@@ -96,7 +96,7 @@ public final class DrAculaStaff implements Mytem {
         ItemStack item = new ItemStack(Material.NETHERITE_SWORD);
         ItemMeta meta = item.getItemMeta();
         ComponentBuilder cb = new ComponentBuilder();
-        String name = "Dr Acula's Staff";
+        String name = "Dr. Acula's Staff";
         int len = name.length();
         int iter = 255 / name.length() * 3 / 4;
         for (int i = 0; i < name.length(); i += 1) {
