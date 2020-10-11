@@ -1,0 +1,27 @@
+main: com.cavetale.mytems.MytemsPlugin
+
+name: Mytems
+version: 0.1
+description: Items framework and collection
+api-version: 1.13
+
+author: StarTux
+website: https://github.com/StarTux/Mytems
+
+depend: [Core, WorldMarker]
+softdepend: []
+
+commands:
+
+  mytems:
+    aliases: []
+    description: Mytems Command
+    permission: mytems.mytems
+    usage: |-
+      /mytems
+
+permissions:
+
+  mytems.mytems:
+    description: Use /mytems
+    default: op
