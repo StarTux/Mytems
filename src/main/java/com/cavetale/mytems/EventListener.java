@@ -1,6 +1,7 @@
 package com.cavetale.mytems;
 
 import com.cavetale.mytems.item.DrAculaStaff;
+import com.cavetale.mytems.item.FlameShield;
 import com.cavetale.worldmarker.ItemMarker;
 import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import lombok.RequiredArgsConstructor;
@@ -39,7 +40,6 @@ public final class EventListener implements Listener {
         if (id == null) return;
         switch (id) {
         case DrAculaStaff.ID:
-            event.setCancelled(true);
             plugin.drAculaStaff.onRightClick(event, item);
             return;
         default:
@@ -65,6 +65,7 @@ public final class EventListener implements Listener {
         if (id == null) return;
         switch (id) {
         case DrAculaStaff.ID:
+        case FlameShield.ID:
             switch (event.getView().getType()) {
             case GRINDSTONE:
                 event.setResult(null);

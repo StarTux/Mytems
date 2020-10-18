@@ -1,6 +1,7 @@
 package com.cavetale.mytems;
 
 import com.cavetale.mytems.item.DrAculaStaff;
+import com.cavetale.mytems.item.FlameShield;
 import com.cavetale.mytems.session.Sessions;
 import lombok.Getter;
 import org.bukkit.Bukkit;
@@ -13,6 +14,7 @@ public final class MytemsPlugin extends JavaPlugin {
     final EventListener eventListener = new EventListener(this);
     final Sessions sessions = new Sessions(this);
     DrAculaStaff drAculaStaff;
+    FlameShield flameShield;
 
     @Override
     public void onEnable() {
@@ -20,6 +22,7 @@ public final class MytemsPlugin extends JavaPlugin {
         eventListener.enable();
         sessions.enable();
         drAculaStaff = new DrAculaStaff(this).enable();
+        flameShield = new FlameShield(this).enable();
         for (Player player : Bukkit.getOnlinePlayers()) {
             enter(player);
         }

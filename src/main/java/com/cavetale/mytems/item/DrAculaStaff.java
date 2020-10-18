@@ -53,6 +53,7 @@ public final class DrAculaStaff implements Mytem {
             Block block = event.getClickedBlock();
             if (block.getType().isInteractable()) return;
         }
+        event.setCancelled(true);
         onUse(event.getPlayer(), item);
     }
 

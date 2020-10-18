@@ -32,7 +32,7 @@ public final class MytemsCommand implements TabExecutor {
     }
 
     boolean give(Player player, String[] args) {
-        player.getInventory().addItem(plugin.drAculaStaff.create());
+        player.getInventory().addItem(plugin.flameShield.create());
         player.sendMessage("Item given: Dr Acula's Staff");
         return true;
     }
