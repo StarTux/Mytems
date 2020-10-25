@@ -1,6 +1,7 @@
 package com.cavetale.mytems.item;
 
 import com.cavetale.mytems.Mytem;
+import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.worldmarker.ItemMarker;
@@ -8,8 +9,10 @@ import java.awt.Color;
 import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -34,32 +37,49 @@ import org.bukkit.potion.PotionEffectType;
 
 @RequiredArgsConstructor
 public final class DrAculaStaff implements Mytem {
+    public static final Mytems KEY = Mytems.DR_ACULA_STAFF;
     private final MytemsPlugin plugin;
-    public static final String ID = "mytems:dr_acula_staff";
     final int durationSeconds = 30;
     final int cooldownSeconds = 60;
-
-    public DrAculaStaff enable() {
-        return this;
-    }
+    ItemStack prototype;
+    @Getter private BaseComponent[] displayName;
 
     @Override
     public String getId() {
-        return ID;
+        return KEY.id;
     }
 
-    public void onRightClick(PlayerInteractEvent event, ItemStack item) {
+    @Override
+    public void enable() {
+        ComponentBuilder cb = new ComponentBuilder();
+        String name = "Dr. Acula's Staff";
+        int len = name.length();
+        int iter = 255 / name.length() * 3 / 4;
+        for (int i = 0; i < name.length(); i += 1) {
+            cb.append(name.substring(i, i + 1)).color(ChatColor.of(new Color(255 - iter * i, 0, 0)));
+        }
+        displayName = cb.create();
+        prototype = create();
+    }
+
+    @Override
+    public ItemStack getItem() {
+        return prototype.clone();
+    }
+
+    @Override
+    public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
         if (event.hasBlock()) {
             Block block = event.getClickedBlock();
             if (block.getType().isInteractable()) return;
         }
         event.setCancelled(true);
-        onUse(event.getPlayer(), item);
+        use(player, item);
     }
 
-    public void onUse(Player player, ItemStack item) {
+    public void use(Player player, ItemStack item) {
         Session session = plugin.getSessions().of(player);
-        long cooldown = session.getCooldownInTicks(ID);
+        long cooldown = session.getCooldownInTicks(KEY.id);
         if (cooldown > 0) {
             long seconds = (cooldown - 1L) / 20L + 1;
             player.sendActionBar(ChatColor.DARK_RED + "Cooldown " + seconds + "s");
@@ -74,7 +94,7 @@ public final class DrAculaStaff implements Mytem {
         }
         effect = new PotionEffect(PotionEffectType.INVISIBILITY, durationSeconds * 20, 0, false, false, true);
         player.addPotionEffect(effect, false);
-        session.setCooldown(ID, cooldownSeconds * 20);
+        session.setCooldown(KEY.id, cooldownSeconds * 20);
         Location base = player.getLocation().add(0, 1, 0);
         for (int i = 0; i < 16; i += 1) {
             Location loc = base.clone().add((Math.random() - Math.random()) * 0.5,
@@ -96,14 +116,7 @@ public final class DrAculaStaff implements Mytem {
     public ItemStack create() {
         ItemStack item = new ItemStack(Material.NETHERITE_SWORD);
         ItemMeta meta = item.getItemMeta();
-        ComponentBuilder cb = new ComponentBuilder();
-        String name = "Dr. Acula's Staff";
-        int len = name.length();
-        int iter = 255 / name.length() * 3 / 4;
-        for (int i = 0; i < name.length(); i += 1) {
-            cb.append(name.substring(i, i + 1)).color(ChatColor.of(new Color(255 - iter * i, 0, 0)));
-        }
-        meta.setDisplayNameComponent(cb.create());
+        meta.setDisplayNameComponent(displayName);
         List<String> lore = Arrays
             .asList(ChatColor.GRAY + "This staff was found",
                     ChatColor.GRAY + "among the mysterious",
@@ -125,11 +138,11 @@ public final class DrAculaStaff implements Mytem {
         meta.addEnchant(Enchantment.DURABILITY, 4, true);
         meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
-                                  new AttributeModifier(UUID.randomUUID(), ID, 12.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+                                  new AttributeModifier(UUID.randomUUID(), KEY.id, 12.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
-                                  new AttributeModifier(UUID.randomUUID(), ID, 1.6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+                                  new AttributeModifier(UUID.randomUUID(), KEY.id, 1.6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
         item.setItemMeta(meta);
-        ItemMarker.setId(item, ID);
+        ItemMarker.setId(item, KEY.id);
         return item;
     }
 }
