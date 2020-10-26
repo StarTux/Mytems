@@ -1,9 +1,5 @@
 package com.cavetale.mytems;
 
-import com.cavetale.mytems.item.DrAculaStaff;
-import com.cavetale.mytems.item.FlameShield;
-import com.cavetale.mytems.item.GhastBow;
-import com.cavetale.mytems.item.Stompers;
 import com.cavetale.mytems.session.Sessions;
 import java.util.EnumMap;
 import java.util.Map;
@@ -39,13 +35,9 @@ public final class MytemsPlugin extends JavaPlugin {
     }
 
     public void enableItems() {
-        mytems.put(Mytems.DR_ACULA_STAFF, new DrAculaStaff(this));
-        mytems.put(Mytems.FLAME_SHIELD, new FlameShield(this));
-        mytems.put(Mytems.STOMPERS, new Stompers(this));
-        mytems.put(Mytems.GHAST_BOW, new GhastBow(this));
         for (Mytems it : Mytems.values()) {
-            Mytem mytem = mytems.get(it);
-            if (mytem == null) throw new IllegalStateException(it + "=null");
+            Mytem mytem = it.ctor.apply(this);
+            mytems.put(it, mytem);
             mytem.enable();
         }
     }

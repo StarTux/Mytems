@@ -27,7 +27,7 @@ public final class MytemsCommand implements TabExecutor {
         rootNode.addChild("give")
             .description("Give yourself an item")
             .arguments("<player> <mytem>")
-            .playerCaller(this::give)
+            .senderCaller(this::give)
             .completer(this::giveComplete);
         plugin.getCommand("mytems").setExecutor(this);
     }
@@ -42,7 +42,7 @@ public final class MytemsCommand implements TabExecutor {
         return rootNode.complete(sender, command, alias, args);
     }
 
-    boolean give(Player player, String[] args) {
+    boolean give(CommandSender sender, String[] args) {
         if (args.length != 2) return false;
         String targetArg = args[0];
         String mytemArg = args[1];
@@ -59,7 +59,7 @@ public final class MytemsCommand implements TabExecutor {
         ComponentBuilder cb = new ComponentBuilder("").color(ChatColor.YELLOW);
         cb.append(mytem.getDisplayName());
         cb.append(" given to " + target.getName()).color(ChatColor.YELLOW);
-        player.sendMessage(cb.create());
+        sender.sendMessage(cb.create());
         return true;
     }
 
