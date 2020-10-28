@@ -1,19 +1,12 @@
 package com.cavetale.mytems.item;
 
-import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
+import com.cavetale.mytems.util.Text;
 import com.cavetale.worldmarker.ItemMarker;
-import java.awt.Color;
-import java.util.Arrays;
 import java.util.Base64;
-import java.util.List;
 import java.util.UUID;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
@@ -22,13 +15,17 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 
-@RequiredArgsConstructor
-public final class FlameShield implements Mytem {
+public final class FlameShield extends AculaItem {
     public static final Mytems KEY = Mytems.FLAME_SHIELD;
-    private final MytemsPlugin plugin;
-    ItemStack baseItem;
-    ItemStack prototype;
-    @Getter private BaseComponent[] displayName;
+    private ItemStack baseItem;
+    private String description = "\n\n"
+        + ChatColor.GRAY + "After the castle was completely burned down to the ground, this item remained intact."
+        + "\n\n"
+        + ChatColor.GRAY + "For years it was kept in a secret vault, until one day, when it vanished.";
+
+    public FlameShield(final MytemsPlugin plugin) {
+        super(plugin);
+    }
 
     @Override
     public String getId() {
@@ -37,17 +34,11 @@ public final class FlameShield implements Mytem {
 
     @Override
     public void enable() {
-        ComponentBuilder cb = new ComponentBuilder();
-        String name = "Flame Shield";
-        int len = name.length();
-        int iter = 255 / name.length() * 3 / 4;
-        for (int i = 0; i < name.length(); i += 1) {
-            cb.append(name.substring(i, i + 1)).color(ChatColor.of(new Color(255 - iter * i, 0, 0)));
-        }
-        displayName = cb.create();
+        displayName = creepify("Flame Shield", false);
         @SuppressWarnings("LineLength")
         final byte[] bytes = Base64.getDecoder().decode("H4sIAAAAAAAAAHXLsQ6CMBSF4QNFxZqAg0/jiLg7GPcrVKjSNmkvg29vMQ5dPNufL0cCAruWmG7KB+0sIA8lct1jb7RVnacHH8Oo1dRLCKZBYN2SoUEhTqJqJte9zpY1v6+LFg2FxeotygsxK2+DjF2U2PwawrinwOrkJucjZUgsv/NfMj6hOiUx+Dmx6nuNOVvO8AESRyVa5QAAAA==");
         baseItem = ItemStack.deserializeBytes(bytes);
+        baseLore = Text.toBaseComponents(Text.wrapMultiline(description, Text.ITEM_LORE_WIDTH));
         prototype = create();
     }
 
@@ -60,18 +51,6 @@ public final class FlameShield implements Mytem {
         ItemStack item = baseItem.clone();
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayNameComponent(displayName);
-        List<String> lore = Arrays
-            .asList("",
-                    ChatColor.GRAY + "After the castle was",
-                    ChatColor.GRAY + "completely burned down",
-                    ChatColor.GRAY + "to the ground, this",
-                    ChatColor.GRAY + "item remained intact.",
-                    "",
-                    ChatColor.GRAY + "For years it was kept",
-                    ChatColor.GRAY + "in a secret vault,",
-                    ChatColor.GRAY + "until one day, when",
-                    ChatColor.GRAY + "it vanished.");
-        meta.setLore(lore);
         Repairable repairable = (Repairable) meta;
         repairable.setRepairCost(9999);
         meta.addEnchant(Enchantment.DURABILITY, 4, true);

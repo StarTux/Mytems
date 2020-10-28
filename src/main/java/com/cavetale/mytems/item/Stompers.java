@@ -1,19 +1,13 @@
 package com.cavetale.mytems.item;
 
-import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
+import com.cavetale.mytems.util.Text;
 import com.cavetale.worldmarker.ItemMarker;
 import com.winthier.generic_events.GenericEvents;
-import java.awt.Color;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -29,16 +23,28 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.util.Vector;
 
-@RequiredArgsConstructor
-public final class Stompers implements Mytem {
+public final class Stompers extends AculaItem {
     public static final Mytems KEY = Mytems.STOMPERS;
-    private final MytemsPlugin plugin;
-    @Getter BaseComponent[] displayName;
-    ItemStack prototype;
     double damageFactor = 2.0;
     String damageFactorStr = "2";
     double radius = 3.0;
     String radiusStr = "3";
+    String description = "\n\n"
+        + ChatColor.RED + "When first discovered, my clumsy assistant managed to drop these shoes to the ground."
+        + "\n\n"
+        + ChatColor.RED + "The resulting damage sustained by my prizeless collection of glassware has yet to be evaluated."
+        + " May their new owner have more luck."
+        + " " + ChatColor.DARK_GRAY + ChatColor.UNDERLINE + "Unknown"
+        + "\n\n"
+        + ChatColor.RED + "USE " + ChatColor.GRAY + "Taking fall damage"
+        + "\n"
+        + ChatColor.GRAY + "deals " + damageFactorStr + "x base damage"
+        + "\n"
+        + ChatColor.GRAY + "to enemies within " + radiusStr + " blocks.";
+
+    public Stompers(final MytemsPlugin plugin) {
+        super(plugin);
+    }
 
     @Override
     public String getId() {
@@ -47,14 +53,8 @@ public final class Stompers implements Mytem {
 
     @Override
     public void enable() {
-        String name = "Stompers";
-        ComponentBuilder cb = new ComponentBuilder();
-        int len = name.length();
-        int iter = 255 / name.length() * 3 / 4;
-        for (int i = 0; i < name.length(); i += 1) {
-            cb.append(name.substring(i, i + 1)).color(ChatColor.of(new Color(255 - iter * i, 0, 0)));
-        }
-        displayName = cb.create();
+        displayName = creepify("Stompers", false);
+        baseLore = Text.toBaseComponents(Text.wrapMultiline(description, Text.ITEM_LORE_WIDTH));
         prototype = create();
     }
 
@@ -67,27 +67,6 @@ public final class Stompers implements Mytem {
         ItemStack item = new ItemStack(Material.NETHERITE_BOOTS);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayNameComponent(displayName);
-        String[] lore = {
-            "",
-            ChatColor.GRAY + "When first discovered,",
-            ChatColor.GRAY + "my clumsy assistant",
-            ChatColor.GRAY + "managed to drop these",
-            ChatColor.GRAY + "shoes to the ground.",
-            "",
-            ChatColor.GRAY + "The resulting damage",
-            ChatColor.GRAY + "sustained by my prizeless",
-            ChatColor.GRAY + "collection of glassware",
-            ChatColor.GRAY + "has yet to be evaluated.",
-            "",
-            ChatColor.GRAY + "May their new owner have",
-            ChatColor.GRAY + "more luck.",
-            "" + ChatColor.DARK_GRAY + ChatColor.ITALIC + "                 Unknown",
-            "",
-            ChatColor.RED + "USE " + ChatColor.GRAY + "Taking fall damage",
-            ChatColor.GRAY + "deals " + damageFactorStr + "x base damage",
-            ChatColor.GRAY + "to enemies within " + radiusStr + " blocks."
-        };
-        meta.setLore(Arrays.asList(lore));
         meta.addEnchant(Enchantment.DURABILITY, 3, true);
         meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
         meta.addEnchant(Enchantment.PROTECTION_FALL, 4, true);

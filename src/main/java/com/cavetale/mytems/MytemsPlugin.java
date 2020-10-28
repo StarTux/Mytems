@@ -1,11 +1,13 @@
 package com.cavetale.mytems;
 
+import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.session.Sessions;
 import java.util.EnumMap;
 import java.util.Map;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @Getter
@@ -43,7 +45,7 @@ public final class MytemsPlugin extends JavaPlugin {
     }
 
     public void enter(Player player) {
-        sessions.of(player);
+        sessions.of(player).equipmentDidChange();
     }
 
     public void exit(Player player) {
@@ -54,7 +56,26 @@ public final class MytemsPlugin extends JavaPlugin {
         sessions.tick();
     }
 
-    public Mytem getMytem(Mytems it) {
-        return mytems.get(it);
+    public Mytem getMytem(Mytems key) {
+        return mytems.get(key);
+    }
+
+    public Mytem getMytem(ItemStack itemStack) {
+        if (itemStack == null) return null;
+        Mytems key = Mytems.forItem(itemStack);
+        if (key == null) return null;
+        return getMytem(key);
+    }
+
+    public GearItem getGearItem(Mytems key) {
+        Mytem mytem = mytems.get(key);
+        return mytem instanceof GearItem ? (GearItem) mytem : null;
+    }
+
+    public GearItem getGearItem(ItemStack itemStack) {
+        if (itemStack == null) return null;
+        Mytems key = Mytems.forItem(itemStack);
+        if (key == null) return null;
+        return getGearItem(key);
     }
 }

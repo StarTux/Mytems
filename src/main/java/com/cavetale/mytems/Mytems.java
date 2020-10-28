@@ -1,15 +1,19 @@
 package com.cavetale.mytems;
 
 import com.cavetale.mytems.item.*;
+import com.cavetale.worldmarker.ItemMarker;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import org.bukkit.inventory.ItemStack;
 
 public enum Mytems {
+    // Halloween 2020
     DR_ACULA_STAFF(DrAculaStaff::new),
     FLAME_SHIELD(FlameShield::new),
     STOMPERS(Stompers::new),
     GHAST_BOW(GhastBow::new),
+    // Generic
     KITTY_COIN(KittyCoin::new, "kitty_coin");
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
@@ -38,5 +42,12 @@ public enum Mytems {
 
     public static Mytems forId(String in) {
         return ID_MAP.get(in);
+    }
+
+    public static Mytems forItem(ItemStack item) {
+        if (item == null) return null;
+        String id = ItemMarker.getId(item);
+        if (id == null) return null;
+        return forId(id);
     }
 }

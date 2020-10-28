@@ -1,16 +1,10 @@
 package com.cavetale.mytems.item;
 
-import com.cavetale.mytems.Mytem;
+import com.cavetale.mytems.util.Text;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.worldmarker.ItemMarker;
-import java.awt.Color;
-import java.util.Arrays;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -26,12 +20,19 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 
-@RequiredArgsConstructor
-public final class GhastBow implements Mytem {
+public final class GhastBow extends AculaItem {
     public static final Mytems KEY = Mytems.GHAST_BOW;
-    private final MytemsPlugin plugin;
-    @Getter BaseComponent[] displayName;
-    private ItemStack prototype;
+    private String description = "\n\n"
+        + ChatColor.RED + "Legend has it the bowstring of this unique item was soaked in ghast tears."
+        + " They say it's the only weapon which may lower a vampire's guard..."
+        + "\n\n"
+        + ChatColor.RED + "USE " + ChatColor.GRAY + "Shooting a regular arrow will launch a fireball instead"
+        + "\n"
+        + ChatColor.RED + "Cost " + ChatColor.GRAY + "1 XP Level";
+
+    public GhastBow(final MytemsPlugin plugin) {
+        super(plugin);
+    }
 
     @Override
     public String getId() {
@@ -40,14 +41,8 @@ public final class GhastBow implements Mytem {
 
     @Override
     public void enable() {
-        String name = "Ghast Bow";
-        ComponentBuilder cb = new ComponentBuilder();
-        int len = name.length();
-        int iter = 255 / name.length() * 3 / 4;
-        for (int i = 0; i < name.length(); i += 1) {
-            cb.append(name.substring(i, i + 1)).color(ChatColor.of(new Color(255 - iter * i, 0, 0)));
-        }
-        displayName = cb.create();
+        displayName = creepify("Ghast Bow", false);
+        baseLore = Text.toBaseComponents(Text.wrapMultiline(description, Text.ITEM_LORE_WIDTH));
         prototype = create();
     }
 
@@ -60,19 +55,6 @@ public final class GhastBow implements Mytem {
         ItemStack item = new ItemStack(Material.BOW);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayNameComponent(displayName);
-        String[] lore = {
-            "",
-            ChatColor.GRAY + "Legend has it the",
-            ChatColor.GRAY + "bowstring of this unique",
-            ChatColor.GRAY + "item was soaked in ghast",
-            ChatColor.GRAY + "tears.",
-            "",
-            ChatColor.RED + "USE " + ChatColor.GRAY + "Shooting a regular",
-            ChatColor.GRAY + "arrow will launch a",
-            ChatColor.GRAY + "fireball instead.",
-            ChatColor.RED + "COST " + ChatColor.GRAY + "1 XP Level",
-        };
-        meta.setLore(Arrays.asList(lore));
         meta.addEnchant(Enchantment.DURABILITY, 3, true);
         meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
         meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);

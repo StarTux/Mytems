@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -25,7 +26,7 @@ public final class MytemsCommand implements TabExecutor {
     public void enable() {
         rootNode = new CommandNode("mytems");
         rootNode.addChild("give")
-            .description("Give yourself an item")
+            .description("Give an item to a player")
             .arguments("<player> <mytem>")
             .senderCaller(this::give)
             .completer(this::giveComplete);
@@ -59,7 +60,11 @@ public final class MytemsCommand implements TabExecutor {
         ComponentBuilder cb = new ComponentBuilder("").color(ChatColor.YELLOW);
         cb.append(mytem.getDisplayName());
         cb.append(" given to " + target.getName()).color(ChatColor.YELLOW);
-        sender.sendMessage(cb.create());
+        if (sender instanceof Player) {
+            sender.sendMessage(cb.create());
+        } else {
+            sender.sendMessage(BaseComponent.toLegacyText(cb.create()));
+        }
         return true;
     }
 

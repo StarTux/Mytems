@@ -2,6 +2,7 @@ package com.cavetale.mytems;
 
 import com.cavetale.worldmarker.ItemMarker;
 import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
+import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -10,10 +11,16 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 @RequiredArgsConstructor
 public final class EventListener implements Listener {
@@ -99,5 +106,37 @@ public final class EventListener implements Listener {
         Mytems mytems = Mytems.forId(id);
         if (mytems == null) return;
         plugin.getMytem(mytems).onPlayerShootBow(event, player, item);
+    }
+
+    @EventHandler
+    void onPlayerItemHeld(PlayerItemHeldEvent event) {
+        plugin.sessions.of(event.getPlayer()).equipmentDidChange();
+    }
+
+    @EventHandler
+    void onPlayerArmorChange(PlayerArmorChangeEvent event) {
+        plugin.sessions.of(event.getPlayer()).equipmentDidChange();
+    }
+
+    @EventHandler
+    void onInventoryClick(InventoryClickEvent event) {
+        if (event.getClickedInventory() instanceof PlayerInventory && event.getWhoClicked() instanceof Player) {
+            plugin.sessions.of((Player) event.getWhoClicked()).equipmentDidChange();
+        }
+    }
+
+    @EventHandler
+    void onPlayerPickupItem(PlayerPickupItemEvent event) {
+        plugin.sessions.of(event.getPlayer()).equipmentDidChange();
+    }
+
+    @EventHandler
+    void onPlayerDropItem(PlayerDropItemEvent event) {
+        plugin.sessions.of(event.getPlayer()).equipmentDidChange();
+    }
+
+    @EventHandler
+    void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
+        plugin.sessions.of(event.getPlayer()).equipmentDidChange();
     }
 }
