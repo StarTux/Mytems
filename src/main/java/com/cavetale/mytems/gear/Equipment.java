@@ -14,10 +14,11 @@ import java.util.stream.Collectors;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 public final class Equipment {
     private final MytemsPlugin plugin;
@@ -68,9 +69,13 @@ public final class Equipment {
     }
 
     public void loadPlayer(Player player) {
-        PlayerInventory inventory = player.getInventory();
+        loadLivingEntity(player);
+    }
+
+    public void loadLivingEntity(LivingEntity livingEntity) {
+        EntityEquipment entityEquipment = livingEntity.getEquipment();
         for (Slot slot : Slot.values()) {
-            ItemStack item = inventory.getItem(slot.bukkitEquipmentSlot);
+            ItemStack item = entityEquipment.getItem(slot.bukkitEquipmentSlot);
             if (!slot.guess(item)) continue;
             Mytems mytems = Mytems.forItem(item); // may yield null
             if (mytems == null) continue;

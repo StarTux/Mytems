@@ -1,17 +1,21 @@
 package com.cavetale.mytems;
 
+import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.session.Sessions;
 import java.util.EnumMap;
 import java.util.Map;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @Getter
 public final class MytemsPlugin extends JavaPlugin {
+    @Getter private static MytemsPlugin instance;
     final MytemsCommand mytemsCommand = new MytemsCommand(this);
     final EventListener eventListener = new EventListener(this);
     final Sessions sessions = new Sessions(this);
@@ -19,6 +23,7 @@ public final class MytemsPlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        instance = this;
         mytemsCommand.enable();
         eventListener.enable();
         sessions.enable();
@@ -77,5 +82,17 @@ public final class MytemsPlugin extends JavaPlugin {
         Mytems key = Mytems.forItem(itemStack);
         if (key == null) return null;
         return getGearItem(key);
+    }
+
+    public Equipment getEquipment(Entity entity) {
+        if (entity instanceof Player) {
+            return sessions.of((Player) entity).getEquipment();
+        } else if (entity instanceof LivingEntity) {
+            Equipment equipment = new Equipment(this);
+            equipment.loadLivingEntity((LivingEntity) entity);
+            return equipment;
+        } else {
+            return null;
+        }
     }
 }
