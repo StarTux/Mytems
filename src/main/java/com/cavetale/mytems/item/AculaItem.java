@@ -57,7 +57,7 @@ abstract class AculaItem implements GearItem {
 
     @Override
     public ItemSet getItemSet() {
-        return AculaItemSet.getInstance(plugin);
+        return AculaItemSet.getInstance();
     }
 
     protected BaseComponent[] creepify(String in, boolean bold) {
