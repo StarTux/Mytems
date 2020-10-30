@@ -20,7 +20,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 public final class BatMask extends AculaItem {
     public static final Mytems KEY = Mytems.BAT_MASK;
     private String description = ""
-        + ChatColor.RED + "It is unknown who made this map or for what purpose it was worn,"
+        + ChatColor.RED + "It is unknown who made this mask or for what purpose it was worn,"
         + " but a team of specialists on the occult and vampirism has determined that it resembles a bat.";
     private final UUID skullId = UUID.fromString("62e67882-f5a4-411b-816f-2f704b3feb51");
     @SuppressWarnings("LineLength")
