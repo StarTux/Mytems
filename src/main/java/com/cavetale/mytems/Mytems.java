@@ -13,6 +13,7 @@ public enum Mytems {
     FLAME_SHIELD(FlameShield::new),
     STOMPERS(Stompers::new),
     GHAST_BOW(GhastBow::new),
+    BAT_MASK(BatMask::new),
     // Generic
     KITTY_COIN(KittyCoin::new, "kitty_coin");
 
