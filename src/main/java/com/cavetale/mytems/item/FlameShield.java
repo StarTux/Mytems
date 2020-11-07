@@ -42,11 +42,6 @@ public final class FlameShield extends AculaItem {
         prototype = create();
     }
 
-    @Override
-    public ItemStack getItem() {
-        return prototype.clone();
-    }
-
     public ItemStack create() {
         ItemStack item = baseItem.clone();
         ItemMeta meta = item.getItemMeta();

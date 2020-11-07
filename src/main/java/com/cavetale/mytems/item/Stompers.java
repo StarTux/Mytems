@@ -58,11 +58,6 @@ public final class Stompers extends AculaItem {
         prototype = create();
     }
 
-    @Override
-    public ItemStack getItem() {
-        return prototype.clone();
-    }
-
     public ItemStack create() {
         ItemStack item = new ItemStack(Material.NETHERITE_BOOTS);
         ItemMeta meta = item.getItemMeta();

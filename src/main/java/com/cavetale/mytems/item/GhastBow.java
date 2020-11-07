@@ -46,11 +46,6 @@ public final class GhastBow extends AculaItem {
         prototype = create();
     }
 
-    @Override
-    public ItemStack getItem() {
-        return prototype.clone();
-    }
-
     public ItemStack create() {
         ItemStack item = new ItemStack(Material.BOW);
         ItemMeta meta = item.getItemMeta();
