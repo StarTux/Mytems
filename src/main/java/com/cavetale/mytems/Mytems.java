@@ -51,4 +51,8 @@ public enum Mytems {
         if (id == null) return null;
         return forId(id);
     }
+
+    public Mytem getMytem() {
+        return MytemsPlugin.getInstance().getMytem(this);
+    }
 }

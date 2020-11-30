@@ -3,6 +3,7 @@ package com.cavetale.mytems;
 import com.cavetale.core.command.CommandContext;
 import com.cavetale.core.command.CommandNode;
 import com.cavetale.core.command.CommandWarn;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -25,11 +26,13 @@ public final class MytemsCommand implements TabExecutor {
 
     public void enable() {
         rootNode = new CommandNode("mytems");
-        rootNode.addChild("give")
+        rootNode.addChild("give").arguments("<player> <mytem>")
             .description("Give an item to a player")
-            .arguments("<player> <mytem>")
             .senderCaller(this::give)
             .completer(this::giveComplete);
+        rootNode.addChild("serialize").denyTabCompletion()
+            .description("Serialize the item in your hand")
+            .playerCaller(this::serialize);
         plugin.getCommand("mytems").setExecutor(this);
     }
 
@@ -65,6 +68,24 @@ public final class MytemsCommand implements TabExecutor {
         } else {
             sender.sendMessage(BaseComponent.toLegacyText(cb.create()));
         }
+        return true;
+    }
+
+    boolean serialize(Player player, String[] args) {
+        if (args.length != 0) return false;
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        if (itemStack == null || itemStack.getAmount() <= 0) {
+            throw new CommandWarn("There's no item in your main hand!");
+        }
+        byte[] bytes = itemStack.serializeAsBytes();
+        String string = Base64.getEncoder().encodeToString(bytes);
+        ComponentBuilder cb = new ComponentBuilder("Base64: ")
+            .color(ChatColor.GRAY)
+            .append(string)
+            .color(ChatColor.WHITE)
+            .insertion(string);
+        player.sendMessage(cb.create());
+        plugin.getLogger().info("Serialize " + itemStack.getType() + ": " + string);
         return true;
     }
 
