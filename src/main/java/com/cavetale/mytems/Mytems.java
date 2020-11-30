@@ -15,7 +15,8 @@ public enum Mytems {
     GHAST_BOW(GhastBow::new),
     BAT_MASK(BatMask::new),
     // Generic
-    KITTY_COIN(KittyCoin::new, "kitty_coin");
+    KITTY_COIN(KittyCoin::new, "kitty_coin"),
+    CHRISTMAS_TOKEN(ChristmasToken::new, "christmas_token");
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String key; // unqualified, e.g. dr_acula_staff
