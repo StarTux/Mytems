@@ -5,6 +5,7 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Skull;
 import com.cavetale.mytems.util.Text;
+import com.cavetale.worldmarker.ItemMarker;
 import java.awt.Color;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 @RequiredArgsConstructor
 public final class ChristmasToken implements Mytem {
-    public static final Mytems ID = Mytems.CHRISTMAS_TOKEN;
+    public static final Mytems KEY = Mytems.CHRISTMAS_TOKEN;
     private static final String SKULL_NAME = "Christmas Token";
     private static final UUID SKULL_ID = UUID.fromString("6d46f5a1-a833-414c-ba0d-9842cb59316e");
     private static final String SKULL_TEXTURE = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjU2MTJkYzdiODZkNzFhZmMxMTk3MzAxYzE1ZmQ5NzllOWYzOWU3YjFmNDFkOGYxZWJkZjgxMTU1NzZlMmUifX19";
@@ -30,7 +31,7 @@ public final class ChristmasToken implements Mytem {
 
     @Override
     public String getId() {
-        return ID.key;
+        return KEY.id;
     }
 
     private BaseComponent[] xmasify(String in) {
@@ -52,6 +53,7 @@ public final class ChristmasToken implements Mytem {
         meta.setLoreComponents(Text.toBaseComponents(Text.wrapMultiline(description, Text.ITEM_LORE_WIDTH)));
         meta.setDisplayNameComponent(displayName);
         prototype.setItemMeta(meta);
+        ItemMarker.setId(prototype, KEY.id);
     }
 
     @Override
