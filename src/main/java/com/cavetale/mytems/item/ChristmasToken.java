@@ -54,7 +54,6 @@ public final class ChristmasToken implements Mytem {
         meta.setDisplayNameComponent(displayName);
         prototype.setItemMeta(meta);
         ItemMarker.setId(prototype, KEY.id);
-        prototype = prototype.ensureServerConversions();
     }
 
     @Override
