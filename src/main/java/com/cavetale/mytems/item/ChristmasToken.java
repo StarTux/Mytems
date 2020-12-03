@@ -65,4 +65,9 @@ public final class ChristmasToken implements Mytem {
     public BaseComponent[] getDisplayName() {
         return displayName;
     }
+
+    @Override
+    public boolean shouldAutoFix() {
+        return true;
+    }
 }

@@ -24,4 +24,8 @@ public interface Mytem {
     default void onPlayerFallDamage(EntityDamageEvent event, Player player, ItemStack item) { }
 
     default void onPlayerShootBow(EntityShootBowEvent event, Player player, ItemStack item) { }
+
+    default boolean shouldAutoFix() {
+        return false;
+    }
 }

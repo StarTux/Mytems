@@ -137,6 +137,7 @@ public final class EventListener implements Listener {
     @EventHandler
     void onPlayerPickupItem(PlayerPickupItemEvent event) {
         plugin.sessions.of(event.getPlayer()).equipmentDidChange();
+        Bukkit.getScheduler().runTask(plugin, () -> plugin.fixPlayerInventory(event.getPlayer()));
     }
 
     @EventHandler

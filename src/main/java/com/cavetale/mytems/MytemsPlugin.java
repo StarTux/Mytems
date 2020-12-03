@@ -10,6 +10,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -51,6 +52,7 @@ public final class MytemsPlugin extends JavaPlugin {
 
     public void enter(Player player) {
         sessions.of(player).equipmentDidChange();
+        Bukkit.getScheduler().runTask(this, () -> fixPlayerInventory(player));
     }
 
     public void exit(Player player) {
@@ -94,5 +96,26 @@ public final class MytemsPlugin extends JavaPlugin {
         } else {
             return null;
         }
+    }
+
+    public int fixInventory(Inventory inventory) {
+        int count = 0;
+        for (int i = 0; i < inventory.getSize(); i += 1) {
+            ItemStack itemStack = inventory.getItem(i);
+            if (itemStack == null || itemStack.getAmount() == 0) continue;
+            Mytem mytem = getMytem(itemStack);
+            if (mytem == null) continue;
+            if (!mytem.shouldAutoFix()) continue;
+            ItemStack newItemStack = mytem.getItem();
+            newItemStack.setAmount(itemStack.getAmount());
+            if (itemStack.equals(newItemStack)) continue;
+            inventory.setItem(i, newItemStack);
+            count += 1;
+        }
+        return count;
+    }
+
+    public void fixPlayerInventory(Player player) {
+        int count = fixInventory(player.getInventory());
     }
 }
