@@ -1,14 +1,23 @@
 package com.cavetale.mytems;
 
+import com.cavetale.mytems.item.ChristmasToken;
 import com.cavetale.worldmarker.ItemMarker;
 import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
+import java.util.Objects;
+import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Skull;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -138,5 +147,31 @@ public final class EventListener implements Listener {
     @EventHandler
     void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
         plugin.sessions.of(event.getPlayer()).equipmentDidChange();
+    }
+
+    /**
+     * Restore the Christmas Token and fix the missing id bug.
+     */
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    public void onBlockDropItem(BlockDropItemEvent event) {
+        BlockState state = event.getBlockState();
+        if (event.getItems().size() != 1) return;
+        if (!(state instanceof Skull)) return;
+        Skull skull = (Skull) state;
+        PlayerProfile profile = skull.getPlayerProfile();
+        if (profile == null) return;
+        UUID id = profile.getId();
+        if (!Objects.equals(id, ChristmasToken.SKULL_ID)) return;
+        if (!profile.hasProperty("textures")) return;
+        for (ProfileProperty property : profile.getProperties()) {
+            if (Objects.equals(property.getName(), "textures")
+                && Objects.equals(property.getValue(), ChristmasToken.SKULL_TEXTURE)) {
+                // Success!
+                Location location = event.getItems().get(0).getLocation();
+                event.setCancelled(true);
+                location.getWorld().dropItem(location, Mytems.CHRISTMAS_TOKEN.getMytem().getItem());
+                return;
+            }
+        }
     }
 }
