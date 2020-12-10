@@ -89,7 +89,7 @@ public final class EventListener implements Listener {
             event.setResult(null);
             break;
         default:
-            event.setResult(plugin.getMytem(key).getItem());
+            break;
         }
     }
 
