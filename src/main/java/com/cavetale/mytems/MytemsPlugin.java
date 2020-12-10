@@ -5,6 +5,7 @@ import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.session.Sessions;
 import java.util.EnumMap;
 import java.util.Map;
+import java.util.Set;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Entity;
@@ -12,6 +13,8 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @Getter
@@ -104,16 +107,34 @@ public final class MytemsPlugin extends JavaPlugin {
         for (int i = 0; i < inventory.getSize(); i += 1) {
             ItemStack itemStack = inventory.getItem(i);
             if (itemStack == null || itemStack.getAmount() == 0) continue;
-            Mytem mytem = getMytem(itemStack);
-            if (mytem == null) continue;
-            if (!mytem.shouldAutoFix()) continue;
-            ItemStack newItemStack = mytem.getItem();
-            newItemStack.setAmount(itemStack.getAmount());
-            if (itemStack.equals(newItemStack)) continue;
+            ItemStack newItemStack = fixItemStack(itemStack);
+            if (newItemStack == null) continue;
             inventory.setItem(i, newItemStack);
             count += 1;
         }
         return count;
+    }
+
+    public ItemStack fixItemStack(ItemStack oldItemStack) {
+        Mytem mytem = getMytem(oldItemStack);
+        if (mytem == null) return null;
+        if (!mytem.shouldAutoFix()) return null;
+        ItemStack newItemStack = mytem.getItem();
+        newItemStack.setAmount(oldItemStack.getAmount());
+        Set<ItemFixFlag> itemFixFlags = mytem.getItemFixFlags();
+        if (itemFixFlags.contains(ItemFixFlag.COPY_ENCHANTMENTS)) {
+            newItemStack.addUnsafeEnchantments(oldItemStack.getEnchantments());
+        }
+        if (itemFixFlags.contains(ItemFixFlag.COPY_DURABILITY)) {
+            ItemMeta oldItemMeta = oldItemStack.getItemMeta();
+            ItemMeta newItemMeta = newItemStack.getItemMeta();
+            if (oldItemMeta instanceof Damageable && newItemMeta instanceof Damageable) {
+                ((Damageable) newItemMeta).setDamage(((Damageable) oldItemMeta).getDamage());
+            }
+            newItemStack.setItemMeta(newItemMeta);
+        }
+        if (oldItemStack.equals(newItemStack)) return null;
+        return newItemStack;
     }
 
     public void fixPlayerInventory(Player player) {

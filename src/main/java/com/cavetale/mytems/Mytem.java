@@ -1,5 +1,7 @@
 package com.cavetale.mytems;
 
+import java.util.Collections;
+import java.util.Set;
 import net.md_5.bungee.api.chat.BaseComponent;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -35,5 +37,9 @@ public interface Mytem {
 
     default boolean shouldAutoFix() {
         return false;
+    }
+
+    default Set<ItemFixFlag> getItemFixFlags() {
+        return Collections.emptySet();
     }
 }

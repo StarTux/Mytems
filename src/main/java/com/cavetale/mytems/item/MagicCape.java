@@ -1,11 +1,13 @@
 package com.cavetale.mytems.item;
 
+import com.cavetale.mytems.ItemFixFlag;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Text;
 import com.cavetale.worldmarker.ItemMarker;
+import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.md_5.bungee.api.ChatColor;
@@ -141,5 +143,10 @@ public final class MagicCape implements Mytem {
     @Override
     public boolean shouldAutoFix() {
         return true;
+    }
+
+    @Override
+    public Set<ItemFixFlag> getItemFixFlags() {
+        return ItemFixFlag.COPY_VANILLA;
     }
 }
