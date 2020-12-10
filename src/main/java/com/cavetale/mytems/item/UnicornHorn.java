@@ -38,7 +38,7 @@ public final class UnicornHorn implements Mytem {
         int len = in.length();
         for (int i = 0; i < len; i += 1) {
             float pos = (float) i / (float) len;
-            Color color = new Color(Color.HSBtoRGB(pos, 1.0f, 1.0f));
+            Color color = new Color(Color.HSBtoRGB(pos, 0.66f, 1.0f));
             cb.append(in.substring(i, i + 1)).color(ChatColor.of(color));
         }
     }
@@ -86,5 +86,10 @@ public final class UnicornHorn implements Mytem {
     @Override
     public void onBlockPlace(BlockPlaceEvent event, Player player, ItemStack item) {
         event.setCancelled(true);
+    }
+
+    @Override
+    public boolean shouldAutoFix() {
+        return true;
     }
 }
