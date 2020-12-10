@@ -85,7 +85,7 @@ public final class DrAculaStaff extends AculaItem {
             return;
         }
         effect = new PotionEffect(PotionEffectType.INVISIBILITY, durationSeconds * 20, 0, false, false, true);
-        player.addPotionEffect(effect, false);
+        player.addPotionEffect(effect);
         session.setCooldown(KEY.id, cooldownSeconds * 20);
         Location base = player.getLocation().add(0, 1, 0);
         for (int i = 0; i < 16; i += 1) {

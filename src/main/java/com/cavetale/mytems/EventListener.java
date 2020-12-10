@@ -19,13 +19,13 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerPickupItemEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.inventory.ItemStack;
@@ -135,9 +135,12 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler
-    void onPlayerPickupItem(PlayerPickupItemEvent event) {
-        plugin.sessions.of(event.getPlayer()).equipmentDidChange();
-        Bukkit.getScheduler().runTask(plugin, () -> plugin.fixPlayerInventory(event.getPlayer()));
+    void onEntityPickupItem(EntityPickupItemEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            plugin.sessions.of(player).equipmentDidChange();
+            Bukkit.getScheduler().runTask(plugin, () -> plugin.fixPlayerInventory(player));
+        }
     }
 
     @EventHandler
