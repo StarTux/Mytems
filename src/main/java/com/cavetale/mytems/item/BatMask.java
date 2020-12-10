@@ -31,6 +31,11 @@ public final class BatMask extends AculaItem {
     }
 
     @Override
+    public Mytems getKey() {
+        return KEY;
+    }
+
+    @Override
     public String getId() {
         return KEY.id;
     }

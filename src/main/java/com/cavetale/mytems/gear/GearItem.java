@@ -3,7 +3,6 @@ package com.cavetale.mytems.gear;
 import com.cavetale.mytems.Mytem;
 import javax.annotation.Nullable;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 /**
@@ -27,6 +26,4 @@ public interface GearItem extends Mytem {
     default void updateItemLore(ItemMeta meta) {
         updateItemLore(meta, null, null, null);
     }
-
-    default void onTick(ItemStack item) { }
 }

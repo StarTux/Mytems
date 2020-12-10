@@ -30,6 +30,11 @@ public final class ChristmasToken implements Mytem {
     private BaseComponent[] displayName;
 
     @Override
+    public Mytems getKey() {
+        return KEY;
+    }
+
+    @Override
     public String getId() {
         return KEY.id;
     }

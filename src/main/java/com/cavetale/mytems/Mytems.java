@@ -14,6 +14,9 @@ public enum Mytems {
     STOMPERS(Stompers::new),
     GHAST_BOW(GhastBow::new),
     BAT_MASK(BatMask::new),
+    // Cloud City
+    UNICORN_HORN(UnicornHorn::new),
+    MAGIC_CAPE(MagicCape::new),
     // Generic
     KITTY_COIN(KittyCoin::new, "kitty_coin"),
     CHRISTMAS_TOKEN(ChristmasToken::new, "christmas_token");

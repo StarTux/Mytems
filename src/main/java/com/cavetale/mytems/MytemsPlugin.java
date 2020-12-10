@@ -56,6 +56,7 @@ public final class MytemsPlugin extends JavaPlugin {
     }
 
     public void exit(Player player) {
+        sessions.of(player).disable();
         sessions.remove(player);
     }
 

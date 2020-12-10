@@ -12,17 +12,22 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
 public final class Session {
-    private final MytemsPlugin plugin;
-    private final Player player;
-    private Map<String, Long> cooldowns = new HashMap<>();
-    static final long NANOS_PER_TICK = 50L * 1000L * 1000L;
+    protected final MytemsPlugin plugin;
+    protected final Player player;
+    protected Map<String, Long> cooldowns = new HashMap<>();
+    public static final long NANOS_PER_TICK = 50L * 1000L * 1000L;
     private int equipmentUpdateTicks = 0;
     @Getter private Equipment equipment; // Updated every tick
+    @Getter private Flying flying = new Flying(this);
 
     public Session(final MytemsPlugin plugin, final Player player) {
         this.plugin = plugin;
         this.player = player;
         equipment = new Equipment(plugin);
+    }
+
+    public void disable() {
+        flying.disable();
     }
 
     public void setCooldown(String key, int ticks) {
@@ -54,9 +59,7 @@ public final class Session {
                 updateEquipment();
             }
         }
-        for (Equipment.Equipped equipped : equipment.getItems()) {
-            equipped.gearItem.onTick(equipped.itemStack);
-        }
+        flying.tick();
     }
 
     /**

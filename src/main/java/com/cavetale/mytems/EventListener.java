@@ -18,9 +18,11 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDropItemEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -28,6 +30,7 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
@@ -177,5 +180,33 @@ public final class EventListener implements Listener {
                 return;
             }
         }
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    void onBlockPlace(BlockPlaceEvent event) {
+        ItemStack itemStack = event.getItemInHand();
+        if (itemStack != null) {
+            Mytems mytems = Mytems.forItem(itemStack);
+            if (mytems != null) {
+                mytems.getMytem().onBlockPlace(event, event.getPlayer(), itemStack);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    void onEntityToggleGlide(EntityToggleGlideEvent event) {
+        if (!(event.getEntity() instanceof Player)) return;
+        Player player = (Player) event.getEntity();
+        ItemStack itemStack = player.getInventory().getChestplate();
+        if (itemStack == null) return;
+        Mytems mytems = Mytems.forItem(itemStack);
+        if (mytems == null) return;
+        mytems.getMytem().onToggleGlide(event, player, itemStack);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
+        if (event.isFlying()) return;
+        plugin.getSessions().of(event.getPlayer()).getFlying().onToggleOff();
     }
 }

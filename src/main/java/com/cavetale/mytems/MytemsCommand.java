@@ -26,7 +26,7 @@ public final class MytemsCommand implements TabExecutor {
 
     public void enable() {
         rootNode = new CommandNode("mytems");
-        rootNode.addChild("give").arguments("<player> <mytem>")
+        rootNode.addChild("give").arguments("<player> <mytem> [amount]")
             .description("Give an item to a player")
             .senderCaller(this::give)
             .completer(this::giveComplete);
@@ -47,20 +47,37 @@ public final class MytemsCommand implements TabExecutor {
     }
 
     boolean give(CommandSender sender, String[] args) {
-        if (args.length != 2) return false;
+        if (args.length != 2 && args.length != 3) return false;
         String targetArg = args[0];
         String mytemArg = args[1];
+        String amountArg = args.length >= 3 ? args[2] : null;
         Player target = Bukkit.getPlayer(targetArg);
         if (target == null) throw new CommandWarn("Player not found: " + targetArg);
         Mytems mytems = Mytems.forId(mytemArg);
         if (mytems == null) throw new CommandWarn("Mytem not found: " + mytemArg);
+        int amount = 1;
+        if (amountArg != null) {
+            try {
+                amount = Integer.parseInt(amountArg);
+            } catch (NumberFormatException nfe) {
+                amount = -1;
+            }
+        }
+        if (amount < 1) throw new CommandWarn("Invalid amount: " + amountArg);
         Mytem mytem = plugin.getMytem(mytems);
         ItemStack item = mytem.getItem();
-        boolean success = target.getInventory().addItem(item).isEmpty();
-        if (!success) {
+        item.setAmount(amount);
+        int retain = 0;
+        for (ItemStack drop : target.getInventory().addItem(item).values()) {
+            retain += drop.getAmount();
+        }
+        if (retain >= amount) {
             throw new CommandWarn("Could not add item to inventory: " + mytems + ", " + target.getName());
         }
         ComponentBuilder cb = new ComponentBuilder("").color(ChatColor.YELLOW);
+        cb.append("" + (amount - retain)).color(ChatColor.WHITE);
+        cb.append("x").color(ChatColor.DARK_GRAY);
+        cb.append("").reset();
         cb.append(mytem.getDisplayName());
         cb.append(" given to " + target.getName()).color(ChatColor.YELLOW);
         if (sender instanceof Player) {

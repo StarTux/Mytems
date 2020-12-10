@@ -19,6 +19,11 @@ public final class KittyCoin implements Mytem {
     private ItemStack prototype;
 
     @Override
+    public Mytems getKey() {
+        return KEY;
+    }
+
+    @Override
     public String getId() {
         return KEY.id;
     }
