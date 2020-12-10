@@ -27,7 +27,7 @@ public final class UnicornHorn implements Mytem {
     public static final Mytems KEY = Mytems.UNICORN_HORN;
     @Getter private BaseComponent[] displayName;
     private final String description = ""
-        + ChatColor.AQUA + "Legend has it that this horn once belonged to a magical unicorn which lived for over one thousand years ago."
+        + ChatColor.AQUA + "Legend has it that this horn once belonged to a magical unicorn which lived over one thousand years ago."
         + " Scientists say it belonged to a narwhal."
         + "\n\n"
         + ChatColor.AQUA + "Run like the wind. Wearing this horn gives you a speed boost. Put it in your helmet slot."
