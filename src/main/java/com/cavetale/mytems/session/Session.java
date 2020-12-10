@@ -15,7 +15,7 @@ public final class Session {
     protected final MytemsPlugin plugin;
     protected final Player player;
     protected Map<String, Long> cooldowns = new HashMap<>();
-    public static final long NANOS_PER_TICK = 50L * 1000L * 1000L;
+    public static final long MILLIS_PER_TICK = 50L;
     private int equipmentUpdateTicks = 0;
     @Getter private Equipment equipment; // Updated every tick
     @Getter private Flying flying = new Flying(this);
@@ -31,23 +31,23 @@ public final class Session {
     }
 
     public void setCooldown(String key, int ticks) {
-        long now = System.nanoTime();
-        cooldowns.put(key, now + (long) ticks * NANOS_PER_TICK);
+        long now = System.currentTimeMillis();
+        cooldowns.put(key, now + (long) ticks * MILLIS_PER_TICK);
     }
 
     public boolean isOnCooldown(String key) {
         Long cd = cooldowns.get(key);
         if (cd == null) return false;
-        long now = System.nanoTime();
+        long now = System.currentTimeMillis();
         return cd < now;
     }
 
     public long getCooldownInTicks(String key) {
         Long cd = cooldowns.get(key);
         if (cd == null) return 0L;
-        long now = System.nanoTime();
+        long now = System.currentTimeMillis();
         if (now > cd) return 0L;
-        return (cd - now) / NANOS_PER_TICK;
+        return (cd - now) / MILLIS_PER_TICK;
     }
 
     void tick() {

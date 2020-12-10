@@ -1,12 +1,15 @@
 package com.cavetale.mytems.session;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public final  class Flying {
     private final Session session;
-    private int flyingTicks = 0;
-    private Runnable endFlightCallback;
+    private int flyingTicks = 0; // remaining
+    @Getter private int flyTime;
+    private Runnable flyEndTask;
+    private Runnable flyTickTask;
     boolean allowed = false;
 
     public void disable() {
@@ -19,19 +22,25 @@ public final  class Flying {
         if (flyingTicks == 0) return;
         flyingTicks -= 1;
         if (flyingTicks == 0) {
-            Runnable run = endFlightCallback;
+            Runnable run = flyEndTask;
             if (run != null) {
-                endFlightCallback = null;
+                flyEndTask = null;
                 run.run();
             }
             if (flyingTicks == 0) {
                 stopFlying();
             }
+        } else {
+            if (flyTickTask != null) {
+                flyTickTask.run();
+            }
         }
+        flyTime += 1;
     }
 
-    public void setFlying(float speed, int ticks, Runnable callback) {
-        endFlightCallback = callback;
+    public void setFlying(float speed, int ticks, Runnable tickTask, Runnable endTask) {
+        flyTickTask = tickTask;
+        flyEndTask = endTask;
         flyingTicks = ticks;
         if (!session.player.getAllowFlight()) {
             session.player.setAllowFlight(true);
@@ -43,6 +52,9 @@ public final  class Flying {
 
     public void stopFlying() {
         flyingTicks = 0;
+        flyEndTask = null;
+        flyTickTask = null;
+        flyTime = 0;
         session.player.setFlySpeed(0.1f);
         session.player.setFlying(false);
         if (allowed) resetAllow();
@@ -55,7 +67,11 @@ public final  class Flying {
 
     public void onToggleOff() {
         if (flyingTicks == 0) return;
+        if (flyEndTask != null) flyEndTask.run();
+        flyTickTask = null;
+        flyEndTask = null;
         flyingTicks = 0;
+        flyTime = 0;
         if (allowed) resetAllow();
     }
 }
