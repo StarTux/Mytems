@@ -23,7 +23,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 public final class MagicCape implements Mytem {
     private final MytemsPlugin plugin;
     public static final Mytems KEY = Mytems.MAGIC_CAPE;
-    public static final int XP_PER_SECOND = 4;
+    public static final int XP_PER_SECOND = 1;
     public static final float FLY_SPEED = 0.025f;
     public static final String FOOD_COOLDOWN_KEY = "magic_cape:hunger";
     public static final int SECONDS_PER_FOOD = 5;
@@ -90,8 +90,7 @@ public final class MagicCape implements Mytem {
         player.setLevel(player.getLevel() - XP_PER_SECOND);
         if (!session.isOnCooldown(FOOD_COOLDOWN_KEY)) {
             session.setCooldown(FOOD_COOLDOWN_KEY, 20 * SECONDS_PER_FOOD);
-            player.sendMessage("Hunger!");
-            if (player.getSaturation() > 0f) {
+            if (player.getSaturation() >= 1f) {
                 player.setSaturation(Math.max(0f, player.getSaturation() - 1f));
             } else if (player.getFoodLevel() > 0) {
                 player.setFoodLevel(player.getFoodLevel() - 1);
