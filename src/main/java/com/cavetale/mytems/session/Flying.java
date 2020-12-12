@@ -72,6 +72,7 @@ public final  class Flying {
         flyEndTask = null;
         flyingTicks = 0;
         flyTime = 0;
+        session.player.setFlySpeed(0.1f);
         if (allowed) resetAllow();
     }
 }
