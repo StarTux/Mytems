@@ -40,4 +40,9 @@ public final class KittyCoin implements Mytem {
     public ItemStack getItem() {
         return prototype.clone();
     }
+
+    @Override
+    public boolean shouldAutoFix() {
+        return true;
+    }
 }
