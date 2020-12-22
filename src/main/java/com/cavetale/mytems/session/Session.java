@@ -3,6 +3,7 @@ package com.cavetale.mytems.session;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
+import com.cavetale.mytems.gear.SetBonus;
 import java.util.HashMap;
 import java.util.Map;
 import lombok.Getter;
@@ -20,6 +21,7 @@ public final class Session {
     @Getter protected Equipment equipment; // Updated every tick
     @Getter protected Flying flying = new Flying(this);
     @Getter protected Attributes attributes = new Attributes(this);
+    @Getter protected final Favorites favorites = new Favorites();
 
     public Session(final MytemsPlugin plugin, final Player player) {
         this.plugin = plugin;
@@ -68,6 +70,9 @@ public final class Session {
         }
         flying.tick();
         attributes.tick();
+        for (SetBonus setBonus : equipment.getSetBonuses()) {
+            setBonus.tick(player);
+        }
     }
 
     public void loadEquipment() {

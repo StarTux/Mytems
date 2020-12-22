@@ -73,7 +73,6 @@ public final class Attributes {
                 // Remove if they should not be there or mark as already had
                 if (!shouldHaveAttributeNames.contains(name)) {
                     attributeInstance.removeModifier(attributeModifier);
-                    System.out.println("Removed " + attributeModifier);
                 } else {
                     hasAttributes.add(name);
                 }
@@ -82,7 +81,6 @@ public final class Attributes {
                 if (hasAttributes.contains(entityAttribute.getName())) continue;
                 AttributeModifier modifier = entityAttribute.toAttributeModifier(PREFIX);
                 attributeInstance.addModifier(modifier);
-                System.out.println("Added " + entityAttribute);
             }
         }
     }

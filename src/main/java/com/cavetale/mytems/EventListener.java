@@ -21,6 +21,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
@@ -107,6 +108,16 @@ public final class EventListener implements Listener {
         Mytems mytems = Mytems.forId(id);
         if (mytems == null) return;
         plugin.getMytem(mytems).onPlayerFallDamage(event, player, item);
+    }
+
+    @EventHandler(ignoreCancelled = false, priority = EventPriority.HIGH)
+    void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
+                setBonus.onPlayerDamageByEntity(event, player, event.getDamager());
+            }
+        }
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.LOW)

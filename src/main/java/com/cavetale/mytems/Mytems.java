@@ -1,6 +1,7 @@
 package com.cavetale.mytems;
 
 import com.cavetale.mytems.item.*;
+import com.cavetale.mytems.item.dune.DuneItem;
 import com.cavetale.mytems.item.santa.*;
 import com.cavetale.worldmarker.ItemMarker;
 import java.util.HashMap;
@@ -25,7 +26,13 @@ public enum Mytems {
     SANTA_HAT(SantaHat::new),
     SANTA_JACKET(SantaJacket::new),
     SANTA_PANTS(SantaPants::new),
-    SANTA_BOOTS(SantaBoots::new);
+    SANTA_BOOTS(SantaBoots::new),
+    // Dune set
+    DUNE_HELMET(DuneItem.Helmet::new),
+    DUNE_CHESTPLATE(DuneItem.Chestplate::new),
+    DUNE_LEGGINGS(DuneItem.Leggings::new),
+    DUNE_BOOTS(DuneItem.Boots::new),
+    DUNE_DIGGER(DuneItem.Weapon::new);
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id; // optionally qualified, e.g. mytems:dr_acula_staff
