@@ -1,5 +1,6 @@
 package com.cavetale.mytems;
 
+import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.item.ChristmasToken;
 import com.cavetale.worldmarker.ItemMarker;
 import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
@@ -26,6 +27,7 @@ import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -208,5 +210,14 @@ public final class EventListener implements Listener {
     void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
         if (event.isFlying()) return;
         plugin.getSessions().of(event.getPlayer()).getFlying().onToggleOff();
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    void onPlayerItemConsume(PlayerItemConsumeEvent event) {
+        Player player = event.getPlayer();
+        ItemStack item = event.getItem();
+        for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
+            setBonus.onPlayerItemConsume(event, player, item);
+        }
     }
 }

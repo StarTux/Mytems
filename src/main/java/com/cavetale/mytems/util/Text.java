@@ -79,4 +79,14 @@ public final class Text {
         bs[0] = new TextComponent(in);
         return bs;
     }
+
+    public static List<BaseComponent[]> wrapLore(String txt) {
+        List<String> lines = wrapMultiline(txt, ITEM_LORE_WIDTH);
+        List<BaseComponent[]> comps = toBaseComponents(lines);
+        return comps;
+    }
+
+    public static String colorize(String in) {
+        return ChatColor.translateAlternateColorCodes('&', in);
+    }
 }

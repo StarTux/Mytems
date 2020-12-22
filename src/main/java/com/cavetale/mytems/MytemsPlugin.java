@@ -54,8 +54,10 @@ public final class MytemsPlugin extends JavaPlugin {
     }
 
     public void enter(Player player) {
-        sessions.of(player).equipmentDidChange();
-        Bukkit.getScheduler().runTask(this, () -> fixPlayerInventory(player));
+        sessions.of(player).enable();
+        Bukkit.getScheduler().runTask(this, () -> {
+                fixPlayerInventory(player);
+            });
     }
 
     public void exit(Player player) {

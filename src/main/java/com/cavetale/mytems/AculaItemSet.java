@@ -11,10 +11,12 @@ public final class AculaItemSet implements ItemSet {
     @Getter List<SetBonus> setBonuses;
     @Getter public final SetBonus vampiricBonusDamage = new SetBonus() {
             @Getter public final int requiredItemCount = 2;
+            @Getter public final String name = "Garlic Breath";
             @Getter public final String description = "Deal extra 50% damage to vampiric enemies";
         };
     @Getter public final SetBonus vampirismResistance = new SetBonus() {
             @Getter public final int requiredItemCount = 4;
+            @Getter public final String name = "Silver Shield";
             @Getter public final String description = "Resistance to Vampirism";
         };
 

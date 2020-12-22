@@ -20,11 +20,13 @@ import org.bukkit.inventory.EntityEquipment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
+@Getter
 public final class Equipment {
     private final MytemsPlugin plugin;
     private final Map<Slot, Equipped> items = new EnumMap<>(Slot.class);
     private final Map<ItemSet, Integer> itemSets = new IdentityHashMap<>();
-    @Getter private final List<SetBonus> setBonuses = new ArrayList<>();
+    private final List<SetBonus> setBonuses = new ArrayList<>();
+    private final List<EntityAttribute> entityAttributes = new ArrayList<>();
 
     public Equipment(final MytemsPlugin plugin) {
         this.plugin = plugin;
@@ -96,6 +98,12 @@ public final class Equipment {
                     setBonuses.add(setBonus);
                 }
             }
+        }
+        entityAttributes.clear();
+        for (SetBonus setBonus : setBonuses) {
+            List<EntityAttribute> list = setBonus.getEntityAttributes(livingEntity);
+            if (list == null) continue;
+            entityAttributes.addAll(list);
         }
     }
 

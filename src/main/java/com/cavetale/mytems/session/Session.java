@@ -17,8 +17,9 @@ public final class Session {
     protected Map<String, Long> cooldowns = new HashMap<>();
     public static final long MILLIS_PER_TICK = 50L;
     private int equipmentUpdateTicks = 0;
-    @Getter private Equipment equipment; // Updated every tick
-    @Getter private Flying flying = new Flying(this);
+    @Getter protected Equipment equipment; // Updated every tick
+    @Getter protected Flying flying = new Flying(this);
+    @Getter protected Attributes attributes = new Attributes(this);
 
     public Session(final MytemsPlugin plugin, final Player player) {
         this.plugin = plugin;
@@ -26,8 +27,15 @@ public final class Session {
         equipment = new Equipment(plugin);
     }
 
+    public void enable() {
+        loadEquipment();
+        equipmentDidChange();
+        attributes.enable();
+    }
+
     public void disable() {
         flying.disable();
+        attributes.disable();
     }
 
     public void setCooldown(String key, int ticks) {
@@ -50,9 +58,8 @@ public final class Session {
         return (cd - now) / MILLIS_PER_TICK;
     }
 
-    void tick() {
-        equipment.clear();
-        equipment.loadPlayer(player);
+    public void tick() {
+        loadEquipment();
         if (equipmentUpdateTicks > 0) {
             equipmentUpdateTicks -= 1;
             if (equipmentUpdateTicks == 0) {
@@ -60,6 +67,12 @@ public final class Session {
             }
         }
         flying.tick();
+        attributes.tick();
+    }
+
+    public void loadEquipment() {
+        equipment.clear();
+        equipment.loadPlayer(player);
     }
 
     /**

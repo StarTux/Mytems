@@ -3,6 +3,7 @@ package com.cavetale.mytems;
 import com.cavetale.core.command.CommandContext;
 import com.cavetale.core.command.CommandNode;
 import com.cavetale.core.command.CommandWarn;
+import com.cavetale.mytems.gear.Equipment;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
@@ -33,6 +34,8 @@ public final class MytemsCommand implements TabExecutor {
         rootNode.addChild("serialize").denyTabCompletion()
             .description("Serialize the item in your hand")
             .playerCaller(this::serialize);
+        rootNode.addChild("equipment").denyTabCompletion()
+            .playerCaller(this::equipment);
         plugin.getCommand("mytems").setExecutor(this);
     }
 
@@ -114,5 +117,14 @@ public final class MytemsCommand implements TabExecutor {
             .map(m -> m.id)
             .filter(s -> s.contains(arg))
             .collect(Collectors.toList());
+    }
+
+    boolean equipment(Player player, String[] args) {
+        Equipment equipment = plugin.sessions.of(player).getEquipment();
+        player.sendMessage("items " + equipment.getItems());
+        player.sendMessage("sets " + equipment.getItemSets());
+        player.sendMessage("boni " + equipment.getSetBonuses());
+        player.sendMessage("attrs " + equipment.getEntityAttributes());
+        return true;
     }
 }

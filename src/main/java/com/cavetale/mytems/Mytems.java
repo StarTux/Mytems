@@ -1,6 +1,7 @@
 package com.cavetale.mytems;
 
 import com.cavetale.mytems.item.*;
+import com.cavetale.mytems.item.santa.*;
 import com.cavetale.worldmarker.ItemMarker;
 import java.util.HashMap;
 import java.util.Map;
@@ -19,7 +20,12 @@ public enum Mytems {
     MAGIC_CAPE(MagicCape::new),
     // Generic
     KITTY_COIN(KittyCoin::new, "kitty_coin"),
-    CHRISTMAS_TOKEN(ChristmasToken::new, "christmas_token");
+    // Christmas 2020
+    CHRISTMAS_TOKEN(ChristmasToken::new, "christmas_token"),
+    SANTA_HAT(SantaHat::new),
+    SANTA_JACKET(SantaJacket::new),
+    SANTA_PANTS(SantaPants::new),
+    SANTA_BOOTS(SantaBoots::new);
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id; // optionally qualified, e.g. mytems:dr_acula_staff
