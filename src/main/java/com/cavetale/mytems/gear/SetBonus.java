@@ -6,6 +6,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -30,6 +31,8 @@ public interface SetBonus {
     default void onPlayerItemConsume(PlayerItemConsumeEvent event, Player player, ItemStack item) { }
 
     default void onPlayerDamageByEntity(EntityDamageByEntityEvent event, Player player, Entity damager) { }
+
+    default void onPlayerPotionEffect(EntityPotionEffectEvent event, Player player) { }
 
     default void tick(LivingEntity living) { }
 }

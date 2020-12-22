@@ -1,6 +1,5 @@
 package com.cavetale.mytems.item.dune;
 
-import com.cavetale.mytems.ItemFixFlag;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.gear.EntityAttribute;
@@ -13,9 +12,7 @@ import com.cavetale.mytems.util.Text;
 import com.cavetale.worldmarker.ItemMarker;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.Getter;
@@ -60,6 +57,7 @@ public abstract class DuneItem implements GearItem {
         updateItemLore(meta);
         if (meta instanceof Repairable) {
             ((Repairable) meta).setRepairCost(9999);
+            meta.setUnbreakable(true);
         }
         prototype.setItemMeta(meta);
         ItemMarker.setId(prototype, getId());
@@ -67,12 +65,11 @@ public abstract class DuneItem implements GearItem {
 
     protected final BaseComponent[] fancify(String in, boolean bold) {
         int len = in.length();
-        int iter = 255 / len;
         ComponentBuilder cb = new ComponentBuilder();
         cb.append("").italic(false);
         for (int i = 0; i < len; i += 1) {
-            int red = 255 - (i * 255) / len;
-            cb.append(in.substring(i, i + 1)).color(ChatColor.of(new java.awt.Color(red, 255, 0)));
+            int red = 128 + (i * 127) / len;
+            cb.append(in.substring(i, i + 1)).color(ChatColor.of(new java.awt.Color(red, 128, 0)));
             if (bold) cb.bold(true);
         }
         return cb.create();
@@ -87,11 +84,6 @@ public abstract class DuneItem implements GearItem {
     @Override
     public final boolean shouldAutoFix() {
         return true;
-    }
-
-    @Override
-    public final Set<ItemFixFlag> getItemFixFlags() {
-        return EnumSet.of(ItemFixFlag.COPY_DURABILITY);
     }
 
     @Override
@@ -185,8 +177,7 @@ public abstract class DuneItem implements GearItem {
 
     public static final class DuneItemSet implements ItemSet {
         @Getter private final List<SetBonus> setBonuses = Arrays
-            .asList(new SandSpeed(2),
-                    new FlameThorns(4));
+            .asList(new FlameThorns(2), new SandSpeed(4));
 
         @Getter @RequiredArgsConstructor
         public static final class SandSpeed implements SetBonus {

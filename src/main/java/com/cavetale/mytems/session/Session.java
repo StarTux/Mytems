@@ -30,9 +30,9 @@ public final class Session {
     }
 
     public void enable() {
+        attributes.enable();
         loadEquipment();
         equipmentDidChange();
-        attributes.enable();
     }
 
     public void disable() {

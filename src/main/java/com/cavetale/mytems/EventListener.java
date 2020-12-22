@@ -20,9 +20,10 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -229,6 +230,16 @@ public final class EventListener implements Listener {
         ItemStack item = event.getItem();
         for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
             setBonus.onPlayerItemConsume(event, player, item);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    void onEntityPotionEffect(EntityPotionEffectEvent event) {
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
+                setBonus.onPlayerPotionEffect(event, player);
+            }
         }
     }
 }

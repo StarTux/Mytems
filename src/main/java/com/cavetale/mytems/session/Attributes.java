@@ -8,7 +8,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import lombok.RequiredArgsConstructor;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
@@ -22,7 +21,6 @@ import org.bukkit.attribute.AttributeModifier;
  * and adds the attributes that are missing from the player and
  * removes the ones that they should no longer have.
  */
-@RequiredArgsConstructor
 public final class Attributes {
     public static final String PREFIX = "mytems:attr";
     private final Session session;
@@ -30,12 +28,14 @@ public final class Attributes {
     private final Set<String> shouldHaveAttributeNames = new HashSet<>();
     private final Map<Attribute, List<EntityAttribute>> shouldHaveAttributes = new EnumMap<>(Attribute.class);
 
-    public void enable() {
+    public Attributes(final Session session) {
+        this.session = session;
         for (Attribute attr : Attribute.values()) {
             shouldHaveAttributes.put(attr, new ArrayList<>());
         }
-        update();
     }
+
+    public void enable() { }
 
     public void disable() {
         clear();

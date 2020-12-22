@@ -2,7 +2,9 @@ package com.cavetale.mytems;
 
 import com.cavetale.mytems.item.*;
 import com.cavetale.mytems.item.dune.DuneItem;
+import com.cavetale.mytems.item.dwarven.DwarvenItem;
 import com.cavetale.mytems.item.santa.*;
+import com.cavetale.mytems.item.swampy.SwampyItem;
 import com.cavetale.worldmarker.ItemMarker;
 import java.util.HashMap;
 import java.util.Map;
@@ -32,7 +34,19 @@ public enum Mytems {
     DUNE_CHESTPLATE(DuneItem.Chestplate::new),
     DUNE_LEGGINGS(DuneItem.Leggings::new),
     DUNE_BOOTS(DuneItem.Boots::new),
-    DUNE_DIGGER(DuneItem.Weapon::new);
+    DUNE_DIGGER(DuneItem.Weapon::new),
+    // Swampy set
+    SWAMPY_HELMET(SwampyItem.Helmet::new),
+    SWAMPY_CHESTPLATE(SwampyItem.Chestplate::new),
+    SWAMPY_LEGGINGS(SwampyItem.Leggings::new),
+    SWAMPY_BOOTS(SwampyItem.Boots::new),
+    SWAMPY_TRIDENT(SwampyItem.Weapon::new),
+    // Swampy set
+    DWARVEN_HELMET(DwarvenItem.Helmet::new),
+    DWARVEN_CHESTPLATE(DwarvenItem.Chestplate::new),
+    DWARVEN_LEGGINGS(DwarvenItem.Leggings::new),
+    DWARVEN_BOOTS(DwarvenItem.Boots::new),
+    DWARF_AXE(DwarvenItem.Weapon::new);
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id; // optionally qualified, e.g. mytems:dr_acula_staff
