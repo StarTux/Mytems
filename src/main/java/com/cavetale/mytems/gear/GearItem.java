@@ -3,6 +3,8 @@ package com.cavetale.mytems.gear;
 import com.cavetale.mytems.Mytem;
 import javax.annotation.Nullable;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 /**
@@ -25,5 +27,15 @@ public interface GearItem extends Mytem {
 
     default void updateItemLore(ItemMeta meta) {
         updateItemLore(meta, null, null, null);
+    }
+
+    /**
+     * Helmets of gear items are oftentimes player heads which can be
+     * placed.
+     * Let's cancel that.
+     */
+    @Override
+    default void onBlockPlace(BlockPlaceEvent event, Player player, ItemStack item) {
+        event.setCancelled(true);
     }
 }
