@@ -31,11 +31,13 @@ public final class MytemsCommand implements TabExecutor {
             .description("Give an item to a player")
             .senderCaller(this::give)
             .completer(this::giveComplete);
-        rootNode.addChild("serialize").denyTabCompletion()
-            .description("Serialize the item in your hand")
-            .playerCaller(this::serialize);
+        rootNode.addChild("base64").denyTabCompletion()
+            .description("Serialize the item in your hand to base64")
+            .playerCaller(this::base64);
         rootNode.addChild("equipment").denyTabCompletion()
             .playerCaller(this::equipment);
+        rootNode.addChild("serialize").denyTabCompletion()
+            .playerCaller(this::serialize);
         plugin.getCommand("mytems").setExecutor(this);
     }
 
@@ -91,7 +93,7 @@ public final class MytemsCommand implements TabExecutor {
         return true;
     }
 
-    boolean serialize(Player player, String[] args) {
+    boolean base64(Player player, String[] args) {
         if (args.length != 0) return false;
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         if (itemStack == null || itemStack.getAmount() <= 0) {
@@ -125,6 +127,21 @@ public final class MytemsCommand implements TabExecutor {
         player.sendMessage("sets " + equipment.getItemSets());
         player.sendMessage("boni " + equipment.getSetBonuses());
         player.sendMessage("attrs " + equipment.getEntityAttributes());
+        return true;
+    }
+
+    boolean serialize(Player player, String[] args) {
+        if (args.length != 0) return false;
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        if (itemStack == null || itemStack.getAmount() == 0) {
+            throw new CommandWarn("No item in your hand!");
+        }
+        Mytems mytems = Mytems.forItem(itemStack);
+        if (mytems == null) {
+            throw new CommandWarn("No Mytem in your hand!");
+        }
+        String serialized = mytems.serializeItem(itemStack);
+        player.sendMessage(ChatColor.YELLOW + "Serialized item in hand: " + ChatColor.RESET + serialized);
         return true;
     }
 }

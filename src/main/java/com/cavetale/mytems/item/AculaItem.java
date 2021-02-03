@@ -1,5 +1,6 @@
 package com.cavetale.mytems.item;
 
+import com.cavetale.mytems.ItemFixFlag;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
@@ -8,7 +9,9 @@ import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.util.Text;
 import java.awt.Color;
 import java.util.ArrayList;
+import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import lombok.Getter;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -78,5 +81,10 @@ abstract class AculaItem implements GearItem {
         updateItemLore(meta);
         itemStack.setItemMeta(meta);
         return itemStack;
+    }
+
+    @Override
+    public Set<ItemFixFlag> getItemFixFlags() {
+        return EnumSet.of(ItemFixFlag.COPY_DURABILITY);
     }
 }

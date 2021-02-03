@@ -83,4 +83,22 @@ public enum Mytems {
     public Mytem getMytem() {
         return MytemsPlugin.getInstance().getMytem(this);
     }
+
+    public String serializeItem(ItemStack itemStack) {
+        String tag = getMytem().serializeTag(itemStack);
+        return tag != null
+            ? id + tag
+            : id;
+    }
+
+    public static ItemStack deserializeItem(String serialized) {
+        int index = serialized.indexOf("{");
+        String id = index >= 0 ? serialized.substring(0, index) : serialized;
+        Mytems mytems = forId(id);
+        if (mytems == null) return null;
+        String tag = index >= 0 ? serialized.substring(index) : null;
+        return tag != null
+            ? mytems.getMytem().deserializeTag(tag)
+            : mytems.getMytem().getItem();
+    }
 }
