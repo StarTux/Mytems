@@ -75,9 +75,11 @@ public interface Mytem {
         if (flags.contains(ItemFixFlag.COPY_DURABILITY)) {
             ItemMeta meta = itemStack.getItemMeta();
             if (meta instanceof Damageable) {
-                tag.durability = ((Damageable) meta).getDamage();
+                int damage = ((Damageable) meta).getDamage();
+                if (damage != 0) tag.durability = damage;
             }
         }
+        if (tag.enchantments == null && tag.durability == null && tag.amount == null) return null;
         return Json.serialize(tag);
     }
 
