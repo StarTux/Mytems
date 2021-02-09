@@ -2,11 +2,15 @@ package com.cavetale.mytems.util;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ClickEvent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import org.bukkit.ChatColor;
 
 /**
  * Convenience functions to format text. Primarily for item tooltips.
@@ -29,7 +33,7 @@ public final class Text {
             if (lineLength + wordLength + 1 > maxLineLength) {
                 String lineStr = lastColors + line.toString();
                 lines.add(lineStr);
-                lastColors = ChatColor.getLastColors(lineStr);
+                lastColors = org.bukkit.ChatColor.getLastColors(lineStr);
                 line = new StringBuilder(word);
                 lineLength = wordLength;
             } else {
@@ -80,6 +84,16 @@ public final class Text {
         return bs;
     }
 
+    public static List<BaseComponent[]> toBaseComponents(List<String> in, Consumer<ComponentBuilder> lineCallback) {
+        List<BaseComponent[]> result = new ArrayList<>(in.size());
+        for (String line : in) {
+            ComponentBuilder cb = new ComponentBuilder(line);
+            lineCallback.accept(cb);
+            result.add(cb.create());
+        }
+        return result;
+    }
+
     public static List<BaseComponent[]> wrapLore(String txt) {
         List<String> lines = wrapMultiline(txt, ITEM_LORE_WIDTH);
         List<BaseComponent[]> comps = toBaseComponents(lines);
@@ -88,5 +102,22 @@ public final class Text {
 
     public static String colorize(String in) {
         return ChatColor.translateAlternateColorCodes('&', in);
+    }
+
+    public static HoverEvent hover(String msg) {
+        BaseComponent[] lore = TextComponent.fromLegacyText(msg);
+        return new HoverEvent(HoverEvent.Action.SHOW_TEXT, lore);
+    }
+
+    public static HoverEvent hover(BaseComponent[] lore) {
+        return new HoverEvent(HoverEvent.Action.SHOW_TEXT, lore);
+    }
+
+    public static ClickEvent click(String cmd) {
+        return new ClickEvent(ClickEvent.Action.RUN_COMMAND, cmd);
+    }
+
+    public static ComponentBuilder builder(String txt) {
+        return new ComponentBuilder(txt);
     }
 }

@@ -46,7 +46,9 @@ public enum Mytems {
     DWARVEN_CHESTPLATE(DwarvenItem.Chestplate::new),
     DWARVEN_LEGGINGS(DwarvenItem.Leggings::new),
     DWARVEN_BOOTS(DwarvenItem.Boots::new),
-    DWARF_AXE(DwarvenItem.Weapon::new);
+    DWARF_AXE(DwarvenItem.Weapon::new),
+    //
+    WEDDING_RING(WeddingRing::new, "wedding_ring");
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id; // optionally qualified, e.g. mytems:dr_acula_staff
