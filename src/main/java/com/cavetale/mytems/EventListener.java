@@ -2,7 +2,7 @@ package com.cavetale.mytems;
 
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.item.ChristmasToken;
-import com.cavetale.worldmarker.ItemMarker;
+import com.cavetale.worldmarker.item.ItemMarker;
 import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.destroystokyo.paper.profile.PlayerProfile;

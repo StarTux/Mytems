@@ -5,7 +5,7 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Skull;
 import com.cavetale.mytems.util.Text;
-import com.cavetale.worldmarker.ItemMarker;
+import com.cavetale.worldmarker.item.ItemMarker;
 import java.awt.Color;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;

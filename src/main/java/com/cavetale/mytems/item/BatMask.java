@@ -3,7 +3,7 @@ package com.cavetale.mytems.item;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Text;
-import com.cavetale.worldmarker.ItemMarker;
+import com.cavetale.worldmarker.item.ItemMarker;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import java.util.UUID;

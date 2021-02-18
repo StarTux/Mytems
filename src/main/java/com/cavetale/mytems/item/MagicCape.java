@@ -6,7 +6,7 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Text;
-import com.cavetale.worldmarker.ItemMarker;
+import com.cavetale.worldmarker.item.ItemMarker;
 import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;

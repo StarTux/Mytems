@@ -3,7 +3,7 @@ package com.cavetale.mytems.item;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Text;
-import com.cavetale.worldmarker.ItemMarker;
+import com.cavetale.worldmarker.item.ItemMarker;
 import java.util.Base64;
 import java.util.UUID;
 import net.md_5.bungee.api.ChatColor;

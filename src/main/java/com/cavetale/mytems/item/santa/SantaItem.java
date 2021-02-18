@@ -8,7 +8,7 @@ import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.util.Attr;
 import com.cavetale.mytems.util.Skull;
 import com.cavetale.mytems.util.Text;
-import com.cavetale.worldmarker.ItemMarker;
+import com.cavetale.worldmarker.item.ItemMarker;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;

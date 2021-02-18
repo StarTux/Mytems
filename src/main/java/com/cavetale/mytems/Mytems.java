@@ -5,7 +5,7 @@ import com.cavetale.mytems.item.dune.DuneItem;
 import com.cavetale.mytems.item.dwarven.DwarvenItem;
 import com.cavetale.mytems.item.santa.*;
 import com.cavetale.mytems.item.swampy.SwampyItem;
-import com.cavetale.worldmarker.ItemMarker;
+import com.cavetale.worldmarker.item.ItemMarker;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
