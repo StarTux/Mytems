@@ -4,7 +4,6 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Text;
-import com.cavetale.worldmarker.item.ItemMarker;
 import java.util.UUID;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
@@ -16,12 +15,10 @@ import org.bukkit.SoundCategory;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Block;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
@@ -50,11 +47,6 @@ public final class DrAculaStaff extends AculaItem {
     @Override
     public Mytems getKey() {
         return KEY;
-    }
-
-    @Override
-    public String getId() {
-        return KEY.id;
     }
 
     @Override
@@ -116,15 +108,13 @@ public final class DrAculaStaff extends AculaItem {
         meta.setDisplayNameComponent(displayName);
         Repairable repairable = (Repairable) meta;
         repairable.setRepairCost(9999);
-        meta.addEnchant(Enchantment.DURABILITY, 4, true);
-        meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         AttributeModifier attr;
         attr = new AttributeModifier(UUID.randomUUID(), KEY.id, 12.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, attr);
         attr = new AttributeModifier(UUID.randomUUID(), KEY.id, 1.6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, attr);
+        KEY.markItemMeta(meta);
         item.setItemMeta(meta);
-        ItemMarker.setId(item, KEY.id);
         return item;
     }
 }

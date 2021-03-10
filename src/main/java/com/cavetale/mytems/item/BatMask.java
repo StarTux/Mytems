@@ -36,11 +36,6 @@ public final class BatMask extends AculaItem {
     }
 
     @Override
-    public String getId() {
-        return KEY.id;
-    }
-
-    @Override
     public void enable() {
         displayName = creepify("Bat Mask", false);
         baseLore = Text.toBaseComponents(Text.wrapMultiline(description, Text.ITEM_LORE_WIDTH));

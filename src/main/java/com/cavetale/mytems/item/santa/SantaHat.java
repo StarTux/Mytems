@@ -22,11 +22,6 @@ public final class SantaHat extends SantaItem {
     }
 
     @Override
-    public String getId() {
-        return KEY.id;
-    }
-
-    @Override
     public ItemStack getBaseItemStack() {
         return makeHat();
     }

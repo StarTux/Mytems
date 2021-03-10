@@ -53,11 +53,6 @@ public final class MagicCape implements Mytem {
     }
 
     @Override
-    public String getId() {
-        return KEY.id;
-    }
-
-    @Override
     public void enable() {
         ComponentBuilder cb = new ComponentBuilder();
         UnicornHorn.rainbowify(cb, "Magic Cape");
@@ -138,11 +133,6 @@ public final class MagicCape implements Mytem {
     public void onEnd(Player player) {
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PHANTOM_FLAP, SoundCategory.PLAYERS, 2.0f, 1.0f);
         return;
-    }
-
-    @Override
-    public boolean shouldAutoFix() {
-        return true;
     }
 
     @Override

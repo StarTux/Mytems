@@ -52,11 +52,6 @@ public final class Stompers extends AculaItem {
     }
 
     @Override
-    public String getId() {
-        return KEY.id;
-    }
-
-    @Override
     public void enable() {
         displayName = creepify("Stompers", false);
         baseLore = Text.toBaseComponents(Text.wrapMultiline(description, Text.ITEM_LORE_WIDTH));

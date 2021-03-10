@@ -3,7 +3,9 @@ package com.cavetale.mytems;
 import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.session.Sessions;
+import java.util.ArrayList;
 import java.util.EnumMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import lombok.Getter;
@@ -24,6 +26,7 @@ public final class MytemsPlugin extends JavaPlugin {
     final EventListener eventListener = new EventListener(this);
     final Sessions sessions = new Sessions(this);
     private Map<Mytems, Mytem> mytems = new EnumMap<>(Mytems.class);
+    private List<CustomMytemSlot> customMytemSlots = new ArrayList<>();
 
     @Override
     public void onEnable() {
@@ -55,9 +58,7 @@ public final class MytemsPlugin extends JavaPlugin {
 
     public void enter(Player player) {
         sessions.of(player).enable();
-        Bukkit.getScheduler().runTask(this, () -> {
-                fixPlayerInventory(player);
-            });
+        fixPlayerInventory(player);
     }
 
     public void exit(Player player) {
@@ -104,6 +105,11 @@ public final class MytemsPlugin extends JavaPlugin {
         }
     }
 
+    public int fixPlayerInventory(Player player) {
+        return fixInventory(player.getInventory())
+            + fixInventory(player.getEnderChest());
+    }
+
     public int fixInventory(Inventory inventory) {
         int count = 0;
         for (int i = 0; i < inventory.getSize(); i += 1) {
@@ -120,7 +126,6 @@ public final class MytemsPlugin extends JavaPlugin {
     public ItemStack fixItemStack(ItemStack oldItemStack) {
         Mytem mytem = getMytem(oldItemStack);
         if (mytem == null) return null;
-        if (!mytem.shouldAutoFix()) return null;
         ItemStack newItemStack = mytem.getItem();
         newItemStack.setAmount(oldItemStack.getAmount());
         Set<ItemFixFlag> itemFixFlags = mytem.getItemFixFlags();
@@ -139,7 +144,34 @@ public final class MytemsPlugin extends JavaPlugin {
         return newItemStack;
     }
 
-    public void fixPlayerInventory(Player player) {
-        int count = fixInventory(player.getInventory());
+    public static void registerMytem(JavaPlugin plugin, Mytems mytems, Mytem mytem) {
+        Mytem old = instance.mytems.get(mytems);
+        instance.mytems.put(mytems, mytem);
+        mytem.enable();
+        instance.customMytemSlots.removeIf(slot -> slot.mytems == mytems);
+        instance.customMytemSlots.add(new CustomMytemSlot(plugin, mytems, mytem));
+        if (old != null) {
+            try {
+                old.disable();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    protected void onDisablePlugin(JavaPlugin plugin) {
+        for (CustomMytemSlot customMytemSlot : customMytemSlots) {
+            if (plugin.equals(customMytemSlot.plugin)) {
+                try {
+                    customMytemSlot.mytem.disable();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                Mytem mytem = customMytemSlot.mytems.ctor.apply(this);
+                mytems.put(customMytemSlot.mytems, mytem);
+                mytem.enable();
+            }
+        }
+        customMytemSlots.removeIf(slot -> plugin.equals(slot.plugin));
     }
 }

@@ -49,11 +49,6 @@ public final class UnicornHorn implements Mytem {
     }
 
     @Override
-    public String getId() {
-        return KEY.id;
-    }
-
-    @Override
     public void enable() {
         ComponentBuilder cb = new ComponentBuilder();
         rainbowify(cb, "Unicorn Horn");
@@ -86,10 +81,5 @@ public final class UnicornHorn implements Mytem {
     @Override
     public void onBlockPlace(BlockPlaceEvent event, Player player, ItemStack item) {
         event.setCancelled(true);
-    }
-
-    @Override
-    public boolean shouldAutoFix() {
-        return true;
     }
 }

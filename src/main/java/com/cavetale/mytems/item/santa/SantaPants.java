@@ -23,11 +23,6 @@ public final class SantaPants extends SantaItem {
     }
 
     @Override
-    public String getId() {
-        return KEY.id;
-    }
-
-    @Override
     public ItemStack getBaseItemStack() {
         return makePants();
     }

@@ -9,7 +9,6 @@ import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
-import com.cavetale.worldmarker.item.ItemMarker;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,11 +43,6 @@ public abstract class DuneItem implements GearItem {
     private static DuneItemSet duneItemSet;
 
     @Override
-    public final String getId() {
-        return key.id;
-    }
-
-    @Override
     public final void enable() {
         displayName = fancify(getRawDisplayName(), false);
         prototype = Items.deserialize(getSerialized());
@@ -59,8 +53,8 @@ public abstract class DuneItem implements GearItem {
             ((Repairable) meta).setRepairCost(9999);
             meta.setUnbreakable(true);
         }
+        key.markItemMeta(meta);
         prototype.setItemMeta(meta);
-        ItemMarker.setId(prototype, getId());
     }
 
     protected final BaseComponent[] fancify(String in, boolean bold) {
@@ -80,11 +74,6 @@ public abstract class DuneItem implements GearItem {
     abstract String getRawDisplayName();
 
     abstract String getDescription();
-
-    @Override
-    public final boolean shouldAutoFix() {
-        return true;
-    }
 
     @Override
     public final ItemSet getItemSet() {

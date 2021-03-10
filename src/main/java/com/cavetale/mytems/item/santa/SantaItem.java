@@ -8,7 +8,6 @@ import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.util.Attr;
 import com.cavetale.mytems.util.Skull;
 import com.cavetale.mytems.util.Text;
-import com.cavetale.worldmarker.item.ItemMarker;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -48,8 +47,8 @@ abstract class SantaItem implements GearItem {
         ItemMeta meta = prototype.getItemMeta();
         baseLore = Text.wrapLore(Text.colorize("\n\n" + getDescription()));
         updateItemLore(meta);
+        getKey().markItemMeta(meta);
         prototype.setItemMeta(meta);
-        ItemMarker.setId(prototype, getId());
     }
 
     abstract String getRawDisplayName();
@@ -109,12 +108,6 @@ abstract class SantaItem implements GearItem {
         meta.setColor(color);
         itemStack.setItemMeta(meta);
         return itemStack;
-    }
-
-
-    @Override
-    public boolean shouldAutoFix() {
-        return true;
     }
 
     protected ItemStack makeBoots() {

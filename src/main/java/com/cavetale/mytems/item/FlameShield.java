@@ -33,11 +33,6 @@ public final class FlameShield extends AculaItem {
     }
 
     @Override
-    public String getId() {
-        return KEY.id;
-    }
-
-    @Override
     public void enable() {
         displayName = creepify("Flame Shield", false);
         @SuppressWarnings("LineLength")

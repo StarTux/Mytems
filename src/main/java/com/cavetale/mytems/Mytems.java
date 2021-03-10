@@ -9,11 +9,13 @@ import com.cavetale.worldmarker.item.ItemMarker;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 public enum Mytems {
     // Halloween 2020
-    DR_ACULA_STAFF(DrAculaStaff::new),
+    DR_ACULA_STAFF(DrAculaStaff::new, "dr_acula_staff", Material.NETHERITE_SWORD, 741302),
     FLAME_SHIELD(FlameShield::new),
     STOMPERS(Stompers::new),
     GHAST_BOW(GhastBow::new),
@@ -22,7 +24,7 @@ public enum Mytems {
     UNICORN_HORN(UnicornHorn::new),
     MAGIC_CAPE(MagicCape::new),
     // Generic
-    KITTY_COIN(KittyCoin::new, "kitty_coin"),
+    KITTY_COIN(KittyCoin::new, "kitty_coin", Material.PLAYER_HEAD, 7413001),
     // Christmas 2020
     CHRISTMAS_TOKEN(ChristmasToken::new, "christmas_token"),
     SANTA_HAT(SantaHat::new),
@@ -40,35 +42,46 @@ public enum Mytems {
     SWAMPY_CHESTPLATE(SwampyItem.Chestplate::new),
     SWAMPY_LEGGINGS(SwampyItem.Leggings::new),
     SWAMPY_BOOTS(SwampyItem.Boots::new),
-    SWAMPY_TRIDENT(SwampyItem.Weapon::new),
+    SWAMPY_TRIDENT(SwampyItem.Weapon::new, "swampy_trident", Material.TRIDENT, 7413305),
     // Swampy set
-    DWARVEN_HELMET(DwarvenItem.Helmet::new),
-    DWARVEN_CHESTPLATE(DwarvenItem.Chestplate::new),
-    DWARVEN_LEGGINGS(DwarvenItem.Leggings::new),
-    DWARVEN_BOOTS(DwarvenItem.Boots::new),
-    DWARF_AXE(DwarvenItem.Weapon::new),
+    DWARVEN_HELMET(DwarvenItem.Helmet::new, "dwarven_helmet", Material.PLAYER_HEAD, 7413401),
+    DWARVEN_CHESTPLATE(DwarvenItem.Chestplate::new, "dwarven_chestplate", Material.IRON_CHESTPLATE, 7413402),
+    DWARVEN_LEGGINGS(DwarvenItem.Leggings::new, "dwarven_leggings", Material.IRON_LEGGINGS, 7413403),
+    DWARVEN_BOOTS(DwarvenItem.Boots::new, "dwarven_boots", Material.IRON_BOOTS, 7413404),
+    DWARF_AXE(DwarvenItem.Weapon::new, "dwarven_axe", Material.IRON_AXE, 7413405),
     //
-    WEDDING_RING(WeddingRing::new, "wedding_ring");
+    WEDDING_RING(WeddingRing::new, "wedding_ring"),
+    MAGIC_MAP(MagicMap::new, "magic_map");
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
-    public final String id; // optionally qualified, e.g. mytems:dr_acula_staff
+    public final String id;
     public final Function<MytemsPlugin, Mytem> ctor;
+    public final Material material;
+    public final Integer customModelData;
 
     static {
         for (Mytems it : Mytems.values()) {
             ID_MAP.put(it.id, it);
-            ID_MAP.put(it.id.split(":")[0], it);
+            ID_MAP.put("mytems:" + it.id, it);
         }
     }
 
     Mytems(final Function<MytemsPlugin, Mytem> ctor) {
         this.ctor = ctor;
-        this.id = "mytems:" + name().toLowerCase();
+        this.id = name().toLowerCase();
+        this.material = null;
+        this.customModelData = null;
     }
 
     Mytems(final Function<MytemsPlugin, Mytem> ctor, final String id) {
+        this(ctor, id, null, null);
+    }
+
+    Mytems(final Function<MytemsPlugin, Mytem> ctor, final String id, final Material material, final Integer customModelData) {
         this.ctor = ctor;
         this.id = id;
+        this.material = material;
+        this.customModelData = customModelData;
     }
 
     public static Mytems forId(String in) {
@@ -86,6 +99,10 @@ public enum Mytems {
         return MytemsPlugin.getInstance().getMytem(this);
     }
 
+    /**
+     * Return the mytems id, optionally by the serialized tag if it
+     * exists.
+     */
     public String serializeItem(ItemStack itemStack) {
         String tag = getMytem().serializeTag(itemStack);
         return tag != null
@@ -102,5 +119,18 @@ public enum Mytems {
         return tag != null
             ? mytems.getMytem().deserializeTag(tag)
             : mytems.getMytem().getItem();
+    }
+
+    public void markItemMeta(ItemMeta meta) {
+        ItemMarker.setId(meta, id);
+        if (customModelData != null) {
+            meta.setCustomModelData(customModelData);
+        }
+    }
+
+    public void markItemStack(ItemStack itemStack) {
+        ItemMeta meta = itemStack.getItemMeta();
+        markItemMeta(meta);
+        itemStack.setItemMeta(meta);
     }
 }

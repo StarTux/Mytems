@@ -4,6 +4,7 @@ import com.cavetale.core.command.CommandContext;
 import com.cavetale.core.command.CommandNode;
 import com.cavetale.core.command.CommandWarn;
 import com.cavetale.mytems.gear.Equipment;
+import com.cavetale.mytems.util.Text;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
@@ -27,6 +28,9 @@ public final class MytemsCommand implements TabExecutor {
 
     public void enable() {
         rootNode = new CommandNode("mytems");
+        rootNode.addChild("list").denyTabCompletion()
+            .description("Show some info on all mytems")
+            .senderCaller(this::list);
         rootNode.addChild("give").arguments("<player> <mytem> [amount]")
             .description("Give an item to a player")
             .senderCaller(this::give)
@@ -49,6 +53,18 @@ public final class MytemsCommand implements TabExecutor {
     @Override
     public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias, final String[] args) {
         return rootNode.complete(sender, command, alias, args);
+    }
+
+    boolean list(CommandSender sender, String[] args) {
+        if (args.length != 0) return false;
+        for (Mytems mytems : Mytems.values()) {
+            Mytem mytem = mytems.getMytem();
+            boolean same = mytems == mytem.getKey();
+            sender.sendMessage(Text.builder(mytems.ordinal() + ") " + mytems.id + " same=" + same)
+                               .append(mytem.getDisplayName())
+                               .create());
+        }
+        return true;
     }
 
     boolean give(CommandSender sender, String[] args) {

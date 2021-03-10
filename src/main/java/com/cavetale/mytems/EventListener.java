@@ -3,6 +3,7 @@ package com.cavetale.mytems;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.item.ChristmasToken;
 import com.cavetale.worldmarker.item.ItemMarker;
+import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
 import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.destroystokyo.paper.profile.PlayerProfile;
@@ -14,6 +15,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Skull;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,7 +24,6 @@ import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
@@ -35,8 +36,10 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
+import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.plugin.java.JavaPlugin;
 
 @RequiredArgsConstructor
 public final class EventListener implements Listener {
@@ -151,12 +154,15 @@ public final class EventListener implements Listener {
         }
     }
 
-    @EventHandler
-    void onEntityPickupItem(EntityPickupItemEvent event) {
-        if (event.getEntity() instanceof Player) {
-            Player player = (Player) event.getEntity();
-            plugin.sessions.of(player).equipmentDidChange();
-            Bukkit.getScheduler().runTask(plugin, () -> plugin.fixPlayerInventory(player));
+    @EventHandler(priority = EventPriority.LOWEST)
+    void onEntityAddToWorld(EntityAddToWorldEvent event) {
+        if (event.getEntity() instanceof Item) {
+            Item item = (Item) event.getEntity();
+            ItemStack itemStack = item.getItemStack();
+            if (itemStack == null) return;
+            ItemStack newItemStack = plugin.fixItemStack(itemStack);
+            if (newItemStack == null) return;
+            item.setItemStack(newItemStack);
         }
     }
 
@@ -240,6 +246,13 @@ public final class EventListener implements Listener {
             for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
                 setBonus.onPlayerPotionEffect(event, player);
             }
+        }
+    }
+
+    @EventHandler
+    void onPluginDisable(PluginDisableEvent event) {
+        if (event.getPlugin() instanceof JavaPlugin) {
+            plugin.onDisablePlugin((JavaPlugin) event.getPlugin());
         }
     }
 }

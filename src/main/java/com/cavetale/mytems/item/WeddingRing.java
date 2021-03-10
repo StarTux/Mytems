@@ -5,7 +5,6 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
-import com.cavetale.worldmarker.item.ItemMarker;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.md_5.bungee.api.ChatColor;
@@ -36,11 +35,6 @@ public final class WeddingRing implements Mytem {
     }
 
     @Override
-    public String getId() {
-        return KEY.id;
-    }
-
-    @Override
     public void enable() {
         prototype = Items.deserialize(serialized);
         ItemMeta meta = prototype.getItemMeta();
@@ -48,8 +42,8 @@ public final class WeddingRing implements Mytem {
         meta.setDisplayNameComponent(displayName);
         meta.setLoreComponents(Text.toBaseComponents(Text.wrapMultiline(description, Text.ITEM_LORE_WIDTH),
                                                      cb -> cb.color(pink).italic(false)));
+        KEY.markItemMeta(meta);
         prototype.setItemMeta(meta);
-        ItemMarker.setId(prototype, KEY.id);
     }
 
     @Override

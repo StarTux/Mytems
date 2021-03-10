@@ -21,9 +21,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 public interface Mytem {
     Mytems getKey();
 
-    String getId();
-
     void enable();
+
+    default void disable() { }
 
     /**
      * Create a fresh copy.
@@ -41,10 +41,6 @@ public interface Mytem {
     default void onBlockPlace(BlockPlaceEvent event, Player player, ItemStack item) { }
 
     default void onToggleGlide(EntityToggleGlideEvent event, Player player, ItemStack item) { }
-
-    default boolean shouldAutoFix() {
-        return false;
-    }
 
     default Set<ItemFixFlag> getItemFixFlags() {
         return Collections.emptySet();

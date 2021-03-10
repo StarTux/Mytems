@@ -18,11 +18,6 @@ public final class TemplateItem implements Mytem {
     }
 
     @Override
-    public String getId() {
-        return KEY.id;
-    }
-
-    @Override
     public void enable() {
     }
 

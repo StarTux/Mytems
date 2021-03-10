@@ -40,11 +40,6 @@ public final class GhastBow extends AculaItem {
     }
 
     @Override
-    public String getId() {
-        return KEY.id;
-    }
-
-    @Override
     public void enable() {
         displayName = creepify("Ghast Bow", false);
         baseLore = Text.toBaseComponents(Text.wrapMultiline(description, Text.ITEM_LORE_WIDTH));

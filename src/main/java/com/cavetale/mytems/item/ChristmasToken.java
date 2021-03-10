@@ -34,11 +34,6 @@ public final class ChristmasToken implements Mytem {
         return KEY;
     }
 
-    @Override
-    public String getId() {
-        return KEY.id;
-    }
-
     private BaseComponent[] xmasify(String in) {
         int len = in.length();
         int iter = 255 / len;
@@ -69,10 +64,5 @@ public final class ChristmasToken implements Mytem {
     @Override
     public BaseComponent[] getDisplayName() {
         return displayName;
-    }
-
-    @Override
-    public boolean shouldAutoFix() {
-        return true;
     }
 }
