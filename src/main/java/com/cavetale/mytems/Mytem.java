@@ -65,7 +65,13 @@ public interface Mytem {
         if (flags.contains(ItemFixFlag.COPY_ENCHANTMENTS)) {
             tag.enchantments = new HashMap<>();
             for (Map.Entry<Enchantment, Integer> entry : itemStack.getEnchantments().entrySet()) {
-                tag.enchantments.put(entry.getKey().getKey().toString(), entry.getValue());
+                Enchantment enchantment = entry.getKey();
+                NamespacedKey namespacedKey = enchantment.getKey();
+                String mapKey = "minecraft".equals(namespacedKey.getNamespace())
+                    ? namespacedKey.getKey()
+                    : namespacedKey.toString();
+                Integer level = entry.getValue();
+                tag.enchantments.put(mapKey, level);
             }
         }
         if (flags.contains(ItemFixFlag.COPY_DURABILITY)) {
@@ -76,7 +82,7 @@ public interface Mytem {
             }
         }
         if (tag.enchantments == null && tag.durability == null && tag.amount == null) return null;
-        return Json.serialize(tag);
+        return Json.simplified(tag);
     }
 
     /**
@@ -86,7 +92,10 @@ public interface Mytem {
     default ItemStack deserializeTag(String serialized) {
         ItemStack itemStack = getItem();
         Tag tag = Json.deserialize(serialized, Tag.class);
-        if (tag == null) return itemStack;
+        if (tag == null) {
+            MytemsPlugin.getInstance().getLogger().warning("Invalid item tag: " + serialized);
+            return itemStack;
+        }
         if (tag.amount != null) {
             itemStack.setAmount(tag.amount);
         }
@@ -95,12 +104,24 @@ public interface Mytem {
             case COPY_ENCHANTMENTS:
                 if (tag.enchantments == null) continue;
                 for (Map.Entry<String, Integer> entry : tag.enchantments.entrySet()) {
-                    String[] toks = entry.getKey().split(":", 2);
-                    if (toks.length != 2) continue;
-                    NamespacedKey key = NamespacedKey.minecraft(toks[1]);
+                    String keyString = entry.getKey();
+                    Integer level = entry.getValue();
+                    NamespacedKey key;
+                    try {
+                        key = keyString.contains(":")
+                            ? NamespacedKey.fromString(keyString)
+                            : NamespacedKey.minecraft(keyString);
+                    } catch (IllegalArgumentException iae) {
+                        MytemsPlugin.getInstance().getLogger().warning(keyString + ": " + serialized);
+                        iae.printStackTrace();
+                        continue;
+                    }
                     Enchantment enchantment = Enchantment.getByKey(key);
-                    if (enchantment == null) continue;
-                    itemStack.addUnsafeEnchantment(enchantment, entry.getValue());
+                    if (enchantment == null) {
+                        MytemsPlugin.getInstance().getLogger().warning("Enchantment not found: " + key + ": " + serialized);
+                        continue;
+                    }
+                    itemStack.addUnsafeEnchantment(enchantment, level);
                 }
                 break;
             case COPY_DURABILITY:
