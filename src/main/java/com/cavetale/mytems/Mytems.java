@@ -38,17 +38,17 @@ public enum Mytems {
     DUNE_BOOTS(DuneItem.Boots::new),
     DUNE_DIGGER(DuneItem.Weapon::new),
     // Swampy set
-    SWAMPY_HELMET(SwampyItem.Helmet::new),
-    SWAMPY_CHESTPLATE(SwampyItem.Chestplate::new),
-    SWAMPY_LEGGINGS(SwampyItem.Leggings::new),
-    SWAMPY_BOOTS(SwampyItem.Boots::new),
+    SWAMPY_HELMET(SwampyItem.Helmet::new, Material.PLAYER_HEAD, 7413301),
+    SWAMPY_CHESTPLATE(SwampyItem.Chestplate::new, Material.LEATHER_CHESTPLATE, 7413302),
+    SWAMPY_LEGGINGS(SwampyItem.Leggings::new, Material.LEATHER_LEGGINGS, 7413303),
+    SWAMPY_BOOTS(SwampyItem.Boots::new, Material.LEATHER_BOOTS, 7413304),
     SWAMPY_TRIDENT(SwampyItem.Weapon::new, "swampy_trident", Material.TRIDENT, 7413305),
     // Swampy set
     DWARVEN_HELMET(DwarvenItem.Helmet::new, "dwarven_helmet", Material.PLAYER_HEAD, 7413401),
     DWARVEN_CHESTPLATE(DwarvenItem.Chestplate::new, "dwarven_chestplate", Material.IRON_CHESTPLATE, 7413402),
     DWARVEN_LEGGINGS(DwarvenItem.Leggings::new, "dwarven_leggings", Material.IRON_LEGGINGS, 7413403),
     DWARVEN_BOOTS(DwarvenItem.Boots::new, "dwarven_boots", Material.IRON_BOOTS, 7413404),
-    DWARF_AXE(DwarvenItem.Weapon::new, "dwarven_axe", Material.IRON_AXE, 7413405),
+    DWARVEN_AXE(DwarvenItem.Weapon::new, "dwarven_axe", Material.IRON_AXE, 7413405),
     //
     WEDDING_RING(WeddingRing::new, "wedding_ring"),
     MAGIC_MAP(MagicMap::new, "magic_map");
@@ -75,6 +75,13 @@ public enum Mytems {
 
     Mytems(final Function<MytemsPlugin, Mytem> ctor, final String id) {
         this(ctor, id, null, null);
+    }
+
+    Mytems(final Function<MytemsPlugin, Mytem> ctor, final Material material, final Integer customModelData) {
+        this.ctor = ctor;
+        this.id = name().toLowerCase();
+        this.material = material;
+        this.customModelData = customModelData;
     }
 
     Mytems(final Function<MytemsPlugin, Mytem> ctor, final String id, final Material material, final Integer customModelData) {

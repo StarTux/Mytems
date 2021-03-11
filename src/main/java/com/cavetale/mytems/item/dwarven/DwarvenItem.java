@@ -151,7 +151,7 @@ public abstract class DwarvenItem implements GearItem {
             + "&6Forged in the molten underground.";
 
         public Weapon(final MytemsPlugin plugin) {
-            super(plugin, Mytems.DWARF_AXE);
+            super(plugin, Mytems.DWARVEN_AXE);
         }
     }
 
