@@ -4,7 +4,6 @@ import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Text;
-import com.cavetale.worldmarker.item.ItemMarker;
 import java.awt.Color;
 import java.util.UUID;
 import lombok.Getter;
@@ -68,9 +67,8 @@ public final class UnicornHorn implements Mytem {
         attr = new AttributeModifier(UUID.fromString("f9e5bc8d-5532-4a6e-a0d9-fe8521f72c9a"),
                                      KEY.id, 0.15, AttributeModifier.Operation.ADD_SCALAR, EquipmentSlot.HEAD);
         meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, attr);
-        //
+        KEY.markItemMeta(meta);
         prototype.setItemMeta(meta);
-        ItemMarker.setId(prototype, KEY.id);
     }
 
     @Override

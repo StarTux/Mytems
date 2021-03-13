@@ -21,22 +21,22 @@ public enum Mytems {
     GHAST_BOW(GhastBow::new),
     BAT_MASK(BatMask::new),
     // Cloud City
-    UNICORN_HORN(UnicornHorn::new),
+    UNICORN_HORN(UnicornHorn::new, Material.END_ROD, 7413003),
     MAGIC_CAPE(MagicCape::new),
     // Generic
     KITTY_COIN(KittyCoin::new, "kitty_coin", Material.PLAYER_HEAD, 7413001),
     // Christmas 2020
     CHRISTMAS_TOKEN(ChristmasToken::new, "christmas_token"),
-    SANTA_HAT(SantaHat::new),
-    SANTA_JACKET(SantaJacket::new),
-    SANTA_PANTS(SantaPants::new),
-    SANTA_BOOTS(SantaBoots::new),
+    SANTA_HAT(SantaHat::new, Material.PLAYER_HEAD, 7413101),
+    SANTA_JACKET(SantaJacket::new, Material.LEATHER_CHESTPLATE, 4713102),
+    SANTA_PANTS(SantaPants::new, Material.LEATHER_LEGGINGS, 4713103),
+    SANTA_BOOTS(SantaBoots::new, Material.LEATHER_BOOTS, 4713104),
     // Dune set
-    DUNE_HELMET(DuneItem.Helmet::new),
-    DUNE_CHESTPLATE(DuneItem.Chestplate::new),
-    DUNE_LEGGINGS(DuneItem.Leggings::new),
-    DUNE_BOOTS(DuneItem.Boots::new),
-    DUNE_DIGGER(DuneItem.Weapon::new),
+    DUNE_HELMET(DuneItem.Helmet::new, Material.PLAYER_HEAD, 7413201),
+    DUNE_CHESTPLATE(DuneItem.Chestplate::new, Material.GOLDEN_CHESTPLATE, 7413202),
+    DUNE_LEGGINGS(DuneItem.Leggings::new, Material.GOLDEN_LEGGINGS, 7413203),
+    DUNE_BOOTS(DuneItem.Boots::new, Material.GOLDEN_BOOTS, 7413204),
+    DUNE_DIGGER(DuneItem.Weapon::new, Material.GOLDEN_SHOVEL, 7413205),
     // Swampy set
     SWAMPY_HELMET(SwampyItem.Helmet::new, Material.PLAYER_HEAD, 7413301),
     SWAMPY_CHESTPLATE(SwampyItem.Chestplate::new, Material.LEATHER_CHESTPLATE, 7413302),
@@ -50,7 +50,7 @@ public enum Mytems {
     DWARVEN_BOOTS(DwarvenItem.Boots::new, "dwarven_boots", Material.IRON_BOOTS, 7413404),
     DWARVEN_AXE(DwarvenItem.Weapon::new, "dwarven_axe", Material.IRON_AXE, 7413405),
     //
-    WEDDING_RING(WeddingRing::new, "wedding_ring"),
+    WEDDING_RING(WeddingRing::new, "wedding_ring", Material.PLAYER_HEAD, 7413002),
     MAGIC_MAP(MagicMap::new, "magic_map");
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
