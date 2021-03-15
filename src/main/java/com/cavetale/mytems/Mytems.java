@@ -64,6 +64,8 @@ public enum Mytems {
             ID_MAP.put(it.id, it);
             ID_MAP.put("mytems:" + it.id, it);
         }
+        ID_MAP.put("dwarf_axe", DWARVEN_AXE);
+        ID_MAP.put("mytems:dwarf_axe", DWARVEN_AXE);
     }
 
     Mytems(final Function<MytemsPlugin, Mytem> ctor) {
