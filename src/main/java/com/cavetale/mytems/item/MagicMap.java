@@ -2,7 +2,6 @@ package com.cavetale.mytems.item;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Text;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +17,7 @@ import org.bukkit.inventory.meta.ItemMeta;
  */
 @Getter @RequiredArgsConstructor
 public final class MagicMap implements Mytem {
-    private final MytemsPlugin plugin;
-    private final Mytems key = Mytems.MAGIC_MAP;
+    private final Mytems key;
     private BaseComponent[] displayName;
 
     @Override

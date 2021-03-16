@@ -6,7 +6,6 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Text;
-import com.cavetale.worldmarker.item.ItemMarker;
 import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +22,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 @RequiredArgsConstructor
 public final class MagicCape implements Mytem {
-    private final MytemsPlugin plugin;
-    public static final Mytems KEY = Mytems.MAGIC_CAPE;
+    @Getter private final Mytems key;
     public static final int XP_PER_SECOND = 3;
     public static final float FLY_SPEED = 0.025f;
     public static final int SECONDS_PER_FOOD = 5;
@@ -48,11 +46,6 @@ public final class MagicCape implements Mytem {
     private ItemStack prototype;
 
     @Override
-    public Mytems getKey() {
-        return KEY;
-    }
-
-    @Override
     public void enable() {
         ComponentBuilder cb = new ComponentBuilder();
         UnicornHorn.rainbowify(cb, "Magic Cape");
@@ -61,8 +54,8 @@ public final class MagicCape implements Mytem {
         ItemMeta meta = prototype.getItemMeta();
         meta.setDisplayNameComponent(displayName);
         meta.setLore(Text.wrapMultiline(description, Text.ITEM_LORE_WIDTH));
+        key.markItemMeta(meta);
         prototype.setItemMeta(meta);
-        ItemMarker.setId(prototype, KEY.id);
     }
 
     @Override
@@ -84,22 +77,22 @@ public final class MagicCape implements Mytem {
             player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.5f, 2.0f);
             return;
         }
-        Session session = plugin.getSessions().of(player);
-        long cooldown = session.getCooldownInTicks(KEY.id);
+        Session session = MytemsPlugin.getInstance().getSessions().of(player);
+        long cooldown = session.getCooldownInTicks(key.id);
         if (cooldown > 0) {
             long seconds = (cooldown - 1L) / 20L + 1;
             player.sendActionBar(ChatColor.DARK_RED + "Cooldown " + seconds + "s");
             player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.5f, 2.0f);
             return;
         }
-        session.setCooldown(KEY.id, COOLDOWN_SECONDS * 20);
+        session.setCooldown(key.id, COOLDOWN_SECONDS * 20);
         event.setCancelled(true);
         session.getFlying().setFlying(FLY_SPEED, FLIGHT_SECONDS * 20, () -> onFlyTick(player), () -> onEnd(player));
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PHANTOM_FLAP, SoundCategory.PLAYERS, 2.0f, 2.0f);
     }
 
     void onFlyTick(Player player) {
-        Session session = plugin.getSessions().of(player);
+        Session session = MytemsPlugin.getInstance().getSessions().of(player);
         int flyTime = session.getFlying().getFlyTime();
         if (flyTime % 20 == 0) {
             // Take exp

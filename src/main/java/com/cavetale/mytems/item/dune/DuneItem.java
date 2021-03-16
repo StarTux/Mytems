@@ -35,7 +35,6 @@ import org.bukkit.inventory.meta.Repairable;
 
 @RequiredArgsConstructor @Getter
 public abstract class DuneItem implements GearItem {
-    protected final MytemsPlugin plugin;
     protected final Mytems key;
     private List<BaseComponent[]> baseLore;
     private BaseComponent[] displayName;
@@ -115,8 +114,8 @@ public abstract class DuneItem implements GearItem {
         @Getter private final String description = "\n"
             + "&eAn ancient guardian once wore this mighty headpiece.";
 
-        public Helmet(final MytemsPlugin plugin) {
-            super(plugin, Mytems.DUNE_HELMET);
+        public Helmet(final Mytems key) {
+            super(key);
         }
     }
 
@@ -126,8 +125,8 @@ public abstract class DuneItem implements GearItem {
         @Getter private final String description = ""
             + "&eAn ancient guardian once wore this breastplate.";
 
-        public Chestplate(final MytemsPlugin plugin) {
-            super(plugin, Mytems.DUNE_CHESTPLATE);
+        public Chestplate(final Mytems key) {
+            super(key);
         }
     }
 
@@ -137,8 +136,8 @@ public abstract class DuneItem implements GearItem {
         @Getter private final String description = "\n"
             + "&eAn ancient guardian once wore these leggings.";
 
-        public Leggings(final MytemsPlugin plugin) {
-            super(plugin, Mytems.DUNE_LEGGINGS);
+        public Leggings(final Mytems key) {
+            super(key);
         }
     }
 
@@ -148,8 +147,8 @@ public abstract class DuneItem implements GearItem {
         @Getter private final String description = ""
             + "&eAn ancient guardian once wore these golden boots.";
 
-        public Boots(final MytemsPlugin plugin) {
-            super(plugin, Mytems.DUNE_BOOTS);
+        public Boots(final Mytems key) {
+            super(key);
         }
     }
 
@@ -159,8 +158,8 @@ public abstract class DuneItem implements GearItem {
         @Getter private final String description = ""
             + "&eWhat ancient ruins might this golden shovel uncover?";
 
-        public Weapon(final MytemsPlugin plugin) {
-            super(plugin, Mytems.DUNE_DIGGER);
+        public Weapon(final Mytems key) {
+            super(key);
         }
     }
 

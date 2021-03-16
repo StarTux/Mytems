@@ -51,11 +51,12 @@ public enum Mytems {
     DWARVEN_AXE(DwarvenItem.Weapon::new, "dwarven_axe", Material.IRON_AXE, 7413405),
     //
     WEDDING_RING(WeddingRing::new, "wedding_ring", Material.PLAYER_HEAD, 7413002),
-    MAGIC_MAP(MagicMap::new, "magic_map");
+    MAGIC_MAP(MagicMap::new, "magic_map"),
+    BOSS_CHEST(DummyMytem::new, Material.CHEST, 7413004);
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;
-    public final Function<MytemsPlugin, Mytem> ctor;
+    public final Function<Mytems, Mytem> ctor;
     public final Material material;
     public final Integer customModelData;
 
@@ -68,25 +69,25 @@ public enum Mytems {
         ID_MAP.put("mytems:dwarf_axe", DWARVEN_AXE);
     }
 
-    Mytems(final Function<MytemsPlugin, Mytem> ctor) {
+    Mytems(final Function<Mytems, Mytem> ctor) {
         this.ctor = ctor;
         this.id = name().toLowerCase();
         this.material = null;
         this.customModelData = null;
     }
 
-    Mytems(final Function<MytemsPlugin, Mytem> ctor, final String id) {
+    Mytems(final Function<Mytems, Mytem> ctor, final String id) {
         this(ctor, id, null, null);
     }
 
-    Mytems(final Function<MytemsPlugin, Mytem> ctor, final Material material, final Integer customModelData) {
+    Mytems(final Function<Mytems, Mytem> ctor, final Material material, final Integer customModelData) {
         this.ctor = ctor;
         this.id = name().toLowerCase();
         this.material = material;
         this.customModelData = customModelData;
     }
 
-    Mytems(final Function<MytemsPlugin, Mytem> ctor, final String id, final Material material, final Integer customModelData) {
+    Mytems(final Function<Mytems, Mytem> ctor, final String id, final Material material, final Integer customModelData) {
         this.ctor = ctor;
         this.id = id;
         this.material = material;

@@ -1,9 +1,7 @@
 package com.cavetale.mytems.item;
 
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Text;
-import com.cavetale.worldmarker.item.ItemMarker;
 import com.winthier.generic_events.GenericEvents;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +22,6 @@ import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.util.Vector;
 
 public final class Stompers extends AculaItem {
-    public static final Mytems KEY = Mytems.STOMPERS;
     double damageFactor = 2.0;
     String damageFactorStr = "2";
     double radius = 3.0;
@@ -42,13 +39,8 @@ public final class Stompers extends AculaItem {
         + "\n"
         + ChatColor.GRAY + "to enemies within " + radiusStr + " blocks.";
 
-    public Stompers(final MytemsPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Mytems getKey() {
-        return KEY;
+    public Stompers(final Mytems key) {
+        super(key);
     }
 
     @Override
@@ -66,8 +58,8 @@ public final class Stompers extends AculaItem {
         meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
         meta.addEnchant(Enchantment.PROTECTION_FALL, 4, true);
         ((Repairable) meta).setRepairCost(9999);
+        key.markItemMeta(meta);
         item.setItemMeta(meta);
-        ItemMarker.setId(item, KEY.id);
         return item;
     }
 

@@ -2,7 +2,6 @@ package com.cavetale.mytems.item;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import lombok.Getter;
@@ -16,8 +15,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 @RequiredArgsConstructor
 public final class WeddingRing implements Mytem {
-    private final MytemsPlugin plugin;
-    public static final Mytems KEY = Mytems.WEDDING_RING;
+    @Getter private final Mytems key;
     private final String serialized = "H4sIAAAAAAAAAE2Pu06DUByH/71FpLMOToYXEKGtaRNjeguFFLAUaOliTstpgZ4DDQUrNe4uxsEX8BF8HFcnFzdfQLo5fr/L8LEAJaj2UIJsHG/9KARgzxgo+i6cUD/Eixgtk9aGoAzHdx5GLgulBK1YOHL97SFmoKwhiuH0kUvwQ8K1OCkiLg7PDT9ccU/AAjtep4TouxDHOdzG0QbHiY+3x8AcHmmMtywAFBio2IikGD5wpvCzqce7U4UsMrmRsznmiS4Hmys5tLN5V27INO8H7cYwa/7b1hM0qRNHVLxZOErn1OaHokHwwLhcUOve2bdFXVIFXXKEWbAWtGC91/Yd4phq3aGWqAZrXpv09465EvSeR1TJ2qmBQbTJSFBNqzajo5pmGtQJFF/vdajjK83llL8GqEJRdnOJMvP2Ln199n9e45ff54ub79wLKt0oDZMC/AFVGpZFbAEAAA==";
     private final String description = ""
         + "Use this on your partner to get married."
@@ -30,11 +28,6 @@ public final class WeddingRing implements Mytem {
     private ItemStack prototype;
 
     @Override
-    public Mytems getKey() {
-        return KEY;
-    }
-
-    @Override
     public void enable() {
         prototype = Items.deserialize(serialized);
         ItemMeta meta = prototype.getItemMeta();
@@ -42,7 +35,7 @@ public final class WeddingRing implements Mytem {
         meta.setDisplayNameComponent(displayName);
         meta.setLoreComponents(Text.toBaseComponents(Text.wrapMultiline(description, Text.ITEM_LORE_WIDTH),
                                                      cb -> cb.color(pink).italic(false)));
-        KEY.markItemMeta(meta);
+        key.markItemMeta(meta);
         prototype.setItemMeta(meta);
     }
 

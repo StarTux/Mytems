@@ -2,7 +2,6 @@ package com.cavetale.mytems.item;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Text;
 import java.awt.Color;
 import java.util.UUID;
@@ -22,8 +21,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 @RequiredArgsConstructor
 public final class UnicornHorn implements Mytem {
-    private final MytemsPlugin plugin;
-    public static final Mytems KEY = Mytems.UNICORN_HORN;
+    @Getter private final Mytems key;
     @Getter private BaseComponent[] displayName;
     private final String description = ""
         + ChatColor.AQUA + "Legend has it that this horn once belonged to a magical unicorn which lived over one thousand years ago."
@@ -43,11 +41,6 @@ public final class UnicornHorn implements Mytem {
     }
 
     @Override
-    public Mytems getKey() {
-        return KEY;
-    }
-
-    @Override
     public void enable() {
         ComponentBuilder cb = new ComponentBuilder();
         rainbowify(cb, "Unicorn Horn");
@@ -59,15 +52,15 @@ public final class UnicornHorn implements Mytem {
         // Attr
         AttributeModifier attr;
         attr = new AttributeModifier(UUID.fromString("4ae9dba0-db6a-4843-9028-554ab26155d3"),
-                                     KEY.id, 2.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD);
+                                     key.id, 2.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD);
         meta.addAttributeModifier(Attribute.GENERIC_ARMOR, attr);
         attr = new AttributeModifier(UUID.fromString("f7febe45-8f8c-4cbf-b84a-0c6902670655"),
-                                     KEY.id, 2.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD);
+                                     key.id, 2.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD);
         meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, attr);
         attr = new AttributeModifier(UUID.fromString("f9e5bc8d-5532-4a6e-a0d9-fe8521f72c9a"),
-                                     KEY.id, 0.15, AttributeModifier.Operation.ADD_SCALAR, EquipmentSlot.HEAD);
+                                     key.id, 0.15, AttributeModifier.Operation.ADD_SCALAR, EquipmentSlot.HEAD);
         meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED, attr);
-        KEY.markItemMeta(meta);
+        key.markItemMeta(meta);
         prototype.setItemMeta(meta);
     }
 

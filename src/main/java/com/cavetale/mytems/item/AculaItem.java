@@ -1,7 +1,7 @@
 package com.cavetale.mytems.item;
 
 import com.cavetale.mytems.ItemFixFlag;
-import com.cavetale.mytems.MytemsPlugin;
+import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
@@ -13,6 +13,7 @@ import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
@@ -25,15 +26,12 @@ import org.bukkit.inventory.meta.ItemMeta;
  * the enable() method.
  * The prototype is the base item, before its lore is updated.
  */
+@RequiredArgsConstructor
 abstract class AculaItem implements GearItem {
-    protected final MytemsPlugin plugin;
+    @Getter protected final Mytems key;
     @Getter protected BaseComponent[] displayName;
     protected List<BaseComponent[]> baseLore;
     protected ItemStack prototype;
-
-    AculaItem(final MytemsPlugin plugin) {
-        this.plugin = plugin;
-    }
 
     @Override
     public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Equipment.Slot slot) {

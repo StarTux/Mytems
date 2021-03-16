@@ -1,7 +1,6 @@
 package com.cavetale.mytems.item.santa;
 
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.MytemsPlugin;
 import lombok.Getter;
 import org.bukkit.inventory.ItemStack;
 
@@ -12,8 +11,8 @@ public final class SantaHat extends SantaItem {
         + "\n\n"
         + "&cThis mask carries the likeness of Santa, white beard included.";
 
-    public SantaHat(final MytemsPlugin plugin) {
-        super(plugin);
+    public SantaHat(final Mytems key) {
+        super(key);
     }
 
     @Override

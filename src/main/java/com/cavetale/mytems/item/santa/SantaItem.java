@@ -1,6 +1,6 @@
 package com.cavetale.mytems.item.santa;
 
-import com.cavetale.mytems.MytemsPlugin;
+import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
@@ -35,7 +35,7 @@ abstract class SantaItem implements GearItem {
     protected static final Operation HEALTH_OP = Operation.ADD_NUMBER;
     protected static final UUID SKULL_ID = UUID.fromString("986f0d53-6462-43bc-827f-beba9afdd7f4");
     protected static final String SKULL_TEXTURE = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTRlNDI0YjE2NzZmZWVjM2EzZjhlYmFkZTllN2Q2YTZmNzFmNzc1NmE4NjlmMzZmN2RmMGZjMTgyZDQzNmUifX19";
-    protected final MytemsPlugin plugin;
+    @Getter protected final Mytems key;
     @Getter protected BaseComponent[] displayName;
     protected List<BaseComponent[]> baseLore;
     protected ItemStack prototype;

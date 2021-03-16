@@ -1,7 +1,6 @@
 package com.cavetale.mytems.item.dwarven;
 
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
@@ -26,7 +25,6 @@ import org.bukkit.potion.PotionEffectType;
 
 @RequiredArgsConstructor @Getter
 public abstract class DwarvenItem implements GearItem {
-    protected final MytemsPlugin plugin;
     protected final Mytems key;
     private List<BaseComponent[]> baseLore;
     private BaseComponent[] displayName;
@@ -106,8 +104,8 @@ public abstract class DwarvenItem implements GearItem {
         @Getter private final String description = "\n"
             + "&6Forged in the molten underground.";
 
-        public Helmet(final MytemsPlugin plugin) {
-            super(plugin, Mytems.DWARVEN_HELMET);
+        public Helmet(final Mytems key) {
+            super(key);
         }
     }
 
@@ -117,8 +115,8 @@ public abstract class DwarvenItem implements GearItem {
         @Getter private final String description = ""
             + "&6Forged in the molten underground.";
 
-        public Chestplate(final MytemsPlugin plugin) {
-            super(plugin, Mytems.DWARVEN_CHESTPLATE);
+        public Chestplate(final Mytems key) {
+            super(key);
         }
     }
 
@@ -128,8 +126,8 @@ public abstract class DwarvenItem implements GearItem {
         @Getter private final String description = "\n"
             + "&6Forged in the molten underground.";
 
-        public Leggings(final MytemsPlugin plugin) {
-            super(plugin, Mytems.DWARVEN_LEGGINGS);
+        public Leggings(final Mytems key) {
+            super(key);
         }
     }
 
@@ -139,8 +137,8 @@ public abstract class DwarvenItem implements GearItem {
         @Getter private final String description = ""
             + "&6Forged in the molten underground.";
 
-        public Boots(final MytemsPlugin plugin) {
-            super(plugin, Mytems.DWARVEN_BOOTS);
+        public Boots(final Mytems key) {
+            super(key);
         }
     }
 
@@ -150,8 +148,8 @@ public abstract class DwarvenItem implements GearItem {
         @Getter private final String description = ""
             + "&6Forged in the molten underground.";
 
-        public Weapon(final MytemsPlugin plugin) {
-            super(plugin, Mytems.DWARVEN_AXE);
+        public Weapon(final Mytems key) {
+            super(key);
         }
     }
 

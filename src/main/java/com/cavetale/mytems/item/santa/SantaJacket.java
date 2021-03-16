@@ -1,7 +1,6 @@
 package com.cavetale.mytems.item.santa;
 
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.MytemsPlugin;
 import lombok.Getter;
 import org.bukkit.inventory.ItemStack;
 
@@ -12,8 +11,8 @@ public final class SantaJacket extends SantaItem {
         + "\n\n"
         + "&cSoaring through the air without a windshield gets cold. This jacket will help with that.";
 
-    public SantaJacket(final MytemsPlugin plugin) {
-        super(plugin);
+    public SantaJacket(final Mytems key) {
+        super(key);
     }
 
     @Override

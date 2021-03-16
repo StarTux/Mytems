@@ -2,8 +2,6 @@ package com.cavetale.mytems.item;
 
 import com.cavetale.mytems.util.Text;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.MytemsPlugin;
-import com.cavetale.worldmarker.item.ItemMarker;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -21,7 +19,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 
 public final class GhastBow extends AculaItem {
-    public static final Mytems KEY = Mytems.GHAST_BOW;
     private String description = "\n\n"
         + ChatColor.RED + "Legend has it the bowstring of this unique item was soaked in ghast tears."
         + " They say it's the only weapon which may lower a vampire's guard..."
@@ -30,13 +27,8 @@ public final class GhastBow extends AculaItem {
         + "\n"
         + ChatColor.RED + "Cost " + ChatColor.GRAY + "1 XP Level";
 
-    public GhastBow(final MytemsPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Mytems getKey() {
-        return KEY;
+    public GhastBow(final Mytems key) {
+        super(key);
     }
 
     @Override
@@ -54,8 +46,8 @@ public final class GhastBow extends AculaItem {
         meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
         meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
         ((Repairable) meta).setRepairCost(9999);
+        key.markItemMeta(meta);
         item.setItemMeta(meta);
-        ItemMarker.setId(item, KEY.id);
         return item;
     }
 

@@ -1,7 +1,6 @@
 package com.cavetale.mytems.item.santa;
 
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.MytemsPlugin;
 import lombok.Getter;
 import org.bukkit.inventory.ItemStack;
 
@@ -13,13 +12,8 @@ public final class SantaPants extends SantaItem {
         + "&cSince a sled does not come with seat pads,"
         + " these pants are extra thick for more comfort while sitting for hours on end.";
 
-    public SantaPants(final MytemsPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Mytems getKey() {
-        return KEY;
+    public SantaPants(final Mytems key) {
+        super(key);
     }
 
     @Override

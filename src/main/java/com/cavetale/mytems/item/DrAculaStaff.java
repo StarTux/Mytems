@@ -26,7 +26,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
 public final class DrAculaStaff extends AculaItem {
-    public static final Mytems KEY = Mytems.DR_ACULA_STAFF;
     final int durationSeconds = 30;
     final int cooldownSeconds = 60;
     private String description = ""
@@ -40,13 +39,8 @@ public final class DrAculaStaff extends AculaItem {
         + "\n"
         + ChatColor.RED + "Cooldown " + ChatColor.GRAY + cooldownSeconds + "s";
 
-    public DrAculaStaff(final MytemsPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Mytems getKey() {
-        return KEY;
+    public DrAculaStaff(final Mytems key) {
+        super(key);
     }
 
     @Override
@@ -67,8 +61,8 @@ public final class DrAculaStaff extends AculaItem {
     }
 
     public void use(Player player, ItemStack item) {
-        Session session = plugin.getSessions().of(player);
-        long cooldown = session.getCooldownInTicks(KEY.id);
+        Session session = MytemsPlugin.getInstance().getSessions().of(player);
+        long cooldown = session.getCooldownInTicks(key.id);
         if (cooldown > 0) {
             long seconds = (cooldown - 1L) / 20L + 1;
             player.sendActionBar(ChatColor.DARK_RED + "Cooldown " + seconds + "s");
@@ -83,7 +77,7 @@ public final class DrAculaStaff extends AculaItem {
         }
         effect = new PotionEffect(PotionEffectType.INVISIBILITY, durationSeconds * 20, 0, false, false, true);
         player.addPotionEffect(effect);
-        session.setCooldown(KEY.id, cooldownSeconds * 20);
+        session.setCooldown(key.id, cooldownSeconds * 20);
         Location base = player.getLocation().add(0, 1, 0);
         for (int i = 0; i < 16; i += 1) {
             Location loc = base.clone().add((Math.random() - Math.random()) * 0.5,
@@ -96,7 +90,7 @@ public final class DrAculaStaff extends AculaItem {
                     b.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(2048.0);
                     b.setHealth(2048.0);
                 });
-            Bukkit.getScheduler().runTaskLater(plugin, bat::remove, 40L + (long) i);
+            Bukkit.getScheduler().runTaskLater(MytemsPlugin.getInstance(), bat::remove, 40L + (long) i);
         }
         base.getWorld().playSound(base, Sound.ENTITY_BAT_LOOP, SoundCategory.MASTER, 0.5f, 2.0f);
         base.getWorld().spawnParticle(Particle.SMOKE_LARGE, base, 16, 0.5, 0.7, 0.5, 0.05);
@@ -109,11 +103,11 @@ public final class DrAculaStaff extends AculaItem {
         Repairable repairable = (Repairable) meta;
         repairable.setRepairCost(9999);
         AttributeModifier attr;
-        attr = new AttributeModifier(UUID.randomUUID(), KEY.id, 12.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+        attr = new AttributeModifier(UUID.randomUUID(), key.id, 12.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, attr);
-        attr = new AttributeModifier(UUID.randomUUID(), KEY.id, 1.6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
+        attr = new AttributeModifier(UUID.randomUUID(), key.id, 1.6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
         meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, attr);
-        KEY.markItemMeta(meta);
+        key.markItemMeta(meta);
         item.setItemMeta(meta);
         return item;
     }

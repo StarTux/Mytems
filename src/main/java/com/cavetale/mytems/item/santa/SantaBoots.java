@@ -1,7 +1,6 @@
 package com.cavetale.mytems.item.santa;
 
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.MytemsPlugin;
 import lombok.Getter;
 import org.bukkit.inventory.ItemStack;
 
@@ -12,8 +11,8 @@ public final class SantaBoots extends SantaItem {
         + "\n\n"
         + "&cJumping off a sleigh at maximum velocity, just to land in a searing hot fireplace is not easy. With these boots however, it is quite manageable.";
 
-    public SantaBoots(final MytemsPlugin plugin) {
-        super(plugin);
+    public SantaBoots(final Mytems key) {
+        super(key);
     }
 
     @Override

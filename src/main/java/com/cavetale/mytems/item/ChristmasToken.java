@@ -2,12 +2,11 @@ package com.cavetale.mytems.item;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Skull;
 import com.cavetale.mytems.util.Text;
-import com.cavetale.worldmarker.item.ItemMarker;
 import java.awt.Color;
 import java.util.UUID;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -17,22 +16,16 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 @RequiredArgsConstructor
 public final class ChristmasToken implements Mytem {
-    public static final Mytems KEY = Mytems.CHRISTMAS_TOKEN;
+    @Getter private final Mytems key;
     private static final String SKULL_NAME = "Christmas Token";
     public static final UUID SKULL_ID = UUID.fromString("6d46f5a1-a833-414c-ba0d-9842cb59316e");
     public static final String SKULL_TEXTURE = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjU2MTJkYzdiODZkNzFhZmMxMTk3MzAxYzE1ZmQ5NzllOWYzOWU3YjFmNDFkOGYxZWJkZjgxMTU1NzZlMmUifX19";
-    private final MytemsPlugin plugin;
     private ItemStack prototype;
     private String description = ""
         + ChatColor.DARK_GRAY + "Christmas Event 2020"
         + "\n\n" + ChatColor.BLUE + "Ho ho ho! Find out how to exchange this token for actual goodies."
         + "\n\n" + ChatColor.BLUE + "You will when Santa comes to town.";
     private BaseComponent[] displayName;
-
-    @Override
-    public Mytems getKey() {
-        return KEY;
-    }
 
     private BaseComponent[] xmasify(String in) {
         int len = in.length();
@@ -52,8 +45,8 @@ public final class ChristmasToken implements Mytem {
         ItemMeta meta = prototype.getItemMeta();
         meta.setLoreComponents(Text.toBaseComponents(Text.wrapMultiline(description, Text.ITEM_LORE_WIDTH)));
         meta.setDisplayNameComponent(displayName);
+        key.markItemMeta(meta);
         prototype.setItemMeta(meta);
-        ItemMarker.setId(prototype, KEY.id);
     }
 
     @Override

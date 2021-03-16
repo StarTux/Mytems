@@ -1,7 +1,6 @@
 package com.cavetale.mytems.item.swampy;
 
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
@@ -29,7 +28,6 @@ import org.bukkit.potion.PotionEffectType;
 
 @RequiredArgsConstructor @Getter
 public abstract class SwampyItem implements GearItem {
-    protected final MytemsPlugin plugin;
     protected final Mytems key;
     private List<BaseComponent[]> baseLore;
     private BaseComponent[] displayName;
@@ -112,8 +110,8 @@ public abstract class SwampyItem implements GearItem {
         @Getter private final String description = "\n"
             + "&2Smells like rotten plants.";
 
-        public Helmet(final MytemsPlugin plugin) {
-            super(plugin, Mytems.SWAMPY_HELMET);
+        public Helmet(final Mytems key) {
+            super(key);
         }
     }
 
@@ -123,8 +121,8 @@ public abstract class SwampyItem implements GearItem {
         @Getter private final String description = ""
             + "&2Smells like rotten plants.";
 
-        public Chestplate(final MytemsPlugin plugin) {
-            super(plugin, Mytems.SWAMPY_CHESTPLATE);
+        public Chestplate(final Mytems key) {
+            super(key);
         }
     }
 
@@ -134,8 +132,8 @@ public abstract class SwampyItem implements GearItem {
         @Getter private final String description = "\n"
             + "&2Smells like rotten plants.";
 
-        public Leggings(final MytemsPlugin plugin) {
-            super(plugin, Mytems.SWAMPY_LEGGINGS);
+        public Leggings(final Mytems key) {
+            super(key);
         }
     }
 
@@ -145,8 +143,8 @@ public abstract class SwampyItem implements GearItem {
         @Getter private final String description = ""
             + "&2Smells like rotten plants.";
 
-        public Boots(final MytemsPlugin plugin) {
-            super(plugin, Mytems.SWAMPY_BOOTS);
+        public Boots(final Mytems key) {
+            super(key);
         }
     }
 
@@ -156,8 +154,8 @@ public abstract class SwampyItem implements GearItem {
         @Getter private final String description = ""
             + "&2Smells like rotten plants.";
 
-        public Weapon(final MytemsPlugin plugin) {
-            super(plugin, Mytems.SWAMPY_TRIDENT);
+        public Weapon(final Mytems key) {
+            super(key);
         }
     }
 

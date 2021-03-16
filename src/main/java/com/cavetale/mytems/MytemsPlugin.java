@@ -50,7 +50,7 @@ public final class MytemsPlugin extends JavaPlugin {
 
     public void enableItems() {
         for (Mytems it : Mytems.values()) {
-            Mytem mytem = it.ctor.apply(this);
+            Mytem mytem = it.ctor.apply(it);
             mytems.put(it, mytem);
             mytem.enable();
         }
@@ -167,7 +167,7 @@ public final class MytemsPlugin extends JavaPlugin {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                Mytem mytem = customMytemSlot.mytems.ctor.apply(this);
+                Mytem mytem = customMytemSlot.mytems.ctor.apply(customMytemSlot.mytems);
                 mytems.put(customMytemSlot.mytems, mytem);
                 mytem.enable();
             }

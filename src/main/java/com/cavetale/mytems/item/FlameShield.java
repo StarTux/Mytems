@@ -1,9 +1,7 @@
 package com.cavetale.mytems.item;
 
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Text;
-import com.cavetale.worldmarker.item.ItemMarker;
 import java.util.Base64;
 import java.util.UUID;
 import net.md_5.bungee.api.ChatColor;
@@ -16,20 +14,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 
 public final class FlameShield extends AculaItem {
-    public static final Mytems KEY = Mytems.FLAME_SHIELD;
     private ItemStack baseItem;
     private String description = "\n\n"
         + ChatColor.GRAY + "After the castle was completely burned down to the ground, this item remained intact."
         + "\n\n"
         + ChatColor.GRAY + "For years it was kept in a secret vault, until one day, when it vanished.";
 
-    public FlameShield(final MytemsPlugin plugin) {
-        super(plugin);
-    }
-
-    @Override
-    public Mytems getKey() {
-        return KEY;
+    public FlameShield(final Mytems key) {
+        super(key);
     }
 
     @Override
@@ -51,13 +43,13 @@ public final class FlameShield extends AculaItem {
         meta.addEnchant(Enchantment.DURABILITY, 4, true);
         meta.addEnchant(Enchantment.MENDING, 1, true);
         meta.addAttributeModifier(Attribute.GENERIC_ARMOR,
-                                  new AttributeModifier(UUID.randomUUID(), KEY.id, 4, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+                                  new AttributeModifier(UUID.randomUUID(), key.id, 4, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
         meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS,
-                                  new AttributeModifier(UUID.randomUUID(), KEY.id, 1, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+                                  new AttributeModifier(UUID.randomUUID(), key.id, 1, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
         meta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE,
-                                  new AttributeModifier(UUID.randomUUID(), KEY.id, 0.1, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+                                  new AttributeModifier(UUID.randomUUID(), key.id, 0.1, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
+        key.markItemMeta(meta);
         item.setItemMeta(meta);
-        ItemMarker.setId(item, KEY.id);
         return item;
     }
 }
