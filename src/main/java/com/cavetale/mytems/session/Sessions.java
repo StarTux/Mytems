@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
 @RequiredArgsConstructor
@@ -13,6 +14,7 @@ public final class Sessions {
     private final Map<UUID, Session> sessions = new HashMap<>();
 
     public Sessions enable() {
+        Bukkit.getScheduler().runTaskTimer(plugin, this::tick, 1L, 1L);
         return this;
     }
 

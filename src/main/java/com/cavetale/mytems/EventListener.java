@@ -73,6 +73,7 @@ public final class EventListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     void onPlayerJoin(PlayerJoinEvent event) {
         plugin.enter(event.getPlayer());
+        plugin.fixPlayerInventory(event.getPlayer());
     }
 
     @EventHandler(priority = EventPriority.MONITOR)

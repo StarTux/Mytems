@@ -27,6 +27,7 @@ public final class MytemsPlugin extends JavaPlugin {
     final Sessions sessions = new Sessions(this);
     private Map<Mytems, Mytem> mytems = new EnumMap<>(Mytems.class);
     private List<CustomMytemSlot> customMytemSlots = new ArrayList<>();
+    private boolean fixAllPlayerInventoriesScheduled = false;
 
     @Override
     public void onEnable() {
@@ -38,7 +39,7 @@ public final class MytemsPlugin extends JavaPlugin {
         for (Player player : Bukkit.getOnlinePlayers()) {
             enter(player);
         }
-        Bukkit.getScheduler().runTaskTimer(this, this::tick, 1L, 1L);
+        fixAllPlayerInventoriesLater();
     }
 
     @Override
@@ -58,16 +59,11 @@ public final class MytemsPlugin extends JavaPlugin {
 
     public void enter(Player player) {
         sessions.of(player).enable();
-        fixPlayerInventory(player);
     }
 
     public void exit(Player player) {
         sessions.of(player).disable();
         sessions.remove(player);
-    }
-
-    void tick() {
-        sessions.tick();
     }
 
     public Mytem getMytem(Mytems key) {
@@ -102,6 +98,21 @@ public final class MytemsPlugin extends JavaPlugin {
             return equipment;
         } else {
             return null;
+        }
+    }
+
+    public void fixAllPlayerInventoriesLater() {
+        if (fixAllPlayerInventoriesScheduled) return;
+        fixAllPlayerInventoriesScheduled = true;
+        Bukkit.getScheduler().runTaskLater(this, () -> {
+                fixAllPlayerInventoriesScheduled = false;
+                fixAllPlayerInventories();
+            }, 0L);
+    }
+
+    public void fixAllPlayerInventories() {
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            fixPlayerInventory(player);
         }
     }
 
@@ -157,6 +168,7 @@ public final class MytemsPlugin extends JavaPlugin {
                 e.printStackTrace();
             }
         }
+        instance.fixAllPlayerInventoriesLater();
     }
 
     protected void onDisablePlugin(JavaPlugin plugin) {

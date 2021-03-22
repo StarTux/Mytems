@@ -39,9 +39,14 @@ public final class MytemsCommand implements TabExecutor {
             .description("Serialize the item in your hand to base64")
             .playerCaller(this::base64);
         rootNode.addChild("equipment").denyTabCompletion()
+            .description("Print worn equipment")
             .playerCaller(this::equipment);
         rootNode.addChild("serialize").denyTabCompletion()
+            .description("Serialize the mytem in your hand")
             .playerCaller(this::serialize);
+        rootNode.addChild("fixall").denyTabCompletion()
+            .description("Fix all player inventories")
+            .senderCaller(this::fixall);
         plugin.getCommand("mytems").setExecutor(this);
     }
 
@@ -158,6 +163,13 @@ public final class MytemsCommand implements TabExecutor {
         }
         String serialized = mytems.serializeItem(itemStack);
         player.sendMessage(ChatColor.YELLOW + "Serialized item in hand: " + ChatColor.RESET + serialized);
+        return true;
+    }
+
+    boolean fixall(CommandSender sender, String[] args) {
+        if (args.length != 0) return false;
+        plugin.fixAllPlayerInventoriesLater();
+        sender.sendMessage(ChatColor.YELLOW + "Fixing all player inventories");
         return true;
     }
 }
