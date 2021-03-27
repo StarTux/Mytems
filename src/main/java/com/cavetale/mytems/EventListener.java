@@ -252,6 +252,7 @@ public final class EventListener implements Listener {
 
     @EventHandler
     void onPluginDisable(PluginDisableEvent event) {
+        if (event.getPlugin() == plugin) return;
         if (event.getPlugin() instanceof JavaPlugin) {
             plugin.onDisablePlugin((JavaPlugin) event.getPlugin());
         }

@@ -10,11 +10,14 @@ import java.util.Map;
 import java.util.Set;
 import lombok.Getter;
 import org.bukkit.Bukkit;
+import org.bukkit.Tag;
+import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -135,24 +138,37 @@ public final class MytemsPlugin extends JavaPlugin {
     }
 
     public ItemStack fixItemStack(ItemStack oldItemStack) {
+        if (oldItemStack == null || oldItemStack.getAmount() == 0) return null;
         Mytem mytem = getMytem(oldItemStack);
-        if (mytem == null) return null;
-        ItemStack newItemStack = mytem.getItem();
-        newItemStack.setAmount(oldItemStack.getAmount());
-        Set<ItemFixFlag> itemFixFlags = mytem.getItemFixFlags();
-        if (itemFixFlags.contains(ItemFixFlag.COPY_ENCHANTMENTS)) {
-            newItemStack.addUnsafeEnchantments(oldItemStack.getEnchantments());
-        }
-        if (itemFixFlags.contains(ItemFixFlag.COPY_DURABILITY)) {
-            ItemMeta oldItemMeta = oldItemStack.getItemMeta();
-            ItemMeta newItemMeta = newItemStack.getItemMeta();
-            if (oldItemMeta instanceof Damageable && newItemMeta instanceof Damageable) {
-                ((Damageable) newItemMeta).setDamage(((Damageable) oldItemMeta).getDamage());
+        if (mytem != null) {
+            ItemStack newItemStack = mytem.getItem();
+            newItemStack.setAmount(oldItemStack.getAmount());
+            Set<ItemFixFlag> itemFixFlags = mytem.getItemFixFlags();
+            if (itemFixFlags.contains(ItemFixFlag.COPY_ENCHANTMENTS)) {
+                newItemStack.addUnsafeEnchantments(oldItemStack.getEnchantments());
             }
-            newItemStack.setItemMeta(newItemMeta);
+            if (itemFixFlags.contains(ItemFixFlag.COPY_DURABILITY)) {
+                ItemMeta oldItemMeta = oldItemStack.getItemMeta();
+                ItemMeta newItemMeta = newItemStack.getItemMeta();
+                if (oldItemMeta instanceof Damageable && newItemMeta instanceof Damageable) {
+                    ((Damageable) newItemMeta).setDamage(((Damageable) oldItemMeta).getDamage());
+                }
+                newItemStack.setItemMeta(newItemMeta);
+            }
+            if (oldItemStack.equals(newItemStack)) return null;
+            return newItemStack;
         }
-        if (oldItemStack.equals(newItemStack)) return null;
-        return newItemStack;
+        if (Tag.SHULKER_BOXES.isTagged(oldItemStack.getType())) {
+            if (!oldItemStack.hasItemMeta()) return null;
+            BlockStateMeta meta = (BlockStateMeta) oldItemStack.getItemMeta();
+            ShulkerBox shulkerBox = (ShulkerBox) meta.getBlockState();
+            int count = fixInventory(shulkerBox.getInventory());
+            if (count == 0) return null;
+            meta.setBlockState(shulkerBox);
+            oldItemStack.setItemMeta(meta);
+            return oldItemStack;
+        }
+        return null;
     }
 
     public static void registerMytem(JavaPlugin plugin, Mytems mytems, Mytem mytem) {
