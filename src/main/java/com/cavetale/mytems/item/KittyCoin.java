@@ -2,13 +2,15 @@ package com.cavetale.mytems.item;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
+import com.cavetale.mytems.util.Text;
 import java.util.Base64;
+import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 @RequiredArgsConstructor
 public final class KittyCoin implements Mytem {
@@ -19,10 +21,20 @@ public final class KittyCoin implements Mytem {
     @Override
     public void enable() {
         @SuppressWarnings("LineLength")
-        final byte[] bytes = Base64.getDecoder().decode("H4sIAAAAAAAAAMWUTc+jVBSAma/Y6SQujG7Nm65MOrEtLX1538RFC6VAC5QWKGCMucDl88Jt+WgLk/kHszAxxvkLJu79K/4RExcupGZmNKNLk1me7+ece87tEsQj4hkLSmDAvIhwRhDdTzvEw8gjPkujDLo58Mv7AwI1zL8NIfC6xKMSBF3iIy8qruoO8VgGKSS+e9GDlzIHvfuvX/QcjLzefZlX8HkvKgGK3LdSlXkwR23i1u4DVLSqosyjBJZhjqsgfKfFjl8VLij/4ehihPPefS+4Zn/eK9t6rbSKyrK+YXCU9V5+807be/mUeLzGOewQBPGYeP1vujdJ3+K9Ef8XvhzUf/NtoQdhelOGUfEflMQPH44MlDfgRoK5G4KsfA/r+w+HVeKbQ3WFKuB7UD9+OCh4cVFVRCd4E0CQf/keWJf4ZFM5LcG8SpKoNACqYNEhPj7jHHkpyBOY37cX1U2uu/qt225BG9LdJRVCyjmD+dsj6jDgBNtW4DPioeBdN5f+5Y/fXv3Kaa9/93569QX+vA3b5PgA8zKCxVOic2Woclh0W+cHHeLJX6UfmLAWh2A/Qu54GzrmLFLixUhh3YusJbXEzi4SqxZCNq8d0j44S0O0GWEqxNLEir3UIq2RspQThVVJWVMpZWlN5HgbKloYS3FA2jGHhOgcubx4slNU2DoVOns9UiKRtUwbeUuusHdCm18+2CQVerxR24aIXNM4uKmRCPFh6GYGWjPi0DbDoWe2tlqYtszaboiU1n4rZEbtXJnS1s7Ppuv67h++VAn2FLLGYmhnauWkxnA93iLIb0duqp+sWETy3kiteNbI6Ta0l2JkswGpaG6tLKWLzLqkpQWNROpDOxYoiRSRws4jay+cFU0npVQi7dQI5bbvdlZt/+pI2Yl3vjn8qkM83UVBBq4zf/izb2yqLDcuwkwYn/DojtTq8+1sqQ0sOqQXlB1cXHowiTnB7MtgrPs0zhg9i8zpEdWDzRhzwuTIr4Mth/kLk+/XWnCqWWlbSZbpn5Db1BsHa3d+yg63gLbFXbM7Ok15VknpdnNGCUmaaW2kClmq/ejgqPacp8UAAPnirXHKwZUYMZwoL5eHZbFFpORZ2J+yrne89GNrv9guSIGu8iYTKdSMVmvHbxYy7k/GFsuVaJlZC8A1wzU/xbToa426CJxROs3TxXSeY33CLxhysaW2mKb3QaPTtjqdLgV+ekxZDmgDYPpi4fnHwTxueGgUOaUvYn29BOTQqRXOrO60dFGrSpbo56rMRvLUwP0zOCTWWDmJIAtuEU/NVzO+ZCLDczw1pfC+XEjaQEVMbHtWn8lV0jmu3MMghvRRVo+q26TOGae0iLhAFSZzRh5OaW5cndhVPzIXu/1qq5VzPGB0XnC5lZOIWihtbk87YEPRHA83c9Oij3f1wCe3IWCKW4bXJeZucvHd1XmVWpFkxm5RuH6UjyftExg8l1c2qtYlr4tJ4TKn8qiZ5oKa7kJhvKZkZiewOZ0ejgUQufmpSA5Nxmg13qmQWiCr72gZFzTqPlGK6WStroL+2bT79n4MKH3Oz8aU2qfEvp3pQ+WSSf5hv1nV63KwK/qSHsaWMzjSahPf0grC83IYrHElQzObxfQKbhI63Sj9i1f3m5OLvyKuHwTxhMFVVj4g/gRs9qQq9wcAAA==");
+        final byte[] bytes = Base64.getDecoder().decode("H4sIAAAAAAAAAMVUO6+jRhhlH1Hu3q3TpIiuXEXyKgYb2/hKW2CwAduAjQEDURQNMDzM8/KG1f6DTZFui/yBSOnzM9Lmj0RKkSJ4N/uuk1SjOd+Z75yj+WauEeQB8pgGBVBhlvtJjCDXX14h930b+SLyY2hlwClu0xC0MPveg8C+Rh4UwL1GPrf9/AJfIQ8FEEHkx2cD2BQZGNx++2xgJqE9uC2yEj4Z+AUIfWtw64Aw77dlbMMs7Dvbb6G8yPwAFl6WlK73Fk1Mp8wtULxHtJIwyQa3A/fS/smg6AX73dYvivaGSvx48Py7t+jg+SPk4S7J4BVyifjyU3v/NP03/GWgfedPgjaE0U3h+fmN9YlL5Lf/zxkobnYgtiOQBTcRzCwPxEX+zeD5k2cfa785b/fU79MyS0M4eC/EB4F++E8DfTAKoxpk6Ud2rpHrY1CGoVjHMHszrVcUqGDvBvbVfZakMCt8mD9Cri7nygzm1/3U3LtCPlNBWMJ7P8E6cTlqg4ITFloTyTM10ufoxOVlvRa6w5jvuClPu6hA1VuOIn2L3VRGFOaGEgacT844iutEhpsYkRAJsnc2LtyzgoqyF4m0jupygOsdhwuR3hhHLqd80uXiZWuOjdRkVFHvdV/32dC6ZoQ2s87f8YTUGE89m1VbQ92ElqamVqS+1mWl1j4p//CkELIS1te617X84vWSSz6iofghduGrrUlxruiTPmAl1KKTajd512MXYakZqWcrWkc2NS0N7VDZjIq/8nFc+HykYMbJ8HmaHxvMOtCjTdBnnQp9Tr1boUJneCLNd4YsRfw56PRIwXlm4+lncirIeqt3RmScVqhxdmueDnCDVqacm7zy5hz6lUW3zuHp0yvk0dF3Y3C5t/u/hNt61cTUaAHC0TbxiYN7MDugtSuuDrYj9VxZo6RawdCoZif+qBw5qlwN19GdPWGk2fnA1E0enPCSp8f1hBQxwZnfhcwkSdEqOZ3NHK3xfedArxTWi6jBazjjo7lsoHfk7CDMNK5pigM0SXrEaKRUdadDgO8KNvE3i3Cy5BrGHNl0bYIKo0QGDrtw6IlZk/rT8MgXHouvLJXVcMwkhxpHUrMqW+fEpG5xVfJRXlqk2XorLk8zbJfx20Z1xd1+06InzOOAQ1Tj6anIAXHuSn+/XBGnZbOpHeeuZWLIoTtJIlCf4CmNYPBUKQ/T3DouLD31NnVeeeWcdoe0kjgNpYk1zqxsfJ5Y1Rjs5Tv7NGflbegCWlRlkrfSyWjRVmOFGJL+9k6btWWXnpW0PjgdcPtHjdZFWBlHKYazkGaKoeToKnHyZr2eGrOEvO3WrFytsQVlU3arYMMC5jlxN3anRdVNVKIdycu5uMxwwyllPWAtWlcS9EwH+zmVrBhmI2Nj6cDNgVK7qxOYRWsO30MBxXQQkrguqa7FMrv1uiEXbpfNIeNO3RjlpnNsZB01RTf1PSHqMI+XuLstQlRxFnk1a7Vho6TBOtjzWuEcdcEkoolSj9FmqIb7wy6WsaOI3mHD2dj1mqGJbgwSBpmPBTHLeJrICixKrXB1HCSVXIQLWxrtcXauDbsUM+3KZxkuZ9x4l26soOra7U5/iiCPkfuc3X81D4lf//rjxe9r+eWf9s8vvk6+6n8f5DMqKePiHvI3CFevWKQHAAA=");
         prototype = ItemStack.deserializeBytes(bytes);
-        displayName = TextComponent.fromLegacyText("" + ChatColor.GOLD + ChatColor.BOLD + ChatColor.ITALIC + "Kitty Coin");
-        key.markItemStack(prototype);
+        displayName = Text.builder("Kitty Coin").color(ChatColor.GOLD).bold(true).italic(false).create();
+        ItemMeta meta = prototype.getItemMeta();
+        meta.setDisplayNameComponent(displayName);
+        List<BaseComponent[]> lore = meta.getLoreComponents();
+        lore.set(lore.size() - 1, Text.builder("").create());
+        lore.add(Text.builder("/warp Bazaar").color(ChatColor.GOLD).italic(false).create());
+        lore.add(Text.builder("/warp WitchLair").color(ChatColor.GOLD).italic(false).create());
+        lore.add(Text.builder("/warp DwarvenVillage").color(ChatColor.GOLD).italic(false).create());
+        lore.add(Text.builder("/warp CloudVillage").color(ChatColor.GOLD).italic(false).create());
+        meta.setLoreComponents(lore);
+        key.markItemMeta(meta);
+        prototype.setItemMeta(meta);
     }
 
     @Override
