@@ -53,8 +53,10 @@ public enum Mytems {
     // Easter 2021
     BLUE_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345701),
     GREEN_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345702),
-    PINK_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345703),
-    YELLOW_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345704),
+    ORANGE_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345703),
+    PINK_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345704),
+    PURPLE_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345705),
+    YELLOW_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345706),
     //
     WEDDING_RING(WeddingRing::new, "wedding_ring", Material.PLAYER_HEAD, 7413002),
     MAGIC_MAP(MagicMap::new, "magic_map"),
