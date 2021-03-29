@@ -4,6 +4,7 @@ import com.cavetale.mytems.item.*;
 import com.cavetale.mytems.item.dune.DuneItem;
 import com.cavetale.mytems.item.dwarven.DwarvenItem;
 import com.cavetale.mytems.item.easter.EasterEgg;
+import com.cavetale.mytems.item.easter.EasterToken;
 import com.cavetale.mytems.item.santa.*;
 import com.cavetale.mytems.item.swampy.SwampyItem;
 import com.cavetale.worldmarker.item.ItemMarker;
@@ -51,6 +52,7 @@ public enum Mytems {
     DWARVEN_BOOTS(DwarvenItem.Boots::new, "dwarven_boots", Material.IRON_BOOTS, 7413404),
     DWARVEN_AXE(DwarvenItem.Weapon::new, "dwarven_axe", Material.IRON_AXE, 7413405),
     // Easter 2021
+    EASTER_TOKEN(EasterToken::new, Material.PLAYER_HEAD, 345700),
     BLUE_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345701),
     GREEN_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345702),
     ORANGE_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345703),
