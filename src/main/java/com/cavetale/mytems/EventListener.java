@@ -6,6 +6,7 @@ import com.cavetale.worldmarker.item.ItemMarker;
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
 import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
+import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import java.util.Objects;
@@ -106,6 +107,9 @@ public final class EventListener implements Listener {
         if (event.getCause() != EntityDamageEvent.DamageCause.FALL) return;
         if (!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
+        for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
+            setBonus.onPlayerDamage(event, player);
+        }
         ItemStack item = player.getInventory().getBoots();
         if (item == null) return;
         String id = ItemMarker.getId(item);
@@ -247,6 +251,14 @@ public final class EventListener implements Listener {
             for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
                 setBonus.onPlayerPotionEffect(event, player);
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    void onPlayerJump(PlayerJumpEvent event) {
+        Player player = event.getPlayer();
+        for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
+            setBonus.onPlayerJump(event, player);
         }
     }
 

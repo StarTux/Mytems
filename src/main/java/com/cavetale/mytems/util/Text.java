@@ -100,6 +100,12 @@ public final class Text {
         return comps;
     }
 
+    public static List<BaseComponent[]> wrapLore(String txt, Consumer<ComponentBuilder> lineCallback) {
+        List<String> lines = wrapMultiline(txt, ITEM_LORE_WIDTH);
+        List<BaseComponent[]> comps = toBaseComponents(lines, lineCallback);
+        return comps;
+    }
+
     public static String colorize(String in) {
         return ChatColor.translateAlternateColorCodes('&', in);
     }

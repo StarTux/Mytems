@@ -4,8 +4,12 @@ import com.cavetale.mytems.item.*;
 import com.cavetale.mytems.item.dune.DuneItem;
 import com.cavetale.mytems.item.dwarven.DwarvenItem;
 import com.cavetale.mytems.item.easter.EasterEgg;
+import com.cavetale.mytems.item.easter.EasterGear;
 import com.cavetale.mytems.item.easter.EasterToken;
-import com.cavetale.mytems.item.santa.*;
+import com.cavetale.mytems.item.santa.SantaBoots;
+import com.cavetale.mytems.item.santa.SantaHat;
+import com.cavetale.mytems.item.santa.SantaJacket;
+import com.cavetale.mytems.item.santa.SantaPants;
 import com.cavetale.mytems.item.swampy.SwampyItem;
 import com.cavetale.worldmarker.item.ItemMarker;
 import java.util.HashMap;
@@ -59,6 +63,10 @@ public enum Mytems {
     PINK_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345704),
     PURPLE_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345705),
     YELLOW_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345706),
+    EASTER_HELMET(EasterGear.Helmet::new, Material.PLAYER_HEAD, 345711),
+    EASTER_CHESTPLATE(EasterGear.Chestplate::new, Material.LEATHER_CHESTPLATE, 345712),
+    EASTER_LEGGINGS(EasterGear.Leggings::new, Material.LEATHER_LEGGINGS, 345713),
+    EASTER_BOOTS(EasterGear.Boots::new, Material.LEATHER_BOOTS, 345714),
     //
     WEDDING_RING(WeddingRing::new, "wedding_ring", Material.PLAYER_HEAD, 7413002),
     MAGIC_MAP(MagicMap::new, "magic_map"),
