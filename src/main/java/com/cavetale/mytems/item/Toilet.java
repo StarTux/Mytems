@@ -34,10 +34,12 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
+import org.spigotmc.event.entity.EntityDismountEvent;
 
 @RequiredArgsConstructor
 public final class Toilet implements Mytem, Listener {
@@ -81,7 +83,7 @@ public final class Toilet implements Mytem, Listener {
     }
 
     @Override
-    public void onBlockPlace(BlockPlaceEvent event, Player player, ItemStack itemStack) {
+    public void onBlockPlace(BlockPlaceEvent event, Player player, ItemStack unused) {
         if (event.isCancelled()) return;
         event.setCancelled(true);
         final BlockFace facing;
@@ -102,27 +104,34 @@ public final class Toilet implements Mytem, Listener {
                 facing = dir.getZ() > 0 ? BlockFace.NORTH : BlockFace.SOUTH;
             }
         }
-        ItemFrame itemFrame;
-        Location location = block.getLocation().add(0.5, 0.5, 0.5);
-        try {
-            itemFrame = location.getWorld().spawn(location, ItemFrame.class, e -> {
-                    e.setFixed(true);
-                    e.setFacingDirection(facing);
-                    e.setPersistent(true);
-                    e.setVisible(false);
-                    e.setItem(emptyPrototype.clone());
-                    e.setItemDropChance(0.0f);
-                    e.setFixed(true);
-                });
-        } catch (IllegalArgumentException iae) {
-            return;
-        }
-        EntityMarker.setId(itemFrame, key.id);
+        EquipmentSlot hand = event.getHand();
         Bukkit.getScheduler().runTask(MytemsPlugin.getInstance(), () -> {
+                // Do this on the next tick so the placed block,
+                // albeit cancelled, does not interfere.
+                if (!player.isValid()) return;
+                if (!block.isEmpty()) return;
+                ItemStack itemStack = player.getInventory().getItem(hand);
+                if (Mytems.forItem(itemStack) != key) return;
+                ItemFrame itemFrame;
+                Location location = block.getLocation().add(0.5, 0.5, 0.5);
+                try {
+                    itemFrame = location.getWorld().spawn(location, ItemFrame.class, e -> {
+                            e.setFixed(true);
+                            e.setFacingDirection(facing);
+                            e.setPersistent(true);
+                            e.setVisible(false);
+                            e.setItem(emptyPrototype.clone());
+                            e.setItemDropChance(0.0f);
+                            e.setFixed(true);
+                        });
+                } catch (IllegalArgumentException iae) {
+                    return;
+                }
+                EntityMarker.setId(itemFrame, key.id);
                 block.setType(Material.BARRIER);
                 BlockMarker.setId(block, key.id);
+                itemStack.subtract();
             });
-        itemStack.subtract();
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.HIGH)
@@ -205,6 +214,23 @@ public final class Toilet implements Mytem, Listener {
         for (ItemFrame it : loc.getWorld().getNearbyEntitiesByType(ItemFrame.class, loc, 0.5)) {
             it.remove();
         }
+    }
+
+    @EventHandler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        if (!(player.getVehicle() instanceof ArmorStand)) return;
+        ArmorStand armorStand = (ArmorStand) player.getVehicle();
+        Seat seat = uuidMap.get(armorStand.getUniqueId());
+        if (seat != null) disableSeat(seat);
+    }
+
+    @EventHandler
+    public void onEntityDismount(EntityDismountEvent event) {
+        if (!(event.getDismounted() instanceof ArmorStand)) return;
+        ArmorStand armorStand = (ArmorStand) event.getDismounted();
+        Seat seat = uuidMap.get(armorStand.getUniqueId());
+        if (seat != null) disableSeat(seat);
     }
 
     boolean isOccupied(Block block) {
