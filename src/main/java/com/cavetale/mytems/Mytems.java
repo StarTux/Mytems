@@ -68,6 +68,7 @@ public enum Mytems {
     EASTER_LEGGINGS(EasterGear.Leggings::new, Material.LEATHER_LEGGINGS, 345713),
     EASTER_BOOTS(EasterGear.Boots::new, Material.LEATHER_BOOTS, 345714),
     //
+    TOILET(Toilet::new, Material.CAULDRON, 498101),
     WEDDING_RING(WeddingRing::new, "wedding_ring", Material.PLAYER_HEAD, 7413002),
     MAGIC_MAP(MagicMap::new, "magic_map"),
     BOSS_CHEST(DummyMytem::new, Material.CHEST, 7413004);

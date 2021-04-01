@@ -47,6 +47,14 @@ public final class MytemsPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        for (Mytem mytem : mytems.values()) {
+            try {
+                mytem.disable();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        mytems.clear();
         for (Player player : Bukkit.getOnlinePlayers()) {
             exit(player);
         }

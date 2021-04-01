@@ -207,7 +207,7 @@ public final class EventListener implements Listener {
         }
     }
 
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.HIGH)
     void onBlockPlace(BlockPlaceEvent event) {
         ItemStack itemStack = event.getItemInHand();
         if (itemStack != null) {
