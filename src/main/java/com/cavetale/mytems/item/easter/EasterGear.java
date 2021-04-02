@@ -236,12 +236,13 @@ public abstract class EasterGear implements GearItem {
             static final int COOLDOWN = 3;
             private final int requiredItemCount;
             private final String name = "Bunny Hop";
-            private final String description = "Jump like the Easter Bunny! (" + COOLDOWN + "s cooldown)";
+            private final String description = "Run and jump like the Easter Bunny! (" + COOLDOWN + "s cooldown)";
 
             @Override
             public void onPlayerJump(PlayerJumpEvent event, Player player) {
                 if (event.isCancelled()) return;
                 if (player.isSneaking()) return;
+                if (!player.isSprinting()) return;
                 Session session = MytemsPlugin.getInstance().getSessions().of(player);
                 if (session.getCooldownInTicks("easter.jump") > 0) return;
                 Vector direction = player.getLocation().getDirection().setY(0);
