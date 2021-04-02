@@ -6,6 +6,7 @@ import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
+import com.cavetale.mytems.gear.Slot;
 import com.cavetale.mytems.util.Text;
 import java.awt.Color;
 import java.util.ArrayList;
@@ -34,7 +35,7 @@ abstract class AculaItem implements GearItem {
     protected ItemStack prototype;
 
     @Override
-    public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Equipment.Slot slot) {
+    public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Slot slot) {
         meta.setDisplayNameComponent(displayName);
         List<BaseComponent[]> lore = new ArrayList<>(baseLore);
         ItemSet itemSet = getItemSet();

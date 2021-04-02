@@ -3,27 +3,21 @@ package com.cavetale.mytems.gear;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
-import com.destroystokyo.paper.MaterialTags;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.IdentityHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.EntityEquipment;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 @Getter
 public final class Equipment {
     private final MytemsPlugin plugin;
-    private final Map<Slot, Equipped> items = new EnumMap<>(Slot.class);
+    private final Map<Slot, Equipped> equipped = new EnumMap<>(Slot.class);
     private final Map<ItemSet, Integer> itemSets = new IdentityHashMap<>();
     private final List<SetBonus> setBonuses = new ArrayList<>();
     private final List<EntityAttribute> entityAttributes = new ArrayList<>();
@@ -32,40 +26,8 @@ public final class Equipment {
         this.plugin = plugin;
     }
 
-    public enum Slot {
-        MAIN_HAND(EquipmentSlot.HAND),
-        OFF_HAND(EquipmentSlot.OFF_HAND),
-        HELMET(EquipmentSlot.HEAD),
-        CHESTPLATE(EquipmentSlot.CHEST),
-        LEGGINGS(EquipmentSlot.LEGS),
-        BOOTS(EquipmentSlot.FEET);
-
-        public final EquipmentSlot bukkitEquipmentSlot;
-
-        Slot(final EquipmentSlot bukkitEquipmentSlot) {
-            this.bukkitEquipmentSlot = bukkitEquipmentSlot;
-        }
-
-        public boolean guess(ItemStack item) {
-            if (item == null) return false;
-            Material mat = item.getType();
-            if (MaterialTags.HEAD_EQUIPPABLE.isTagged(mat)) return this == HELMET;
-            if (MaterialTags.CHEST_EQUIPPABLE.isTagged(mat)) return this == CHESTPLATE;
-            if (MaterialTags.LEGGINGS.isTagged(mat)) return this == LEGGINGS;
-            if (MaterialTags.BOOTS.isTagged(mat)) return this == BOOTS;
-            return this == MAIN_HAND || this == OFF_HAND;
-        }
-    }
-
-    @RequiredArgsConstructor
-    public static final class Equipped {
-        public final Slot slot;
-        public final ItemStack itemStack;
-        public final GearItem gearItem;
-    }
-
     public void clear() {
-        items.clear();
+        equipped.clear();
         itemSets.clear();
         setBonuses.clear();
     }
@@ -78,13 +40,14 @@ public final class Equipment {
         EntityEquipment entityEquipment = livingEntity.getEquipment();
         for (Slot slot : Slot.values()) {
             ItemStack item = entityEquipment.getItem(slot.bukkitEquipmentSlot);
+            if (item == null) continue;
             if (!slot.guess(item)) continue;
             Mytems mytems = Mytems.forItem(item); // may yield null
             if (mytems == null) continue;
             Mytem mytem = plugin.getMytem(mytems);
             if (!(mytem instanceof GearItem)) continue;
             GearItem gearItem = (GearItem) mytem;
-            items.put(slot, new Equipped(slot, item, gearItem));
+            equipped.put(slot, new Equipped(slot, item, gearItem));
             ItemSet itemSet = gearItem.getItemSet();
             if (itemSet != null) {
                 int count = itemSets.compute(itemSet, (is, num) -> num == null ? 1 : num + 1);
@@ -117,16 +80,14 @@ public final class Equipment {
     }
 
     public boolean isEmpty() {
-        return items.isEmpty();
+        return equipped.isEmpty();
     }
 
     public List<Equipped> getItems() {
-        return items.values().stream()
-            .filter(Objects::nonNull)
-            .collect(Collectors.toList());
+        return new ArrayList<>(equipped.values());
     }
 
     public boolean containsSlot(Slot slot) {
-        return items.containsKey(slot);
+        return equipped.containsKey(slot);
     }
 }

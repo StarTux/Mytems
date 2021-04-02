@@ -7,6 +7,7 @@ import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
+import com.cavetale.mytems.gear.Slot;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.util.ArrayList;
@@ -81,7 +82,7 @@ public abstract class DuneItem implements GearItem {
     }
 
     @Override
-    public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Equipment.Slot slot) {
+    public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Slot slot) {
         meta.setDisplayNameComponent(displayName);
         List<BaseComponent[]> lore = new ArrayList<>(baseLore);
         ItemSet itemSet = getItemSet();
@@ -163,9 +164,10 @@ public abstract class DuneItem implements GearItem {
         }
     }
 
+    @Getter
     public static final class DuneItemSet implements ItemSet {
-        @Getter private final List<SetBonus> setBonuses = Arrays
-            .asList(new FlameThorns(2), new SandSpeed(4));
+        private final String name = "Dune";
+        private final List<SetBonus> setBonuses = Arrays.asList(new FlameThorns(2), new SandSpeed(4));
 
         @Getter @RequiredArgsConstructor
         public static final class SandSpeed implements SetBonus {

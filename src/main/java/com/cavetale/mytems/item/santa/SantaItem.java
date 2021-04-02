@@ -5,6 +5,7 @@ import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
+import com.cavetale.mytems.gear.Slot;
 import com.cavetale.mytems.util.Attr;
 import com.cavetale.mytems.util.Skull;
 import com.cavetale.mytems.util.Text;
@@ -58,7 +59,7 @@ abstract class SantaItem implements GearItem {
     abstract ItemStack getBaseItemStack();
 
     @Override
-    public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Equipment.Slot slot) {
+    public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Slot slot) {
         meta.setDisplayNameComponent(displayName);
         List<BaseComponent[]> lore = new ArrayList<>(baseLore);
         ItemSet itemSet = getItemSet();

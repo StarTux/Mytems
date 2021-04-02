@@ -11,6 +11,7 @@ import java.util.Set;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.entity.Player;
 
 /**
  * This manages the plugin-wide attributes mechanism for one player.
@@ -42,8 +43,9 @@ public final class Attributes {
     }
 
     private void clear() {
+        Player player = session.getPlayer();
         for (Attribute attribute : Attribute.values()) {
-            AttributeInstance attributeInstance = session.player.getAttribute(attribute);
+            AttributeInstance attributeInstance = player.getAttribute(attribute);
             if (attributeInstance == null) continue;
             for (AttributeModifier attributeModifier : attributeInstance.getModifiers()) {
                 if (!(attributeModifier.getName().startsWith(PREFIX))) continue;
@@ -53,6 +55,7 @@ public final class Attributes {
     }
 
     protected void update() {
+        Player player = session.getPlayer();
         hasAttributes.clear();
         shouldHaveAttributeNames.clear();
         shouldHaveAttributes.values().forEach(List::clear);
@@ -62,7 +65,7 @@ public final class Attributes {
             shouldHaveAttributeNames.add(entityAttribute.getName());
         }
         for (Attribute attribute : Attribute.values()) {
-            AttributeInstance attributeInstance = session.player.getAttribute(attribute);
+            AttributeInstance attributeInstance = player.getAttribute(attribute);
             if (attributeInstance == null) continue;
             // See which attributes are there, by name.
             Collection<AttributeModifier> modifiers = attributeInstance.getModifiers();

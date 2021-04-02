@@ -34,7 +34,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.server.PluginDisableEvent;
@@ -73,13 +72,7 @@ public final class EventListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     void onPlayerJoin(PlayerJoinEvent event) {
-        plugin.enter(event.getPlayer());
         plugin.fixPlayerInventory(event.getPlayer());
-    }
-
-    @EventHandler(priority = EventPriority.MONITOR)
-    void onPlayerQuit(PlayerQuitEvent event) {
-        plugin.exit(event.getPlayer());
     }
 
     /**

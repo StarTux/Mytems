@@ -29,4 +29,16 @@ public final class EntityAttribute {
     public AttributeModifier toAttributeModifier(String prefix) {
         return new AttributeModifier(uuid, prefix + name, amount, operation);
     }
+
+    @Override
+    public String toString() {
+        String op;
+        switch (operation) {
+        case ADD_NUMBER: op = "+"; break; // add
+        case ADD_SCALAR: op = "*"; break; // multiply_base
+        case MULTIPLY_SCALAR_1: op = "+*"; // multiply
+        default: op = "?";
+        }
+        return attribute.getKey().getKey() + op + String.format("%.2f", amount);
+    }
 }

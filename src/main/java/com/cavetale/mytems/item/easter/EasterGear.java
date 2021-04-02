@@ -6,6 +6,7 @@ import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
+import com.cavetale.mytems.gear.Slot;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Attr;
 import com.cavetale.mytems.util.Items;
@@ -22,6 +23,7 @@ import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.attribute.Attribute;
@@ -48,8 +50,8 @@ public abstract class EasterGear implements GearItem {
     private BaseComponent[] displayName;
     private ItemStack prototype;
     private static EasterItemSet easterItemSet;
-    ChatColor pinkChatColor = ChatColor.of("#FF69B4");
-    Color pinkColor = Color.fromRGB(255, 105, 180);
+    static final ChatColor PINK_CHAT_COLOR = ChatColor.of("#FF69B4");
+    static final Color PINK_COLOR = Color.fromRGB(255, 105, 180);
 
     @Override
     public final void enable() {
@@ -60,14 +62,14 @@ public abstract class EasterGear implements GearItem {
             prototype = new ItemStack(key.material);
         }
         ItemMeta meta = prototype.getItemMeta();
-        baseLore = Text.wrapLore(Text.colorize("\n\n" + getDescription()), cb -> cb.color(pinkChatColor).italic(false));
+        baseLore = Text.wrapLore(Text.colorize("\n\n" + getDescription()), cb -> cb.color(PINK_CHAT_COLOR).italic(false));
         updateItemLore(meta);
         if (meta instanceof Repairable) {
             ((Repairable) meta).setRepairCost(9999);
             meta.setUnbreakable(true);
         }
         if (meta instanceof LeatherArmorMeta) {
-            ((LeatherArmorMeta) meta).setColor(pinkColor);
+            ((LeatherArmorMeta) meta).setColor(PINK_COLOR);
             meta.addItemFlags(ItemFlag.HIDE_DYE);
         }
         process(meta);
@@ -112,7 +114,7 @@ public abstract class EasterGear implements GearItem {
     }
 
     @Override
-    public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Equipment.Slot slot) {
+    public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Slot slot) {
         meta.setDisplayNameComponent(displayName);
         List<BaseComponent[]> lore = new ArrayList<>(baseLore);
         ItemSet itemSet = getItemSet();
@@ -125,7 +127,7 @@ public abstract class EasterGear implements GearItem {
                 int need = setBonus.getRequiredItemCount();
                 String description = "(" + need + ") " + setBonus.getDescription();
                 lore.addAll(Text.toBaseComponents(Text.wrapLines(description, Text.ITEM_LORE_WIDTH),
-                                                  cb -> cb.color(count >= need ? pinkChatColor : ChatColor.DARK_GRAY).italic(false)));
+                                                  cb -> cb.color(count >= need ? PINK_CHAT_COLOR : ChatColor.DARK_GRAY).italic(false)));
             }
         }
         meta.setLoreComponents(lore);
@@ -197,9 +199,10 @@ public abstract class EasterGear implements GearItem {
         }
     }
 
+    @Getter
     public static final class EasterItemSet implements ItemSet {
-        @Getter private final List<SetBonus> setBonuses = Arrays
-            .asList(new JumpBoost(2), new BunnyHop(4));
+        private final String name = "Easter";
+        private final List<SetBonus> setBonuses = Arrays.asList(new JumpBoost(2), new BunnyHop(4));
 
         @Getter @RequiredArgsConstructor
         public static final class JumpBoost implements SetBonus {
@@ -227,6 +230,8 @@ public abstract class EasterGear implements GearItem {
             public void onPlayerDamage(EntityDamageEvent event, Player player) {
                 if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
                     event.setCancelled(true);
+                    Particle.DustOptions dust = new Particle.DustOptions(PINK_COLOR, 2.0f);
+                    player.getWorld().spawnParticle(Particle.REDSTONE, player.getLocation(), 16, 0.35, 0.1, 0.35, 0.2, dust);
                 }
             }
         }
@@ -251,7 +256,9 @@ public abstract class EasterGear implements GearItem {
                 Bukkit.getScheduler().runTask(MytemsPlugin.getInstance(), () -> {
                         player.setVelocity(player.getVelocity().add(direction.normalize().multiply(1.0).setY(0.3)));
                     });
-                player.getWorld().playSound(player.getLocation(), Sound.ENTITY_SLIME_JUMP, SoundCategory.PLAYERS, 0.7f, 2.0f);
+                player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, SoundCategory.PLAYERS, 1.5f, 1.5f);
+                Particle.DustOptions dust = new Particle.DustOptions(PINK_COLOR, 2.0f);
+                player.getWorld().spawnParticle(Particle.REDSTONE, player.getLocation(), 16, 0.35, 0.1, 0.35, 0.2, dust);
             }
         }
     }

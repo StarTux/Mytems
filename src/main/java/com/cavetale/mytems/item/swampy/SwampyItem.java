@@ -5,6 +5,7 @@ import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
+import com.cavetale.mytems.gear.Slot;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.util.ArrayList;
@@ -77,7 +78,7 @@ public abstract class SwampyItem implements GearItem {
     }
 
     @Override
-    public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Equipment.Slot slot) {
+    public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Slot slot) {
         meta.setDisplayNameComponent(displayName);
         List<BaseComponent[]> lore = new ArrayList<>(baseLore);
         ItemSet itemSet = getItemSet();
@@ -159,10 +160,10 @@ public abstract class SwampyItem implements GearItem {
         }
     }
 
+    @Getter
     public static final class SwampyItemSet implements ItemSet {
-        @Getter private final List<SetBonus> setBonuses = Arrays
-            .asList(new PotionDuration(2),
-                    new DolphinGrace(4));
+        private final String name = "Swampy";
+        private final List<SetBonus> setBonuses = Arrays.asList(new PotionDuration(2), new DolphinGrace(4));
 
         @Getter @RequiredArgsConstructor
         public static final class PotionDuration implements SetBonus {

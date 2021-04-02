@@ -23,7 +23,7 @@ public interface GearItem extends Mytem {
      * @param the player equipment holding the item or null
      * @param the valid slot the item is in, or null
      */
-    void updateItemLore(ItemMeta meta, @Nullable Player player, @Nullable Equipment equipment, @Nullable Equipment.Slot slot);
+    void updateItemLore(ItemMeta meta, @Nullable Player player, @Nullable Equipment equipment, @Nullable Slot slot);
 
     default void updateItemLore(ItemMeta meta) {
         updateItemLore(meta, null, null, null);

@@ -4,10 +4,12 @@ import com.cavetale.core.command.CommandContext;
 import com.cavetale.core.command.CommandNode;
 import com.cavetale.core.command.CommandWarn;
 import com.cavetale.mytems.gear.Equipment;
+import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Text;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
@@ -38,9 +40,12 @@ public final class MytemsCommand implements TabExecutor {
         rootNode.addChild("base64").denyTabCompletion()
             .description("Serialize the item in your hand to base64")
             .playerCaller(this::base64);
-        rootNode.addChild("equipment").denyTabCompletion()
-            .description("Print worn equipment")
-            .playerCaller(this::equipment);
+        rootNode.addChild("equipment")
+            .description("Display player equipment")
+            .senderCaller(this::equipment);
+        rootNode.addChild("session")
+            .description("Display session info")
+            .senderCaller(this::session);
         rootNode.addChild("serialize").denyTabCompletion()
             .description("Serialize the mytem in your hand")
             .playerCaller(this::serialize);
@@ -64,10 +69,8 @@ public final class MytemsCommand implements TabExecutor {
         if (args.length != 0) return false;
         for (Mytems mytems : Mytems.values()) {
             Mytem mytem = mytems.getMytem();
-            boolean same = mytems == mytem.getKey();
-            sender.sendMessage(Text.builder(mytems.ordinal() + ") " + mytems.id + " same=" + same)
-                               .append(mytem.getDisplayName())
-                               .create());
+            sender.sendMessage(Text.builder(mytems.ordinal() + ") " + mytems.id + " ")
+                               .append(mytem.getDisplayName()).create());
         }
         return true;
     }
@@ -142,12 +145,37 @@ public final class MytemsCommand implements TabExecutor {
             .collect(Collectors.toList());
     }
 
-    boolean equipment(Player player, String[] args) {
-        Equipment equipment = plugin.sessions.of(player).getEquipment();
-        player.sendMessage("items " + equipment.getItems());
-        player.sendMessage("sets " + equipment.getItemSets());
-        player.sendMessage("boni " + equipment.getSetBonuses());
-        player.sendMessage("attrs " + equipment.getEntityAttributes());
+    boolean equipment(CommandSender sender, String[] args) {
+        Player target;
+        if (args.length == 0 && sender instanceof Player) {
+            target = (Player) sender;
+        } else if (args.length == 1) {
+            target = Bukkit.getPlayerExact(args[0]);
+            if (target == null) throw new CommandWarn("Player not found: " + args[0]);
+        } else {
+            return false;
+        }
+        Equipment equipment = plugin.sessions.of(target).getEquipment();
+        sender.sendMessage("Items " + equipment.getItems()); // Equipped::toString
+        sender.sendMessage("Sets " + equipment.getItemSets().entrySet().stream()
+                           .map(e -> e.getKey().getName() + ":" + e.getValue())
+                           .collect(Collectors.joining(", ")));
+        sender.sendMessage("Bonuses " + equipment.getSetBonuses().stream()
+                           .map(b -> "(" + b.getRequiredItemCount() + ")" + b.getName())
+                           .collect(Collectors.joining(", ")));
+        sender.sendMessage("Attrs " + equipment.getEntityAttributes());
+        return true;
+    }
+
+    boolean session(CommandSender sender, String[] args) {
+        int index = 0;
+        for (Session session : plugin.sessions.all()) {
+            UUID uuid = session.getUuid();
+            String name = session.getName();
+            boolean online = session.getPlayer() != null;
+            int i = index++;
+            sender.sendMessage(i + ") " + uuid + " " + name + " " + online);
+        }
         return true;
     }
 

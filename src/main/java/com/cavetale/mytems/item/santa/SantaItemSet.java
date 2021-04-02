@@ -22,6 +22,7 @@ import org.bukkit.potion.PotionEffectType;
 @Getter
 public final class SantaItemSet implements ItemSet {
     private static SantaItemSet instance = null;
+    private final String name = "Santa";
     List<SetBonus> setBonuses;
 
     @Getter

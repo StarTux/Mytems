@@ -2,37 +2,49 @@ package com.cavetale.mytems.session;
 
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.gear.Equipment;
+import com.cavetale.mytems.gear.Equipped;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.SetBonus;
+import com.cavetale.mytems.gear.Slot;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import lombok.Getter;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 
+@Getter
 public final class Session {
     protected final MytemsPlugin plugin;
-    protected final Player player;
+    protected final UUID uuid;
+    protected final String name;
     protected Map<String, Long> cooldowns = new HashMap<>();
     public static final long MILLIS_PER_TICK = 50L;
     private int equipmentUpdateTicks = 0;
-    @Getter protected Equipment equipment; // Updated every tick
-    @Getter protected Flying flying = new Flying(this);
-    @Getter protected Attributes attributes = new Attributes(this);
-    @Getter protected final Favorites favorites = new Favorites();
+    protected Equipment equipment; // Updated every tick
+    protected Flying flying = new Flying(this);
+    protected Attributes attributes = new Attributes(this);
+    protected final Favorites favorites = new Favorites();
 
     public Session(final MytemsPlugin plugin, final Player player) {
         this.plugin = plugin;
-        this.player = player;
+        this.uuid = player.getUniqueId();
+        this.name = player.getName();
         equipment = new Equipment(plugin);
     }
 
-    public void enable() {
+    public Player getPlayer() {
+        return Bukkit.getPlayer(uuid);
+    }
+
+    public Session enable() {
         attributes.enable();
         loadEquipment();
         equipmentDidChange();
+        return this;
     }
 
     public void disable() {
@@ -61,6 +73,10 @@ public final class Session {
     }
 
     public void tick() {
+        Player player = getPlayer();
+        if (player == null) {
+            throw new IllegalStateException("Player not found: " + uuid);
+        }
         loadEquipment();
         if (equipmentUpdateTicks > 0) {
             equipmentUpdateTicks -= 1;
@@ -76,6 +92,7 @@ public final class Session {
     }
 
     public void loadEquipment() {
+        Player player = getPlayer();
         equipment.clear();
         equipment.loadPlayer(player);
     }
@@ -85,8 +102,9 @@ public final class Session {
      * remove effects as needed.
      */
     private void updateEquipment() {
+        Player player = getPlayer();
         if (!equipment.isEmpty()) {
-            for (Equipment.Equipped equipped : equipment.getItems()) {
+            for (Equipped equipped : equipment.getItems()) {
                 ItemMeta meta = equipped.itemStack.getItemMeta();
                 equipped.gearItem.updateItemLore(meta, player, equipment, equipped.slot);
                 equipped.itemStack.setItemMeta(meta);
@@ -100,7 +118,7 @@ public final class Session {
             if (itemStack != null) updateLooseItem(itemStack);
         }
         // Update invalid equipment slots (this boots in hand)
-        for (Equipment.Slot slot : Equipment.Slot.values()) {
+        for (Slot slot : Slot.values()) {
             if (equipment.containsSlot(slot)) continue;
             ItemStack itemStack = inventory.getItem(slot.bukkitEquipmentSlot);
             if (itemStack != null) updateLooseItem(itemStack);
@@ -108,6 +126,7 @@ public final class Session {
     }
 
     private void updateLooseItem(ItemStack itemStack) {
+        Player player = getPlayer();
         GearItem gearItem = plugin.getGearItem(itemStack);
         if (gearItem == null) return;
         ItemMeta itemMeta = itemStack.getItemMeta();

@@ -37,16 +37,14 @@ public final class MytemsPlugin extends JavaPlugin {
         instance = this;
         mytemsCommand.enable();
         eventListener.enable();
-        sessions.enable();
         enableItems();
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            enter(player);
-        }
         fixAllPlayerInventoriesLater();
+        sessions.enable();
     }
 
     @Override
     public void onDisable() {
+        sessions.disable();
         for (Mytem mytem : mytems.values()) {
             try {
                 mytem.disable();
@@ -55,9 +53,6 @@ public final class MytemsPlugin extends JavaPlugin {
             }
         }
         mytems.clear();
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            exit(player);
-        }
     }
 
     public void enableItems() {
@@ -66,15 +61,6 @@ public final class MytemsPlugin extends JavaPlugin {
             mytems.put(it, mytem);
             mytem.enable();
         }
-    }
-
-    public void enter(Player player) {
-        sessions.of(player).enable();
-    }
-
-    public void exit(Player player) {
-        sessions.of(player).disable();
-        sessions.remove(player);
     }
 
     public Mytem getMytem(Mytems key) {

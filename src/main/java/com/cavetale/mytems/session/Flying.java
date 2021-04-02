@@ -2,6 +2,7 @@ package com.cavetale.mytems.session;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.entity.Player;
 
 @RequiredArgsConstructor
 public final  class Flying {
@@ -49,39 +50,43 @@ public final  class Flying {
     }
 
     private void startFlying() {
-        if (!session.player.getAllowFlight()) {
-            session.player.setAllowFlight(true);
+        Player player = session.getPlayer();
+        if (!player.getAllowFlight()) {
+            player.setAllowFlight(true);
             allowed = true;
         }
-        if (!session.player.isFlying()) {
-            session.player.setFlying(true);
-            session.player.setFlySpeed(flyingSpeed);
+        if (!player.isFlying()) {
+            player.setFlying(true);
+            player.setFlySpeed(flyingSpeed);
         }
     }
 
     private void stopFlying() {
+        Player player = session.getPlayer();
         flyingTicks = 0;
         flyEndTask = null;
         flyTickTask = null;
         flyTime = 0;
-        session.player.setFlySpeed(0.1f);
-        session.player.setFlying(false);
+        player.setFlySpeed(0.1f);
+        player.setFlying(false);
         if (allowed) resetAllow();
     }
 
     void resetAllow() {
+        Player player = session.getPlayer();
         allowed = false;
-        session.player.setAllowFlight(false);
+        player.setAllowFlight(false);
     }
 
     public void onToggleOff() {
+        Player player = session.getPlayer();
         if (flyingTicks == 0) return;
         if (flyEndTask != null) flyEndTask.run();
         flyTickTask = null;
         flyEndTask = null;
         flyingTicks = 0;
         flyTime = 0;
-        session.player.setFlySpeed(0.1f);
+        player.setFlySpeed(0.1f);
         if (allowed) resetAllow();
     }
 }

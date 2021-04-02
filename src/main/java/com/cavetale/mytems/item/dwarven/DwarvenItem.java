@@ -5,6 +5,7 @@ import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
+import com.cavetale.mytems.gear.Slot;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.util.ArrayList;
@@ -71,7 +72,7 @@ public abstract class DwarvenItem implements GearItem {
     }
 
     @Override
-    public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Equipment.Slot slot) {
+    public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Slot slot) {
         meta.setDisplayNameComponent(displayName);
         List<BaseComponent[]> lore = new ArrayList<>(baseLore);
         ItemSet itemSet = getItemSet();
@@ -153,9 +154,10 @@ public abstract class DwarvenItem implements GearItem {
         }
     }
 
+    @Getter
     public static final class DwarvenItemSet implements ItemSet {
-        @Getter private final List<SetBonus> setBonuses = Arrays
-            .asList(new NightVision(2), new MiningSpeed(4));
+        private final String name = "Dwarven";
+        private final List<SetBonus> setBonuses = Arrays.asList(new NightVision(2), new MiningSpeed(4));
 
         @Getter @RequiredArgsConstructor
         public static final class MiningSpeed implements SetBonus {
