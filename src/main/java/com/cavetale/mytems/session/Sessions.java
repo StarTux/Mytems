@@ -30,7 +30,8 @@ public final class Sessions implements Listener {
 
     public void disable() {
         for (Session session : sessions.values()) {
-            session.disable();
+            Player player = session.getPlayer();
+            if (player != null) session.disable(player);
         }
         sessions.clear();
     }
@@ -49,20 +50,6 @@ public final class Sessions implements Listener {
         return session;
     }
 
-    protected Session remove(UUID uuid) {
-        Session session = sessions.remove(uuid);
-        if (session != null) session.disable();
-        return  session;
-    }
-
-    protected Session remove(Player player) {
-        return remove(player.getUniqueId());
-    }
-
-    protected void remove(Session session) {
-        remove(session.getUuid());
-    }
-
     @EventHandler(priority = EventPriority.MONITOR)
     void onPlayerJoin(PlayerJoinEvent event) {
         of(event.getPlayer());
@@ -70,16 +57,24 @@ public final class Sessions implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     void onPlayerQuit(PlayerQuitEvent event) {
-        remove(event.getPlayer());
+        Player player = event.getPlayer();
+        Session session = sessions.remove(player.getUniqueId());
+        if (session != null) session.disable(player);
     }
 
     private void tick() {
         for (Session session : all()) {
+            Player player = session.getPlayer();
+            if (player == null) {
+                sessions.remove(session.getUuid());
+                continue;
+            }
             try {
-                session.tick();
+                session.tick(player);
             } catch (Exception e) {
-                remove(session);
                 e.printStackTrace();
+                session.disable(player);
+                sessions.remove(player.getUniqueId());
             }
         }
     }

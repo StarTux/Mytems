@@ -14,13 +14,13 @@ public final  class Flying {
     boolean allowed = false;
     private float flyingSpeed;
 
-    public void disable() {
+    public void disable(Player player) {
         if (flyingTicks > 0) {
-            stopFlying();
+            stopFlying(player);
         }
     }
 
-    public void tick() {
+    public void tick(Player player) {
         if (flyingTicks == 0) return;
         flyingTicks -= 1;
         if (flyingTicks == 0) {
@@ -30,7 +30,7 @@ public final  class Flying {
                 run.run();
             }
             if (flyingTicks == 0) {
-                stopFlying();
+                stopFlying(player);
             }
         } else {
             startFlying();
@@ -61,8 +61,7 @@ public final  class Flying {
         }
     }
 
-    private void stopFlying() {
-        Player player = session.getPlayer();
+    private void stopFlying(Player player) {
         flyingTicks = 0;
         flyEndTask = null;
         flyTickTask = null;

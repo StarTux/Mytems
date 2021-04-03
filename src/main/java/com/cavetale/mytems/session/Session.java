@@ -47,9 +47,9 @@ public final class Session {
         return this;
     }
 
-    public void disable() {
-        flying.disable();
-        attributes.disable();
+    public void disable(Player player) {
+        flying.disable(player);
+        attributes.disable(player);
     }
 
     public void setCooldown(String key, int ticks) {
@@ -72,11 +72,7 @@ public final class Session {
         return (cd - now) / MILLIS_PER_TICK;
     }
 
-    public void tick() {
-        Player player = getPlayer();
-        if (player == null) {
-            throw new IllegalStateException("Player not found: " + uuid);
-        }
+    public void tick(Player player) {
         loadEquipment();
         if (equipmentUpdateTicks > 0) {
             equipmentUpdateTicks -= 1;
@@ -84,8 +80,8 @@ public final class Session {
                 updateEquipment();
             }
         }
-        flying.tick();
-        attributes.tick();
+        flying.tick(player);
+        attributes.tick(player);
         for (SetBonus setBonus : equipment.getSetBonuses()) {
             setBonus.tick(player);
         }

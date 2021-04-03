@@ -38,12 +38,11 @@ public final class Attributes {
 
     public void enable() { }
 
-    public void disable() {
-        clear();
+    public void disable(Player player) {
+        clear(player);
     }
 
-    private void clear() {
-        Player player = session.getPlayer();
+    private void clear(Player player) {
         for (Attribute attribute : Attribute.values()) {
             AttributeInstance attributeInstance = player.getAttribute(attribute);
             if (attributeInstance == null) continue;
@@ -54,8 +53,7 @@ public final class Attributes {
         }
     }
 
-    protected void update() {
-        Player player = session.getPlayer();
+    protected void tick(Player player) {
         hasAttributes.clear();
         shouldHaveAttributeNames.clear();
         shouldHaveAttributes.values().forEach(List::clear);
@@ -86,9 +84,5 @@ public final class Attributes {
                 attributeInstance.addModifier(modifier);
             }
         }
-    }
-
-    protected void tick() {
-        update();
     }
 }
