@@ -40,7 +40,13 @@ public final class Sessions implements Listener {
     }
 
     public Session of(Player player) {
-        return sessions.computeIfAbsent(player.getUniqueId(), u -> new Session(plugin, player).enable());
+        Session session = sessions.get(player.getUniqueId());
+        if (session == null) {
+            session = new Session(plugin, player);
+            sessions.put(player.getUniqueId(), session);
+            session.enable();
+        }
+        return session;
     }
 
     protected Session remove(UUID uuid) {
