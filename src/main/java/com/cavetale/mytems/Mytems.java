@@ -71,7 +71,9 @@ public enum Mytems {
     TOILET(Toilet::new, Material.CAULDRON, 498101),
     WEDDING_RING(WeddingRing::new, "wedding_ring", Material.PLAYER_HEAD, 7413002),
     MAGIC_MAP(MagicMap::new, Material.FILLED_MAP, 7413005),
-    BOSS_CHEST(DummyMytem::new, Material.CHEST, 7413004);
+    BOSS_CHEST(DummyMytem::new, Material.CHEST, 7413004),
+    // Wardrobe
+    WHITE_BUNNY_EARS(DummyMytem::new, Material.IRON_BOOTS, 3919001);
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;
