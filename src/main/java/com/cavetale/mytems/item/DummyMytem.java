@@ -6,7 +6,9 @@ import com.cavetale.mytems.util.Text;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.md_5.bungee.api.chat.BaseComponent;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 @RequiredArgsConstructor @Getter
 public final class DummyMytem implements Mytem {
@@ -18,7 +20,11 @@ public final class DummyMytem implements Mytem {
     public void enable() {
         displayName = Text.builder(key.id).create();
         prototype = new ItemStack(key.material);
-        key.markItemStack(prototype);
+        ItemMeta meta = prototype.getItemMeta();
+        meta.setDisplayNameComponent(displayName);
+        meta.addItemFlags(ItemFlag.values());
+        key.markItemMeta(meta);
+        prototype.setItemMeta(meta);
     }
 
     @Override
