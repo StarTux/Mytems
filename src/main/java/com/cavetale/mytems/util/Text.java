@@ -133,11 +133,11 @@ public final class Text {
             + in.substring(1).toLowerCase();
     }
 
-    public static String toCamelCase(Enum en) {
+    public static String toCamelCase(Enum en, String glue) {
         String[] toks = en.name().split("_");
         for (int i = 0; i < toks.length; i += 1) {
             toks[i] = toCamelCase(toks[i]);
         }
-        return String.join(" ", toks);
+        return String.join(glue, toks);
     }
 }
