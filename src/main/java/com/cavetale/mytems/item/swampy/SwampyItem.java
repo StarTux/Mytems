@@ -206,7 +206,7 @@ public abstract class SwampyItem implements GearItem {
                 PotionEffect potionEffect = player.getPotionEffect(type);
                 if (potionEffect != null) {
                     if (potionEffect.getAmplifier() > amplifier) return;
-                    if (potionEffect.getDuration() > duration) return;
+                    if (potionEffect.getAmplifier() == amplifier && potionEffect.getDuration() >= duration) return;
                 }
                 potionEffect = new PotionEffect(type, duration, amplifier, true, false, true);
                 player.addPotionEffect(potionEffect);
