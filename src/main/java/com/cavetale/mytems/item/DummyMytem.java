@@ -18,7 +18,7 @@ public final class DummyMytem implements Mytem {
 
     @Override
     public void enable() {
-        displayName = Text.builder(key.id).create();
+        displayName = Text.builder(Text.toCamelCase(key)).create();
         prototype = new ItemStack(key.material);
         ItemMeta meta = prototype.getItemMeta();
         meta.setDisplayNameComponent(displayName);

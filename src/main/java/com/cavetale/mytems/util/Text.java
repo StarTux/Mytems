@@ -126,4 +126,18 @@ public final class Text {
     public static ComponentBuilder builder(String txt) {
         return new ComponentBuilder(txt);
     }
+
+    public static String toCamelCase(String in) {
+        if (in == null) return "";
+        return in.substring(0, 1).toUpperCase()
+            + in.substring(1).toLowerCase();
+    }
+
+    public static String toCamelCase(Enum en) {
+        String[] toks = en.name().split("_");
+        for (int i = 0; i < toks.length; i += 1) {
+            toks[i] = toCamelCase(toks[i]);
+        }
+        return String.join(" ", toks);
+    }
 }
