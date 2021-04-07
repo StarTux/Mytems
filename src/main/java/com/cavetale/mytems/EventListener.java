@@ -232,6 +232,10 @@ public final class EventListener implements Listener {
     void onPlayerItemConsume(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
+        Mytems mytems = Mytems.forItem(item);
+        if (mytems != null) {
+            mytems.getMytem().onConsume(event, player, item);
+        }
         for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
             setBonus.onPlayerItemConsume(event, player, item);
         }

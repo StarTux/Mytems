@@ -11,11 +11,14 @@ import com.cavetale.mytems.item.santa.SantaHat;
 import com.cavetale.mytems.item.santa.SantaJacket;
 import com.cavetale.mytems.item.santa.SantaPants;
 import com.cavetale.mytems.item.swampy.SwampyItem;
+import com.cavetale.mytems.item.vote.VoteCandy;
+import com.cavetale.mytems.item.vote.VoteFirework;
 import com.cavetale.worldmarker.item.ItemMarker;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 import org.bukkit.Material;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -68,12 +71,15 @@ public enum Mytems {
     EASTER_LEGGINGS(EasterGear.Leggings::new, Material.LEATHER_LEGGINGS, 345713),
     EASTER_BOOTS(EasterGear.Boots::new, Material.LEATHER_BOOTS, 345714),
     //
-    TOILET(Toilet::new, Material.CAULDRON, 498101),
+    TOILET(Toilet::new, Material.CAULDRON, 498101), // APRIL
     WEDDING_RING(WeddingRing::new, "wedding_ring", Material.PLAYER_HEAD, 7413002),
     MAGIC_MAP(MagicMap::new, Material.FILLED_MAP, 7413005),
     BOSS_CHEST(DummyMytem::new, Material.CHEST, 7413004),
     // Wardrobe
-    WHITE_BUNNY_EARS(DummyMytem::new, Material.IRON_BOOTS, 3919001);
+    WHITE_BUNNY_EARS(DummyMytem::new, Material.IRON_BOOTS, 3919001), // EPIC
+    // Vote
+    VOTE_CANDY(VoteCandy::new, "vote_candy", Material.COOKIE, 9073001), // VOTE
+    VOTE_FIREWORK(VoteFirework::new, "vote_firework", Material.FIREWORK_ROCKET, 9073002);
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;
@@ -84,10 +90,14 @@ public enum Mytems {
     static {
         for (Mytems it : Mytems.values()) {
             ID_MAP.put(it.id, it);
-            ID_MAP.put("mytems:" + it.id, it);
+            if (!it.id.contains(":")) {
+                ID_MAP.put("mytems:" + it.id, it);
+            }
         }
-        ID_MAP.put("dwarf_axe", DWARVEN_AXE);
-        ID_MAP.put("mytems:dwarf_axe", DWARVEN_AXE);
+        ID_MAP.put("dwarf_axe", DWARVEN_AXE); // legacy
+        ID_MAP.put("mytems:dwarf_axe", DWARVEN_AXE); // legacy
+        ID_MAP.put("vote:candy", VOTE_CANDY); // legacy
+        ID_MAP.put("vote:firework", VOTE_FIREWORK); // legacy
     }
 
     Mytems(final Function<Mytems, Mytem> ctor) {
@@ -149,7 +159,7 @@ public enum Mytems {
         String tag = index >= 0 ? serialized.substring(index) : null;
         return tag != null
             ? mytems.getMytem().deserializeTag(tag)
-            : mytems.getMytem().getItem();
+            : mytems.getMytem().createItemStack();
     }
 
     public void markItemMeta(ItemMeta meta) {
@@ -163,5 +173,21 @@ public enum Mytems {
         ItemMeta meta = itemStack.getItemMeta();
         markItemMeta(meta);
         itemStack.setItemMeta(meta);
+    }
+
+    public ItemStack createItemStack() {
+        return getMytem().createItemStack();
+    }
+
+    public ItemStack createItemStack(Player player) {
+        return getMytem().createItemStack(player);
+    }
+
+    public void giveItemStack(Player player, int amount) {
+        ItemStack itemStack = createItemStack(player);
+        itemStack.setAmount(amount);
+        for (ItemStack drop : player.getInventory().addItem(itemStack).values()) {
+            player.getWorld().dropItem(player.getEyeLocation(), itemStack).setPickupDelay(0);
+        }
     }
 }

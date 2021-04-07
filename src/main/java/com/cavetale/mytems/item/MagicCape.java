@@ -1,7 +1,7 @@
 package com.cavetale.mytems.item;
 
-import com.cavetale.mytems.ItemFixFlag;
 import com.cavetale.mytems.Mytem;
+import com.cavetale.mytems.MytemPersistenceFlag;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.session.Session;
@@ -129,7 +129,7 @@ public final class MagicCape implements Mytem {
     }
 
     @Override
-    public Set<ItemFixFlag> getItemFixFlags() {
-        return ItemFixFlag.COPY_VANILLA;
+    public Set<MytemPersistenceFlag> getMytemPersistenceFlags() {
+        return MytemPersistenceFlag.VANILLA;
     }
 }

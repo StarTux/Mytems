@@ -63,6 +63,17 @@ public final class Json {
         return GSON.fromJson(json, type);
     }
 
+    public static <T> T deserialize(String json, Class<T> type, Supplier<T> dfl) {
+        T t;
+        try {
+            t = GSON.fromJson(json, type);
+        } catch (Exception e) {
+            e.printStackTrace();
+            t = null;
+        }
+        return t != null ? t : dfl.get();
+    }
+
     public static String simplified(Object in) {
         if (in == null) {
             return "null";

@@ -22,12 +22,12 @@ public final class MagicMap implements Mytem {
 
     @Override
     public void enable() {
-        displayName = Text.builder("Magic Map").color(ChatColor.LIGHT_PURPLE).create();
+        displayName = Text.builder("Magic Map").color(ChatColor.LIGHT_PURPLE).italic(false).create();
     }
 
     @Override
     public ItemStack getItem() {
-        ItemStack item = new ItemStack(key.material != null ? key.material : Material.PAPER);
+        ItemStack item = new ItemStack(Material.PAPER);
         ItemMeta meta = item.getItemMeta();
         meta.setDisplayNameComponent(displayName);
         key.markItemMeta(meta);

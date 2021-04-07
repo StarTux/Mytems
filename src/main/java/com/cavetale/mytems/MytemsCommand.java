@@ -9,6 +9,7 @@ import com.cavetale.mytems.util.Text;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -49,9 +50,15 @@ public final class MytemsCommand implements TabExecutor {
         rootNode.addChild("serialize").denyTabCompletion()
             .description("Serialize the mytem in your hand")
             .playerCaller(this::serialize);
+        rootNode.addChild("testserialize").denyTabCompletion()
+            .description("Test serialize the mytem in your hand")
+            .playerCaller(this::testserialize);
         rootNode.addChild("fixall").denyTabCompletion()
             .description("Fix all player inventories")
             .senderCaller(this::fixall);
+        rootNode.addChild("giveall").denyTabCompletion()
+            .description("Give all items")
+            .playerCaller(this::giveall);
         plugin.getCommand("mytems").setExecutor(this);
     }
 
@@ -94,7 +101,7 @@ public final class MytemsCommand implements TabExecutor {
         }
         if (amount < 1) throw new CommandWarn("Invalid amount: " + amountArg);
         Mytem mytem = plugin.getMytem(mytems);
-        ItemStack item = mytem.getItem();
+        ItemStack item = mytem.createItemStack(target);
         item.setAmount(amount);
         int retain = 0;
         for (ItemStack drop : target.getInventory().addItem(item).values()) {
@@ -198,6 +205,49 @@ public final class MytemsCommand implements TabExecutor {
         if (args.length != 0) return false;
         plugin.fixAllPlayerInventoriesLater();
         sender.sendMessage(ChatColor.YELLOW + "Fixing all player inventories");
+        return true;
+    }
+
+    boolean testserialize(Player player, String[] args) {
+        if (args.length != 0) return false;
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        if (itemStack == null || itemStack.getAmount() == 0) {
+            throw new CommandWarn("No item in your hand!");
+        }
+        Mytems mytems = Mytems.forItem(itemStack);
+        if (mytems == null) {
+            throw new CommandWarn("No Mytem in your hand!");
+        }
+        itemStack = itemStack.clone();
+        String serialized = mytems.serializeItem(itemStack);
+        player.sendMessage(ChatColor.YELLOW + "Testing: " + serialized);
+        for (int i = 0; i < 3; i += 1) {
+            ItemStack itemStack2 = Mytems.deserializeItem(serialized);
+            String serialized2 = mytems.serializeItem(itemStack2);
+            boolean sameItem = Objects.equals(itemStack, itemStack2);
+            boolean sameText = Objects.equals(serialized, serialized2);
+            if (sameItem && sameText) {
+                player.sendMessage(ChatColor.YELLOW + "Step " + (i + 1) + ": " + ChatColor.GREEN + "OK");
+            } else {
+                player.sendMessage(ChatColor.YELLOW + "Step " + (i + 1) + ":" + ChatColor.RED
+                                   + " sameItem=" + sameItem + " sameText=" + sameText
+                                   + " serial=" + serialized2);
+            }
+            if (itemStack2 == null || serialized2 == null) break;
+            itemStack = itemStack2;
+            serialized = serialized2;
+        }
+        return true;
+    }
+
+    boolean giveall(Player player, String[] args) {
+        if (args.length != 0) return false;
+        int count = 0;
+        for (Mytems mytems : Mytems.values()) {
+            mytems.giveItemStack(player, 1);
+            count += 1;
+        }
+        player.sendMessage("" + ChatColor.YELLOW + count + " mytems givem");
         return true;
     }
 }

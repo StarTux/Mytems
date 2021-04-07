@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Tag;
@@ -18,8 +17,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
-import org.bukkit.inventory.meta.Damageable;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @Getter
@@ -131,26 +128,22 @@ public final class MytemsPlugin extends JavaPlugin {
         return count;
     }
 
+    /**
+     * Attempt to update an item. This means generating a new Mytem
+     * with the same serialized data if it's mytem. Or a container
+     * with all updated contained items.
+     *
+     * @return the ItemStack if it was fixed and needs updating in its
+     *   context, null otherwise
+     */
     public ItemStack fixItemStack(ItemStack oldItemStack) {
         if (oldItemStack == null || oldItemStack.getAmount() == 0) return null;
-        Mytem mytem = getMytem(oldItemStack);
-        if (mytem != null) {
-            ItemStack newItemStack = mytem.getItem();
-            newItemStack.setAmount(oldItemStack.getAmount());
-            Set<ItemFixFlag> itemFixFlags = mytem.getItemFixFlags();
-            if (itemFixFlags.contains(ItemFixFlag.COPY_ENCHANTMENTS)) {
-                newItemStack.addUnsafeEnchantments(oldItemStack.getEnchantments());
-            }
-            if (itemFixFlags.contains(ItemFixFlag.COPY_DURABILITY)) {
-                ItemMeta oldItemMeta = oldItemStack.getItemMeta();
-                ItemMeta newItemMeta = newItemStack.getItemMeta();
-                if (oldItemMeta instanceof Damageable && newItemMeta instanceof Damageable) {
-                    ((Damageable) newItemMeta).setDamage(((Damageable) oldItemMeta).getDamage());
-                }
-                newItemStack.setItemMeta(newItemMeta);
-            }
-            if (oldItemStack.equals(newItemStack)) return null;
-            return newItemStack;
+        Mytems key = Mytems.forItem(oldItemStack);
+        if (key != null) {
+            String serialized = key.serializeItem(oldItemStack);
+            ItemStack newItemStack = Mytems.deserializeItem(serialized);
+            if (newItemStack == null) return null;
+            return newItemStack.equals(oldItemStack) ? null : newItemStack;
         }
         if (Tag.SHULKER_BOXES.isTagged(oldItemStack.getType())) {
             if (!oldItemStack.hasItemMeta()) return null;

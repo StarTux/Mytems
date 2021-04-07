@@ -1,6 +1,6 @@
 package com.cavetale.mytems.item;
 
-import com.cavetale.mytems.ItemFixFlag;
+import com.cavetale.mytems.MytemPersistenceFlag;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
@@ -83,7 +83,7 @@ abstract class AculaItem implements GearItem {
     }
 
     @Override
-    public Set<ItemFixFlag> getItemFixFlags() {
-        return EnumSet.of(ItemFixFlag.COPY_DURABILITY);
+    public Set<MytemPersistenceFlag> getMytemPersistenceFlags() {
+        return EnumSet.of(MytemPersistenceFlag.DURABILITY);
     }
 }
