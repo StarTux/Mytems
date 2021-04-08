@@ -31,7 +31,7 @@ public enum Mytems {
     BAT_MASK(BatMask::new),
     // Cloud City
     UNICORN_HORN(UnicornHorn::new, Material.END_ROD, 7413003),
-    MAGIC_CAPE(MagicCape::new),
+    MAGIC_CAPE(MagicCape::new, Material.ELYTRA, 7413006),
     // Generic
     KITTY_COIN(KittyCoin::new, "kitty_coin", Material.PLAYER_HEAD, 7413001),
     // Christmas 2020
