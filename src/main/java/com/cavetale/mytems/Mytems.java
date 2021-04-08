@@ -162,6 +162,17 @@ public enum Mytems {
             : mytems.getMytem().createItemStack();
     }
 
+    public static ItemStack deserializeItem(String serialized, Player player) {
+        int index = serialized.indexOf("{");
+        String id = index >= 0 ? serialized.substring(0, index) : serialized;
+        Mytems mytems = forId(id);
+        if (mytems == null) return null;
+        String tag = index >= 0 ? serialized.substring(index) : null;
+        return tag != null
+            ? mytems.getMytem().deserializeTag(tag, player)
+            : mytems.getMytem().createItemStack();
+    }
+
     public void markItemMeta(ItemMeta meta) {
         ItemMarker.setId(meta, id);
         if (customModelData != null) {

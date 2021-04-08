@@ -66,7 +66,7 @@ public final class UnicornHorn implements Mytem {
     }
 
     @Override
-    public ItemStack getItem() {
+    public ItemStack createItemStack() {
         return prototype.clone();
     }
 

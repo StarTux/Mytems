@@ -49,7 +49,7 @@ public final class ChristmasToken implements Mytem {
     }
 
     @Override
-    public ItemStack getItem() {
+    public ItemStack createItemStack() {
         return prototype.clone();
     }
 }

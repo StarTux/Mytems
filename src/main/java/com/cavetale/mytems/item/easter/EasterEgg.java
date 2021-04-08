@@ -43,7 +43,7 @@ public final class EasterEgg implements Mytem {
     }
 
     @Override
-    public ItemStack getItem() {
+    public ItemStack createItemStack() {
         return prototype.clone();
     }
 

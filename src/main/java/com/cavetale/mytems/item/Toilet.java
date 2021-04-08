@@ -78,7 +78,7 @@ public final class Toilet implements Mytem, Listener {
     }
 
     @Override
-    public ItemStack getItem() {
+    public ItemStack createItemStack() {
         return prototype.clone();
     }
 
@@ -199,7 +199,7 @@ public final class Toilet implements Mytem, Listener {
             block.setType(Material.AIR);
         }
         if (itemFrame != null) {
-            loc.getWorld().dropItem(loc, getItem());
+            loc.getWorld().dropItem(loc, createItemStack(player));
         }
     }
 

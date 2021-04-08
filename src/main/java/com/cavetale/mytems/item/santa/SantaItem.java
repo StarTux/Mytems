@@ -85,7 +85,7 @@ abstract class SantaItem implements GearItem {
     }
 
     @Override
-    public ItemStack getItem() {
+    public ItemStack createItemStack() {
         return prototype.clone();
     }
 

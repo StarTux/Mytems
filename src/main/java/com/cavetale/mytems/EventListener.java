@@ -194,7 +194,8 @@ public final class EventListener implements Listener {
                 // Success!
                 Location location = event.getItems().get(0).getLocation();
                 event.setCancelled(true);
-                location.getWorld().dropItem(location, Mytems.CHRISTMAS_TOKEN.getMytem().getItem());
+                ItemStack drop = Mytems.CHRISTMAS_TOKEN.createItemStack(event.getPlayer());
+                location.getWorld().dropItem(location, drop);
                 return;
             }
         }

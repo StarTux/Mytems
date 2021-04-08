@@ -16,6 +16,10 @@ import org.bukkit.inventory.meta.ItemMeta;
  *
  * A Mytem object uses this internally.
  *
+ * The store method performs additive operations only and never
+ * removes something that's stored in the item, be it enchantments,
+ * durability, amount, or owner.
+ *
  * @see MytemPersistenceFlag
  */
 @Data

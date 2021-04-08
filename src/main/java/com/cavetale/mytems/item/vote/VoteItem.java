@@ -27,10 +27,6 @@ abstract class VoteItem implements Mytem {
     protected final Random random = new Random();
 
     @Override
-    public ItemStack getItem() {
-        return prototype.clone();
-    }
-
     public ItemStack createItemStack() {
         return prototype.clone();
     }
@@ -53,8 +49,11 @@ abstract class VoteItem implements Mytem {
     }
 
     @Override
-    public final ItemStack deserializeTag(String serialized) {
+    public final ItemStack deserializeTag(String serialized, Player player) {
         MytemTag tag = Json.deserialize(serialized, MytemTag.class, MytemTag::new);
+        if (player != null) {
+            tag.setOwner(MytemOwner.ofPlayer(player));
+        }
         ItemStack itemStack = prototype.clone();
         tag.store(itemStack, getMytemPersistenceFlags());
         if (tag.getOwner() != null) {
@@ -65,6 +64,11 @@ abstract class VoteItem implements Mytem {
             itemStack.setItemMeta(meta);
         }
         return itemStack;
+    }
+
+    @Override
+    public final ItemStack deserializeTag(String serialized) {
+        return deserializeTag(serialized, null);
     }
 
     protected static List<Component> getThanksLore(String playerName) {

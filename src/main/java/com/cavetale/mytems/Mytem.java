@@ -22,14 +22,13 @@ public interface Mytem {
     /**
      * Create a fresh copy.
      */
-    ItemStack getItem();
+    ItemStack createItemStack();
 
-    default ItemStack createItemStack() {
-        return getItem();
-    }
-
+    /**
+     * Create a fresh copy for the player.
+     */
     default ItemStack createItemStack(Player player) {
-        return getItem();
+        return createItemStack();
     }
 
     Component getDisplayName();
@@ -65,9 +64,27 @@ public interface Mytem {
      * to respect the MytemPersistenceFlags.
      */
     default ItemStack deserializeTag(String serialized) {
-        ItemStack itemStack = getItem();
+        ItemStack itemStack = createItemStack();
         MytemTag tag = Json.deserialize(serialized, MytemTag.class);
         tag.store(itemStack, getMytemPersistenceFlags());
+        return itemStack;
+    }
+
+    /**
+     * Deserialize an item tag with a new owner.
+     *
+     * Overriders may accept a null for the player argument in order
+     * to call it from the overload above, but the default
+     * implementation will not.
+     */
+    default ItemStack deserializeTag(String serialized, Player player) {
+        ItemStack itemStack = createItemStack();
+        MytemTag tag = Json.deserialize(serialized, MytemTag.class);
+        Set<MytemPersistenceFlag> flags = getMytemPersistenceFlags();
+        if (flags.contains(MytemPersistenceFlag.OWNER)) {
+            tag.setOwner(MytemOwner.ofPlayer(player));
+        }
+        tag.store(itemStack, flags);
         return itemStack;
     }
 }

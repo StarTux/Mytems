@@ -26,7 +26,7 @@ public final class MagicMap implements Mytem {
     }
 
     @Override
-    public ItemStack getItem() {
+    public ItemStack createItemStack() {
         ItemStack item = new ItemStack(Material.PAPER);
         ItemMeta meta = item.getItemMeta();
         meta.displayName(displayName);

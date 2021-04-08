@@ -45,7 +45,7 @@ public final class WeddingRing implements Mytem {
     }
 
     @Override
-    public ItemStack getItem() {
+    public ItemStack createItemStack() {
         return prototype.clone();
     }
 }

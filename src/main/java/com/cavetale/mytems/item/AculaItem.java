@@ -70,7 +70,7 @@ abstract class AculaItem implements GearItem {
     }
 
     @Override
-    public ItemStack getItem() {
+    public ItemStack createItemStack() {
         ItemStack itemStack = prototype.clone();
         ItemMeta meta = itemStack.getItemMeta();
         updateItemLore(meta);

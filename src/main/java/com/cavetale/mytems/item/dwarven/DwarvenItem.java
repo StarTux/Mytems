@@ -92,7 +92,7 @@ public abstract class DwarvenItem implements GearItem {
     }
 
     @Override
-    public final ItemStack getItem() {
+    public final ItemStack createItemStack() {
         return prototype.clone();
     }
 
