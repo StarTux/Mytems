@@ -17,6 +17,8 @@ public final class MytemsTest {
                     throw new IllegalStateException(mytems + ": duplicate custom model data: " + mytems.customModelData);
                 }
                 customModelDataSet.add(mytems.customModelData);
+            } else {
+                System.out.println("No custom model data: " + mytems);
             }
         }
     }
