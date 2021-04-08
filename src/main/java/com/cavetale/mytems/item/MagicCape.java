@@ -6,12 +6,14 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Text;
+import java.awt.Color;
 import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -28,7 +30,7 @@ public final class MagicCape implements Mytem {
     public static final int SECONDS_PER_FOOD = 5;
     public static final int FLIGHT_SECONDS = 10;
     public static final int COOLDOWN_SECONDS = 20;
-    @Getter private BaseComponent[] displayName;
+    @Getter private Component displayName;
     private final String description = ""
         + ChatColor.AQUA + "Woven with the rare membrane dropped by a phantom boss."
         + "\n\n"
@@ -45,15 +47,24 @@ public final class MagicCape implements Mytem {
         + ChatColor.AQUA + "Cost " + ChatColor.GRAY + "1 food per " + SECONDS_PER_FOOD + " seconds";
     private ItemStack prototype;
 
+    protected static Component rainbowify(String in) {
+        Component component = Component.empty().decoration(TextDecoration.ITALIC, false);
+        int len = in.length();
+        for (int i = 0; i < len; i += 1) {
+            float pos = (float) i / (float) len;
+            int rgb = 0xFFFFFF & Color.HSBtoRGB(pos, 0.66f, 1.0f);
+            component = component.append(Component.text(in.substring(i, i + 1)).color(TextColor.color(rgb)));
+        }
+        return component;
+    }
+
     @Override
     public void enable() {
-        ComponentBuilder cb = new ComponentBuilder();
-        UnicornHorn.rainbowify(cb, "Magic Cape");
-        displayName = cb.create();
+        displayName = rainbowify("Magic Cape");
         prototype = new ItemStack(Material.ELYTRA).ensureServerConversions();
         ItemMeta meta = prototype.getItemMeta();
-        meta.setDisplayNameComponent(displayName);
-        meta.setLore(Text.wrapMultiline(description, Text.ITEM_LORE_WIDTH));
+        meta.displayName(displayName);
+        meta.lore(Text.wrapLore(description));
         key.markItemMeta(meta);
         prototype.setItemMeta(meta);
     }

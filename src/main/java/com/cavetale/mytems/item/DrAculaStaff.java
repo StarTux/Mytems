@@ -5,8 +5,8 @@ import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Text;
 import java.util.UUID;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -46,7 +46,7 @@ public final class DrAculaStaff extends AculaItem {
     @Override
     public void enable() {
         displayName = creepify("Dr. Acula's Staff", false);
-        baseLore = Text.toBaseComponents(Text.wrapMultiline(description, Text.ITEM_LORE_WIDTH));
+        baseLore = Text.wrapLore(description);
         prototype = create();
     }
 
@@ -99,7 +99,7 @@ public final class DrAculaStaff extends AculaItem {
     public ItemStack create() {
         ItemStack item = new ItemStack(Material.NETHERITE_SWORD);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayNameComponent(displayName);
+        meta.displayName(displayName);
         Repairable repairable = (Repairable) meta;
         repairable.setRepairCost(9999);
         AttributeModifier attr;

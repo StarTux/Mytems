@@ -5,7 +5,8 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Text;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.md_5.bungee.api.chat.BaseComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -14,14 +15,14 @@ import org.bukkit.inventory.meta.ItemMeta;
 public final class DummyMytem implements Mytem {
     private final Mytems key;
     private ItemStack prototype;
-    private BaseComponent[] displayName;
+    private Component displayName;
 
     @Override
     public void enable() {
-        displayName = Text.builder(Text.toCamelCase(key, " ")).italic(false).create();
+        displayName = Component.text(Text.toCamelCase(key, " ")).decoration(TextDecoration.ITALIC, false);
         prototype = new ItemStack(key.material);
         ItemMeta meta = prototype.getItemMeta();
-        meta.setDisplayNameComponent(displayName);
+        meta.displayName(displayName);
         meta.addItemFlags(ItemFlag.values());
         key.markItemMeta(meta);
         prototype.setItemMeta(meta);

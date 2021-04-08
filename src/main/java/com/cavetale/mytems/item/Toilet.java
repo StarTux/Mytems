@@ -3,7 +3,6 @@ package com.cavetale.mytems.item;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
-import com.cavetale.mytems.util.Text;
 import com.cavetale.worldmarker.block.BlockMarker;
 import com.cavetale.worldmarker.entity.EntityMarker;
 import com.winthier.generic_events.GenericEvents;
@@ -14,8 +13,9 @@ import java.util.Random;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -44,7 +44,7 @@ import org.spigotmc.event.entity.EntityDismountEvent;
 @RequiredArgsConstructor
 public final class Toilet implements Mytem, Listener {
     @Getter private final Mytems key;
-    @Getter private BaseComponent[] displayName;
+    @Getter private Component displayName;
     private ItemStack emptyPrototype;
     private ItemStack prototype;
     Map<Block, Seat> blockMap = new HashMap<>();
@@ -59,10 +59,10 @@ public final class Toilet implements Mytem, Listener {
 
     @Override
     public void enable() {
-        displayName = Text.builder("Toilet").color(ChatColor.of("#A0A0A0")).italic(false).create();
+        displayName = Component.text("Toilet").color(TextColor.color(0xA0A0A0)).decoration(TextDecoration.ITALIC, false);
         prototype = new ItemStack(key.material);
         ItemMeta meta = prototype.getItemMeta();
-        meta.setDisplayNameComponent(displayName);
+        meta.displayName(displayName);
         key.markItemMeta(meta);
         prototype.setItemMeta(meta);
         emptyPrototype = new ItemStack(key.material);

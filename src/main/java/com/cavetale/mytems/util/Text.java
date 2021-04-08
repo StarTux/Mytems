@@ -2,15 +2,12 @@ package com.cavetale.mytems.util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ClickEvent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
-import net.md_5.bungee.api.chat.HoverEvent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.ChatColor;
 
 /**
  * Convenience functions to format text. Primarily for item tooltips.
@@ -33,7 +30,7 @@ public final class Text {
             if (lineLength + wordLength + 1 > maxLineLength) {
                 String lineStr = lastColors + line.toString();
                 lines.add(lineStr);
-                lastColors = org.bukkit.ChatColor.getLastColors(lineStr);
+                lastColors = ChatColor.getLastColors(lineStr);
                 line = new StringBuilder(word);
                 lineLength = wordLength;
             } else {
@@ -70,61 +67,38 @@ public final class Text {
         return result;
     }
 
-    public static List<BaseComponent[]> toBaseComponents(List<String> in) {
-        List<BaseComponent[]> out = new ArrayList<>(in.size());
+    public static List<Component> toComponents(List<String> in) {
+        List<Component> out = new ArrayList<>(in.size());
         for (String ins : in) {
-            out.add(toBaseComponents(ins));
+            out.add(Component.text(ins).decoration(TextDecoration.ITALIC, false));
         }
         return out;
     }
 
-    public static BaseComponent[] toBaseComponents(String in) {
-        BaseComponent[] bs = new BaseComponent[1];
-        bs[0] = new TextComponent(in);
-        return bs;
-    }
-
-    public static List<BaseComponent[]> toBaseComponents(List<String> in, Consumer<ComponentBuilder> lineCallback) {
-        List<BaseComponent[]> result = new ArrayList<>(in.size());
+    public static List<Component> toComponents(List<String> in, Function<Component, Component> lineCallback) {
+        List<Component> result = new ArrayList<>(in.size());
         for (String line : in) {
-            ComponentBuilder cb = new ComponentBuilder(line);
-            lineCallback.accept(cb);
-            result.add(cb.create());
+            Component component = Component.text(line).decoration(TextDecoration.ITALIC, false);
+            component = lineCallback.apply(component);
+            result.add(component);
         }
         return result;
     }
 
-    public static List<BaseComponent[]> wrapLore(String txt) {
+    public static List<Component> wrapLore(String txt) {
         List<String> lines = wrapMultiline(txt, ITEM_LORE_WIDTH);
-        List<BaseComponent[]> comps = toBaseComponents(lines);
+        List<Component> comps = toComponents(lines);
         return comps;
     }
 
-    public static List<BaseComponent[]> wrapLore(String txt, Consumer<ComponentBuilder> lineCallback) {
+    public static List<Component> wrapLore(String txt, Function<Component, Component> lineCallback) {
         List<String> lines = wrapMultiline(txt, ITEM_LORE_WIDTH);
-        List<BaseComponent[]> comps = toBaseComponents(lines, lineCallback);
+        List<Component> comps = toComponents(lines, lineCallback);
         return comps;
     }
 
     public static String colorize(String in) {
         return ChatColor.translateAlternateColorCodes('&', in);
-    }
-
-    public static HoverEvent hover(String msg) {
-        BaseComponent[] lore = TextComponent.fromLegacyText(msg);
-        return new HoverEvent(HoverEvent.Action.SHOW_TEXT, lore);
-    }
-
-    public static HoverEvent hover(BaseComponent[] lore) {
-        return new HoverEvent(HoverEvent.Action.SHOW_TEXT, lore);
-    }
-
-    public static ClickEvent click(String cmd) {
-        return new ClickEvent(ClickEvent.Action.RUN_COMMAND, cmd);
-    }
-
-    public static ComponentBuilder builder(String txt) {
-        return new ComponentBuilder(txt);
     }
 
     public static String toCamelCase(String in) {

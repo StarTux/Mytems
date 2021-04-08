@@ -18,9 +18,10 @@ import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Particle;
@@ -46,11 +47,11 @@ import org.bukkit.util.Vector;
 @RequiredArgsConstructor @Getter
 public abstract class EasterGear implements GearItem {
     protected final Mytems key;
-    private List<BaseComponent[]> baseLore;
-    private BaseComponent[] displayName;
+    private List<Component> baseLore;
+    private Component displayName;
     private ItemStack prototype;
     private static EasterItemSet easterItemSet;
-    static final ChatColor PINK_CHAT_COLOR = ChatColor.of("#FF69B4");
+    static final TextColor PINK_CHAT_COLOR = TextColor.color(0xFF69B4);
     static final Color PINK_COLOR = Color.fromRGB(255, 105, 180);
 
     @Override
@@ -62,7 +63,7 @@ public abstract class EasterGear implements GearItem {
             prototype = new ItemStack(key.material);
         }
         ItemMeta meta = prototype.getItemMeta();
-        baseLore = Text.wrapLore(Text.colorize("\n\n" + getDescription()), cb -> cb.color(PINK_CHAT_COLOR).italic(false));
+        baseLore = Text.wrapLore("\n\n" + getDescription(), cb -> cb.color(PINK_CHAT_COLOR));
         updateItemLore(meta);
         if (meta instanceof Repairable) {
             ((Repairable) meta).setRepairCost(9999);
@@ -77,15 +78,14 @@ public abstract class EasterGear implements GearItem {
         prototype.setItemMeta(meta);
     }
 
-    protected final BaseComponent[] fancify(String in, boolean bold) {
+    protected final Component fancify(String in, boolean bold) {
         int len = in.length();
-        ComponentBuilder cb = new ComponentBuilder();
-        cb.append("").italic(false);
-        if (bold) cb.bold(true);
+        Component component = Component.empty().decoration(TextDecoration.ITALIC, false);
+        if (bold) component = component.decorate(TextDecoration.BOLD);
         for (int i = 0; i < len; i += 1) {
-            cb.append(in.substring(i, i + 1)).color(ChatColor.of(new java.awt.Color(255, 105 + i + i, 180 + i)));
+            component = component.append(Component.text(in.substring(i, i + 1)).color(TextColor.color(255, 105 + i + i, 180 + i)));
         }
-        return cb.create();
+        return component;
     }
 
     /**
@@ -115,22 +115,22 @@ public abstract class EasterGear implements GearItem {
 
     @Override
     public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Slot slot) {
-        meta.setDisplayNameComponent(displayName);
-        List<BaseComponent[]> lore = new ArrayList<>(baseLore);
+        meta.displayName(displayName);
+        List<Component> lore = new ArrayList<>(baseLore);
         ItemSet itemSet = getItemSet();
         List<SetBonus> setBonuses = itemSet.getSetBonuses();
         if (!setBonuses.isEmpty()) {
             int count = equipment == null ? 0 : equipment.countSetItems(itemSet);
-            lore.add(Text.toBaseComponents(""));
+            lore.add(Component.empty());
             lore.add(fancify("Set Bonus [" + count + "]", slot != null));
             for (SetBonus setBonus : itemSet.getSetBonuses()) {
                 int need = setBonus.getRequiredItemCount();
                 String description = "(" + need + ") " + setBonus.getDescription();
-                lore.addAll(Text.toBaseComponents(Text.wrapLines(description, Text.ITEM_LORE_WIDTH),
-                                                  cb -> cb.color(count >= need ? PINK_CHAT_COLOR : ChatColor.DARK_GRAY).italic(false)));
+                TextColor color = count >= need ? PINK_CHAT_COLOR : NamedTextColor.DARK_GRAY;
+                lore.addAll(Text.wrapLore(description, cb -> cb.color(color)));
             }
         }
-        meta.setLoreComponents(lore);
+        meta.lore(lore);
     }
 
     @Override

@@ -8,16 +8,16 @@ import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.gear.Slot;
 import com.cavetale.mytems.util.Text;
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -30,31 +30,28 @@ import org.bukkit.inventory.meta.ItemMeta;
 @RequiredArgsConstructor
 abstract class AculaItem implements GearItem {
     @Getter protected final Mytems key;
-    @Getter protected BaseComponent[] displayName;
-    protected List<BaseComponent[]> baseLore;
+    @Getter protected Component displayName;
+    protected List<Component> baseLore;
     protected ItemStack prototype;
 
     @Override
     public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Slot slot) {
-        meta.setDisplayNameComponent(displayName);
-        List<BaseComponent[]> lore = new ArrayList<>(baseLore);
+        meta.displayName(displayName);
+        List<Component> lore = new ArrayList<>(baseLore);
         ItemSet itemSet = getItemSet();
         List<SetBonus> setBonuses = itemSet.getSetBonuses();
         if (!setBonuses.isEmpty()) {
             int count = equipment == null ? 0 : equipment.countSetItems(itemSet);
-            lore.add(Text.toBaseComponents(""));
+            lore.add(Component.empty());
             lore.add(creepify("Set Bonus [" + count + "]", slot != null));
             for (SetBonus setBonus : itemSet.getSetBonuses()) {
                 int need = setBonus.getRequiredItemCount();
-                String description = count >= need
-                    ? (ChatColor.DARK_RED + "(" + need + ") " + ChatColor.RED
-                       + setBonus.getDescription().replace(ChatColor.RESET.toString(), ChatColor.RED.toString()))
-                    : (ChatColor.DARK_GRAY + "(" + need + ") " + ChatColor.GRAY
-                       + setBonus.getDescription().replace(ChatColor.RESET.toString(), ChatColor.GRAY.toString()));
-                lore.addAll(Text.toBaseComponents(Text.wrapLines(description, Text.ITEM_LORE_WIDTH)));
+                String description = "(" + need + ") " + setBonus.getDescription();
+                TextColor color = count >= need ? NamedTextColor.RED : NamedTextColor.DARK_GRAY;
+                lore.addAll(Text.wrapLore(description, c -> c.color(color)));
             }
         }
-        meta.setLoreComponents(lore);
+        meta.lore(lore);
     }
 
     @Override
@@ -62,15 +59,14 @@ abstract class AculaItem implements GearItem {
         return AculaItemSet.getInstance();
     }
 
-    protected BaseComponent[] creepify(String in, boolean bold) {
+    protected Component creepify(String in, boolean bold) {
         int len = in.length();
         int iter = 255 / len * 3 / 4;
-        ComponentBuilder cb = new ComponentBuilder();
+        Component component = bold ? Component.empty().decorate(TextDecoration.BOLD) : Component.empty();
         for (int i = 0; i < len; i += 1) {
-            cb.append(in.substring(i, i + 1)).color(ChatColor.of(new Color(255 - iter * i, 0, 0)));
-            if (bold) cb.bold(true);
+            component = component.append(Component.text(in.substring(i, i + 1)).color(TextColor.color(255 - iter * i, 0, 0)));
         }
-        return cb.create();
+        return component;
     }
 
     @Override

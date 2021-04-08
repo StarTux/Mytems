@@ -5,7 +5,6 @@ import com.cavetale.core.command.CommandNode;
 import com.cavetale.core.command.CommandWarn;
 import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.session.Session;
-import com.cavetale.mytems.util.Text;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
@@ -14,10 +13,10 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -76,8 +75,8 @@ public final class MytemsCommand implements TabExecutor {
         if (args.length != 0) return false;
         for (Mytems mytems : Mytems.values()) {
             Mytem mytem = mytems.getMytem();
-            sender.sendMessage(Text.builder(mytems.ordinal() + ") " + mytems.id + " ")
-                               .append(mytem.getDisplayName()).create());
+            sender.sendMessage(Component.text(mytems.ordinal() + ") " + mytems.id + " ")
+                               .append(mytem.getDisplayName()));
         }
         return true;
     }
@@ -110,17 +109,12 @@ public final class MytemsCommand implements TabExecutor {
         if (retain >= amount) {
             throw new CommandWarn("Could not add item to inventory: " + mytems + ", " + target.getName());
         }
-        ComponentBuilder cb = new ComponentBuilder("").color(ChatColor.YELLOW);
-        cb.append("" + (amount - retain)).color(ChatColor.WHITE);
-        cb.append("x").color(ChatColor.DARK_GRAY);
-        cb.append("").reset();
-        cb.append(mytem.getDisplayName());
-        cb.append(" given to " + target.getName()).color(ChatColor.YELLOW);
-        if (sender instanceof Player) {
-            sender.sendMessage(cb.create());
-        } else {
-            sender.sendMessage(BaseComponent.toLegacyText(cb.create()));
-        }
+        Component component = Component.empty().color(NamedTextColor.YELLOW)
+            .append(Component.text("" + (amount - retain)).color(NamedTextColor.WHITE))
+            .append(Component.text("x").color(NamedTextColor.DARK_GRAY))
+            .append(mytem.getDisplayName())
+            .append(Component.text(" given to " + target.getName()).color(NamedTextColor.YELLOW));
+        sender.sendMessage(component);
         return true;
     }
 
@@ -132,12 +126,9 @@ public final class MytemsCommand implements TabExecutor {
         }
         byte[] bytes = itemStack.serializeAsBytes();
         String string = Base64.getEncoder().encodeToString(bytes);
-        ComponentBuilder cb = new ComponentBuilder("Base64: ")
-            .color(ChatColor.GRAY)
-            .append(string)
-            .color(ChatColor.WHITE)
-            .insertion(string);
-        player.sendMessage(cb.create());
+        Component component = Component.text("Base64: ").color(NamedTextColor.GRAY).insertion(string)
+            .append(Component.text(string).color(NamedTextColor.WHITE));
+        player.sendMessage(component);
         plugin.getLogger().info("Serialize " + itemStack.getType() + ": " + string);
         return true;
     }

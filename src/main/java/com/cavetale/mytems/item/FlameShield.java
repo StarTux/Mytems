@@ -4,7 +4,7 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Text;
 import java.util.Base64;
 import java.util.UUID;
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.enchantments.Enchantment;
@@ -30,14 +30,14 @@ public final class FlameShield extends AculaItem {
         @SuppressWarnings("LineLength")
         final byte[] bytes = Base64.getDecoder().decode("H4sIAAAAAAAAAHXLsQ6CMBSF4QNFxZqAg0/jiLg7GPcrVKjSNmkvg29vMQ5dPNufL0cCAruWmG7KB+0sIA8lct1jb7RVnacHH8Oo1dRLCKZBYN2SoUEhTqJqJte9zpY1v6+LFg2FxeotygsxK2+DjF2U2PwawrinwOrkJucjZUgsv/NfMj6hOiUx+Dmx6nuNOVvO8AESRyVa5QAAAA==");
         baseItem = ItemStack.deserializeBytes(bytes);
-        baseLore = Text.toBaseComponents(Text.wrapMultiline(description, Text.ITEM_LORE_WIDTH));
+        baseLore = Text.wrapLore(description);
         prototype = create();
     }
 
     public ItemStack create() {
         ItemStack item = baseItem.clone();
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayNameComponent(displayName);
+        meta.displayName(displayName);
         Repairable repairable = (Repairable) meta;
         repairable.setRepairCost(9999);
         meta.addEnchant(Enchantment.DURABILITY, 4, true);

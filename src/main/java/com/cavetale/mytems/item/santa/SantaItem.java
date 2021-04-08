@@ -14,9 +14,10 @@ import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -37,8 +38,8 @@ abstract class SantaItem implements GearItem {
     protected static final UUID SKULL_ID = UUID.fromString("986f0d53-6462-43bc-827f-beba9afdd7f4");
     protected static final String SKULL_TEXTURE = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTRlNDI0YjE2NzZmZWVjM2EzZjhlYmFkZTllN2Q2YTZmNzFmNzc1NmE4NjlmMzZmN2RmMGZjMTgyZDQzNmUifX19";
     @Getter protected final Mytems key;
-    @Getter protected BaseComponent[] displayName;
-    protected List<BaseComponent[]> baseLore;
+    @Getter protected Component displayName;
+    protected List<Component> baseLore;
     protected ItemStack prototype;
 
     @Override
@@ -60,25 +61,22 @@ abstract class SantaItem implements GearItem {
 
     @Override
     public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Slot slot) {
-        meta.setDisplayNameComponent(displayName);
-        List<BaseComponent[]> lore = new ArrayList<>(baseLore);
+        meta.displayName(displayName);
+        List<Component> lore = new ArrayList<>(baseLore);
         ItemSet itemSet = getItemSet();
         List<SetBonus> setBonuses = itemSet.getSetBonuses();
         if (!setBonuses.isEmpty()) {
             int count = equipment == null ? 0 : equipment.countSetItems(itemSet);
-            lore.add(Text.toBaseComponents(""));
+            lore.add(Component.empty());
             lore.add(xmasify("Set Bonus [" + count + "]", slot != null));
             for (SetBonus setBonus : itemSet.getSetBonuses()) {
                 int need = setBonus.getRequiredItemCount();
-                String description = count >= need
-                    ? (ChatColor.BLUE + "(" + need + ") " + ChatColor.BLUE
-                       + setBonus.getDescription().replace(ChatColor.RESET.toString(), ChatColor.BLUE.toString()))
-                    : (ChatColor.DARK_GRAY + "(" + need + ") " + ChatColor.GRAY
-                       + setBonus.getDescription().replace(ChatColor.RESET.toString(), ChatColor.GRAY.toString()));
-                lore.addAll(Text.toBaseComponents(Text.wrapLines(description, Text.ITEM_LORE_WIDTH)));
+                String description = "(" + need + ") " + setBonus.getDescription();
+                TextColor color = count >= need ? NamedTextColor.BLUE : NamedTextColor.DARK_GRAY;
+                lore.addAll(Text.wrapLore(description));
             }
         }
-        meta.setLoreComponents(lore);
+        meta.lore(lore);
     }
 
     @Override
@@ -91,16 +89,17 @@ abstract class SantaItem implements GearItem {
         return prototype.clone();
     }
 
-    protected BaseComponent[] xmasify(String in, boolean bold) {
+    protected Component xmasify(String in, boolean bold) {
         int len = in.length();
         int iter = 255 / len;
-        ComponentBuilder cb = new ComponentBuilder();
+        Component component = Component.empty();
+        if (bold) component = component.decorate(TextDecoration.BOLD);
         for (int i = 0; i < len; i += 1) {
             int white = 255 - (i * 255) / len;
-            cb.append(in.substring(i, i + 1)).color(ChatColor.of(new java.awt.Color(255, white, white)));
-            if (bold) cb.bold(true);
+            component = component.append(Component.text(in.substring(i, i + 1))
+                                         .color(TextColor.color(255, white, white)));
         }
-        return cb.create();
+        return component;
     }
 
     protected static ItemStack makeColoredLeatherItem(Material material, Color color) {

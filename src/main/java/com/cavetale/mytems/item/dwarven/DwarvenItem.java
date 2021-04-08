@@ -13,9 +13,10 @@ import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -27,8 +28,8 @@ import org.bukkit.potion.PotionEffectType;
 @RequiredArgsConstructor @Getter
 public abstract class DwarvenItem implements GearItem {
     protected final Mytems key;
-    private List<BaseComponent[]> baseLore;
-    private BaseComponent[] displayName;
+    private List<Component> baseLore;
+    private Component displayName;
     private ItemStack prototype;
     private static DwarvenItemSet dwarvenItemSet;
 
@@ -47,16 +48,15 @@ public abstract class DwarvenItem implements GearItem {
         prototype.setItemMeta(meta);
     }
 
-    protected final BaseComponent[] fancify(String in, boolean bold) {
+    protected final Component fancify(String in, boolean bold) {
         int len = in.length();
-        ComponentBuilder cb = new ComponentBuilder();
-        cb.append("").italic(false);
+        Component component = Component.empty().decoration(TextDecoration.ITALIC, false);
+        if (bold) component = component.decorate(TextDecoration.BOLD);
         for (int i = 0; i < len; i += 1) {
             int red = 64 + (i * 191) / len;
-            cb.append(in.substring(i, i + 1)).color(ChatColor.of(new java.awt.Color(red, red / 2, 0)));
-            if (bold) cb.bold(true);
+            component = component.append(Component.text(in.substring(i, i + 1)).color(TextColor.color(red, red / 2, 0)));
         }
-        return cb.create();
+        return component;
     }
 
     abstract String getSerialized();
@@ -73,25 +73,22 @@ public abstract class DwarvenItem implements GearItem {
 
     @Override
     public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Slot slot) {
-        meta.setDisplayNameComponent(displayName);
-        List<BaseComponent[]> lore = new ArrayList<>(baseLore);
+        meta.displayName(displayName);
+        List<Component> lore = new ArrayList<>(baseLore);
         ItemSet itemSet = getItemSet();
         List<SetBonus> setBonuses = itemSet.getSetBonuses();
         if (!setBonuses.isEmpty()) {
             int count = equipment == null ? 0 : equipment.countSetItems(itemSet);
-            lore.add(Text.toBaseComponents(""));
+            lore.add(Component.empty());
             lore.add(fancify("Set Bonus [" + count + "]", slot != null));
             for (SetBonus setBonus : itemSet.getSetBonuses()) {
                 int need = setBonus.getRequiredItemCount();
-                String description = count >= need
-                    ? (ChatColor.GOLD + "(" + need + ") " + ChatColor.GOLD
-                       + setBonus.getDescription().replace(ChatColor.RESET.toString(), ChatColor.BLUE.toString()))
-                    : (ChatColor.DARK_GRAY + "(" + need + ") " + ChatColor.GRAY
-                       + setBonus.getDescription().replace(ChatColor.RESET.toString(), ChatColor.GRAY.toString()));
-                lore.addAll(Text.toBaseComponents(Text.wrapLines(description, Text.ITEM_LORE_WIDTH)));
+                String description = "(" + need + ") " + setBonus.getDescription();
+                TextColor color = count >= need ? NamedTextColor.GOLD : NamedTextColor.DARK_GRAY;
+                lore.addAll(Text.wrapLore(description, c -> c.color(color)));
             }
         }
-        meta.setLoreComponents(lore);
+        meta.lore(lore);
     }
 
     @Override

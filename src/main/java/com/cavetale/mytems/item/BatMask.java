@@ -5,8 +5,8 @@ import com.cavetale.mytems.util.Text;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import java.util.UUID;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -30,7 +30,7 @@ public final class BatMask extends AculaItem {
     @Override
     public void enable() {
         displayName = creepify("Bat Mask", false);
-        baseLore = Text.toBaseComponents(Text.wrapMultiline(description, Text.ITEM_LORE_WIDTH));
+        baseLore = Text.wrapLore(description);
         prototype = create();
     }
 

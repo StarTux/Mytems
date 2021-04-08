@@ -3,22 +3,23 @@ package com.cavetale.mytems.item.easter;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Items;
-import com.cavetale.mytems.util.Text;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 @Getter @RequiredArgsConstructor
 public final class EasterEgg implements Mytem {
     private final Mytems key;
-    private BaseComponent[] displayName;
+    private Component displayName;
     private ItemStack prototype;
 
     @Override
@@ -26,17 +27,17 @@ public final class EasterEgg implements Mytem {
         String name = Stream.of(key.name().split("_"))
             .map(s -> s.substring(0, 1) + s.substring(1).toLowerCase())
             .collect(Collectors.joining(" "));
-        ChatColor chatColor = getChatColor();
-        displayName = Text.builder(name).color(chatColor).italic(false).create();
+        TextColor chatColor = getChatColor();
+        displayName = Component.text(name).color(chatColor).decoration(TextDecoration.ITALIC, false);
         prototype = getBaseItemStack();
         ItemMeta meta = prototype.getItemMeta();
-        meta.setDisplayNameComponent(displayName);
-        List<BaseComponent[]> lore = new ArrayList<>();
-        lore.add(Text.builder("Easter Event").color(chatColor).italic(false).create());
-        lore.add(Text.builder("Collected in the Easter").color(ChatColor.GRAY).italic(false).create());
-        lore.add(Text.builder("Area. The portal at").color(ChatColor.GRAY).italic(false).create());
-        lore.add(Text.builder("spawn can take you there.").color(ChatColor.GRAY).italic(false).create());
-        meta.setLoreComponents(lore);
+        meta.displayName(displayName);
+        List<Component> lore = new ArrayList<>();
+        lore.add(Component.text("Easter Event").color(chatColor).decoration(TextDecoration.ITALIC, false));
+        lore.add(Component.text("Collected in the Easter").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+        lore.add(Component.text("Area. The portal at").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+        lore.add(Component.text("spawn can take you there.").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+        meta.lore(lore);
         key.markItemMeta(meta);
         prototype.setItemMeta(meta);
     }
@@ -46,20 +47,20 @@ public final class EasterEgg implements Mytem {
         return prototype.clone();
     }
 
-    public ChatColor getChatColor() {
+    public TextColor getChatColor() {
         switch (key) {
         case BLUE_EASTER_EGG:
-            return ChatColor.of("#8A2BE2");
+            return TextColor.color(0x8A2BE2);
         case GREEN_EASTER_EGG:
-            return ChatColor.of("#00FF00");
+            return TextColor.color(0x00FF00);
         case ORANGE_EASTER_EGG:
-            return ChatColor.of("#FFA500");
+            return TextColor.color(0xFFA500);
         case PINK_EASTER_EGG:
-            return ChatColor.of("#FFB6C1");
+            return TextColor.color(0xFFB6C1);
         case PURPLE_EASTER_EGG:
-            return ChatColor.of("#800080");
+            return TextColor.color(0x800080);
         case YELLOW_EASTER_EGG: default:
-            return ChatColor.of("#FFFF00");
+            return TextColor.color(0xFFFF00);
         }
     }
 

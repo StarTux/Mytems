@@ -7,9 +7,10 @@ import java.awt.Color;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -22,33 +23,33 @@ import org.bukkit.inventory.meta.ItemMeta;
 @RequiredArgsConstructor
 public final class UnicornHorn implements Mytem {
     @Getter private final Mytems key;
-    @Getter private BaseComponent[] displayName;
+    @Getter private Component displayName;
     private final String description = ""
-        + ChatColor.AQUA + "Legend has it that this horn once belonged to a magical unicorn which lived over one thousand years ago."
+        + "Legend has it that this horn once belonged to a magical unicorn which lived over one thousand years ago."
         + " Scientists say it belongs to a narwhal."
         + "\n\n"
-        + ChatColor.AQUA + "Run like the wind. Wearing this horn gives you a speed boost. Put it in your helmet slot."
+        + "Run like the wind. Wearing this horn gives you a speed boost. Put it in your helmet slot."
         + "\n\n";
     private ItemStack prototype;
 
-    protected static void rainbowify(ComponentBuilder cb, String in) {
+    protected static Component rainbowify(String in) {
+        Component component = Component.empty().decoration(TextDecoration.ITALIC, false);
         int len = in.length();
         for (int i = 0; i < len; i += 1) {
             float pos = (float) i / (float) len;
-            Color color = new Color(Color.HSBtoRGB(pos, 0.66f, 1.0f));
-            cb.append(in.substring(i, i + 1)).color(ChatColor.of(color));
+            int rgb = 0xFFFFFF & Color.HSBtoRGB(pos, 0.66f, 1.0f);
+            component = component.append(Component.text(in.substring(i, i + 1)).color(TextColor.color(rgb)));
         }
+        return component;
     }
 
     @Override
     public void enable() {
-        ComponentBuilder cb = new ComponentBuilder();
-        rainbowify(cb, "Unicorn Horn");
-        displayName = cb.create();
+        displayName = rainbowify("Unicorn Horn");
         prototype = new ItemStack(Material.END_ROD).ensureServerConversions();
         ItemMeta meta = prototype.getItemMeta();
-        meta.setDisplayNameComponent(displayName);
-        meta.setLore(Text.wrapMultiline(description, Text.ITEM_LORE_WIDTH));
+        meta.displayName(displayName);
+        meta.lore(Text.wrapLore(description, c -> c.color(NamedTextColor.AQUA)));
         // Attr
         AttributeModifier attr;
         attr = new AttributeModifier(UUID.fromString("4ae9dba0-db6a-4843-9028-554ab26155d3"),

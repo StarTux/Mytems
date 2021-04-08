@@ -3,8 +3,7 @@ package com.cavetale.mytems.util;
 import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import java.util.UUID;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.TextComponent;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
@@ -16,7 +15,7 @@ public final class Skull {
     public static ItemStack create(String name, UUID uuid, String texture) {
         ItemStack item = new ItemStack(Material.PLAYER_HEAD);
         SkullMeta meta = (SkullMeta) item.getItemMeta();
-        meta.setDisplayNameComponent(new BaseComponent[] {new TextComponent(name)});
+        meta.displayName(Component.text(name));
         PlayerProfile profile = Bukkit.createProfile(uuid);
         ProfileProperty property = new ProfileProperty("textures", texture, (String) null);
         profile.setProperty(property);

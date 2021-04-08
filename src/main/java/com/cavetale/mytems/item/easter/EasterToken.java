@@ -3,35 +3,36 @@ package com.cavetale.mytems.item.easter;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Items;
-import com.cavetale.mytems.util.Text;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
 @Getter @RequiredArgsConstructor
 public final class EasterToken implements Mytem {
     private final Mytems key;
-    private BaseComponent[] displayName;
+    private Component displayName;
     private ItemStack prototype;
 
     @Override
     public void enable() {
-        ChatColor chatColor = ChatColor.of("#FFB6C1");
-        displayName = Text.builder("Easter Token").color(chatColor).italic(false).bold(true).create();
+        TextColor chatColor = TextColor.color(0xFFB6C1);
+        displayName = Component.text("Easter Token").color(chatColor).decoration(TextDecoration.ITALIC, false).decorate(TextDecoration.BOLD);
         prototype = getBaseItemStack();
         ItemMeta meta = prototype.getItemMeta();
-        meta.setDisplayNameComponent(displayName);
-        List<BaseComponent[]> lore = new ArrayList<>();
-        lore.add(Text.builder("Easter Event").color(chatColor).italic(false).create());
-        lore.add(Text.builder("Trade this for cool").color(ChatColor.GRAY).italic(false).create());
-        lore.add(Text.builder("prizes at spawn.").color(ChatColor.GRAY).italic(false).create());
-        lore.add(Text.builder("Only until Easter!").color(ChatColor.GRAY).italic(false).create());
-        meta.setLoreComponents(lore);
+        meta.displayName(displayName);
+        List<Component> lore = new ArrayList<>();
+        lore.add(Component.text("Easter Event").color(chatColor).decoration(TextDecoration.ITALIC, false));
+        lore.add(Component.text("Trade this for cool").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+        lore.add(Component.text("prizes at spawn.").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+        lore.add(Component.text("Only until Easter!").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
+        meta.lore(lore);
         key.markItemMeta(meta);
         prototype.setItemMeta(meta);
     }

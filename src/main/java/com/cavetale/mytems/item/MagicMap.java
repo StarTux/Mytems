@@ -2,11 +2,11 @@ package com.cavetale.mytems.item;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Text;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -18,18 +18,18 @@ import org.bukkit.inventory.meta.ItemMeta;
 @Getter @RequiredArgsConstructor
 public final class MagicMap implements Mytem {
     private final Mytems key;
-    private BaseComponent[] displayName;
+    private Component displayName;
 
     @Override
     public void enable() {
-        displayName = Text.builder("Magic Map").color(ChatColor.LIGHT_PURPLE).italic(false).create();
+        displayName = Component.text("Magic Map").color(NamedTextColor.LIGHT_PURPLE).decoration(TextDecoration.ITALIC, false);
     }
 
     @Override
     public ItemStack getItem() {
         ItemStack item = new ItemStack(Material.PAPER);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayNameComponent(displayName);
+        meta.displayName(displayName);
         key.markItemMeta(meta);
         item.setItemMeta(meta);
         return item;

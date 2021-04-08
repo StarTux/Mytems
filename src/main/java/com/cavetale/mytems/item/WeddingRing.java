@@ -6,8 +6,9 @@ import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
@@ -23,18 +24,17 @@ public final class WeddingRing implements Mytem {
         + "Both players need to use the wedding ring and have 5 hearts in /friends."
         + "\n\n"
         + "On Valentine's Day alone, marriage is possible with fewer than 5 hearts.";
-    @Getter private BaseComponent[] displayName;
-    private final ChatColor pink = ChatColor.of("#FF69B3");
+    @Getter private Component displayName;
+    private final TextColor pink = TextColor.color(0xFF69B3);
     private ItemStack prototype;
 
     @Override
     public void enable() {
         prototype = Items.deserialize(serialized);
         ItemMeta meta = prototype.getItemMeta();
-        displayName = Text.builder("Wedding Ring").color(pink).italic(false).create();
-        meta.setDisplayNameComponent(displayName);
-        meta.setLoreComponents(Text.toBaseComponents(Text.wrapMultiline(description, Text.ITEM_LORE_WIDTH),
-                                                     cb -> cb.color(pink).italic(false)));
+        displayName = Component.text("Wedding Ring").color(pink).decoration(TextDecoration.ITALIC, false);
+        meta.displayName(displayName);
+        meta.lore(Text.wrapLore(description, cb -> cb.color(pink)));
         key.markItemMeta(meta);
         prototype.setItemMeta(meta);
     }

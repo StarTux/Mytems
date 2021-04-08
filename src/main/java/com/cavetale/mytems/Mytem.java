@@ -2,7 +2,7 @@ package com.cavetale.mytems;
 
 import com.cavetale.mytems.util.Json;
 import java.util.Set;
-import net.md_5.bungee.api.chat.BaseComponent;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -32,7 +32,7 @@ public interface Mytem {
         return getItem();
     }
 
-    BaseComponent[] getDisplayName();
+    Component getDisplayName();
 
     default void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) { }
 

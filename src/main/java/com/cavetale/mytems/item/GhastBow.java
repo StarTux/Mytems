@@ -1,8 +1,8 @@
 package com.cavetale.mytems.item;
 
-import com.cavetale.mytems.util.Text;
 import com.cavetale.mytems.Mytems;
-import net.md_5.bungee.api.ChatColor;
+import com.cavetale.mytems.util.Text;
+import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -34,14 +34,14 @@ public final class GhastBow extends AculaItem {
     @Override
     public void enable() {
         displayName = creepify("Ghast Bow", false);
-        baseLore = Text.toBaseComponents(Text.wrapMultiline(description, Text.ITEM_LORE_WIDTH));
+        baseLore = Text.wrapLore(description);
         prototype = create();
     }
 
     public ItemStack create() {
         ItemStack item = new ItemStack(Material.BOW);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayNameComponent(displayName);
+        meta.displayName(displayName);
         meta.addEnchant(Enchantment.DURABILITY, 3, true);
         meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
         meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);

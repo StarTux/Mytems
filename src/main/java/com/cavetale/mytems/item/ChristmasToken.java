@@ -4,19 +4,18 @@ import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Skull;
 import com.cavetale.mytems.util.Text;
-import java.awt.Color;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.BaseComponent;
-import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-@RequiredArgsConstructor
+@Getter @RequiredArgsConstructor
 public final class ChristmasToken implements Mytem {
-    @Getter private final Mytems key;
+    private final Mytems key;
     private static final String SKULL_NAME = "Christmas Token";
     public static final UUID SKULL_ID = UUID.fromString("6d46f5a1-a833-414c-ba0d-9842cb59316e");
     public static final String SKULL_TEXTURE = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjU2MTJkYzdiODZkNzFhZmMxMTk3MzAxYzE1ZmQ5NzllOWYzOWU3YjFmNDFkOGYxZWJkZjgxMTU1NzZlMmUifX19";
@@ -25,17 +24,17 @@ public final class ChristmasToken implements Mytem {
         + ChatColor.DARK_GRAY + "Christmas Event 2020"
         + "\n\n" + ChatColor.BLUE + "Ho ho ho! Find out how to exchange this token for actual goodies."
         + "\n\n" + ChatColor.BLUE + "You will when Santa comes to town.";
-    private BaseComponent[] displayName;
+    private Component displayName;
 
-    private BaseComponent[] xmasify(String in) {
+    private Component xmasify(String in) {
         int len = in.length();
         int iter = 255 / len;
-        ComponentBuilder cb = new ComponentBuilder();
+        Component component = Component.empty();
         for (int i = 0; i < len; i += 1) {
             int white = 255 - Math.abs(i - (len / 2)) * 2 * iter;
-            cb.append(in.substring(i, i + 1)).color(ChatColor.of(new Color(white, white, 255)));
+            component = component.append(Component.text(in.substring(i, i + 1)).color(TextColor.color(white, white, 255)));
         }
-        return cb.create();
+        return component;
     }
 
     @Override
@@ -43,8 +42,8 @@ public final class ChristmasToken implements Mytem {
         displayName = xmasify("Christmas Token");
         prototype = Skull.create(SKULL_NAME, SKULL_ID, SKULL_TEXTURE);
         ItemMeta meta = prototype.getItemMeta();
-        meta.setLoreComponents(Text.toBaseComponents(Text.wrapMultiline(description, Text.ITEM_LORE_WIDTH)));
-        meta.setDisplayNameComponent(displayName);
+        meta.lore(Text.wrapLore(description));
+        meta.displayName(displayName);
         key.markItemMeta(meta);
         prototype.setItemMeta(meta);
     }
@@ -52,10 +51,5 @@ public final class ChristmasToken implements Mytem {
     @Override
     public ItemStack getItem() {
         return prototype.clone();
-    }
-
-    @Override
-    public BaseComponent[] getDisplayName() {
-        return displayName;
     }
 }

@@ -5,7 +5,7 @@ import com.cavetale.mytems.util.Text;
 import com.winthier.generic_events.GenericEvents;
 import java.util.ArrayList;
 import java.util.List;
-import net.md_5.bungee.api.ChatColor;
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -46,14 +46,14 @@ public final class Stompers extends AculaItem {
     @Override
     public void enable() {
         displayName = creepify("Stompers", false);
-        baseLore = Text.toBaseComponents(Text.wrapMultiline(description, Text.ITEM_LORE_WIDTH));
+        baseLore = Text.wrapLore(description);
         prototype = create();
     }
 
     public ItemStack create() {
         ItemStack item = new ItemStack(Material.NETHERITE_BOOTS);
         ItemMeta meta = item.getItemMeta();
-        meta.setDisplayNameComponent(displayName);
+        meta.displayName(displayName);
         meta.addEnchant(Enchantment.DURABILITY, 3, true);
         meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
         meta.addEnchant(Enchantment.PROTECTION_FALL, 4, true);
