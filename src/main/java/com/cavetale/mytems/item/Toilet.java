@@ -169,8 +169,10 @@ public final class Toilet implements Mytem, Listener {
                 as.setMarker(true);
             });
         if (armorStand == null) return;
-        player.teleport(loc);
-        armorStand.addPassenger(player);
+        if (!armorStand.addPassenger(player)) {
+            armorStand.remove();
+            return;
+        }
         Seat seat = new Seat(block, armorStand);
         enableSeat(seat);
         if (random.nextBoolean()) {
