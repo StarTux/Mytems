@@ -169,6 +169,9 @@ public final class Toilet implements Mytem, Listener {
                 as.setMarker(true);
             });
         if (armorStand == null) return;
+        Location ploc = player.getLocation();
+        ploc.setDirection(loc.getDirection());
+        player.teleport(ploc);
         if (!armorStand.addPassenger(player)) {
             armorStand.remove();
             return;
