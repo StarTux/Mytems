@@ -18,6 +18,7 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.GameRule;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -130,7 +131,9 @@ public final class Toilet implements Mytem, Listener {
                 EntityMarker.setId(itemFrame, key.id);
                 block.setType(Material.BARRIER);
                 BlockMarker.setId(block, key.id);
-                itemStack.subtract();
+                if (player.getGameMode() != GameMode.CREATIVE) {
+                    itemStack.subtract();
+                }
             });
     }
 
@@ -203,7 +206,7 @@ public final class Toilet implements Mytem, Listener {
         if (block.getType() == Material.BARRIER) {
             block.setType(Material.AIR);
         }
-        if (itemFrame != null) {
+        if (itemFrame != null && block.getWorld().getGameRuleValue(GameRule.DO_TILE_DROPS)) {
             loc.getWorld().dropItem(loc, createItemStack(player));
         }
     }
