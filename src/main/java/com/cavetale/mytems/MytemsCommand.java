@@ -5,6 +5,7 @@ import com.cavetale.core.command.CommandNode;
 import com.cavetale.core.command.CommandWarn;
 import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.session.Session;
+import java.util.Arrays;
 import java.util.Base64;
 import java.util.Collections;
 import java.util.List;
@@ -88,8 +89,16 @@ public final class MytemsCommand implements TabExecutor {
         String amountArg = args.length >= 3 ? args[2] : null;
         Player target = Bukkit.getPlayer(targetArg);
         if (target == null) throw new CommandWarn("Player not found: " + targetArg);
-        Mytems mytems = Mytems.forId(mytemArg);
-        if (mytems == null) throw new CommandWarn("Mytem not found: " + mytemArg);
+        List<Mytems> mytemsList;
+        if (mytemArg.startsWith("#")) {
+            MytemsTag tag = MytemsTag.of(mytemArg.substring(1));
+            if (tag == null) throw new CommandWarn("Invalid Mytems tag: " + mytemArg);
+            mytemsList = tag.toList();
+        } else {
+            Mytems mytems = Mytems.forId(mytemArg);
+            if (mytems == null) throw new CommandWarn("Mytem not found: " + mytemArg);
+            mytemsList = Arrays.asList(mytems);
+        }
         int amount = 1;
         if (amountArg != null) {
             try {
@@ -99,22 +108,23 @@ public final class MytemsCommand implements TabExecutor {
             }
         }
         if (amount < 1) throw new CommandWarn("Invalid amount: " + amountArg);
-        Mytem mytem = plugin.getMytem(mytems);
-        ItemStack item = mytem.createItemStack(target);
-        item.setAmount(amount);
-        int retain = 0;
-        for (ItemStack drop : target.getInventory().addItem(item).values()) {
-            retain += drop.getAmount();
+        for (Mytems mytems : mytemsList) {
+            ItemStack item = mytems.createItemStack(target);
+            item.setAmount(amount);
+            int retain = 0;
+            for (ItemStack drop : target.getInventory().addItem(item).values()) {
+                retain += drop.getAmount();
+            }
+            if (retain >= amount) {
+                throw new CommandWarn("Could not add item to inventory: " + mytems + ", " + target.getName());
+            }
+            Component component = Component.empty().color(NamedTextColor.YELLOW)
+                .append(Component.text("" + (amount - retain)).color(NamedTextColor.WHITE))
+                .append(Component.text("x").color(NamedTextColor.DARK_GRAY))
+                .append(mytems.getMytem().getDisplayName())
+                .append(Component.text(" given to " + target.getName()).color(NamedTextColor.YELLOW));
+            sender.sendMessage(component);
         }
-        if (retain >= amount) {
-            throw new CommandWarn("Could not add item to inventory: " + mytems + ", " + target.getName());
-        }
-        Component component = Component.empty().color(NamedTextColor.YELLOW)
-            .append(Component.text("" + (amount - retain)).color(NamedTextColor.WHITE))
-            .append(Component.text("x").color(NamedTextColor.DARK_GRAY))
-            .append(mytem.getDisplayName())
-            .append(Component.text(" given to " + target.getName()).color(NamedTextColor.YELLOW));
-        sender.sendMessage(component);
         return true;
     }
 
@@ -137,8 +147,8 @@ public final class MytemsCommand implements TabExecutor {
         if (args.length <= 1) return null; // <player>
         if (args.length > 2) return Collections.emptyList();
         String arg = args[args.length - 1];
-        return Stream.of(Mytems.values())
-            .map(m -> m.id)
+        return Stream.concat(Stream.of(Mytems.values()).map(m -> m.id),
+                             Stream.of(MytemsTag.values()).map(t -> "#" + t.name().toLowerCase()))
             .filter(s -> s.contains(arg))
             .collect(Collectors.toList());
     }

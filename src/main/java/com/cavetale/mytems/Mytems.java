@@ -79,7 +79,24 @@ public enum Mytems {
     WHITE_BUNNY_EARS(DummyMytem::new, Material.IRON_BOOTS, 3919001), // EPIC
     // Vote
     VOTE_CANDY(VoteCandy::new, "vote_candy", Material.COOKIE, 9073001), // VOTE
-    VOTE_FIREWORK(VoteFirework::new, "vote_firework", Material.FIREWORK_ROCKET, 9073002);
+    VOTE_FIREWORK(VoteFirework::new, "vote_firework", Material.FIREWORK_ROCKET, 9073002),
+    // Maypole
+    LUCID_LILY(DummyMytem::new, Material.AZURE_BLUET, 849001),
+    PINE_CONE(DummyMytem::new, Material.SPRUCE_SAPLING, 849002),
+    ORANGE_ONION(DummyMytem::new, Material.ORANGE_TULIP, 849003),
+    MISTY_MOREL(DummyMytem::new, Material.WARPED_FUNGUS, 849004),
+    RED_ROSE(DummyMytem::new, Material.POPPY, 849005),
+    FROST_FLOWER(DummyMytem::new, Material.BLUE_ORCHID, 849006),
+    HEAT_ROOT(DummyMytem::new, Material.DEAD_BUSH, 849007),
+    CACTUS_BLOSSOM(DummyMytem::new, Material.CACTUS, 849008),
+    PIPE_WEED(DummyMytem::new, Material.FERN, 849009),
+    KINGS_PUMPKIN(DummyMytem::new, Material.CARVED_PUMPKIN, 849010),
+    SPARK_SEED(DummyMytem::new, Material.BEETROOT_SEEDS, 849011),
+    OASIS_WATER(DummyMytem::new, Material.LIGHT_BLUE_DYE, 849012),
+    CLAMSHELL(DummyMytem::new, Material.NAUTILUS_SHELL, 849013),
+    FROZEN_AMBER(DummyMytem::new, Material.EMERALD, 849014),
+    CLUMP_OF_MOSS(DummyMytem::new, Material.VINE, 849015),
+    FIRE_AMANITA(DummyMytem::new, Material.CRIMSON_FUNGUS, 849016);
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;
