@@ -7,6 +7,7 @@ import com.cavetale.mytems.util.Text;
 import com.cavetale.worldmarker.block.BlockMarker;
 import com.cavetale.worldmarker.entity.EntityMarker;
 import com.winthier.generic_events.GenericEvents;
+import java.util.Iterator;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
@@ -24,9 +25,13 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.block.BlockPistonExtendEvent;
+import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDropItemEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -140,5 +145,43 @@ public final class Enderball implements Mytem, Listener {
         Block block = event.getBlock();
         if (!GenericEvents.playerCanBuild(player, block)) return;
         BlockMarker.setId(block, key.id);
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    public void onBlockPistonExtend(BlockPistonExtendEvent event) {
+        for (Block block : event.getBlocks()) {
+            if (BlockMarker.hasId(block, key.id)) {
+                event.setCancelled(true);
+                return;
+            }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    public void onBlockPistonRetract(BlockPistonRetractEvent event) {
+        for (Block block : event.getBlocks()) {
+            if (BlockMarker.hasId(block, key.id)) {
+                event.setCancelled(true);
+                return;
+            }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    public void onBlockExplode(BlockExplodeEvent event) {
+        for (Iterator<Block> iter = event.blockList().iterator(); iter.hasNext();) {
+            if (BlockMarker.hasId(iter.next(), key.id)) {
+                iter.remove();
+            }
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    public void onEntityExplode(EntityExplodeEvent event) {
+        for (Iterator<Block> iter = event.blockList().iterator(); iter.hasNext();) {
+            if (BlockMarker.hasId(iter.next(), key.id)) {
+                iter.remove();
+            }
+        }
     }
 }
