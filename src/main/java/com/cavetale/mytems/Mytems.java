@@ -96,7 +96,9 @@ public enum Mytems {
     CLAMSHELL(DummyMytem::new, Material.NAUTILUS_SHELL, 849013),
     FROZEN_AMBER(DummyMytem::new, Material.EMERALD, 849014),
     CLUMP_OF_MOSS(DummyMytem::new, Material.VINE, 849015),
-    FIRE_AMANITA(DummyMytem::new, Material.CRIMSON_FUNGUS, 849016);
+    FIRE_AMANITA(DummyMytem::new, Material.CRIMSON_FUNGUS, 849016),
+    //
+    ENDERBALL(Enderball::new);
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;
