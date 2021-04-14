@@ -93,6 +93,7 @@ public final class Enderball implements Mytem, Listener {
         if (!(event.getEntity() instanceof FallingBlock)) return;
         FallingBlock fallingBlock = (FallingBlock) event.getEntity();
         if (fallingBlock.getMaterial() != Material.DRAGON_EGG) return;
+        if (!EntityMarker.hasId(fallingBlock, key.id)) return;
         event.getItemDrop().setItemStack(createItemStack());
     }
 
