@@ -78,12 +78,10 @@ public final class Enderball implements Mytem, Listener {
         if (fallingBlock.getMaterial() != Material.DRAGON_EGG) return;
         Block block = event.getBlock();
         if (event.getTo().isEmpty()) {
-            System.out.println("Dragon Egg Fall");
             if (!BlockMarker.hasId(block, key.id)) return;
             BlockMarker.resetId(block);
             EntityMarker.setId(fallingBlock, key.id);
         } else {
-            System.out.println("Dragon Egg Land");
             if (!EntityMarker.hasId(fallingBlock, key.id)) return;
             EntityMarker.resetId(fallingBlock);
             BlockMarker.setId(block, key.id);
