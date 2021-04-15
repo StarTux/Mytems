@@ -14,6 +14,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -25,6 +26,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
@@ -139,6 +142,24 @@ public final class Enderball implements Mytem, Listener {
         } else {
             ballLocation.getWorld().playSound(ballLocation, Sound.BLOCK_ENDER_CHEST_OPEN, SoundCategory.MASTER, 1.0f, 2.0f);
         }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    public void onBlockBreak(BlockBreakEvent event) {
+        if (event.getPlayer().getGameMode() == GameMode.CREATIVE) return;
+        Block block = event.getBlock();
+        if (block.getType() != Material.DRAGON_EGG) return;
+        if (!BlockMarker.hasId(block, key.id)) return;
+        event.setCancelled(true);
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    public void onBlockDamge(BlockDamageEvent event) {
+        if (event.getPlayer().getGameMode() == GameMode.CREATIVE) return;
+        Block block = event.getBlock();
+        if (block.getType() != Material.DRAGON_EGG) return;
+        if (!BlockMarker.hasId(block, key.id)) return;
+        event.setCancelled(true);
     }
 
     @Override
