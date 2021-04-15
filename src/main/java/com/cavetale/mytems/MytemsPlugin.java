@@ -37,6 +37,7 @@ public final class MytemsPlugin extends JavaPlugin {
         enableItems();
         fixAllPlayerInventoriesLater();
         sessions.enable();
+        new MytemsBlockMarkerHook(this).enable();
     }
 
     @Override

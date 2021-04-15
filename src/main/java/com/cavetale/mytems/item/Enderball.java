@@ -131,6 +131,7 @@ public final class Enderball implements Mytem, Listener {
         if (fallingBlock == null) return;
         EntityMarker.setId(fallingBlock, key.id);
         block.setType(Material.AIR, false);
+        BlockMarker.resetId(block);
         fallingBlock.setDropItem(true);
         fallingBlock.setVelocity(vec);
         if (strong) {
