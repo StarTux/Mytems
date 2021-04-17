@@ -17,6 +17,10 @@ import com.cavetale.worldmarker.item.ItemMarker;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
+import net.kyori.adventure.key.Key;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -24,7 +28,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public enum Mytems {
     // Halloween 2020
-    DR_ACULA_STAFF(DrAculaStaff::new, "dr_acula_staff", Material.NETHERITE_SWORD, 741302),
+    DR_ACULA_STAFF(DrAculaStaff::new, Material.NETHERITE_SWORD, 741302),
     FLAME_SHIELD(FlameShield::new),
     STOMPERS(Stompers::new),
     GHAST_BOW(GhastBow::new),
@@ -33,9 +37,9 @@ public enum Mytems {
     UNICORN_HORN(UnicornHorn::new, Material.END_ROD, 7413003),
     MAGIC_CAPE(MagicCape::new, Material.ELYTRA, 7413006),
     // Generic
-    KITTY_COIN(KittyCoin::new, "kitty_coin", Material.PLAYER_HEAD, 7413001),
+    KITTY_COIN(KittyCoin::new, Material.PLAYER_HEAD, 7413001),
     // Christmas 2020
-    CHRISTMAS_TOKEN(ChristmasToken::new, "christmas_token"),
+    CHRISTMAS_TOKEN(ChristmasToken::new),
     SANTA_HAT(SantaHat::new, Material.PLAYER_HEAD, 7413101),
     SANTA_JACKET(SantaJacket::new, Material.LEATHER_CHESTPLATE, 4713102),
     SANTA_PANTS(SantaPants::new, Material.LEATHER_LEGGINGS, 4713103),
@@ -51,13 +55,13 @@ public enum Mytems {
     SWAMPY_CHESTPLATE(SwampyItem.Chestplate::new, Material.LEATHER_CHESTPLATE, 7413302),
     SWAMPY_LEGGINGS(SwampyItem.Leggings::new, Material.LEATHER_LEGGINGS, 7413303),
     SWAMPY_BOOTS(SwampyItem.Boots::new, Material.LEATHER_BOOTS, 7413304),
-    SWAMPY_TRIDENT(SwampyItem.Weapon::new, "swampy_trident", Material.TRIDENT, 7413305),
+    SWAMPY_TRIDENT(SwampyItem.Weapon::new, Material.TRIDENT, 7413305),
     // Swampy set
-    DWARVEN_HELMET(DwarvenItem.Helmet::new, "dwarven_helmet", Material.PLAYER_HEAD, 7413401),
-    DWARVEN_CHESTPLATE(DwarvenItem.Chestplate::new, "dwarven_chestplate", Material.IRON_CHESTPLATE, 7413402),
-    DWARVEN_LEGGINGS(DwarvenItem.Leggings::new, "dwarven_leggings", Material.IRON_LEGGINGS, 7413403),
-    DWARVEN_BOOTS(DwarvenItem.Boots::new, "dwarven_boots", Material.IRON_BOOTS, 7413404),
-    DWARVEN_AXE(DwarvenItem.Weapon::new, "dwarven_axe", Material.IRON_AXE, 7413405),
+    DWARVEN_HELMET(DwarvenItem.Helmet::new, Material.PLAYER_HEAD, 7413401),
+    DWARVEN_CHESTPLATE(DwarvenItem.Chestplate::new, Material.IRON_CHESTPLATE, 7413402),
+    DWARVEN_LEGGINGS(DwarvenItem.Leggings::new, Material.IRON_LEGGINGS, 7413403),
+    DWARVEN_BOOTS(DwarvenItem.Boots::new, Material.IRON_BOOTS, 7413404),
+    DWARVEN_AXE(DwarvenItem.Weapon::new, Material.IRON_AXE, 7413405),
     // Easter 2021
     EASTER_TOKEN(EasterToken::new, Material.PLAYER_HEAD, 345700),
     BLUE_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345701),
@@ -72,31 +76,31 @@ public enum Mytems {
     EASTER_BOOTS(EasterGear.Boots::new, Material.LEATHER_BOOTS, 345714),
     //
     TOILET(Toilet::new, Material.CAULDRON, 498101), // APRIL
-    WEDDING_RING(WeddingRing::new, "wedding_ring", Material.PLAYER_HEAD, 7413002),
+    WEDDING_RING(WeddingRing::new, Material.PLAYER_HEAD, 7413002),
     MAGIC_MAP(MagicMap::new, Material.FILLED_MAP, 7413005),
     BOSS_CHEST(DummyMytem::new, Material.CHEST, 7413004),
     // Wardrobe
     WHITE_BUNNY_EARS(DummyMytem::new, Material.IRON_BOOTS, 3919001), // EPIC
     // Vote
-    VOTE_CANDY(VoteCandy::new, "vote_candy", Material.COOKIE, 9073001), // VOTE
-    VOTE_FIREWORK(VoteFirework::new, "vote_firework", Material.FIREWORK_ROCKET, 9073002),
+    VOTE_CANDY(VoteCandy::new, Material.COOKIE, 9073001), // VOTE
+    VOTE_FIREWORK(VoteFirework::new, Material.FIREWORK_ROCKET, 9073002),
     // Maypole
-    LUCID_LILY(DummyMytem::new, Material.AZURE_BLUET, 849001),
-    PINE_CONE(DummyMytem::new, Material.SPRUCE_SAPLING, 849002),
-    ORANGE_ONION(DummyMytem::new, Material.ORANGE_TULIP, 849003),
-    MISTY_MOREL(DummyMytem::new, Material.WARPED_FUNGUS, 849004),
-    RED_ROSE(DummyMytem::new, Material.POPPY, 849005),
-    FROST_FLOWER(DummyMytem::new, Material.BLUE_ORCHID, 849006),
-    HEAT_ROOT(DummyMytem::new, Material.DEAD_BUSH, 849007),
-    CACTUS_BLOSSOM(DummyMytem::new, Material.CACTUS, 849008),
-    PIPE_WEED(DummyMytem::new, Material.FERN, 849009),
-    KINGS_PUMPKIN(DummyMytem::new, Material.CARVED_PUMPKIN, 849010),
-    SPARK_SEED(DummyMytem::new, Material.BEETROOT_SEEDS, 849011),
-    OASIS_WATER(DummyMytem::new, Material.LIGHT_BLUE_DYE, 849012),
-    CLAMSHELL(DummyMytem::new, Material.NAUTILUS_SHELL, 849013),
-    FROZEN_AMBER(DummyMytem::new, Material.EMERALD, 849014),
-    CLUMP_OF_MOSS(DummyMytem::new, Material.VINE, 849015),
-    FIRE_AMANITA(DummyMytem::new, Material.CRIMSON_FUNGUS, 849016),
+    LUCID_LILY(DummyMytem::new, Material.AZURE_BLUET, 849001, '\uE201'),
+    PINE_CONE(DummyMytem::new, Material.SPRUCE_SAPLING, 849002, '\uE202'),
+    ORANGE_ONION(DummyMytem::new, Material.ORANGE_TULIP, 849003, '\uE203'),
+    MISTY_MOREL(DummyMytem::new, Material.WARPED_FUNGUS, 849004, '\uE204'),
+    RED_ROSE(DummyMytem::new, Material.POPPY, 849005, '\uE205'),
+    FROST_FLOWER(DummyMytem::new, Material.BLUE_ORCHID, 849006, '\uE206'),
+    HEAT_ROOT(DummyMytem::new, Material.DEAD_BUSH, 849007, '\uE207'),
+    CACTUS_BLOSSOM(DummyMytem::new, Material.CACTUS, 849008, '\uE208'),
+    PIPE_WEED(DummyMytem::new, Material.FERN, 849009, '\uE209'),
+    KINGS_PUMPKIN(DummyMytem::new, Material.CARVED_PUMPKIN, 849010, '\uE20A'),
+    SPARK_SEED(DummyMytem::new, Material.BEETROOT_SEEDS, 849011, '\uE20B'),
+    OASIS_WATER(DummyMytem::new, Material.LIGHT_BLUE_DYE, 849012, '\uE20C'),
+    CLAMSHELL(DummyMytem::new, Material.NAUTILUS_SHELL, 849013, '\uE20D'),
+    FROZEN_AMBER(DummyMytem::new, Material.EMERALD, 849014, '\uE20E'),
+    CLUMP_OF_MOSS(DummyMytem::new, Material.VINE, 849015, '\uE20F'),
+    FIRE_AMANITA(DummyMytem::new, Material.CRIMSON_FUNGUS, 849016, '\uE210'),
     //
     ENDERBALL(Enderball::new);
 
@@ -105,6 +109,8 @@ public enum Mytems {
     public final Function<Mytems, Mytem> ctor;
     public final Material material;
     public final Integer customModelData;
+    public final char character;
+    public final Component component;
 
     static {
         for (Mytems it : Mytems.values()) {
@@ -124,10 +130,8 @@ public enum Mytems {
         this.id = name().toLowerCase();
         this.material = null;
         this.customModelData = null;
-    }
-
-    Mytems(final Function<Mytems, Mytem> ctor, final String id) {
-        this(ctor, id, null, null);
+        this.character = (char) 0;
+        this.component = Component.empty();
     }
 
     Mytems(final Function<Mytems, Mytem> ctor, final Material material, final Integer customModelData) {
@@ -135,13 +139,18 @@ public enum Mytems {
         this.id = name().toLowerCase();
         this.material = material;
         this.customModelData = customModelData;
+        this.character = (char) 0;
+        this.component = Component.empty();
     }
 
-    Mytems(final Function<Mytems, Mytem> ctor, final String id, final Material material, final Integer customModelData) {
+    Mytems(final Function<Mytems, Mytem> ctor, final Material material, final Integer customModelData, final char character) {
         this.ctor = ctor;
-        this.id = id;
+        this.id = name().toLowerCase();
         this.material = material;
         this.customModelData = customModelData;
+        this.character = character;
+        this.component = Component.text(character)
+            .style(Style.style().font(Key.key("cavetale:default")).color(TextColor.color(0xFFFFFF)));
     }
 
     public static Mytems forId(String in) {
