@@ -16,6 +16,7 @@ import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -75,9 +76,9 @@ public final class MytemsCommand implements TabExecutor {
     boolean list(CommandSender sender, String[] args) {
         if (args.length != 0) return false;
         for (Mytems mytems : Mytems.values()) {
-            Mytem mytem = mytems.getMytem();
             sender.sendMessage(Component.text(mytems.ordinal() + ") " + mytems.id + " ")
-                               .append(mytem.getDisplayName()));
+                               .append(mytems.component.insertion(GsonComponentSerializer.gson().serialize(mytems.component)))
+                               .append(mytems.getMytem().getDisplayName()));
         }
         return true;
     }
@@ -121,6 +122,7 @@ public final class MytemsCommand implements TabExecutor {
             Component component = Component.empty().color(NamedTextColor.YELLOW)
                 .append(Component.text("" + (amount - retain)).color(NamedTextColor.WHITE))
                 .append(Component.text("x").color(NamedTextColor.DARK_GRAY))
+                .append(mytems.component)
                 .append(mytems.getMytem().getDisplayName())
                 .append(Component.text(" given to " + target.getName()).color(NamedTextColor.YELLOW));
             sender.sendMessage(component);

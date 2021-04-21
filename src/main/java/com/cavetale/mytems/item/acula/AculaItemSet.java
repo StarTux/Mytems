@@ -1,4 +1,4 @@
-package com.cavetale.mytems.item;
+package com.cavetale.mytems.item.acula;
 
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;

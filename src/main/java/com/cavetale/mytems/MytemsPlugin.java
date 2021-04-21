@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
+import java.util.function.Function;
 import lombok.Getter;
 import org.bukkit.Bukkit;
 import org.bukkit.Tag;
@@ -160,6 +162,9 @@ public final class MytemsPlugin extends JavaPlugin {
     }
 
     public static void registerMytem(JavaPlugin plugin, Mytems mytems, Mytem mytem) {
+        if (!Objects.equals(mytems, mytem.getKey())) {
+            throw new IllegalArgumentException(mytems + " != " + mytem.getKey());
+        }
         Mytem old = instance.mytems.get(mytems);
         instance.mytems.put(mytems, mytem);
         mytem.enable();
@@ -173,6 +178,14 @@ public final class MytemsPlugin extends JavaPlugin {
             }
         }
         instance.fixAllPlayerInventoriesLater();
+    }
+
+    public static void registerMytem(JavaPlugin plugin, Mytem mytem) {
+        registerMytem(plugin, mytem.getKey(), mytem);
+    }
+
+    public static void registerMytem(JavaPlugin plugin, Mytems mytems, Function<Mytems, Mytem> ctor) {
+        registerMytem(plugin, mytems, ctor.apply(mytems));
     }
 
     protected void onDisablePlugin(JavaPlugin plugin) {

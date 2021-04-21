@@ -1,6 +1,19 @@
 package com.cavetale.mytems;
 
-import com.cavetale.mytems.item.*;
+import com.cavetale.mytems.item.ChristmasToken;
+import com.cavetale.mytems.item.DummyMytem;
+import com.cavetale.mytems.item.Enderball;
+import com.cavetale.mytems.item.KittyCoin;
+import com.cavetale.mytems.item.MagicCape;
+import com.cavetale.mytems.item.MagicMap;
+import com.cavetale.mytems.item.Toilet;
+import com.cavetale.mytems.item.UnicornHorn;
+import com.cavetale.mytems.item.WeddingRing;
+import com.cavetale.mytems.item.acula.BatMask;
+import com.cavetale.mytems.item.acula.DrAculaStaff;
+import com.cavetale.mytems.item.acula.FlameShield;
+import com.cavetale.mytems.item.acula.GhastBow;
+import com.cavetale.mytems.item.acula.Stompers;
 import com.cavetale.mytems.item.dune.DuneItem;
 import com.cavetale.mytems.item.dwarven.DwarvenItem;
 import com.cavetale.mytems.item.easter.EasterEgg;
@@ -28,7 +41,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 
 public enum Mytems {
     // Halloween 2020
-    DR_ACULA_STAFF(DrAculaStaff::new, Material.NETHERITE_SWORD, 741302),
+    DR_ACULA_STAFF(DrAculaStaff::new, Material.NETHERITE_SWORD, 741302, '\uE220'),
     FLAME_SHIELD(FlameShield::new),
     STOMPERS(Stompers::new),
     GHAST_BOW(GhastBow::new),
@@ -37,53 +50,53 @@ public enum Mytems {
     UNICORN_HORN(UnicornHorn::new, Material.END_ROD, 7413003),
     MAGIC_CAPE(MagicCape::new, Material.ELYTRA, 7413006),
     // Generic
-    KITTY_COIN(KittyCoin::new, Material.PLAYER_HEAD, 7413001),
+    KITTY_COIN(KittyCoin::new, Material.PLAYER_HEAD, 7413001, '\uE200'),
     // Christmas 2020
     CHRISTMAS_TOKEN(ChristmasToken::new),
-    SANTA_HAT(SantaHat::new, Material.PLAYER_HEAD, 7413101),
-    SANTA_JACKET(SantaJacket::new, Material.LEATHER_CHESTPLATE, 4713102),
-    SANTA_PANTS(SantaPants::new, Material.LEATHER_LEGGINGS, 4713103),
-    SANTA_BOOTS(SantaBoots::new, Material.LEATHER_BOOTS, 4713104),
+    SANTA_HAT(SantaHat::new, Material.PLAYER_HEAD, 7413101, '\uE221'),
+    SANTA_JACKET(SantaJacket::new, Material.LEATHER_CHESTPLATE, 4713102, '\uE222'),
+    SANTA_PANTS(SantaPants::new, Material.LEATHER_LEGGINGS, 4713103, '\uE223'),
+    SANTA_BOOTS(SantaBoots::new, Material.LEATHER_BOOTS, 4713104, '\uE224'),
     // Dune set
-    DUNE_HELMET(DuneItem.Helmet::new, Material.PLAYER_HEAD, 7413201),
-    DUNE_CHESTPLATE(DuneItem.Chestplate::new, Material.GOLDEN_CHESTPLATE, 7413202),
-    DUNE_LEGGINGS(DuneItem.Leggings::new, Material.GOLDEN_LEGGINGS, 7413203),
-    DUNE_BOOTS(DuneItem.Boots::new, Material.GOLDEN_BOOTS, 7413204),
-    DUNE_DIGGER(DuneItem.Weapon::new, Material.GOLDEN_SHOVEL, 7413205),
+    DUNE_HELMET(DuneItem.Helmet::new, Material.PLAYER_HEAD, 7413201, '\uE225'),
+    DUNE_CHESTPLATE(DuneItem.Chestplate::new, Material.GOLDEN_CHESTPLATE, 7413202, '\uE226'),
+    DUNE_LEGGINGS(DuneItem.Leggings::new, Material.GOLDEN_LEGGINGS, 7413203, '\uE227'),
+    DUNE_BOOTS(DuneItem.Boots::new, Material.GOLDEN_BOOTS, 7413204, '\uE228'),
+    DUNE_DIGGER(DuneItem.Weapon::new, Material.GOLDEN_SHOVEL, 7413205, '\uE229'),
     // Swampy set
-    SWAMPY_HELMET(SwampyItem.Helmet::new, Material.PLAYER_HEAD, 7413301),
-    SWAMPY_CHESTPLATE(SwampyItem.Chestplate::new, Material.LEATHER_CHESTPLATE, 7413302),
-    SWAMPY_LEGGINGS(SwampyItem.Leggings::new, Material.LEATHER_LEGGINGS, 7413303),
-    SWAMPY_BOOTS(SwampyItem.Boots::new, Material.LEATHER_BOOTS, 7413304),
-    SWAMPY_TRIDENT(SwampyItem.Weapon::new, Material.TRIDENT, 7413305),
+    SWAMPY_HELMET(SwampyItem.Helmet::new, Material.PLAYER_HEAD, 7413301, '\uE22A'),
+    SWAMPY_CHESTPLATE(SwampyItem.Chestplate::new, Material.LEATHER_CHESTPLATE, 7413302, '\uE22B'),
+    SWAMPY_LEGGINGS(SwampyItem.Leggings::new, Material.LEATHER_LEGGINGS, 7413303, '\uE22C'),
+    SWAMPY_BOOTS(SwampyItem.Boots::new, Material.LEATHER_BOOTS, 7413304, '\uE22D'),
+    SWAMPY_TRIDENT(SwampyItem.Weapon::new, Material.TRIDENT, 7413305, '\uE22E'),
     // Swampy set
-    DWARVEN_HELMET(DwarvenItem.Helmet::new, Material.PLAYER_HEAD, 7413401),
-    DWARVEN_CHESTPLATE(DwarvenItem.Chestplate::new, Material.IRON_CHESTPLATE, 7413402),
-    DWARVEN_LEGGINGS(DwarvenItem.Leggings::new, Material.IRON_LEGGINGS, 7413403),
-    DWARVEN_BOOTS(DwarvenItem.Boots::new, Material.IRON_BOOTS, 7413404),
-    DWARVEN_AXE(DwarvenItem.Weapon::new, Material.IRON_AXE, 7413405),
+    DWARVEN_HELMET(DwarvenItem.Helmet::new, Material.PLAYER_HEAD, 7413401, '\uE22F'),
+    DWARVEN_CHESTPLATE(DwarvenItem.Chestplate::new, Material.IRON_CHESTPLATE, 7413402, '\uE230'),
+    DWARVEN_LEGGINGS(DwarvenItem.Leggings::new, Material.IRON_LEGGINGS, 7413403, '\uE231'),
+    DWARVEN_BOOTS(DwarvenItem.Boots::new, Material.IRON_BOOTS, 7413404, '\uE232'),
+    DWARVEN_AXE(DwarvenItem.Weapon::new, Material.IRON_AXE, 7413405, '\uE233'),
     // Easter 2021
-    EASTER_TOKEN(EasterToken::new, Material.PLAYER_HEAD, 345700),
-    BLUE_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345701),
-    GREEN_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345702),
-    ORANGE_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345703),
-    PINK_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345704),
-    PURPLE_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345705),
-    YELLOW_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345706),
-    EASTER_HELMET(EasterGear.Helmet::new, Material.PLAYER_HEAD, 345711),
-    EASTER_CHESTPLATE(EasterGear.Chestplate::new, Material.LEATHER_CHESTPLATE, 345712),
-    EASTER_LEGGINGS(EasterGear.Leggings::new, Material.LEATHER_LEGGINGS, 345713),
-    EASTER_BOOTS(EasterGear.Boots::new, Material.LEATHER_BOOTS, 345714),
+    EASTER_TOKEN(EasterToken::new, Material.PLAYER_HEAD, 345700, '\uE211'),
+    BLUE_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345701, '\uE212'),
+    GREEN_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345702, '\uE213'),
+    ORANGE_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345703, '\uE214'),
+    PINK_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345704, '\uE215'),
+    PURPLE_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345705, '\uE216'),
+    YELLOW_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345706, '\uE217'),
+    EASTER_HELMET(EasterGear.Helmet::new, Material.PLAYER_HEAD, 345711, '\uE218'),
+    EASTER_CHESTPLATE(EasterGear.Chestplate::new, Material.LEATHER_CHESTPLATE, 345712, '\uE219'),
+    EASTER_LEGGINGS(EasterGear.Leggings::new, Material.LEATHER_LEGGINGS, 345713, '\uE21A'),
+    EASTER_BOOTS(EasterGear.Boots::new, Material.LEATHER_BOOTS, 345714, '\uE21B'),
     //
     TOILET(Toilet::new, Material.CAULDRON, 498101), // APRIL
-    WEDDING_RING(WeddingRing::new, Material.PLAYER_HEAD, 7413002),
-    MAGIC_MAP(MagicMap::new, Material.FILLED_MAP, 7413005),
+    WEDDING_RING(WeddingRing::new, Material.PLAYER_HEAD, 7413002, '\uE21C'),
+    MAGIC_MAP(MagicMap::new, Material.FILLED_MAP, 7413005, '\uE21D'),
     BOSS_CHEST(DummyMytem::new, Material.CHEST, 7413004),
     // Wardrobe
     WHITE_BUNNY_EARS(DummyMytem::new, Material.IRON_BOOTS, 3919001), // EPIC
     // Vote
-    VOTE_CANDY(VoteCandy::new, Material.COOKIE, 9073001), // VOTE
-    VOTE_FIREWORK(VoteFirework::new, Material.FIREWORK_ROCKET, 9073002),
+    VOTE_CANDY(VoteCandy::new, Material.COOKIE, 9073001, '\uE21E'), // VOTE
+    VOTE_FIREWORK(VoteFirework::new, Material.FIREWORK_ROCKET, 9073002, '\uE21F'),
     // Maypole
     LUCID_LILY(DummyMytem::new, Material.AZURE_BLUET, 849001, '\uE201'),
     PINE_CONE(DummyMytem::new, Material.SPRUCE_SAPLING, 849002, '\uE202'),
