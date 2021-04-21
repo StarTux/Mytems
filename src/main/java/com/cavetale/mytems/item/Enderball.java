@@ -29,6 +29,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.block.BlockFromToEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -154,8 +155,16 @@ public final class Enderball implements Mytem, Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-    public void onBlockDamge(BlockDamageEvent event) {
+    public void onBlockDamage(BlockDamageEvent event) {
         if (event.getPlayer().getGameMode() == GameMode.CREATIVE) return;
+        Block block = event.getBlock();
+        if (block.getType() != Material.DRAGON_EGG) return;
+        if (!BlockMarker.hasId(block, key.id)) return;
+        event.setCancelled(true);
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    public void onBlockFromTo(BlockFromToEvent event) {
         Block block = event.getBlock();
         if (block.getType() != Material.DRAGON_EGG) return;
         if (!BlockMarker.hasId(block, key.id)) return;
