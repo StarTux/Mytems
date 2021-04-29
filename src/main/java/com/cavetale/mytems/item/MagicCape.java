@@ -1,13 +1,11 @@
 package com.cavetale.mytems.item;
 
 import com.cavetale.mytems.Mytem;
-import com.cavetale.mytems.MytemPersistenceFlag;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Text;
 import java.awt.Color;
-import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
@@ -21,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.Repairable;
 
 @RequiredArgsConstructor
 public final class MagicCape implements Mytem {
@@ -63,6 +62,11 @@ public final class MagicCape implements Mytem {
         displayName = rainbowify("Magic Cape");
         prototype = new ItemStack(Material.ELYTRA).ensureServerConversions();
         ItemMeta meta = prototype.getItemMeta();
+        if (meta instanceof Repairable) {
+            Repairable repairable = (Repairable) meta;
+            repairable.setRepairCost(9999);
+        }
+        meta.setUnbreakable(true);
         meta.displayName(displayName);
         meta.lore(Text.wrapLore(description));
         key.markItemMeta(meta);
@@ -78,6 +82,7 @@ public final class MagicCape implements Mytem {
     public void onToggleGlide(EntityToggleGlideEvent event, Player player, ItemStack item) {
         if (event.isCancelled()) return;
         if (!event.isGliding()) return;
+        event.setCancelled(true);
         if (player.getLevel() == 0 && player.getExp() <= 0f) {
             player.sendActionBar(ChatColor.DARK_RED + "Need exp!");
             player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.5f, 2.0f);
@@ -97,7 +102,6 @@ public final class MagicCape implements Mytem {
             return;
         }
         session.setCooldown(key.id, COOLDOWN_SECONDS * 20);
-        event.setCancelled(true);
         session.getFlying().setFlying(FLY_SPEED, FLIGHT_SECONDS * 20, () -> onFlyTick(player), () -> onEnd(player));
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PHANTOM_FLAP, SoundCategory.PLAYERS, 2.0f, 2.0f);
     }
@@ -137,10 +141,5 @@ public final class MagicCape implements Mytem {
     public void onEnd(Player player) {
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PHANTOM_FLAP, SoundCategory.PLAYERS, 2.0f, 1.0f);
         return;
-    }
-
-    @Override
-    public Set<MytemPersistenceFlag> getMytemPersistenceFlags() {
-        return MytemPersistenceFlag.VANILLA;
     }
 }

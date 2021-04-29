@@ -3,6 +3,7 @@ package com.cavetale.mytems;
 import com.cavetale.mytems.item.ChristmasToken;
 import com.cavetale.mytems.item.DummyMytem;
 import com.cavetale.mytems.item.Enderball;
+import com.cavetale.mytems.item.Ingredient;
 import com.cavetale.mytems.item.KittyCoin;
 import com.cavetale.mytems.item.MagicCape;
 import com.cavetale.mytems.item.MagicMap;
@@ -19,6 +20,8 @@ import com.cavetale.mytems.item.dwarven.DwarvenItem;
 import com.cavetale.mytems.item.easter.EasterEgg;
 import com.cavetale.mytems.item.easter.EasterGear;
 import com.cavetale.mytems.item.easter.EasterToken;
+import com.cavetale.mytems.item.pocketmob.MobCatcher;
+import com.cavetale.mytems.item.pocketmob.PocketMob;
 import com.cavetale.mytems.item.santa.SantaBoots;
 import com.cavetale.mytems.item.santa.SantaHat;
 import com.cavetale.mytems.item.santa.SantaJacket;
@@ -35,6 +38,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.Style;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -42,13 +46,13 @@ import org.bukkit.inventory.meta.ItemMeta;
 public enum Mytems {
     // Halloween 2020
     DR_ACULA_STAFF(DrAculaStaff::new, Material.NETHERITE_SWORD, 741302, '\uE220'),
-    FLAME_SHIELD(FlameShield::new),
-    STOMPERS(Stompers::new),
-    GHAST_BOW(GhastBow::new),
-    BAT_MASK(BatMask::new),
+    FLAME_SHIELD(FlameShield::new, Material.SHIELD, 741303, '\uE234'),
+    STOMPERS(Stompers::new, Material.NETHERITE_BOOTS, 741304, '\uE235'),
+    GHAST_BOW(GhastBow::new, Material.BOW, 741305, '\uE236'),
+    BAT_MASK(BatMask::new, Material.PLAYER_HEAD, 741306, '\uE237'),
     // Cloud City
     UNICORN_HORN(UnicornHorn::new, Material.END_ROD, 7413003),
-    MAGIC_CAPE(MagicCape::new, Material.ELYTRA, 7413006),
+    MAGIC_CAPE(MagicCape::new, Material.ELYTRA, 7413006, '\uE238'),
     // Generic
     KITTY_COIN(KittyCoin::new, Material.PLAYER_HEAD, 7413001, '\uE200'),
     // Christmas 2020
@@ -98,24 +102,104 @@ public enum Mytems {
     VOTE_CANDY(VoteCandy::new, Material.COOKIE, 9073001, '\uE21E'), // VOTE
     VOTE_FIREWORK(VoteFirework::new, Material.FIREWORK_ROCKET, 9073002, '\uE21F'),
     // Maypole
-    LUCID_LILY(DummyMytem::new, Material.AZURE_BLUET, 849001, '\uE201'),
-    PINE_CONE(DummyMytem::new, Material.SPRUCE_SAPLING, 849002, '\uE202'),
-    ORANGE_ONION(DummyMytem::new, Material.ORANGE_TULIP, 849003, '\uE203'),
-    MISTY_MOREL(DummyMytem::new, Material.WARPED_FUNGUS, 849004, '\uE204'),
-    RED_ROSE(DummyMytem::new, Material.POPPY, 849005, '\uE205'),
-    FROST_FLOWER(DummyMytem::new, Material.BLUE_ORCHID, 849006, '\uE206'),
-    HEAT_ROOT(DummyMytem::new, Material.DEAD_BUSH, 849007, '\uE207'),
-    CACTUS_BLOSSOM(DummyMytem::new, Material.CACTUS, 849008, '\uE208'),
-    PIPE_WEED(DummyMytem::new, Material.FERN, 849009, '\uE209'),
-    KINGS_PUMPKIN(DummyMytem::new, Material.CARVED_PUMPKIN, 849010, '\uE20A'),
-    SPARK_SEED(DummyMytem::new, Material.BEETROOT_SEEDS, 849011, '\uE20B'),
-    OASIS_WATER(DummyMytem::new, Material.LIGHT_BLUE_DYE, 849012, '\uE20C'),
-    CLAMSHELL(DummyMytem::new, Material.NAUTILUS_SHELL, 849013, '\uE20D'),
-    FROZEN_AMBER(DummyMytem::new, Material.EMERALD, 849014, '\uE20E'),
-    CLUMP_OF_MOSS(DummyMytem::new, Material.VINE, 849015, '\uE20F'),
-    FIRE_AMANITA(DummyMytem::new, Material.CRIMSON_FUNGUS, 849016, '\uE210'),
-    //
-    ENDERBALL(Enderball::new);
+    LUCID_LILY(Ingredient::new, Material.AZURE_BLUET, 849001, '\uE201'),
+    PINE_CONE(Ingredient::new, Material.SPRUCE_SAPLING, 849002, '\uE202'),
+    ORANGE_ONION(Ingredient::new, Material.ORANGE_TULIP, 849003, '\uE203'),
+    MISTY_MOREL(Ingredient::new, Material.WARPED_FUNGUS, 849004, '\uE204'),
+    RED_ROSE(Ingredient::new, Material.POPPY, 849005, '\uE205'),
+    FROST_FLOWER(Ingredient::new, Material.BLUE_ORCHID, 849006, '\uE206'),
+    HEAT_ROOT(Ingredient::new, Material.DEAD_BUSH, 849007, '\uE207'),
+    CACTUS_BLOSSOM(Ingredient::new, Material.CACTUS, 849008, '\uE208'),
+    PIPE_WEED(Ingredient::new, Material.FERN, 849009, '\uE209'),
+    KINGS_PUMPKIN(Ingredient::new, Material.CARVED_PUMPKIN, 849010, '\uE20A'),
+    SPARK_SEED(Ingredient::new, Material.BEETROOT_SEEDS, 849011, '\uE20B'),
+    OASIS_WATER(Ingredient::new, Material.LIGHT_BLUE_DYE, 849012, '\uE20C'),
+    CLAMSHELL(Ingredient::new, Material.NAUTILUS_SHELL, 849013, '\uE20D'),
+    FROZEN_AMBER(Ingredient::new, Material.EMERALD, 849014, '\uE20E'),
+    CLUMP_OF_MOSS(Ingredient::new, Material.VINE, 849015, '\uE20F'),
+    FIRE_AMANITA(Ingredient::new, Material.CRIMSON_FUNGUS, 849016, '\uE210'),
+    // Enderball
+    ENDERBALL(Enderball::new),
+    // PocketMob
+    POCKET_BAT(mytems -> new PocketMob(mytems, EntityType.BAT), Material.BAT_SPAWN_EGG, 908301),
+    POCKET_BEE(mytems -> new PocketMob(mytems, EntityType.BEE), Material.BEE_SPAWN_EGG, 908301),
+    POCKET_BLAZE(mytems -> new PocketMob(mytems, EntityType.BLAZE), Material.BLAZE_SPAWN_EGG, 908301),
+    POCKET_CAT(mytems -> new PocketMob(mytems, EntityType.CAT), Material.CAT_SPAWN_EGG, 908301),
+    POCKET_CAVE_SPIDER(mytems -> new PocketMob(mytems, EntityType.CAVE_SPIDER), Material.CAVE_SPIDER_SPAWN_EGG, 908301),
+    POCKET_CHICKEN(mytems -> new PocketMob(mytems, EntityType.CHICKEN), Material.CHICKEN_SPAWN_EGG, 908301),
+    POCKET_COD(mytems -> new PocketMob(mytems, EntityType.COD), Material.COD_SPAWN_EGG, 908301),
+    POCKET_COW(mytems -> new PocketMob(mytems, EntityType.COW), Material.COW_SPAWN_EGG, 908301),
+    POCKET_CREEPER(mytems -> new PocketMob(mytems, EntityType.CREEPER), Material.CREEPER_SPAWN_EGG, 908301),
+    POCKET_DOLPHIN(mytems -> new PocketMob(mytems, EntityType.DOLPHIN), Material.DOLPHIN_SPAWN_EGG, 908301),
+    POCKET_DONKEY(mytems -> new PocketMob(mytems, EntityType.DONKEY), Material.DONKEY_SPAWN_EGG, 908301),
+    POCKET_DROWNED(mytems -> new PocketMob(mytems, EntityType.DROWNED), Material.DROWNED_SPAWN_EGG, 908301),
+    POCKET_ELDER_GUARDIAN(mytems -> new PocketMob(mytems, EntityType.ELDER_GUARDIAN), Material.ELDER_GUARDIAN_SPAWN_EGG, 908301),
+    POCKET_ENDERMAN(mytems -> new PocketMob(mytems, EntityType.ENDERMAN), Material.ENDERMAN_SPAWN_EGG, 908301),
+    POCKET_ENDERMITE(mytems -> new PocketMob(mytems, EntityType.ENDERMITE), Material.ENDERMITE_SPAWN_EGG, 908301),
+    POCKET_ENDER_DRAGON(mytems -> new PocketMob(mytems, EntityType.ENDER_DRAGON), Material.ENDERMAN_SPAWN_EGG, 908301),
+    POCKET_EVOKER(mytems -> new PocketMob(mytems, EntityType.EVOKER), Material.EVOKER_SPAWN_EGG, 908301),
+    POCKET_FOX(mytems -> new PocketMob(mytems, EntityType.FOX), Material.FOX_SPAWN_EGG, 908301),
+    POCKET_GHAST(mytems -> new PocketMob(mytems, EntityType.GHAST), Material.GHAST_SPAWN_EGG, 908301),
+    POCKET_GIANT(mytems -> new PocketMob(mytems, EntityType.GIANT), Material.ZOMBIE_SPAWN_EGG, 908301),
+    POCKET_GUARDIAN(mytems -> new PocketMob(mytems, EntityType.GUARDIAN), Material.GUARDIAN_SPAWN_EGG, 908301),
+    POCKET_HOGLIN(mytems -> new PocketMob(mytems, EntityType.HOGLIN), Material.HOGLIN_SPAWN_EGG, 908301),
+    POCKET_HORSE(mytems -> new PocketMob(mytems, EntityType.HORSE), Material.HORSE_SPAWN_EGG, 908301),
+    POCKET_HUSK(mytems -> new PocketMob(mytems, EntityType.HUSK), Material.HUSK_SPAWN_EGG, 908301),
+    POCKET_ILLUSIONER(mytems -> new PocketMob(mytems, EntityType.ILLUSIONER), Material.VINDICATOR_SPAWN_EGG, 908301),
+    POCKET_IRON_GOLEM(mytems -> new PocketMob(mytems, EntityType.IRON_GOLEM), Material.WOLF_SPAWN_EGG, 908301),
+    POCKET_LLAMA(mytems -> new PocketMob(mytems, EntityType.LLAMA), Material.LLAMA_SPAWN_EGG, 908301),
+    POCKET_MAGMA_CUBE(mytems -> new PocketMob(mytems, EntityType.MAGMA_CUBE), Material.MAGMA_CUBE_SPAWN_EGG, 908301),
+    POCKET_MULE(mytems -> new PocketMob(mytems, EntityType.MULE), Material.MULE_SPAWN_EGG, 908301),
+    POCKET_MUSHROOM_COW(mytems -> new PocketMob(mytems, EntityType.MUSHROOM_COW), Material.MOOSHROOM_SPAWN_EGG, 908301),
+    POCKET_OCELOT(mytems -> new PocketMob(mytems, EntityType.OCELOT), Material.OCELOT_SPAWN_EGG, 908301),
+    POCKET_PANDA(mytems -> new PocketMob(mytems, EntityType.PANDA), Material.PANDA_SPAWN_EGG, 908301),
+    POCKET_PARROT(mytems -> new PocketMob(mytems, EntityType.PARROT), Material.PARROT_SPAWN_EGG, 908301),
+    POCKET_PHANTOM(mytems -> new PocketMob(mytems, EntityType.PHANTOM), Material.PHANTOM_SPAWN_EGG, 908301),
+    POCKET_PIG(mytems -> new PocketMob(mytems, EntityType.PIG), Material.PIG_SPAWN_EGG, 908301),
+    POCKET_PIGLIN(mytems -> new PocketMob(mytems, EntityType.PIGLIN), Material.PIGLIN_SPAWN_EGG, 908301),
+    POCKET_PIGLIN_BRUTE(mytems -> new PocketMob(mytems, EntityType.PIGLIN_BRUTE), Material.PIGLIN_BRUTE_SPAWN_EGG, 908301),
+    POCKET_PILLAGER(mytems -> new PocketMob(mytems, EntityType.PILLAGER), Material.PILLAGER_SPAWN_EGG, 908301),
+    POCKET_POLAR_BEAR(mytems -> new PocketMob(mytems, EntityType.POLAR_BEAR), Material.POLAR_BEAR_SPAWN_EGG, 908301),
+    POCKET_PUFFERFISH(mytems -> new PocketMob(mytems, EntityType.PUFFERFISH), Material.PUFFERFISH_SPAWN_EGG, 908301),
+    POCKET_RABBIT(mytems -> new PocketMob(mytems, EntityType.RABBIT), Material.RABBIT_SPAWN_EGG, 908301),
+    POCKET_RAVAGER(mytems -> new PocketMob(mytems, EntityType.RAVAGER), Material.RAVAGER_SPAWN_EGG, 908301),
+    POCKET_SALMON(mytems -> new PocketMob(mytems, EntityType.SALMON), Material.SALMON_SPAWN_EGG, 908301),
+    POCKET_SHEEP(mytems -> new PocketMob(mytems, EntityType.SHEEP), Material.SHEEP_SPAWN_EGG, 908301),
+    POCKET_SHULKER(mytems -> new PocketMob(mytems, EntityType.SHULKER), Material.SHULKER_SPAWN_EGG, 908301),
+    POCKET_SILVERFISH(mytems -> new PocketMob(mytems, EntityType.SILVERFISH), Material.SILVERFISH_SPAWN_EGG, 908301),
+    POCKET_SKELETON(mytems -> new PocketMob(mytems, EntityType.SKELETON), Material.SKELETON_SPAWN_EGG, 908301),
+    POCKET_SKELETON_HORSE(mytems -> new PocketMob(mytems, EntityType.SKELETON_HORSE), Material.SKELETON_HORSE_SPAWN_EGG, 908301),
+    POCKET_SLIME(mytems -> new PocketMob(mytems, EntityType.SLIME), Material.SLIME_SPAWN_EGG, 908301),
+    POCKET_SNOWMAN(mytems -> new PocketMob(mytems, EntityType.SNOWMAN), Material.POLAR_BEAR_SPAWN_EGG, 908301),
+    POCKET_SPIDER(mytems -> new PocketMob(mytems, EntityType.SPIDER), Material.SPIDER_SPAWN_EGG, 908301),
+    POCKET_SQUID(mytems -> new PocketMob(mytems, EntityType.SQUID), Material.SQUID_SPAWN_EGG, 908301),
+    POCKET_STRAY(mytems -> new PocketMob(mytems, EntityType.STRAY), Material.STRAY_SPAWN_EGG, 908301),
+    POCKET_STRIDER(mytems -> new PocketMob(mytems, EntityType.STRIDER), Material.STRIDER_SPAWN_EGG, 908301),
+    POCKET_TRADER_LLAMA(mytems -> new PocketMob(mytems, EntityType.TRADER_LLAMA), Material.TRADER_LLAMA_SPAWN_EGG, 908301),
+    POCKET_TROPICAL_FISH(mytems -> new PocketMob(mytems, EntityType.TROPICAL_FISH), Material.TROPICAL_FISH_SPAWN_EGG, 908301),
+    POCKET_TURTLE(mytems -> new PocketMob(mytems, EntityType.TURTLE), Material.TURTLE_SPAWN_EGG, 908301),
+    POCKET_VEX(mytems -> new PocketMob(mytems, EntityType.VEX), Material.VEX_SPAWN_EGG, 908301),
+    POCKET_VILLAGER(mytems -> new PocketMob(mytems, EntityType.VILLAGER), Material.VILLAGER_SPAWN_EGG, 908301),
+    POCKET_VINDICATOR(mytems -> new PocketMob(mytems, EntityType.VINDICATOR), Material.VINDICATOR_SPAWN_EGG, 908301),
+    POCKET_WANDERING_TRADER(mytems -> new PocketMob(mytems, EntityType.WANDERING_TRADER), Material.WANDERING_TRADER_SPAWN_EGG, 908301),
+    POCKET_WITCH(mytems -> new PocketMob(mytems, EntityType.WITCH), Material.WITCH_SPAWN_EGG, 908301),
+    POCKET_WITHER(mytems -> new PocketMob(mytems, EntityType.WITHER), Material.WITHER_SKELETON_SPAWN_EGG, 908301),
+    POCKET_WITHER_SKELETON(mytems -> new PocketMob(mytems, EntityType.WITHER_SKELETON), Material.WITHER_SKELETON_SPAWN_EGG, 908301),
+    POCKET_WOLF(mytems -> new PocketMob(mytems, EntityType.WOLF), Material.WOLF_SPAWN_EGG, 908301),
+    POCKET_ZOGLIN(mytems -> new PocketMob(mytems, EntityType.ZOGLIN), Material.ZOGLIN_SPAWN_EGG, 908301),
+    POCKET_ZOMBIE(mytems -> new PocketMob(mytems, EntityType.ZOMBIE), Material.ZOMBIE_SPAWN_EGG, 908301),
+    POCKET_ZOMBIE_HORSE(mytems -> new PocketMob(mytems, EntityType.ZOMBIE_HORSE), Material.ZOMBIE_HORSE_SPAWN_EGG, 908301),
+    POCKET_ZOMBIE_VILLAGER(mytems -> new PocketMob(mytems, EntityType.ZOMBIE_VILLAGER), Material.ZOMBIE_VILLAGER_SPAWN_EGG, 908301),
+    POCKET_ZOMBIFIED_PIGLIN(mytems -> new PocketMob(mytems, EntityType.ZOMBIFIED_PIGLIN), Material.ZOMBIFIED_PIGLIN_SPAWN_EGG, 908301),
+    // Mob Catcher
+    MOB_CATCHER(MobCatcher::new, Material.EGG, 908302),
+    MONSTER_CATCHER(MobCatcher::new, Material.EGG, 908303),
+    ANIMAL_CATCHER(MobCatcher::new, Material.EGG, 908304),
+    VILLAGER_CATCHER(MobCatcher::new, Material.EGG, 908305),
+    FISH_CATCHER(MobCatcher::new, Material.EGG, 908306),
+    PET_CATCHER(MobCatcher::new, Material.EGG, 908307),
+    // Enemy
+    KOBOLD_HEAD(DummyMytem::new, Material.GREEN_CONCRETE, 1);
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;

@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import lombok.Data;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.NamespacedKey;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
@@ -28,6 +30,7 @@ public class MytemTag {
     protected Integer durability;
     protected Integer amount;
     protected MytemOwner owner;
+    protected String displayNameJson;
 
     /**
      * Determine if this tag is empty and needs not be saved.
@@ -47,39 +50,50 @@ public class MytemTag {
         if (itemAmount == 1 && (flags == null || flags.isEmpty())) return;
         MytemTag tag = new MytemTag();
         if (itemAmount != 1) amount = itemAmount;
-        if (flags.contains(MytemPersistenceFlag.ENCHANTMENTS)) {
-            for (Map.Entry<Enchantment, Integer> entry : itemStack.getEnchantments().entrySet()) {
-                Enchantment enchantment = entry.getKey();
-                NamespacedKey namespacedKey = enchantment.getKey();
-                String mapKey = "minecraft".equals(namespacedKey.getNamespace())
-                    ? namespacedKey.getKey()
-                    : namespacedKey.toString();
-                Integer level = entry.getValue();
-                if (enchantments == null) {
-                    enchantments = new HashMap<>();
+        for (MytemPersistenceFlag flag : flags) {
+            switch (flag) {
+            case ENCHANTMENTS:
+                for (Map.Entry<Enchantment, Integer> entry : itemStack.getEnchantments().entrySet()) {
+                    Enchantment enchantment = entry.getKey();
+                    NamespacedKey namespacedKey = enchantment.getKey();
+                    String mapKey = "minecraft".equals(namespacedKey.getNamespace())
+                        ? namespacedKey.getKey()
+                        : namespacedKey.toString();
+                    Integer level = entry.getValue();
+                    if (enchantments == null) {
+                        enchantments = new HashMap<>();
+                    }
+                    enchantments.put(mapKey, level);
                 }
-                enchantments.put(mapKey, level);
+                break;
+            case DURABILITY: {
+                if (!itemStack.hasItemMeta()) continue;
+                ItemMeta meta = itemStack.getItemMeta();
+                if (meta instanceof Damageable) {
+                    int damage = ((Damageable) meta).getDamage();
+                    if (damage != 0) durability = damage;
+                }
+                break;
             }
-        }
-        ItemMeta meta = null;
-        if (flags.contains(MytemPersistenceFlag.DURABILITY)) {
-            if (meta == null && itemStack.hasItemMeta()) {
-                meta = itemStack.getItemMeta();
-            }
-            if (meta instanceof Damageable) {
-                int damage = ((Damageable) meta).getDamage();
-                if (damage != 0) durability = damage;
-            }
-        }
-        if (flags.contains(MytemPersistenceFlag.OWNER)) {
-            if (meta == null && itemStack.hasItemMeta()) {
-                meta = itemStack.getItemMeta();
-            }
-            if (meta != null) {
+            case OWNER: {
+                if (!itemStack.hasItemMeta()) continue;
+                ItemMeta meta = itemStack.getItemMeta();
                 MytemOwner itemOwner = MytemOwner.ofItemMeta(meta);
                 if (itemOwner != null && itemOwner.isValid()) {
                     owner = itemOwner;
                 }
+                break;
+            }
+            case DISPLAY_NAME: {
+                if (!itemStack.hasItemMeta()) continue;
+                ItemMeta meta = itemStack.getItemMeta();
+                Component displayName = meta.displayName();
+                if (displayName == null) continue;
+                displayNameJson = GsonComponentSerializer.gson().serialize(displayName);
+                break;
+            }
+            default:
+                break;
             }
         }
     }
@@ -91,9 +105,10 @@ public class MytemTag {
         if (amount != null) {
             itemStack.setAmount(amount);
         }
+        if (flags == null || flags.isEmpty()) return;
         for (MytemPersistenceFlag flag : flags) {
             switch (flag) {
-            case ENCHANTMENTS:
+            case ENCHANTMENTS: {
                 if (enchantments == null) continue;
                 for (Map.Entry<String, Integer> entry : enchantments.entrySet()) {
                     String keyString = entry.getKey();
@@ -116,7 +131,8 @@ public class MytemTag {
                     itemStack.addUnsafeEnchantment(enchantment, level);
                 }
                 break;
-            case DURABILITY:
+            }
+            case DURABILITY: {
                 if (durability == null) continue;
                 ItemMeta meta = itemStack.getItemMeta();
                 if (meta instanceof Damageable) {
@@ -124,9 +140,26 @@ public class MytemTag {
                     itemStack.setItemMeta(meta);
                 }
                 break;
-            case OWNER:
+            }
+            case OWNER: {
                 if (owner == null || !owner.isValid()) continue;
                 owner.setItemStack(itemStack);
+                break;
+            }
+            case DISPLAY_NAME: {
+                if (displayNameJson == null) continue;
+                Component displayName;
+                try {
+                    displayName = GsonComponentSerializer.gson().deserialize(displayNameJson);
+                } catch (Exception e) {
+                    MytemsPlugin.getInstance().getLogger().warning("Invalid display name JSON: " + displayNameJson);
+                    continue;
+                }
+                ItemMeta meta = itemStack.getItemMeta();
+                meta.displayName(displayName);
+                itemStack.setItemMeta(meta);
+                break;
+            }
             default:
                 break;
             }

@@ -22,7 +22,8 @@ import java.util.Set;
 public enum MytemPersistenceFlag {
     ENCHANTMENTS, // (de)serialise enchantments
     DURABILITY,
-    OWNER;
+    OWNER,
+    DISPLAY_NAME;
 
     public static final Set<MytemPersistenceFlag> VANILLA = EnumSet.of(ENCHANTMENTS, DURABILITY);
     public static final Set<MytemPersistenceFlag> NONE = Collections.emptySet();

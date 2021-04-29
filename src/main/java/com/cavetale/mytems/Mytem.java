@@ -60,28 +60,21 @@ public interface Mytem {
     }
 
     /**
-     * These can be overridden entirely. The default version attempts
-     * to respect the MytemPersistenceFlags.
+     * Convenience function without a Player argument. It is
+     * recommended to override the other one.
      */
     default ItemStack deserializeTag(String serialized) {
-        ItemStack itemStack = createItemStack();
-        MytemTag tag = Json.deserialize(serialized, MytemTag.class);
-        tag.store(itemStack, getMytemPersistenceFlags());
-        return itemStack;
+        return deserializeTag(serialized, (Player) null);
     }
 
     /**
      * Deserialize an item tag with a new owner.
-     *
-     * Overriders may accept a null for the player argument in order
-     * to call it from the overload above, but the default
-     * implementation will not.
      */
     default ItemStack deserializeTag(String serialized, Player player) {
         ItemStack itemStack = createItemStack();
         MytemTag tag = Json.deserialize(serialized, MytemTag.class);
         Set<MytemPersistenceFlag> flags = getMytemPersistenceFlags();
-        if (flags.contains(MytemPersistenceFlag.OWNER)) {
+        if (player != null && flags.contains(MytemPersistenceFlag.OWNER)) {
             tag.setOwner(MytemOwner.ofPlayer(player));
         }
         tag.store(itemStack, flags);

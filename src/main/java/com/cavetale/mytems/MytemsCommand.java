@@ -34,7 +34,10 @@ public final class MytemsCommand implements TabExecutor {
 
     public void enable() {
         rootNode = new CommandNode("mytems");
-        rootNode.addChild("list").denyTabCompletion()
+        rootNode.addChild("list").arguments("[tag]")
+            .completableList(Stream.of(MytemsTag.values())
+                             .map(MytemsTag::name).map(String::toLowerCase)
+                             .collect(Collectors.toList()))
             .description("Show some info on all mytems")
             .senderCaller(this::list);
         rootNode.addChild("give").arguments("<player> <mytem> [amount]")
@@ -76,9 +79,18 @@ public final class MytemsCommand implements TabExecutor {
     }
 
     boolean list(CommandSender sender, String[] args) {
-        if (args.length != 0) return false;
+        if (args.length > 1) return false;
         List<Component> lines = new ArrayList<>();
+        MytemsTag tag = null;
+        if (args.length >= 1) {
+            try {
+                tag = MytemsTag.valueOf(args[0].toUpperCase());
+            } catch (IllegalArgumentException iae) {
+                throw new CommandWarn("Unknown tag: " + args[0]);
+            }
+        }
         for (Mytems mytems : Mytems.values()) {
+            if (tag != null && !tag.isTagged(mytems)) continue;
             lines.add(TextComponent.ofChildren(Component.text(mytems.ordinal() + ") ", NamedTextColor.GRAY),
                                                mytems.component.insertion(GsonComponentSerializer.gson().serialize(mytems.component)),
                                                mytems.getMytem().getDisplayName(),
