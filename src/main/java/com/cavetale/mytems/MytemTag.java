@@ -165,4 +165,16 @@ public class MytemTag {
             }
         }
     }
+
+    public final Component getDisplayName() {
+        return displayNameJson == null
+            ? Component.empty()
+            : GsonComponentSerializer.gson().deserialize(displayNameJson);
+    }
+
+    public final void setDisplayName(Component component) {
+        displayNameJson = component == null
+            ? null
+            : GsonComponentSerializer.gson().serialize(component);
+    }
 }

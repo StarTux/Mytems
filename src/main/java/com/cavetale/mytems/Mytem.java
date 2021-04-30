@@ -61,7 +61,7 @@ public interface Mytem {
 
     /**
      * Convenience function without a Player argument. It is
-     * recommended to override the other one.
+     * recommended to override the other one, or both.
      */
     default ItemStack deserializeTag(String serialized) {
         return deserializeTag(serialized, (Player) null);

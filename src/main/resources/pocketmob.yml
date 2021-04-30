@@ -1,0 +1,36 @@
+# set-fill-column 34
+mob_catcher: |-
+  This is the standard mob
+  catcher. It will occasionally
+  catch a mob, provided you hit.
+
+  It is recommended to upgrade
+  this item to a more efficient
+  version.
+
+monster_catcher: |-
+  The monster catcher works best
+  on wounded mobs. The more health
+  they're missing, the better your
+  capture chances! A direct hit is
+  required.
+
+animal_catcher: |-
+  This animal catcher works best
+  on healthy animals. You can
+  catch multiple animals at once
+  if they are within the area of
+  effect.
+
+villager_catcher: |-
+  This villager catcher allows
+  easy capture of any villager, if
+  you land a direct hit!
+
+pet_catcher: |-
+  The pet catcher will catch all
+  animals tamed by you within an
+  area.
+
+fish_catcher: |-
+  Catch any fish with ease!
