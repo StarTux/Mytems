@@ -24,8 +24,10 @@ animal_catcher: |-
 
 villager_catcher: |-
   This villager catcher allows
-  easy capture of any villager, if
-  you land a direct hit!
+  easy capture of any villager,
+  old or young, jobless or
+  employed.  Provided you land a
+  direct hit!
 
 pet_catcher: |-
   The pet catcher will catch all
@@ -33,4 +35,6 @@ pet_catcher: |-
   area.
 
 fish_catcher: |-
-  Catch any fish with ease!
+  This catcher will catch all fish
+  within range. More secure than a
+  fishing rod!
