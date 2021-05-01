@@ -4,6 +4,7 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Text;
+import com.cavetale.worldmarker.entity.EntityMarker;
 import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -90,6 +91,8 @@ public final class DrAculaStaff extends AculaItem {
                     b.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(2048.0);
                     b.setHealth(2048.0);
                 });
+            if (bat == null) break;
+            EntityMarker.setId(bat, key.id);
             Bukkit.getScheduler().runTaskLater(MytemsPlugin.getInstance(), bat::remove, 40L + (long) i);
         }
         base.getWorld().playSound(base, Sound.ENTITY_BAT_LOOP, SoundCategory.MASTER, 0.5f, 2.0f);
