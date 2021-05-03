@@ -9,6 +9,7 @@ import com.cavetale.mytems.item.MagicCape;
 import com.cavetale.mytems.item.MagicMap;
 import com.cavetale.mytems.item.Toilet;
 import com.cavetale.mytems.item.UnicornHorn;
+import com.cavetale.mytems.item.WardrobeItem;
 import com.cavetale.mytems.item.WeddingRing;
 import com.cavetale.mytems.item.acula.BatMask;
 import com.cavetale.mytems.item.acula.DrAculaStaff;
@@ -97,7 +98,9 @@ public enum Mytems {
     MAGIC_MAP(MagicMap::new, Material.FILLED_MAP, 7413005, '\uE21D'),
     BOSS_CHEST(DummyMytem::new, Material.CHEST, 7413004),
     // Wardrobe
-    WHITE_BUNNY_EARS(DummyMytem::new, Material.IRON_BOOTS, 3919001), // EPIC
+    WHITE_BUNNY_EARS(WardrobeItem::new, Material.IRON_BOOTS, 3919001), // EPIC
+    RED_LIGHTSABER(WardrobeItem::new, Material.WOODEN_SWORD, 3919002),
+    BLUE_LIGHTSABER(WardrobeItem::new, Material.WOODEN_SWORD, 3919003),
     // Vote
     VOTE_CANDY(VoteCandy::new, Material.COOKIE, 9073001, '\uE21E'), // VOTE
     VOTE_FIREWORK(VoteFirework::new, Material.FIREWORK_ROCKET, 9073002, '\uE21F'),

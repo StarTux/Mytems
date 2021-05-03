@@ -8,6 +8,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -44,6 +45,8 @@ public interface Mytem {
     default void onToggleGlide(EntityToggleGlideEvent event, Player player, ItemStack item) { }
 
     default void onConsume(PlayerItemConsumeEvent event, Player player, ItemStack item) { }
+
+    default void onPlayerDrop(PlayerDropItemEvent event, Player player, ItemStack item) { }
 
     default Set<MytemPersistenceFlag> getMytemPersistenceFlags() {
         return MytemPersistenceFlag.NONE;

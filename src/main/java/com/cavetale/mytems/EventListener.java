@@ -166,7 +166,14 @@ public final class EventListener implements Listener {
 
     @EventHandler
     void onPlayerDropItem(PlayerDropItemEvent event) {
-        plugin.sessions.of(event.getPlayer()).equipmentDidChange();
+        Player player = event.getPlayer();
+        ItemStack item = event.getItemDrop().getItemStack();
+        Mytems mytems = Mytems.forItem(item);
+        if (mytems != null) {
+            mytems.getMytem().onPlayerDrop(event, player, item);
+            if (event.isCancelled()) return;
+        }
+        plugin.sessions.of(player).equipmentDidChange();
     }
 
     @EventHandler
