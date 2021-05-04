@@ -25,11 +25,14 @@ import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
@@ -54,20 +57,22 @@ public final class EventListener implements Listener {
         switch (event.getAction()) {
         case RIGHT_CLICK_BLOCK:
         case RIGHT_CLICK_AIR:
-            onPlayerRightClick(event);
+            ItemStack item = event.getItem();
+            Mytems mytems = Mytems.forItem(item);
+            if (mytems == null) return;
+            mytems.getMytem().onPlayerRightClick(event, event.getPlayer(), item);
             break;
         default: break;
         }
     }
 
-    void onPlayerRightClick(PlayerInteractEvent event) {
-        ItemStack item = event.getItem();
-        if (item == null) return;
-        String id = ItemMarker.getId(item);
-        if (id == null) return;
-        Mytems key = Mytems.forId(id);
-        if (key == null) return;
-        plugin.getMytem(key).onPlayerRightClick(event, event.getPlayer(), item);
+    @EventHandler
+    void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+        Player player = event.getPlayer();
+        ItemStack item = player.getInventory().getItem(event.getHand());
+        Mytems mytems = Mytems.forItem(item);
+        if (mytems == null) return;
+        mytems.getMytem().onPlayerInteractEntity(event, player, item);
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -174,6 +179,22 @@ public final class EventListener implements Listener {
             if (event.isCancelled()) return;
         }
         plugin.sessions.of(player).equipmentDidChange();
+    }
+
+    @EventHandler
+    void onEntityPickupItem(EntityPickupItemEvent event) {
+        ItemStack item = event.getItem().getItemStack();
+        Mytems mytems = Mytems.forItem(item);
+        if (mytems == null) return;
+        mytems.getMytem().onEntityPickup(event, item);
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    void onInventoryPickupItem(InventoryPickupItemEvent event) {
+        ItemStack item = event.getItem().getItemStack();
+        Mytems mytems = Mytems.forItem(item);
+        if (mytems == null) return;
+        mytems.getMytem().onInventoryPickup(event, item);
     }
 
     @EventHandler

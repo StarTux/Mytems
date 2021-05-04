@@ -9,7 +9,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemFlag;
@@ -44,6 +47,11 @@ public final class WardrobeItem implements Mytem {
     }
 
     @Override
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player, ItemStack item) {
+        event.setCancelled(true);
+    }
+
+    @Override
     public void onConsume(PlayerItemConsumeEvent event, Player player, ItemStack item) {
         event.setCancelled(true);
     }
@@ -55,6 +63,18 @@ public final class WardrobeItem implements Mytem {
 
     @Override
     public void onPlayerDrop(PlayerDropItemEvent event, Player player, ItemStack item) {
+        event.getItemDrop().remove();
+    }
+
+    @Override
+    public void onEntityPickup(EntityPickupItemEvent event, ItemStack item) {
         event.setCancelled(true);
+        event.getItem().remove();
+    }
+
+    @Override
+    public void onInventoryPickup(InventoryPickupItemEvent event, ItemStack item) {
+        event.setCancelled(true);
+        event.getItem().remove();
     }
 }

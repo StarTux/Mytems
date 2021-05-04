@@ -6,9 +6,12 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
+import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -36,6 +39,8 @@ public interface Mytem {
 
     default void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) { }
 
+    default void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player, ItemStack item) { }
+
     default void onPlayerFallDamage(EntityDamageEvent event, Player player, ItemStack item) { }
 
     default void onPlayerShootBow(EntityShootBowEvent event, Player player, ItemStack item) { }
@@ -47,6 +52,10 @@ public interface Mytem {
     default void onConsume(PlayerItemConsumeEvent event, Player player, ItemStack item) { }
 
     default void onPlayerDrop(PlayerDropItemEvent event, Player player, ItemStack item) { }
+
+    default void onEntityPickup(EntityPickupItemEvent event, ItemStack item) { }
+
+    default void onInventoryPickup(InventoryPickupItemEvent event, ItemStack item) { }
 
     default Set<MytemPersistenceFlag> getMytemPersistenceFlags() {
         return MytemPersistenceFlag.NONE;
