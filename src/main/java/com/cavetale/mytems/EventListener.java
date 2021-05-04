@@ -16,6 +16,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Skull;
+import org.bukkit.enchantments.Enchantment;
+import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -23,6 +25,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
@@ -31,6 +34,7 @@ import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
+import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -40,6 +44,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -81,22 +86,63 @@ public final class EventListener implements Listener {
     }
 
     /**
-     * Mytems cannot be used on a grindstone or enchanted.
+     * Mytems cannot be used on a grindstone, enchanted (with books)
+     * or renamed, depending on their mytem persistence flags.
      */
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.NORMAL)
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     void onPrepareResult(PrepareResultEvent event) {
         ItemStack item = event.getResult();
-        if (item == null) return;
-        String id = ItemMarker.getId(item);
-        if (id == null) return;
-        Mytems key = Mytems.forId(id);
-        if (key == null) return;
+        Mytems mytems = Mytems.forItem(item);
+        if (mytems == null) return;
         switch (event.getView().getType()) {
         case GRINDSTONE:
-            event.setResult(null);
+            if (!mytems.getMytem().getMytemPersistenceFlags().contains(MytemPersistenceFlag.ENCHANTMENTS)) {
+                event.setResult(null);
+            }
             break;
+        case ANVIL: {
+            AnvilInventory inv = (AnvilInventory) event.getInventory();
+            if (inv.getRenameText() != null) {
+                if (!mytems.getMytem().getMytemPersistenceFlags().contains(MytemPersistenceFlag.DISPLAY_NAME)) {
+                    event.setResult(null);
+                }
+            } else {
+                if (!mytems.getMytem().getMytemPersistenceFlags().contains(MytemPersistenceFlag.ENCHANTMENTS)) {
+                    event.setResult(null);
+                }
+            }
+            break;
+        }
         default:
             break;
+        }
+    }
+
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    void onPrepareItemEnchant(PrepareItemEnchantEvent event) {
+        ItemStack item = event.getItem();
+        Mytems mytems = Mytems.forItem(item);
+        if (mytems == null) return;
+        if (!mytems.getMytem().getMytemPersistenceFlags().contains(MytemPersistenceFlag.ENCHANTMENTS)) {
+            for (EnchantmentOffer offer : event.getOffers()) {
+                offer.setCost(9999);
+                offer.setEnchantment(Enchantment.VANISHING_CURSE);
+                offer.setEnchantmentLevel(1);
+            }
+        }
+    }
+
+    /**
+     * Mytems should not be wasted in regular recipes.
+     */
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
+    void onPrepareItemCraft(PrepareItemCraftEvent event) {
+        for (ItemStack item : event.getInventory().getMatrix()) {
+            Mytems mytems = Mytems.forItem(item);
+            if (mytems != null) {
+                event.getInventory().setResult(null);
+                return;
+            }
         }
     }
 
