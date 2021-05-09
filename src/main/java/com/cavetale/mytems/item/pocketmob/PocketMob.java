@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -65,6 +66,11 @@ public final class PocketMob implements Mytem, Listener {
         if (delegate != null) {
             delegate.onPlayerRightClick(this, event, player, item);
         }
+    }
+
+    @Override
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player, ItemStack item) {
+        event.setCancelled(true);
     }
 
     public String getEntityTypeName() {
