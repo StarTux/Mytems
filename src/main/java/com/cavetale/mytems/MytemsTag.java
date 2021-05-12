@@ -53,12 +53,24 @@ public enum MytemsTag {
                Mytems.POCKET_ZOMBIFIED_PIGLIN),
     MOB_CATCHER(Mytems.MOB_CATCHER, Mytems.MONSTER_CATCHER, Mytems.ANIMAL_CATCHER,
                 Mytems.VILLAGER_CATCHER, Mytems.FISH_CATCHER, Mytems.PET_CATCHER),
+    ITEM_SETS(MytemsTag.ACULA, MytemsTag.SANTA, MytemsTag.DUNE, MytemsTag.SWAMPY,
+              MytemsTag.DWARVEN, MytemsTag.EASTER),
     ENEMY(Mytems.KOBOLD_HEAD);
 
     private final EnumSet<Mytems> set;
 
-    MytemsTag(final Mytems mytems, final Mytems... mytems2) {
-        set = EnumSet.of(mytems, mytems2);
+    MytemsTag(final Enum... enums) {
+        EnumSet<Mytems> theSet = EnumSet.noneOf(Mytems.class);
+        for (Enum e : enums) {
+            if (e instanceof Mytems) {
+                theSet.add((Mytems) e);
+            } else if (e instanceof MytemsTag) {
+                theSet.addAll(((MytemsTag) e).set);
+            } else {
+                throw new IllegalArgumentException("Invlid enum: " + e.getClass().getName() + "." + e.name());
+            }
+        }
+        set = theSet;
     }
 
     public boolean isTagged(Mytems mytems) {
