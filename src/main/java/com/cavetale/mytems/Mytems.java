@@ -16,6 +16,7 @@ import com.cavetale.mytems.item.acula.DrAculaStaff;
 import com.cavetale.mytems.item.acula.FlameShield;
 import com.cavetale.mytems.item.acula.GhastBow;
 import com.cavetale.mytems.item.acula.Stompers;
+import com.cavetale.mytems.item.captain.CaptainsCutlass;
 import com.cavetale.mytems.item.dune.DuneItem;
 import com.cavetale.mytems.item.dwarven.DwarvenItem;
 import com.cavetale.mytems.item.easter.EasterEgg;
@@ -201,6 +202,7 @@ public enum Mytems {
     VILLAGER_CATCHER(MobCatcher::new, Material.EGG, 908305),
     FISH_CATCHER(MobCatcher::new, Material.EGG, 908306),
     PET_CATCHER(MobCatcher::new, Material.EGG, 908307),
+    CAPTAINS_CUTLASS(CaptainsCutlass::new, Material.WOODEN_SWORD, 2, '\uE239'),
     // Enemy
     KOBOLD_HEAD(DummyMytem::new, Material.GREEN_CONCRETE, 1);
 

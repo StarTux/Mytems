@@ -55,6 +55,7 @@ public enum MytemsTag {
                 Mytems.VILLAGER_CATCHER, Mytems.FISH_CATCHER, Mytems.PET_CATCHER),
     ITEM_SETS(MytemsTag.ACULA, MytemsTag.SANTA, MytemsTag.DUNE, MytemsTag.SWAMPY,
               MytemsTag.DWARVEN, MytemsTag.EASTER),
+    EQUIPMENT(MytemsTag.ITEM_SETS, Mytems.CAPTAINS_CUTLASS),
     ENEMY(Mytems.KOBOLD_HEAD);
 
     private final EnumSet<Mytems> set;

@@ -27,6 +27,7 @@ import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
@@ -165,6 +166,16 @@ public final class EventListener implements Listener {
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.HIGH)
     void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+        if (event.getDamager() instanceof Player) {
+            if (event.getCause() == DamageCause.ENTITY_ATTACK) {
+                Player player = (Player) event.getDamager();
+                ItemStack hand = player.getInventory().getItemInMainHand();
+                Mytems mytems = Mytems.forItem(hand);
+                if (mytems != null) {
+                    mytems.getMytem().onDamageEntity(event, player, hand);
+                }
+            }
+        }
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {

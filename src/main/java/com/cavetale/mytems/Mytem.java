@@ -5,6 +5,7 @@ import java.util.Set;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
@@ -56,6 +57,8 @@ public interface Mytem {
     default void onEntityPickup(EntityPickupItemEvent event, ItemStack item) { }
 
     default void onInventoryPickup(InventoryPickupItemEvent event, ItemStack item) { }
+
+    default void onDamageEntity(EntityDamageByEntityEvent event, Player player, ItemStack item) { }
 
     default Set<MytemPersistenceFlag> getMytemPersistenceFlags() {
         return MytemPersistenceFlag.NONE;
