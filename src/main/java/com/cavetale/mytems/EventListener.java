@@ -204,6 +204,14 @@ public final class EventListener implements Listener {
 
     @EventHandler
     void onPlayerArmorChange(PlayerArmorChangeEvent event) {
+        Mytems oldMytems = Mytems.forItem(event.getOldItem());
+        if (oldMytems != null) {
+            oldMytems.getMytem().onPlayerArmorRemove(event, event.getPlayer(), event.getOldItem());
+        }
+        Mytems newMytems = Mytems.forItem(event.getNewItem());
+        if (newMytems != null) {
+            newMytems.getMytem().onPlayerArmorEquip(event, event.getPlayer(), event.getNewItem());
+        }
         plugin.sessions.of(event.getPlayer()).equipmentDidChange();
     }
 

@@ -5,6 +5,7 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Text;
+import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import java.awt.Color;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -141,5 +142,20 @@ public final class MagicCape implements Mytem {
     public void onEnd(Player player) {
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PHANTOM_FLAP, SoundCategory.PLAYERS, 2.0f, 1.0f);
         return;
+    }
+
+    @Override
+    public void onPlayerArmorEquip(PlayerArmorChangeEvent event, Player player, ItemStack item) {
+        if (player.isGliding()) player.setGliding(false);
+    }
+
+    @Override
+    public void onPlayerArmorRemove(PlayerArmorChangeEvent event, Player player, ItemStack item) {
+        if (player.isFlying()) {
+            Session session = MytemsPlugin.getInstance().getSessions().of(player);
+            if (session.getFlying().isFlying()) {
+                session.getFlying().stopFlying(player);
+            }
+        }
     }
 }

@@ -1,6 +1,7 @@
 package com.cavetale.mytems;
 
 import com.cavetale.mytems.util.Json;
+import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import java.util.Set;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
@@ -59,6 +60,10 @@ public interface Mytem {
     default void onInventoryPickup(InventoryPickupItemEvent event, ItemStack item) { }
 
     default void onDamageEntity(EntityDamageByEntityEvent event, Player player, ItemStack item) { }
+
+    default void onPlayerArmorRemove(PlayerArmorChangeEvent event, Player player, ItemStack item) { }
+
+    default void onPlayerArmorEquip(PlayerArmorChangeEvent event, Player player, ItemStack item) { }
 
     default Set<MytemPersistenceFlag> getMytemPersistenceFlags() {
         return MytemPersistenceFlag.NONE;

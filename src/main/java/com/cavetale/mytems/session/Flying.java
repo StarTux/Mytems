@@ -61,7 +61,7 @@ public final  class Flying {
         }
     }
 
-    private void stopFlying(Player player) {
+    public void stopFlying(Player player) {
         flyingTicks = 0;
         flyEndTask = null;
         flyTickTask = null;
@@ -87,5 +87,9 @@ public final  class Flying {
         flyTime = 0;
         player.setFlySpeed(0.1f);
         if (allowed) resetAllow();
+    }
+
+    public boolean isFlying() {
+        return flyingTicks > 0;
     }
 }
