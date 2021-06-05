@@ -66,8 +66,12 @@ public final class CaptainsCutlass implements Mytem {
         if (player.getAttackCooldown() >= 1.0f) {
             if (!(event.getEntity() instanceof LivingEntity)) return;
             LivingEntity target = (LivingEntity) event.getEntity();
-            Vector velo = target.getLocation().subtract(player.getLocation()).toVector().normalize()
-                .multiply(player.isSprinting() ? 3.0 : 2.0);
+            Vector velo = target.getLocation().subtract(player.getLocation()).toVector().normalize();
+            if (velo.getY() < 0.25) {
+                // y = max(y, 0.25), not perfect but good enough
+                velo = velo.setY(0.25).normalize();
+            }
+            velo = velo.multiply(player.isSprinting() ? 4.0 : 3.0);
             target.setVelocity(target.getVelocity().add(velo));
             target.getWorld().playSound(target.getLocation(), Sound.ENTITY_ARMOR_STAND_BREAK, SoundCategory.PLAYERS, 1.0f, 0.75f);
             target.getWorld().spawnParticle(Particle.BLOCK_DUST, target.getLocation(), 24, .25, .25, .25, 0,
