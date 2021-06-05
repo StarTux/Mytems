@@ -87,6 +87,7 @@ public final class Blunderbuss implements Mytem {
                                                     true, // ignorePassableBlocks
                                                     0.0, // raySize
                                                     e -> !e.equals(player)); // filter
+        if (rayTraceResult == null) return false;
         playerLocation.getWorld().playSound(playerLocation,
                                             Sound.ENTITY_GENERIC_EXPLODE,
                                             SoundCategory.PLAYERS,
