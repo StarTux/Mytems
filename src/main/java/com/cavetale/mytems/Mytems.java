@@ -103,6 +103,7 @@ public enum Mytems {
     WHITE_BUNNY_EARS(WardrobeItem::new, Material.IRON_BOOTS, 3919001), // EPIC
     RED_LIGHTSABER(WardrobeItem::new, Material.END_ROD, 3919002),
     BLUE_LIGHTSABER(WardrobeItem::new, Material.END_ROD, 3919003),
+    PIRATE_HAT(WardrobeItem::new, Material.BLACK_DYE, 3919004),
     // Vote
     VOTE_CANDY(VoteCandy::new, Material.COOKIE, 9073001, '\uE21E'), // VOTE
     VOTE_FIREWORK(VoteFirework::new, Material.FIREWORK_ROCKET, 9073002, '\uE21F'),

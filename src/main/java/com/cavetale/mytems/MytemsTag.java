@@ -26,7 +26,7 @@ public enum MytemsTag {
             Mytems.CACTUS_BLOSSOM, Mytems.PIPE_WEED, Mytems.KINGS_PUMPKIN, Mytems.SPARK_SEED,
             Mytems.OASIS_WATER, Mytems.CLAMSHELL, Mytems.FROZEN_AMBER, Mytems.CLUMP_OF_MOSS,
             Mytems.FIRE_AMANITA),
-    PIRATE(Mytems.CAPTAINS_CUTLASS, Mytems.BLUNDERBUSS),
+    PIRATE(Mytems.CAPTAINS_CUTLASS, Mytems.BLUNDERBUSS, Mytems.PIRATE_HAT),
     ENDERBALL(Mytems.ENDERBALL),
     POCKET_MOB(Mytems.POCKET_BAT, Mytems.POCKET_BEE, Mytems.POCKET_BLAZE, Mytems.POCKET_CAT,
                Mytems.POCKET_CAVE_SPIDER, Mytems.POCKET_CHICKEN, Mytems.POCKET_COD,
@@ -56,7 +56,7 @@ public enum MytemsTag {
                 Mytems.VILLAGER_CATCHER, Mytems.FISH_CATCHER, Mytems.PET_CATCHER),
     ITEM_SETS(MytemsTag.ACULA, MytemsTag.SANTA, MytemsTag.DUNE, MytemsTag.SWAMPY,
               MytemsTag.DWARVEN, MytemsTag.EASTER),
-    EQUIPMENT(MytemsTag.ITEM_SETS, MytemsTag.PIRATE),
+    EQUIPMENT(MytemsTag.ITEM_SETS, Mytems.CAPTAINS_CUTLASS),
     ENEMY(Mytems.KOBOLD_HEAD);
 
     private final EnumSet<Mytems> set;
