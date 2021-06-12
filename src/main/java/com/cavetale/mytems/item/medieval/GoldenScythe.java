@@ -56,6 +56,7 @@ public final class GoldenScythe implements Mytem {
 
     @Override
     public void onBlockBreak(BlockBreakEvent event, Player player, ItemStack itemStack) {
+        if (event.isCancelled()) return;
         Block block = event.getBlock();
         if (!Tag.CROPS.isTagged(block.getType())) return;
         final int radius = 1;
