@@ -6,6 +6,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.ChatColor;
 
@@ -113,5 +115,38 @@ public final class Text {
             toks[i] = toCamelCase(toks[i]);
         }
         return String.join(glue, toks);
+    }
+
+    private static int clampRGB(int val) {
+        return Math.min(255, Math.max(0, val));
+    }
+
+    public static Component gradient(String name, TextColor... colors) {
+        if (colors == null) throw new IllegalArgumentException("colors = null");
+        final int len = name.length();
+        TextComponent.Builder comps = Component.text();
+        for (int i = 0; i < len; i += 1) {
+            String d = "" + name.charAt(i);
+            double percentage = (double) i / (double) (len - 1);
+            double colorPercentage = percentage * (double) (colors.length - 1);
+            int colorIndexA = (int) Math.floor(colorPercentage);
+            int colorIndexB = (int) Math.ceil(colorPercentage);
+            TextColor colorA = colors[colorIndexA];
+            TextColor colorB = colors[colorIndexB];
+            double percentageA = (double) colorIndexA / (double) (colors.length - 1);
+            double percentageB = (double) colorIndexB / (double) (colors.length - 1);
+            double progressAB = colorIndexA == colorIndexB
+                ? 0
+                : (percentage - percentageA) / (percentageB - percentageA);
+            double progressBA = 1.0 - progressAB;
+            double r = (double) colorA.red()   * progressBA + colorB.red()   * progressAB;
+            double g = (double) colorA.green() * progressBA + colorB.green() * progressAB;
+            double b = (double) colorA.blue()  * progressBA + colorB.blue()  * progressAB;
+            TextColor color = TextColor.color(clampRGB((int) Math.round(r)),
+                                              clampRGB((int) Math.round(g)),
+                                              clampRGB((int) Math.round(b)));
+            comps.append(Component.text(d, color));
+        }
+        return comps.build();
     }
 }

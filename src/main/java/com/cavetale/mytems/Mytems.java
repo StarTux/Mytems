@@ -16,13 +16,14 @@ import com.cavetale.mytems.item.acula.DrAculaStaff;
 import com.cavetale.mytems.item.acula.FlameShield;
 import com.cavetale.mytems.item.acula.GhastBow;
 import com.cavetale.mytems.item.acula.Stompers;
-import com.cavetale.mytems.item.captain.CaptainsCutlass;
 import com.cavetale.mytems.item.captain.Blunderbuss;
+import com.cavetale.mytems.item.captain.CaptainsCutlass;
 import com.cavetale.mytems.item.dune.DuneItem;
 import com.cavetale.mytems.item.dwarven.DwarvenItem;
 import com.cavetale.mytems.item.easter.EasterEgg;
 import com.cavetale.mytems.item.easter.EasterGear;
 import com.cavetale.mytems.item.easter.EasterToken;
+import com.cavetale.mytems.item.medieval.GoldenScythe;
 import com.cavetale.mytems.item.pocketmob.MobCatcher;
 import com.cavetale.mytems.item.pocketmob.PocketMob;
 import com.cavetale.mytems.item.santa.SantaBoots;
@@ -206,6 +207,7 @@ public enum Mytems {
     PET_CATCHER(MobCatcher::new, Material.EGG, 908307),
     CAPTAINS_CUTLASS(CaptainsCutlass::new, Material.WOODEN_SWORD, 2, '\uE239'),
     BLUNDERBUSS(Blunderbuss::new, Material.IRON_INGOT, 3, '\uE23A'),
+    GOLDEN_SCYTHE(GoldenScythe::new, Material.GOLDEN_HOE, 4, '\uE23B'),
     // Enemy
     KOBOLD_HEAD(DummyMytem::new, Material.GREEN_CONCRETE, 1);
 

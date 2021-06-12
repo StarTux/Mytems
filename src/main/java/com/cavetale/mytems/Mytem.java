@@ -5,6 +5,7 @@ import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import java.util.Set;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -48,6 +49,8 @@ public interface Mytem {
     default void onPlayerShootBow(EntityShootBowEvent event, Player player, ItemStack item) { }
 
     default void onBlockPlace(BlockPlaceEvent event, Player player, ItemStack item) { }
+
+    default void onBlockBreak(BlockBreakEvent event, Player player, ItemStack item) { }
 
     default void onToggleGlide(EntityToggleGlideEvent event, Player player, ItemStack item) { }
 
