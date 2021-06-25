@@ -47,6 +47,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
+/**
+ * List of all known Mytems.
+ * Unicode characters start at 0xE200.
+ */
 public enum Mytems {
     // Halloween 2020
     DR_ACULA_STAFF(DrAculaStaff::new, Material.NETHERITE_SWORD, 741302, '\uE220'),
@@ -85,6 +89,7 @@ public enum Mytems {
     DWARVEN_AXE(DwarvenItem.Weapon::new, Material.IRON_AXE, 7413405, '\uE233'),
     // Easter 2021
     EASTER_TOKEN(EasterToken::new, Material.PLAYER_HEAD, 345700, '\uE211'),
+    EASTER_EGG(DummyMytem::new, Material.EGG, 345715, '\uE23C'),
     BLUE_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345701, '\uE212'),
     GREEN_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345702, '\uE213'),
     ORANGE_EASTER_EGG(EasterEgg::new, Material.PLAYER_HEAD, 345703, '\uE214'),
@@ -209,7 +214,12 @@ public enum Mytems {
     BLUNDERBUSS(Blunderbuss::new, Material.IRON_INGOT, 3, '\uE23A'),
     GOLDEN_SCYTHE(GoldenScythe::new, Material.GOLDEN_HOE, 4, '\uE23B'),
     // Enemy
-    KOBOLD_HEAD(DummyMytem::new, Material.GREEN_CONCRETE, 1);
+    KOBOLD_HEAD(DummyMytem::new, Material.GREEN_CONCRETE, 1),
+    // Random
+    EARTH(DummyMytem::new, Material.ENDER_PEARL, 5, '\uE23D'),
+    RUBY(DummyMytem::new, Material.EMERALD, 6, '\uE23E');
+    // Next Unicode Character: \uE23F
+    // Next CustomModelData: 7
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;
