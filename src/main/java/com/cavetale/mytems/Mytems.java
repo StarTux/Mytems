@@ -217,9 +217,11 @@ public enum Mytems {
     KOBOLD_HEAD(DummyMytem::new, Material.GREEN_CONCRETE, 1),
     // Random
     EARTH(DummyMytem::new, Material.ENDER_PEARL, 5, '\uE23D'),
-    RUBY(DummyMytem::new, Material.EMERALD, 6, '\uE23E');
-    // Next Unicode Character: \uE23F
-    // Next CustomModelData: 7
+    RUBY(DummyMytem::new, Material.EMERALD, 6, '\uE23E'),
+    OK(DummyMytem::new, Material.BLUE_CONCRETE, 7, '\uE23F'),
+    NO(DummyMytem::new, Material.RED_CONCRETE, 8, '\uE240');
+    // Next Unicode Character: \uE241
+    // Next CustomModelData: 9
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;
