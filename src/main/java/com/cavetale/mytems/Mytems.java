@@ -63,6 +63,7 @@ public enum Mytems {
     MAGIC_CAPE(MagicCape::new, Material.ELYTRA, 7413006, '\uE238'),
     // Generic
     KITTY_COIN(KittyCoin::new, Material.PLAYER_HEAD, 7413001, '\uE200'),
+    RAINBOW_KITTY_COIN(KittyCoin::new, Material.PLAYER_HEAD, 7413007, '\uE243'),
     // Christmas 2020
     CHRISTMAS_TOKEN(ChristmasToken::new),
     SANTA_HAT(SantaHat::new, Material.PLAYER_HEAD, 7413101, '\uE221'),
@@ -218,10 +219,16 @@ public enum Mytems {
     // Random
     EARTH(DummyMytem::new, Material.ENDER_PEARL, 5, '\uE23D'),
     RUBY(DummyMytem::new, Material.EMERALD, 6, '\uE23E'),
+    // UI
     OK(DummyMytem::new, Material.BLUE_CONCRETE, 7, '\uE23F'),
-    NO(DummyMytem::new, Material.RED_CONCRETE, 8, '\uE240');
-    // Next Unicode Character: \uE241
-    // Next CustomModelData: 9
+    NO(DummyMytem::new, Material.RED_CONCRETE, 8, '\uE240'),
+    HEART(DummyMytem::new, Material.APPLE, 9, '\uE241'),
+    HALF_HEART(DummyMytem::new, Material.APPLE, 10, '\uE242'),
+    ARROW_RIGHT(DummyMytem::new, Material.ARROW, 11, '\uE244'),
+    ARROW_LEFT(DummyMytem::new, Material.ARROW, 12, '\uE245'),
+    EMPTY_HEART(DummyMytem::new, Material.APPLE, 13, '\uE246');
+    // Next Unicode Character: \uE247
+    // Next CustomModelData: 14
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;
