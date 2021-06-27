@@ -230,9 +230,10 @@ public enum Mytems {
     CHECKBOX(DummyMytem::new, Material.WHITE_CONCRETE, 14, '\uE247'),
     CHECKED_CHECKBOX(DummyMytem::new, Material.GREEN_CONCRETE, 15, '\uE248'),
     CROSSED_CHECKBOX(DummyMytem::new, Material.BARRIER, 16, '\uE249'),
-    QUESTION_MARK(DummyMytem::new, Material.BARRIER, 17, '\uE24A');
-    // Next Unicode Character: \uE24B
-    // Next CustomModelData: 18
+    QUESTION_MARK(DummyMytem::new, Material.BARRIER, 17, '\uE24A'),
+    STAR(DummyMytem::new, Material.NETHER_STAR, 18, '\uE24B');
+    // Next Unicode Character: 0xE24C
+    // Next CustomModelData: 19
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;
