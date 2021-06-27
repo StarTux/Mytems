@@ -226,9 +226,13 @@ public enum Mytems {
     HALF_HEART(DummyMytem::new, Material.APPLE, 10, '\uE242'),
     ARROW_RIGHT(DummyMytem::new, Material.ARROW, 11, '\uE244'),
     ARROW_LEFT(DummyMytem::new, Material.ARROW, 12, '\uE245'),
-    EMPTY_HEART(DummyMytem::new, Material.APPLE, 13, '\uE246');
-    // Next Unicode Character: \uE247
-    // Next CustomModelData: 14
+    EMPTY_HEART(DummyMytem::new, Material.APPLE, 13, '\uE246'),
+    CHECKBOX(DummyMytem::new, Material.WHITE_CONCRETE, 14, '\uE247'),
+    CHECKED_CHECKBOX(DummyMytem::new, Material.GREEN_CONCRETE, 15, '\uE248'),
+    CROSSED_CHECKBOX(DummyMytem::new, Material.BARRIER, 16, '\uE249'),
+    QUESTION_MARK(DummyMytem::new, Material.BARRIER, 17, '\uE24A');
+    // Next Unicode Character: \uE24B
+    // Next CustomModelData: 18
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;
