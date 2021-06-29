@@ -51,13 +51,17 @@ public enum MytemsTag {
                Mytems.POCKET_WITCH, Mytems.POCKET_WITHER, Mytems.POCKET_WITHER_SKELETON,
                Mytems.POCKET_WOLF, Mytems.POCKET_ZOGLIN, Mytems.POCKET_ZOMBIE,
                Mytems.POCKET_ZOMBIE_HORSE, Mytems.POCKET_ZOMBIE_VILLAGER,
-               Mytems.POCKET_ZOMBIFIED_PIGLIN),
+               Mytems.POCKET_ZOMBIFIED_PIGLIN, Mytems.POCKET_GOAT, Mytems.POCKET_AXOLOTL),
     MOB_CATCHER(Mytems.MOB_CATCHER, Mytems.MONSTER_CATCHER, Mytems.ANIMAL_CATCHER,
                 Mytems.VILLAGER_CATCHER, Mytems.FISH_CATCHER, Mytems.PET_CATCHER),
     ITEM_SETS(MytemsTag.ACULA, MytemsTag.SANTA, MytemsTag.DUNE, MytemsTag.SWAMPY,
               MytemsTag.DWARVEN, MytemsTag.EASTER),
     EQUIPMENT(MytemsTag.ITEM_SETS, Mytems.CAPTAINS_CUTLASS),
-    ENEMY(Mytems.KOBOLD_HEAD);
+    ENEMY(Mytems.KOBOLD_HEAD),
+    UI(Mytems.OK, Mytems.NO, Mytems.HEART, Mytems.HALF_HEART,
+       Mytems.ARROW_RIGHT, Mytems.ARROW_LEFT, Mytems.EMPTY_HEART,
+       Mytems.CHECKBOX, Mytems.CHECKED_CHECKBOX,
+       Mytems.CROSSED_CHECKBOX, Mytems.QUESTION_MARK, Mytems.STAR);
 
     private final EnumSet<Mytems> set;
 

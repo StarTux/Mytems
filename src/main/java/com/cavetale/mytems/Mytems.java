@@ -204,6 +204,8 @@ public enum Mytems {
     POCKET_ZOMBIE_HORSE(mytems -> new PocketMob(mytems, EntityType.ZOMBIE_HORSE), Material.ZOMBIE_HORSE_SPAWN_EGG, 908301),
     POCKET_ZOMBIE_VILLAGER(mytems -> new PocketMob(mytems, EntityType.ZOMBIE_VILLAGER), Material.ZOMBIE_VILLAGER_SPAWN_EGG, 908301),
     POCKET_ZOMBIFIED_PIGLIN(mytems -> new PocketMob(mytems, EntityType.ZOMBIFIED_PIGLIN), Material.ZOMBIFIED_PIGLIN_SPAWN_EGG, 908301),
+    POCKET_GOAT(mytems -> new PocketMob(mytems, EntityType.GOAT), Material.GOAT_SPAWN_EGG, 908301),
+    POCKET_AXOLOTL(mytems -> new PocketMob(mytems, EntityType.AXOLOTL), Material.AXOLOTL_SPAWN_EGG, 908301),
     // Mob Catcher
     MOB_CATCHER(MobCatcher::new, Material.EGG, 908302),
     MONSTER_CATCHER(MobCatcher::new, Material.EGG, 908303),
