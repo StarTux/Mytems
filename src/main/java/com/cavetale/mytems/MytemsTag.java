@@ -61,7 +61,8 @@ public enum MytemsTag {
     UI(Mytems.OK, Mytems.NO, Mytems.HEART, Mytems.HALF_HEART,
        Mytems.ARROW_RIGHT, Mytems.ARROW_LEFT, Mytems.EMPTY_HEART,
        Mytems.CHECKBOX, Mytems.CHECKED_CHECKBOX,
-       Mytems.CROSSED_CHECKBOX, Mytems.QUESTION_MARK, Mytems.STAR);
+       Mytems.CROSSED_CHECKBOX, Mytems.QUESTION_MARK, Mytems.STAR,
+       Mytems.EAGLE);
 
     private final EnumSet<Mytems> set;
 
