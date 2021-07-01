@@ -206,6 +206,7 @@ public enum Mytems {
     POCKET_ZOMBIFIED_PIGLIN(mytems -> new PocketMob(mytems, EntityType.ZOMBIFIED_PIGLIN), Material.ZOMBIFIED_PIGLIN_SPAWN_EGG, 908301),
     POCKET_GOAT(mytems -> new PocketMob(mytems, EntityType.GOAT), Material.GOAT_SPAWN_EGG, 908301),
     POCKET_AXOLOTL(mytems -> new PocketMob(mytems, EntityType.AXOLOTL), Material.AXOLOTL_SPAWN_EGG, 908301),
+    POCKET_GLOW_SQUID(mytems -> new PocketMob(mytems, EntityType.GLOW_SQUID), Material.GLOW_SQUID_SPAWN_EGG, 908301),
     // Mob Catcher
     MOB_CATCHER(MobCatcher::new, Material.EGG, 908302),
     MONSTER_CATCHER(MobCatcher::new, Material.EGG, 908303),
