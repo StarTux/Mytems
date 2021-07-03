@@ -1,5 +1,7 @@
 package com.cavetale.mytems;
 
+import com.cavetale.core.font.Emoji;
+import com.cavetale.core.font.GlyphPolicy;
 import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.session.Sessions;
@@ -10,6 +12,8 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
 import lombok.Getter;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Tag;
 import org.bukkit.block.ShulkerBox;
@@ -40,6 +44,13 @@ public final class MytemsPlugin extends JavaPlugin {
         fixAllPlayerInventoriesLater();
         sessions.enable();
         new MytemsBlockMarkerHook(this).enable();
+        for (Mytems it : Mytems.values()) {
+            if (it.component.equals(Component.empty())) continue;
+            String name = it.name().toLowerCase();
+            Component component = it.component
+                .hoverEvent(HoverEvent.showText(it.getMytem().getDisplayName()));
+            Emoji.addEmoji(name, component, GlyphPolicy.PUBLIC);
+        }
     }
 
     @Override
