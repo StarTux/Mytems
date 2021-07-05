@@ -13,7 +13,6 @@ import java.util.Objects;
 import java.util.function.Function;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.event.HoverEvent;
 import org.bukkit.Bukkit;
 import org.bukkit.Tag;
 import org.bukkit.block.ShulkerBox;
@@ -47,9 +46,8 @@ public final class MytemsPlugin extends JavaPlugin {
         for (Mytems it : Mytems.values()) {
             if (it.component.equals(Component.empty())) continue;
             String name = it.name().toLowerCase();
-            Component component = it.component
-                .hoverEvent(HoverEvent.showText(it.getMytem().getDisplayName()));
-            Emoji.addEmoji(name, component, GlyphPolicy.PUBLIC);
+            Emoji.addEmoji(name, it.component, it.getMytem().getDisplayName(),
+                           GlyphPolicy.PUBLIC);
         }
     }
 
