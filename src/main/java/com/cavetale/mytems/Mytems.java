@@ -208,12 +208,12 @@ public enum Mytems {
     POCKET_AXOLOTL(mytems -> new PocketMob(mytems, EntityType.AXOLOTL), Material.AXOLOTL_SPAWN_EGG, 908301),
     POCKET_GLOW_SQUID(mytems -> new PocketMob(mytems, EntityType.GLOW_SQUID), Material.GLOW_SQUID_SPAWN_EGG, 908301),
     // Mob Catcher
-    MOB_CATCHER(MobCatcher::new, Material.EGG, 908302),
-    MONSTER_CATCHER(MobCatcher::new, Material.EGG, 908303),
-    ANIMAL_CATCHER(MobCatcher::new, Material.EGG, 908304),
-    VILLAGER_CATCHER(MobCatcher::new, Material.EGG, 908305),
-    FISH_CATCHER(MobCatcher::new, Material.EGG, 908306),
-    PET_CATCHER(MobCatcher::new, Material.EGG, 908307),
+    MOB_CATCHER(MobCatcher::new, Material.EGG, 908302, '\uE24E'),
+    MONSTER_CATCHER(MobCatcher::new, Material.EGG, 908303, '\uE24F'),
+    ANIMAL_CATCHER(MobCatcher::new, Material.EGG, 908304, '\uE250'),
+    VILLAGER_CATCHER(MobCatcher::new, Material.EGG, 908305, '\uE251'),
+    FISH_CATCHER(MobCatcher::new, Material.EGG, 908306, '\uE252'),
+    PET_CATCHER(MobCatcher::new, Material.EGG, 908307, '\uE253'),
     CAPTAINS_CUTLASS(CaptainsCutlass::new, Material.WOODEN_SWORD, 2, '\uE239'),
     BLUNDERBUSS(Blunderbuss::new, Material.IRON_INGOT, 3, '\uE23A'),
     GOLDEN_SCYTHE(GoldenScythe::new, Material.GOLDEN_HOE, 4, '\uE23B'),
@@ -236,7 +236,7 @@ public enum Mytems {
     QUESTION_MARK(DummyMytem::new, Material.BARRIER, 17, '\uE24A'),
     STAR(DummyMytem::new, Material.NETHER_STAR, 18, '\uE24B'),
     EAGLE(DummyMytem::new, Material.FEATHER, 19, '\uE24C');
-    // Next Unicode Character: 0xE24D
+    // Next Unicode Character: 0xE254
     // Next CustomModelData: 20
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
