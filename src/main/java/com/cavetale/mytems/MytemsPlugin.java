@@ -47,7 +47,7 @@ public final class MytemsPlugin extends JavaPlugin {
             if (it.component.equals(Component.empty())) continue;
             String name = it.name().toLowerCase();
             Emoji.addEmoji(name, it.component, it.getMytem().getDisplayName(),
-                           GlyphPolicy.PUBLIC);
+                           GlyphPolicy.PUBLIC, it);
         }
     }
 
