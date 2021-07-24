@@ -96,24 +96,24 @@ public final class Blunderbuss implements Mytem {
                                                     0.0, // raySize
                                                     e -> {
                                                         if (e.equals(player)) return false;
-                                                        if (e instanceof Player) {
-                                                            Player p = (Player) e;
-                                                            if (p.getGameMode() == GameMode.SPECTATOR) return false;
-                                                        }
+                                                        if (!(e instanceof Player)) return false;
+                                                        Player p = (Player) e;
+                                                        if (p.getGameMode() == GameMode.SPECTATOR) return false;
+                                                        if (p.getGameMode() == GameMode.CREATIVE) return false;
                                                         return true;
                                                     });
-        if (rayTraceResult == null) return true;
         playerLocation.getWorld().playSound(playerLocation,
                                             Sound.ENTITY_GENERIC_EXPLODE,
                                             SoundCategory.PLAYERS,
                                             1.0f, 2.0f);
-        Entity entity = rayTraceResult.getHitEntity();
         Location smokeLocation = eyeLocation.add(gunDirection.normalize());
         smokeLocation.getWorld().spawnParticle(Particle.SMOKE_NORMAL,
                                                smokeLocation,
                                                16, // count
                                                0.25, 0.25, 0.25, // offset
                                                0.01); // speed
+        if (rayTraceResult == null) return true;
+        Entity entity = rayTraceResult.getHitEntity();
         if (entity instanceof Player) {
             Player target = (Player) entity;
             if (target.getVehicle() != null) {
