@@ -21,8 +21,10 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -72,6 +74,13 @@ public final class Blunderbuss implements Mytem {
         boolean result = pullTheTrigger(player);
         if (result && Tags.getInt(item.getItemMeta().getPersistentDataContainer(), singleUseKey) != null) {
             item.subtract(1);
+        }
+    }
+
+    @Override
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player, ItemStack item) {
+        if (event.getRightClicked().getType() == EntityType.IRON_GOLEM) {
+            event.setCancelled(true);
         }
     }
 
