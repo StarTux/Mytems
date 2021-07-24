@@ -12,6 +12,7 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.ChatColor;
 import org.bukkit.FluidCollisionMode;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -86,7 +87,14 @@ public final class Blunderbuss implements Mytem {
                                                     FluidCollisionMode.NEVER,
                                                     true, // ignorePassableBlocks
                                                     0.0, // raySize
-                                                    e -> !e.equals(player)); // filter
+                                                    e -> {
+                                                        if (e.equals(player)) return false;
+                                                        if (e instanceof Player) {
+                                                            Player p = (Player) e;
+                                                            if (p.getGameMode() == GameMode.SPECTATOR) return false;
+                                                        }
+                                                        return true;
+                                                    });
         if (rayTraceResult == null) return false;
         playerLocation.getWorld().playSound(playerLocation,
                                             Sound.ENTITY_GENERIC_EXPLODE,
@@ -101,6 +109,9 @@ public final class Blunderbuss implements Mytem {
                                                0.01); // speed
         if (entity instanceof Player) {
             Player target = (Player) entity;
+            if (target.getVehicle() != null) {
+                target.getVehicle().removePassenger(target);
+            }
             target.setVelocity(target.getVelocity().add(gunDirection.normalize().multiply(3.0)));
             target.getWorld().spawnParticle(Particle.BLOCK_DUST, target.getLocation(), 24, .25, .25, .25, 0,
                                             Material.OAK_PLANKS.createBlockData());
