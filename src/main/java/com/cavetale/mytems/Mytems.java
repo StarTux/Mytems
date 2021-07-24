@@ -111,6 +111,7 @@ public enum Mytems {
     RED_LIGHTSABER(WardrobeItem::new, Material.END_ROD, 3919002),
     BLUE_LIGHTSABER(WardrobeItem::new, Material.END_ROD, 3919003),
     PIRATE_HAT(WardrobeItem::new, Material.BLACK_DYE, 3919004),
+    COWBOY_HAT(WardrobeItem::new, Material.BROWN_DYE, 3919005),
     // Vote
     VOTE_CANDY(VoteCandy::new, Material.COOKIE, 9073001, '\uE21E'), // VOTE
     VOTE_FIREWORK(VoteFirework::new, Material.FIREWORK_ROCKET, 9073002, '\uE21F'),
@@ -235,9 +236,10 @@ public enum Mytems {
     CROSSED_CHECKBOX(DummyMytem::new, Material.BARRIER, 16, '\uE249'),
     QUESTION_MARK(DummyMytem::new, Material.BARRIER, 17, '\uE24A'),
     STAR(DummyMytem::new, Material.NETHER_STAR, 18, '\uE24B'),
-    EAGLE(DummyMytem::new, Material.FEATHER, 19, '\uE24C');
-    // Next Unicode Character: 0xE254
-    // Next CustomModelData: 20
+    EAGLE(DummyMytem::new, Material.FEATHER, 19, '\uE24C'),
+    TONGUE_STICK_OUT(DummyMytem::new, Material.SLIME_BALL, 20, '\uE254');
+    // Next Unicode Character: 0xE255
+    // Next CustomModelData: 21
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;
