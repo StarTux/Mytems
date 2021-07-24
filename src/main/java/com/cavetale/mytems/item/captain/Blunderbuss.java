@@ -102,7 +102,7 @@ public final class Blunderbuss implements Mytem {
                                                         }
                                                         return true;
                                                     });
-        if (rayTraceResult == null) return false;
+        if (rayTraceResult == null) return true;
         playerLocation.getWorld().playSound(playerLocation,
                                             Sound.ENTITY_GENERIC_EXPLODE,
                                             SoundCategory.PLAYERS,
