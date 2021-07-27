@@ -123,15 +123,21 @@ public final class Blunderbuss implements Mytem {
                                                0.01); // speed
         if (rayTraceResult == null) return true;
         Entity entity = rayTraceResult.getHitEntity();
-        if (entity instanceof Player) {
-            Player target = (Player) entity;
-            if (target.getVehicle() != null) {
-                target.getVehicle().removePassenger(target);
-            }
-            target.setVelocity(target.getVelocity().add(gunDirection.normalize().multiply(3.0)));
-            target.getWorld().spawnParticle(Particle.BLOCK_DUST, target.getLocation(), 24, .25, .25, .25, 0,
-                                            Material.OAK_PLANKS.createBlockData());
+        if (entity instanceof Player) { // null check
+            boostHitEntity(entity, gunDirection);
         }
+        return true;
+    }
+
+    public boolean boostHitEntity(Entity target, Vector direction) {
+        Entity vehicle = target.getVehicle();
+        if (vehicle != null) {
+            if (vehicle.getType() == EntityType.ARMOR_STAND) return false;
+            vehicle.removePassenger(target);
+        }
+        target.setVelocity(target.getVelocity().add(direction.normalize().multiply(3.0)));
+        target.getWorld().spawnParticle(Particle.BLOCK_DUST, target.getLocation(), 24, .25, .25, .25, 0,
+                                        Material.OAK_PLANKS.createBlockData());
         return true;
     }
 }
