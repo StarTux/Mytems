@@ -237,9 +237,10 @@ public enum Mytems {
     QUESTION_MARK(DummyMytem::new, Material.BARRIER, 17, '\uE24A'),
     STAR(DummyMytem::new, Material.NETHER_STAR, 18, '\uE24B'),
     EAGLE(DummyMytem::new, Material.FEATHER, 19, '\uE24C'),
-    TONGUE_STICK_OUT(DummyMytem::new, Material.SLIME_BALL, 20, '\uE254');
-    // Next Unicode Character: 0xE255
-    // Next CustomModelData: 21
+    TONGUE_STICK_OUT(DummyMytem::new, Material.SLIME_BALL, 20, '\uE254'),
+    SURPRISED(DummyMytem::new, Material.SLIME_BALL, 21, '\uE255');
+    // Next Unicode Character: 0xE256
+    // Next CustomModelData: 22
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;
