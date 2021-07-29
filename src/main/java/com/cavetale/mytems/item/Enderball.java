@@ -1,12 +1,12 @@
 package com.cavetale.mytems.item;
 
+import com.cavetale.core.event.block.PlayerCanBuildEvent;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Text;
 import com.cavetale.worldmarker.block.BlockMarker;
 import com.cavetale.worldmarker.entity.EntityMarker;
-import com.winthier.generic_events.GenericEvents;
 import java.util.Iterator;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -125,7 +125,7 @@ public final class Enderball implements Mytem, Listener {
         if (block.getType() != Material.DRAGON_EGG) return;
         if (!BlockMarker.hasId(block, key.id)) return;
         event.setCancelled(true);
-        if (!GenericEvents.playerCanBuild(player, block)) return;
+        if (!PlayerCanBuildEvent.call(player, block)) return;
         boolean strong = player.isSprinting();
         double strength = strong ? 1.0 : 0.7;
         Location ballLocation = block.getLocation().add(0.5, 0.0, 0.5);
@@ -174,7 +174,7 @@ public final class Enderball implements Mytem, Listener {
     @Override
     public void onBlockPlace(BlockPlaceEvent event, Player player, ItemStack itemStack) {
         Block block = event.getBlock();
-        if (!GenericEvents.playerCanBuild(player, block)) return;
+        if (!PlayerCanBuildEvent.call(player, block)) return;
         BlockMarker.setId(block, key.id);
     }
 

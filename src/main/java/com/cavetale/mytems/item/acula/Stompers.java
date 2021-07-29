@@ -1,8 +1,8 @@
 package com.cavetale.mytems.item.acula;
 
+import com.cavetale.core.event.block.PlayerCanBuildEvent;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Text;
-import com.winthier.generic_events.GenericEvents;
 import java.util.ArrayList;
 import java.util.List;
 import org.bukkit.ChatColor;
@@ -75,7 +75,6 @@ public final class Stompers extends AculaItem {
                 if (((Tameable) entity).getOwner() instanceof Player) continue;
             }
             if (entity instanceof Player && !entity.getWorld().getPVP()) continue;
-            if (!GenericEvents.playerCanDamageEntity(player, entity)) continue;
             if (center.distanceSquared(entity.getLocation()) > rads) continue;
             targets.add(entity);
         }

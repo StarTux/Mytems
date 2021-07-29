@@ -1,11 +1,11 @@
 package com.cavetale.mytems.item;
 
+import com.cavetale.core.event.block.PlayerCanBuildEvent;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.worldmarker.block.BlockMarker;
 import com.cavetale.worldmarker.entity.EntityMarker;
-import com.winthier.generic_events.GenericEvents;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -89,7 +89,7 @@ public final class Toilet implements Mytem, Listener {
         event.setCancelled(true);
         final BlockFace facing;
         Block block = event.getBlock();
-        if (!GenericEvents.playerCanBuild(player, block)) return;
+        if (!PlayerCanBuildEvent.call(player, block)) return;
         Block against = event.getBlockAgainst();
         int dx = block.getX() - against.getX();
         int dz = block.getZ() - against.getZ();
@@ -193,7 +193,7 @@ public final class Toilet implements Mytem, Listener {
         Block block = event.getBlock();
         if (!BlockMarker.hasId(block, key.id)) return;
         Player player = event.getPlayer();
-        if (!GenericEvents.playerCanBuild(player, block)) return;
+        if (!PlayerCanBuildEvent.call(player, block)) return;
         event.setCancelled(true);
         disableSeat(block);
         BlockMarker.resetId(block);
