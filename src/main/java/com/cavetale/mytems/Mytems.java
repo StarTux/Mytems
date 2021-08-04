@@ -238,7 +238,6 @@ public enum Mytems {
     STAR(DummyMytem::new, Material.NETHER_STAR, 18, '\uE24B'),
     EAGLE(DummyMytem::new, Material.FEATHER, 19, '\uE24C'),
     // Reactions
-    TONGUE_STICK_OUT(DummyMytem::new, Material.SLIME_BALL, 20, '\uE254', Category.REACTION),
     SURPRISED(DummyMytem::new, Material.SLIME_BALL, 21, '\uE255', Category.REACTION),
     HAPPY(DummyMytem::new, Material.SLIME_BALL, 22, '\uE256', Category.REACTION),
     SOB(DummyMytem::new, Material.SLIME_BALL, 23, '\uE257', Category.REACTION),
