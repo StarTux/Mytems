@@ -237,10 +237,25 @@ public enum Mytems {
     QUESTION_MARK(DummyMytem::new, Material.BARRIER, 17, '\uE24A'),
     STAR(DummyMytem::new, Material.NETHER_STAR, 18, '\uE24B'),
     EAGLE(DummyMytem::new, Material.FEATHER, 19, '\uE24C'),
-    TONGUE_STICK_OUT(DummyMytem::new, Material.SLIME_BALL, 20, '\uE254'),
-    SURPRISED(DummyMytem::new, Material.SLIME_BALL, 21, '\uE255');
-    // Next Unicode Character: 0xE256
-    // Next CustomModelData: 22
+    // Reactions
+    TONGUE_STICK_OUT(DummyMytem::new, Material.SLIME_BALL, 20, '\uE254', Category.REACTION),
+    SURPRISED(DummyMytem::new, Material.SLIME_BALL, 21, '\uE255', Category.REACTION),
+    HAPPY(DummyMytem::new, Material.SLIME_BALL, 22, '\uE256', Category.REACTION),
+    SOB(DummyMytem::new, Material.SLIME_BALL, 23, '\uE257', Category.REACTION),
+    CRY(DummyMytem::new, Material.SLIME_BALL, 24, '\uE258', Category.REACTION),
+    COOL(DummyMytem::new, Material.SLIME_BALL, 25, '\uE259', Category.REACTION),
+    SMILE(DummyMytem::new, Material.SLIME_BALL, 26, '\uE25A', Category.REACTION),
+    SMILE_UPSIDE_DOWN(DummyMytem::new, Material.SLIME_BALL, 27, '\uE25B', Category.REACTION),
+    FROWN(DummyMytem::new, Material.SLIME_BALL, 28, '\uE25C', Category.REACTION),
+    SILLY(DummyMytem::new, Material.SLIME_BALL, 29, '\uE25D', Category.REACTION),
+    CLOWN(DummyMytem::new, Material.SLIME_BALL, 30, '\uE25E', Category.REACTION),
+    STARSTRUCK(DummyMytem::new, Material.SLIME_BALL, 31, '\uE25F', Category.REACTION),
+    LOVE_EYES(DummyMytem::new, Material.SLIME_BALL, 32, '\uE260', Category.REACTION),
+    WINK_SMILE(DummyMytem::new, Material.SLIME_BALL, 33, '\uE261', Category.REACTION),
+    MIND_BLOWN(DummyMytem::new, Material.SLIME_BALL, 34, '\uE262', Category.REACTION),
+    WINK(DummyMytem::new, Material.SLIME_BALL, 35, '\uE263', Category.REACTION);
+    // Next Unicode Character: 0xE264
+    // Next CustomModelData: 36
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;
@@ -249,6 +264,11 @@ public enum Mytems {
     public final Integer customModelData;
     public final char character;
     public final Component component;
+    public final Category category;
+
+    public enum Category {
+        REACTION;
+    }
 
     static {
         for (Mytems it : Mytems.values()) {
@@ -270,6 +290,7 @@ public enum Mytems {
         this.customModelData = null;
         this.character = (char) 0;
         this.component = Component.empty();
+        this.category = null;
     }
 
     Mytems(final Function<Mytems, Mytem> ctor, final Material material, final Integer customModelData) {
@@ -279,6 +300,7 @@ public enum Mytems {
         this.customModelData = customModelData;
         this.character = (char) 0;
         this.component = Component.empty();
+        this.category = null;
     }
 
     Mytems(final Function<Mytems, Mytem> ctor, final Material material, final Integer customModelData, final char character) {
@@ -289,6 +311,18 @@ public enum Mytems {
         this.character = character;
         this.component = Component.text(character)
             .style(Style.style().font(Key.key("cavetale:default")).color(TextColor.color(0xFFFFFF)));
+        this.category = null;
+    }
+
+    Mytems(final Function<Mytems, Mytem> ctor, final Material material, final Integer customModelData, final char character, final Category category) {
+        this.ctor = ctor;
+        this.id = name().toLowerCase();
+        this.material = material;
+        this.customModelData = customModelData;
+        this.character = character;
+        this.component = Component.text(character)
+            .style(Style.style().font(Key.key("cavetale:default")).color(TextColor.color(0xFFFFFF)));
+        this.category = category;
     }
 
     public static Mytems forId(String in) {

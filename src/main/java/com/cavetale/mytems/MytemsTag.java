@@ -59,11 +59,13 @@ public enum MytemsTag {
               MytemsTag.DWARVEN, MytemsTag.EASTER),
     EQUIPMENT(MytemsTag.ITEM_SETS, Mytems.CAPTAINS_CUTLASS),
     ENEMY(Mytems.KOBOLD_HEAD),
+    REACTION(Mytems.Category.REACTION),
     UI(Mytems.OK, Mytems.NO, Mytems.HEART, Mytems.HALF_HEART,
        Mytems.ARROW_RIGHT, Mytems.ARROW_LEFT, Mytems.EMPTY_HEART,
        Mytems.CHECKBOX, Mytems.CHECKED_CHECKBOX,
        Mytems.CROSSED_CHECKBOX, Mytems.QUESTION_MARK, Mytems.STAR,
-       Mytems.EAGLE);
+       Mytems.EAGLE,
+       MytemsTag.REACTION);
 
     private final EnumSet<Mytems> set;
 
@@ -74,6 +76,13 @@ public enum MytemsTag {
                 theSet.add((Mytems) e);
             } else if (e instanceof MytemsTag) {
                 theSet.addAll(((MytemsTag) e).set);
+            } else if (e instanceof Mytems.Category) {
+                Mytems.Category category = (Mytems.Category) e;
+                for (Mytems mytems : Mytems.values()) {
+                    if (mytems.category == category) {
+                        theSet.add(mytems);
+                    }
+                }
             } else {
                 throw new IllegalArgumentException("Invlid enum: " + e.getClass().getName() + "." + e.name());
             }
