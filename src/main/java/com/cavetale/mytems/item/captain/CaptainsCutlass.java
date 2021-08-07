@@ -62,7 +62,7 @@ public final class CaptainsCutlass implements Mytem {
     @Override
     public void onDamageEntity(EntityDamageByEntityEvent event, Player player, ItemStack item) {
         if (event.isCancelled()) return;
-        event.setDamage(1.0f);
+        event.setDamage(0);
         if (player.getAttackCooldown() < 1.0f) return;
         if (!(event.getEntity() instanceof LivingEntity)) return;
         LivingEntity target = (LivingEntity) event.getEntity();
