@@ -62,20 +62,19 @@ public final class CaptainsCutlass implements Mytem {
     @Override
     public void onDamageEntity(EntityDamageByEntityEvent event, Player player, ItemStack item) {
         if (event.isCancelled()) return;
-        event.setDamage(0);
-        if (player.getAttackCooldown() >= 1.0f) {
-            if (!(event.getEntity() instanceof LivingEntity)) return;
-            LivingEntity target = (LivingEntity) event.getEntity();
-            Vector velo = target.getLocation().subtract(player.getLocation()).toVector().normalize();
-            if (velo.getY() < 0.25) {
-                // y = max(y, 0.25), not perfect but good enough
-                velo = velo.setY(0.25).normalize();
-            }
-            velo = velo.multiply(player.isSprinting() ? 4.0 : 3.0);
-            target.setVelocity(target.getVelocity().add(velo));
-            target.getWorld().playSound(target.getLocation(), Sound.ENTITY_ARMOR_STAND_BREAK, SoundCategory.PLAYERS, 1.0f, 0.75f);
-            target.getWorld().spawnParticle(Particle.BLOCK_DUST, target.getLocation(), 24, .25, .25, .25, 0,
-                                            Material.OAK_PLANKS.createBlockData());
-        }
+        event.setDamage(1.0f);
+        if (player.getAttackCooldown() < 1.0f) return;
+        if (!(event.getEntity() instanceof LivingEntity)) return;
+        LivingEntity target = (LivingEntity) event.getEntity();
+        Vector velo = target.getLocation().subtract(player.getLocation()).toVector();
+        Vector horizontal = new Vector(velo.getX(), 0.0, velo.getZ());
+        if (horizontal.length() < 0.1) return;
+        horizontal = horizontal.normalize();
+        Vector vertical = new Vector(0.0, 0.25, 0.0);
+        Vector hit = horizontal.multiply(player.isSprinting() ? 4.0 : 3.0).add(vertical);
+        target.setVelocity(target.getVelocity().add(hit));
+        target.getWorld().playSound(target.getLocation(), Sound.ENTITY_ARMOR_STAND_BREAK, SoundCategory.PLAYERS, 1.0f, 0.75f);
+        target.getWorld().spawnParticle(Particle.BLOCK_DUST, target.getLocation(), 24, .25, .25, .25, 0,
+                                        Material.OAK_PLANKS.createBlockData());
     }
 }
