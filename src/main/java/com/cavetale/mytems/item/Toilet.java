@@ -150,8 +150,7 @@ public final class Toilet implements Mytem, Listener {
         Player player = event.getPlayer();
         if (player.isSneaking()) return;
         if (player.getGameMode() == GameMode.SPECTATOR) return;
-        if (player.getVehicle() != null) return;
-        if (!player.isOnGround()) return;
+        if (player.isInsideVehicle()) return;
         if (isOccupied(block)) return;
         if (!BlockMarker.hasId(block, key.id)) return;
         Location loc = block.getLocation().add(0.5, 0.5, 0.5);

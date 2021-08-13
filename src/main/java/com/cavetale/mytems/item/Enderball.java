@@ -84,7 +84,7 @@ public final class Enderball implements Mytem, Listener {
     void onEntityChangeBlock(EntityChangeBlockEvent event) {
         if (!(event.getEntity() instanceof FallingBlock)) return;
         FallingBlock fallingBlock = (FallingBlock) event.getEntity();
-        if (fallingBlock.getMaterial() != Material.DRAGON_EGG) return;
+        if (fallingBlock.getBlockData().getMaterial() != Material.DRAGON_EGG) return;
         Block block = event.getBlock();
         if (event.getTo().isEmpty()) {
             if (!BlockMarker.hasId(block, key.id)) return;
@@ -101,7 +101,7 @@ public final class Enderball implements Mytem, Listener {
     void onEntityDropItem(EntityDropItemEvent event) {
         if (!(event.getEntity() instanceof FallingBlock)) return;
         FallingBlock fallingBlock = (FallingBlock) event.getEntity();
-        if (fallingBlock.getMaterial() != Material.DRAGON_EGG) return;
+        if (fallingBlock.getBlockData().getMaterial() != Material.DRAGON_EGG) return;
         if (!EntityMarker.hasId(fallingBlock, key.id)) return;
         event.getItemDrop().setItemStack(createItemStack());
     }

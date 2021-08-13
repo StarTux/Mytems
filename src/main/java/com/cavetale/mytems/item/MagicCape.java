@@ -10,6 +10,7 @@ import java.awt.Color;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.ChatColor;
@@ -85,12 +86,12 @@ public final class MagicCape implements Mytem {
         if (!event.isGliding()) return;
         event.setCancelled(true);
         if (player.getLevel() == 0 && player.getExp() <= 0f) {
-            player.sendActionBar(ChatColor.DARK_RED + "Need exp!");
+            player.sendActionBar(Component.text("Need exp!", NamedTextColor.DARK_RED));
             player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.5f, 2.0f);
             return;
         }
         if (player.getFoodLevel() < 4) {
-            player.sendActionBar(ChatColor.DARK_RED + "Need food!");
+            player.sendActionBar(Component.text("Need food!", NamedTextColor.DARK_RED));
             player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.5f, 2.0f);
             return;
         }
@@ -98,7 +99,7 @@ public final class MagicCape implements Mytem {
         long cooldown = session.getCooldownInTicks(key.id);
         if (cooldown > 0) {
             long seconds = (cooldown - 1L) / 20L + 1;
-            player.sendActionBar(ChatColor.DARK_RED + "Cooldown " + seconds + "s");
+            player.sendActionBar(Component.text("Cooldown " + seconds + "s", NamedTextColor.DARK_RED));
             player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.5f, 2.0f);
             return;
         }

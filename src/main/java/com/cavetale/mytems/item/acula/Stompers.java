@@ -64,7 +64,7 @@ public final class Stompers extends AculaItem {
 
     @Override
     public void onPlayerFallDamage(EntityDamageEvent event, Player player, ItemStack item) {
-        double dmg = event.getDamage(EntityDamageEvent.DamageModifier.BASE);
+        double dmg = event.getDamage();
         List<Damageable> targets = new ArrayList<>();
         Location center = player.getLocation();
         double rads = radius * radius;

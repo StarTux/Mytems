@@ -6,6 +6,8 @@ import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Text;
 import com.cavetale.worldmarker.entity.EntityMarker;
 import java.util.UUID;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -66,13 +68,13 @@ public final class DrAculaStaff extends AculaItem {
         long cooldown = session.getCooldownInTicks(key.id);
         if (cooldown > 0) {
             long seconds = (cooldown - 1L) / 20L + 1;
-            player.sendActionBar(ChatColor.DARK_RED + "Cooldown " + seconds + "s");
+            player.sendActionBar(Component.text("Cooldown " + seconds + "s", NamedTextColor.DARK_RED));
             player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.5f, 2.0f);
             return;
         }
         PotionEffect effect = player.getPotionEffect(PotionEffectType.INVISIBILITY);
         if (effect != null && effect.getDuration() >= durationSeconds * 20) {
-            player.sendActionBar(ChatColor.DARK_RED + "Already invisible!");
+            player.sendActionBar(Component.text("Already invisible!", NamedTextColor.DARK_RED));
             player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, SoundCategory.MASTER, 0.5f, 2.0f);
             return;
         }

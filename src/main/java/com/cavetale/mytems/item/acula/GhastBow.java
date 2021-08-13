@@ -63,7 +63,7 @@ public final class GhastBow extends AculaItem {
             projectile = player.launchProjectile(LargeFireball.class);
         }
         if (projectile == null) return;
-        event.setConsumeArrow(false);
+        event.setConsumeItem(false);
         event.setProjectile(projectile);
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GHAST_SHOOT, SoundCategory.PLAYERS, 0.5f, 1.25f);
         player.getWorld().spawnParticle(Particle.FLAME, player.getEyeLocation(), 8, 0.25, 0.25, 0.25, 0.0);

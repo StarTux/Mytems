@@ -193,7 +193,7 @@ public abstract class DuneItem implements GearItem {
                 final boolean onSand;
                 long now = System.currentTimeMillis();
                 Favorite favorite = MytemsPlugin.getInstance().getSessions().of(player).getFavorites().getOrSet(Favorite.class, Favorite::new);
-                if (player.isOnGround() && player.getLocation().add(0, -0.125, 0).getBlock().getType() == Material.SAND) {
+                if (player.getLocation().add(0, -0.125, 0).getBlock().getType() == Material.SAND) {
                     onSand = true;
                     favorite.onSandUntil = now + 1000L;
                     favorite.onSand = true;

@@ -81,7 +81,7 @@ public final class PocketMob implements Mytem, Listener {
     public String serializeTag(ItemStack itemStack) {
         PocketMobTag tag = new PocketMobTag();
         tag.load(itemStack, this);
-        return tag.isEmpty() ? null : Json.simplified(tag);
+        return tag.isEmpty() ? null : Json.serialize(tag);
     }
 
     @Override

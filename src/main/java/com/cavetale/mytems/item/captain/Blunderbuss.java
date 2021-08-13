@@ -9,9 +9,9 @@ import com.cavetale.worldmarker.util.Tags;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.ChatColor;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -89,7 +89,7 @@ public final class Blunderbuss implements Mytem {
         long cooldown = session.getCooldownInTicks(key.id);
         if (cooldown > 0) {
             long seconds = (cooldown - 1L) / 20L + 1;
-            player.sendActionBar(ChatColor.DARK_RED + "Cooldown " + seconds + "s");
+            player.sendActionBar(Component.text("Cooldown " + seconds + "s", NamedTextColor.DARK_RED));
             player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.5f, 2.0f);
             return false;
         }

@@ -54,7 +54,7 @@ public final class VoteFirework extends VoteItem implements Listener {
 
     @Override
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack itemStack) {
-        if (event.isCancelled() || event.useItemInHand() == Event.Result.DENY) return;
+        if (event.useItemInHand() == Event.Result.DENY) return;
         fireworkUser = event.getPlayer().getUniqueId();
     }
 

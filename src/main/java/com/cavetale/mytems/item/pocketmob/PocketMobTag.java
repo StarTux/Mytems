@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -19,7 +20,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 /**
  * The data stored in a PocketMob item.
  */
-@Data
+@Data @EqualsAndHashCode(callSuper = true)
 public final class PocketMobTag extends MytemTag {
     public static final NamespacedKey KEY_MOB_TAG = NamespacedKey.fromString("pocketmob:mob_tag");
     protected String mobTag;
@@ -69,7 +70,9 @@ public final class PocketMobTag extends MytemTag {
     public Map<String, Object> parseMobTag() {
         if (mobTag == null) return new HashMap<>();
         try {
-            return (Map<String, Object>) Json.deserialize(mobTag, Map.class);
+            @SuppressWarnings("unchecked")
+            Map<String, Object> result = (Map<String, Object>) Json.deserialize(mobTag, Map.class);
+            return result;
         } catch (Exception e) {
             e.printStackTrace();
             return new HashMap<>();

@@ -79,7 +79,7 @@ public interface Mytem {
     default String serializeTag(ItemStack itemStack) {
         MytemTag tag = new MytemTag();
         tag.load(itemStack, getMytemPersistenceFlags());
-        return tag.isEmpty() ? null : Json.simplified(tag);
+        return tag.isEmpty() ? null : Json.serialize(tag);
     }
 
     /**

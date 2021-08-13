@@ -178,7 +178,7 @@ public abstract class SwampyItem implements GearItem {
                                                         effect.getAmplifier(),
                                                         effect.isAmbient(),
                                                         effect.hasParticles(),
-                                                        effect.hasIcon()), true);
+                                                        effect.hasIcon()));
             }
         }
 

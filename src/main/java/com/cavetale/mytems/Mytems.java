@@ -350,6 +350,13 @@ public enum Mytems {
             : id;
     }
 
+    public static String serializeMytem(ItemStack item) {
+        Mytems mytems = Mytems.forItem(item);
+        return mytems != null
+            ? mytems.serializeItem(item)
+            : null;
+    }
+
     public static ItemStack deserializeItem(String serialized) {
         int index = serialized.indexOf("{");
         String id = index >= 0 ? serialized.substring(0, index) : serialized;
