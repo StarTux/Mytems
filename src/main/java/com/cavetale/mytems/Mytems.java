@@ -7,6 +7,7 @@ import com.cavetale.mytems.item.Ingredient;
 import com.cavetale.mytems.item.KittyCoin;
 import com.cavetale.mytems.item.MagicCape;
 import com.cavetale.mytems.item.MagicMap;
+import com.cavetale.mytems.item.Ocarina;
 import com.cavetale.mytems.item.Toilet;
 import com.cavetale.mytems.item.UnicornHorn;
 import com.cavetale.mytems.item.WardrobeItem;
@@ -218,6 +219,7 @@ public enum Mytems {
     CAPTAINS_CUTLASS(CaptainsCutlass::new, Material.WOODEN_SWORD, 2, '\uE239'),
     BLUNDERBUSS(Blunderbuss::new, Material.IRON_INGOT, 3, '\uE23A'),
     GOLDEN_SCYTHE(GoldenScythe::new, Material.GOLDEN_HOE, 4, '\uE23B'),
+    OCARINA_OF_CHIME(Ocarina::new, Material.NAUTILUS_SHELL, 36, '\uE264'),
     // Enemy
     KOBOLD_HEAD(DummyMytem::new, Material.GREEN_CONCRETE, 1),
     // Random
@@ -230,6 +232,8 @@ public enum Mytems {
     HALF_HEART(DummyMytem::new, Material.APPLE, 10, '\uE242'),
     ARROW_RIGHT(DummyMytem::new, Material.ARROW, 11, '\uE244'),
     ARROW_LEFT(DummyMytem::new, Material.ARROW, 12, '\uE245'),
+    ARROW_UP(DummyMytem::new, Material.ARROW, 37, '\uE265'),
+    ARROW_DOWN(DummyMytem::new, Material.ARROW, 38, '\uE266'),
     EMPTY_HEART(DummyMytem::new, Material.APPLE, 13, '\uE246'),
     CHECKBOX(DummyMytem::new, Material.WHITE_CONCRETE, 14, '\uE247'),
     CHECKED_CHECKBOX(DummyMytem::new, Material.GREEN_CONCRETE, 15, '\uE248'),
@@ -253,8 +257,8 @@ public enum Mytems {
     WINK_SMILE(DummyMytem::new, Material.SLIME_BALL, 33, '\uE261', Category.REACTION),
     MIND_BLOWN(DummyMytem::new, Material.SLIME_BALL, 34, '\uE262', Category.REACTION),
     WINK(DummyMytem::new, Material.SLIME_BALL, 35, '\uE263', Category.REACTION);
-    // Next Unicode Character: 0xE264
-    // Next CustomModelData: 36
+    // Next Unicode Character: 0xE267
+    // Next CustomModelData: 39
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;

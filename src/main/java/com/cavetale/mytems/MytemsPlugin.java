@@ -5,6 +5,7 @@ import com.cavetale.core.font.GlyphPolicy;
 import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.session.Sessions;
+import com.cavetale.mytems.util.Gui;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
@@ -42,6 +43,7 @@ public final class MytemsPlugin extends JavaPlugin {
         enableItems();
         fixAllPlayerInventoriesLater();
         sessions.enable();
+        Gui.enable();
         new MytemsBlockMarkerHook(this).enable();
         for (Mytems it : Mytems.values()) {
             if (it.component.equals(Component.empty())) continue;

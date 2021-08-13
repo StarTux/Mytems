@@ -14,4 +14,8 @@ public final class Favorites {
         map.put(clz, result);
         return result;
     }
+
+    public void clear(Class<?> clz) {
+        map.remove(clz);
+    }
 }
