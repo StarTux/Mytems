@@ -163,10 +163,6 @@ public final class Ocarina implements Mytem {
                     Location particleLoc = player.getEyeLocation();
                     particleLoc.add(particleLoc.getDirection().normalize().multiply(0.5));
                     particleLoc.getWorld().spawnParticle(Particle.NOTE, particleLoc, 1, 0.125, 0.125, 0.125, 0.0);
-                    player.sendMessage(Component.text()
-                                       .append(displayName)
-                                       .append(Component.space())
-                                       .append(Component.text(toString(note), NamedTextColor.WHITE)));
                     if (isMelody) {
                         Session session = MytemsPlugin.getInstance().getSessions().of(player).getFavorites()
                             .getOrSet(Session.class, Session::new);
