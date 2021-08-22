@@ -40,8 +40,8 @@ import java.util.Map;
 import java.util.function.Function;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -296,7 +296,8 @@ public enum Mytems {
         UI,
         UTILITY,
         VOTE,
-        WARDROBE;
+        WARDROBE,
+        UNKNOWN;
     }
 
     static {
@@ -312,56 +313,35 @@ public enum Mytems {
         ID_MAP.put("vote:firework", VOTE_FIREWORK); // legacy
     }
 
-    Mytems(final Function<Mytems, Mytem> ctor) {
-        this.ctor = ctor;
-        this.id = name().toLowerCase();
-        this.material = null;
-        this.customModelData = null;
-        this.character = (char) 0;
-        this.component = Component.empty();
-        this.category = null;
-    }
-
-    Mytems(final Function<Mytems, Mytem> ctor, final Category category) {
-        this.ctor = ctor;
-        this.id = name().toLowerCase();
-        this.material = null;
-        this.customModelData = null;
-        this.character = (char) 0;
-        this.component = Component.empty();
-        this.category = category;
-    }
-
-    Mytems(final Function<Mytems, Mytem> ctor, final Material material, final Integer customModelData) {
-        this.ctor = ctor;
-        this.id = name().toLowerCase();
-        this.material = material;
-        this.customModelData = customModelData;
-        this.character = (char) 0;
-        this.component = Component.empty();
-        this.category = null;
-    }
-
-    Mytems(final Function<Mytems, Mytem> ctor, final Material material, final Integer customModelData, final char character) {
-        this.ctor = ctor;
-        this.id = name().toLowerCase();
-        this.material = material;
-        this.customModelData = customModelData;
-        this.character = character;
-        this.component = Component.text(character)
-            .style(Style.style().font(Key.key("cavetale:default")).color(TextColor.color(0xFFFFFF)));
-        this.category = null;
-    }
-
     Mytems(final Function<Mytems, Mytem> ctor, final Material material, final Integer customModelData, final char character, final Category category) {
         this.ctor = ctor;
         this.id = name().toLowerCase();
         this.material = material;
         this.customModelData = customModelData;
         this.character = character;
-        this.component = Component.text(character)
-            .style(Style.style().font(Key.key("cavetale:default")).color(TextColor.color(0xFFFFFF)));
+        this.component = character > 0
+            ? (Component.text(character)
+               .style(Style.style()
+                      .font(Key.key("cavetale:default"))
+                      .color(NamedTextColor.WHITE)))
+            : Component.empty();
         this.category = category;
+    }
+
+    Mytems(final Function<Mytems, Mytem> ctor, final Material material, final Integer customModelData, final char character) {
+        this(ctor, material, customModelData, character, Category.UNKNOWN);
+    }
+
+    Mytems(final Function<Mytems, Mytem> ctor, final Material material, final Integer customModelData) {
+        this(ctor, material, customModelData, (char) 0, Category.UNKNOWN);
+    }
+
+    Mytems(final Function<Mytems, Mytem> ctor, final Category category) {
+        this(ctor, (Material) null, (Integer) null, (char) 0, Category.UNKNOWN);
+    }
+
+    Mytems(final Function<Mytems, Mytem> ctor) {
+        this(ctor, (Material) null, (Integer) null, (char) 0, Category.UNKNOWN);
     }
 
     public static Mytems forId(String in) {
