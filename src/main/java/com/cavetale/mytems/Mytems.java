@@ -7,7 +7,6 @@ import com.cavetale.mytems.item.Ingredient;
 import com.cavetale.mytems.item.KittyCoin;
 import com.cavetale.mytems.item.MagicCape;
 import com.cavetale.mytems.item.MagicMap;
-import com.cavetale.mytems.item.Ocarina;
 import com.cavetale.mytems.item.Toilet;
 import com.cavetale.mytems.item.UnicornHorn;
 import com.cavetale.mytems.item.WardrobeItem;
@@ -25,6 +24,7 @@ import com.cavetale.mytems.item.easter.EasterEgg;
 import com.cavetale.mytems.item.easter.EasterGear;
 import com.cavetale.mytems.item.easter.EasterToken;
 import com.cavetale.mytems.item.medieval.GoldenScythe;
+import com.cavetale.mytems.item.music.HyruleInstrument;
 import com.cavetale.mytems.item.pocketmob.MobCatcher;
 import com.cavetale.mytems.item.pocketmob.PocketMob;
 import com.cavetale.mytems.item.santa.SantaBoots;
@@ -219,7 +219,9 @@ public enum Mytems {
     CAPTAINS_CUTLASS(CaptainsCutlass::new, Material.WOODEN_SWORD, 2, '\uE239', Category.PIRATE),
     BLUNDERBUSS(Blunderbuss::new, Material.IRON_INGOT, 3, '\uE23A', Category.PIRATE),
     GOLDEN_SCYTHE(GoldenScythe::new, Material.GOLDEN_HOE, 4, '\uE23B', Category.UTILITY),
-    OCARINA_OF_CHIME(Ocarina::new, Material.NAUTILUS_SHELL, 36, '\uE264', Category.UTILITY),
+    // Musical Instruments
+    OCARINA_OF_CHIME(HyruleInstrument::new, Material.NAUTILUS_SHELL, 36, '\uE264', Category.MUSIC),
+    GOLDEN_BANJO(HyruleInstrument::new, Material.WOODEN_SHOVEL, 41, '\uE269', Category.MUSIC),
     // Enemy
     KOBOLD_HEAD(DummyMytem::new, Material.GREEN_CONCRETE, 1, (char) 0, Category.ENEMY),
     // Random
@@ -260,9 +262,11 @@ public enum Mytems {
     WINK(DummyMytem::new, Material.SLIME_BALL, 35, '\uE263', Category.REACTION),
     // Pic
     PIC_WOLF(DummyMytem::new, Material.BONE, 39, '\uE267', Category.PICTURE),
-    PIC_CAT(DummyMytem::new, Material.STRING, 40, '\uE268', Category.PICTURE);
-    // Next Unicode Character: 0xE269
-    // Next CustomModelData: 41
+    PIC_CAT(DummyMytem::new, Material.STRING, 40, '\uE268', Category.PICTURE),
+    // Halloween
+    CANDY_CORN(DummyMytem::new, Material.CARROT, 42, '\uE26A', Category.HALLOWEEN);
+    // Next Unicode Character: 0xE26B
+    // Next CustomModelData: 43
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;
@@ -284,8 +288,10 @@ public enum Mytems {
         EASTER_EGG,
         ENEMY,
         FRIENDS,
+        HALLOWEEN,
         MAYPOLE,
         MOB_CATCHER,
+        MUSIC,
         PICTURE,
         PIRATE,
         POCKET_MOB,

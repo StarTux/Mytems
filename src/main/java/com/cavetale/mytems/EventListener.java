@@ -24,6 +24,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
@@ -314,6 +315,18 @@ public final class EventListener implements Listener {
             Mytems mytems = Mytems.forItem(itemStack);
             if (mytems != null) {
                 mytems.getMytem().onBlockBreak(event, player, itemStack);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    void onBlockDamage(BlockDamageEvent event) {
+        Player player = event.getPlayer();
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        if (itemStack != null) {
+            Mytems mytems = Mytems.forItem(itemStack);
+            if (mytems != null) {
+                mytems.getMytem().onBlockDamage(event, player, itemStack);
             }
         }
     }
