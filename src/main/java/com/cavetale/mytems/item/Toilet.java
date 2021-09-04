@@ -1,6 +1,6 @@
 package com.cavetale.mytems.item;
 
-import com.cavetale.core.event.block.PlayerCanBuildEvent;
+import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
@@ -89,7 +89,7 @@ public final class Toilet implements Mytem, Listener {
         event.setCancelled(true);
         final BlockFace facing;
         Block block = event.getBlock();
-        if (!PlayerCanBuildEvent.call(player, block)) return;
+        if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return;
         Block against = event.getBlockAgainst();
         int dx = block.getX() - against.getX();
         int dz = block.getZ() - against.getZ();
@@ -192,7 +192,7 @@ public final class Toilet implements Mytem, Listener {
         Block block = event.getBlock();
         if (!BlockMarker.hasId(block, key.id)) return;
         Player player = event.getPlayer();
-        if (!PlayerCanBuildEvent.call(player, block)) return;
+        if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return;
         event.setCancelled(true);
         disableSeat(block);
         BlockMarker.resetId(block);
