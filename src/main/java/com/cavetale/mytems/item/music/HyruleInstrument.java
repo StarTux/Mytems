@@ -139,7 +139,6 @@ public final class HyruleInstrument implements Mytem {
 
     static String toString(Note note) {
         return note.getTone().toString()
-            + (note.getOctave() == 1 ? "'" : "")
             + (note.isSharped() ? "#" : "");
     }
 
