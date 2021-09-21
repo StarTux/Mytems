@@ -56,6 +56,7 @@ public final class Toilet implements Mytem, Listener {
     static final class Seat {
         final Block block;
         final ArmorStand armorStand;
+        final BlockFace facing;
     }
 
     @Override
@@ -178,7 +179,7 @@ public final class Toilet implements Mytem, Listener {
             armorStand.remove();
             return;
         }
-        Seat seat = new Seat(block, armorStand);
+        Seat seat = new Seat(block, armorStand, face);
         enableSeat(seat);
         if (random.nextBoolean()) {
             loc.getWorld().playSound(loc, Sound.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 1.0f, 0.5f);
@@ -237,7 +238,21 @@ public final class Toilet implements Mytem, Listener {
         if (!(event.getDismounted() instanceof ArmorStand)) return;
         ArmorStand armorStand = (ArmorStand) event.getDismounted();
         Seat seat = uuidMap.get(armorStand.getUniqueId());
-        if (seat != null) disableSeat(seat);
+        if (seat == null) return;
+        disableSeat(seat);
+        if (event.getEntity() instanceof Player) {
+            Player player = (Player) event.getEntity();
+            Bukkit.getScheduler().runTask(MytemsPlugin.getInstance(), () -> {
+                    Location ploc = player.getLocation();
+                    Location loc = seat.block.getLocation().add(0.5 + seat.facing.getModX(),
+                                                                0.0,
+                                                                0.5 + seat.facing.getModZ());
+                    if (!loc.getWorld().equals(ploc.getWorld())) return;
+                    if (ploc.distance(loc) > 2.0) return;
+                    loc.setDirection(ploc.getDirection());
+                    player.teleport(loc);
+                });
+        }
     }
 
     boolean isOccupied(Block block) {
