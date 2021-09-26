@@ -36,6 +36,8 @@ public interface GearItem extends Mytem {
      */
     @Override
     default void onBlockPlace(BlockPlaceEvent event, Player player, ItemStack item) {
-        event.setCancelled(true);
+        if (item.getType().isBlock()) {
+            event.setCancelled(true);
+        }
     }
 }
