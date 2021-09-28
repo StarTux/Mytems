@@ -41,6 +41,10 @@ public interface Mytem {
 
     Component getDisplayName();
 
+    default Component getDisplayName(ItemStack itemStack) {
+        return getDisplayName();
+    }
+
     default void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) { }
 
     default void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player, ItemStack item) { }
