@@ -16,6 +16,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -91,13 +92,13 @@ public final class MytemsCommand implements TabExecutor {
         }
         for (Mytems mytems : Mytems.values()) {
             if (tag != null && !tag.isTagged(mytems)) continue;
-            lines.add(TextComponent.ofChildren(Component.text(mytems.ordinal() + ") ", NamedTextColor.GRAY),
-                                               mytems.component.insertion(GsonComponentSerializer.gson().serialize(mytems.component)),
-                                               mytems.getMytem().getDisplayName(),
-                                               Component.space(),
-                                               Component.text(mytems.id, NamedTextColor.DARK_GRAY).insertion(mytems.id)));
+            lines.add(Component.join(JoinConfiguration.separator(Component.text(mytems.ordinal() + ") ", NamedTextColor.GRAY)),
+                                     mytems.component.insertion(GsonComponentSerializer.gson().serialize(mytems.component)),
+                                     mytems.getMytem().getDisplayName(),
+                                     Component.space(),
+                                     Component.text(mytems.id, NamedTextColor.DARK_GRAY).insertion(mytems.id)));
         }
-        sender.sendMessage(Component.join(Component.newline(), lines));
+        sender.sendMessage(Component.join(JoinConfiguration.separator(Component.newline()), lines));
         return true;
     }
 
