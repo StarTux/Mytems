@@ -1,6 +1,8 @@
 package com.cavetale.mytems.item.music;
 
 import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
+import com.cavetale.core.event.player.PluginPlayerEvent.Detail;
+import com.cavetale.core.event.player.PluginPlayerEvent;
 import com.cavetale.core.font.DefaultFont;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
@@ -206,6 +208,10 @@ public final class HyruleInstrument implements Mytem {
                     Location particleLoc = player.getEyeLocation();
                     particleLoc.add(particleLoc.getDirection().normalize().multiply(0.5));
                     particleLoc.getWorld().spawnParticle(Particle.NOTE, particleLoc, 1, 0.125, 0.125, 0.125, 0.0);
+                    PluginPlayerEvent.Name.PLAY_NOTE.ultimate(MytemsPlugin.getInstance(), player)
+                        .detail(Detail.NOTE, note)
+                        .detail(Detail.INSTRUMENT, type.instrument)
+                        .call();
                     if (isMelody) {
                         Session session = MytemsPlugin.getInstance().getSessions().of(player).getFavorites()
                             .getOrSet(Session.class, Session::new);

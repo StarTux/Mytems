@@ -25,6 +25,7 @@ import com.cavetale.mytems.item.easter.EasterGear;
 import com.cavetale.mytems.item.easter.EasterToken;
 import com.cavetale.mytems.item.medieval.GoldenScythe;
 import com.cavetale.mytems.item.music.HyruleInstrument;
+import com.cavetale.mytems.item.music.RegularInstrument;
 import com.cavetale.mytems.item.pocketmob.MobCatcher;
 import com.cavetale.mytems.item.pocketmob.PocketMob;
 import com.cavetale.mytems.item.santa.SantaBoots;
@@ -222,6 +223,14 @@ public enum Mytems {
     // Musical Instruments
     OCARINA_OF_CHIME(HyruleInstrument::new, Material.NAUTILUS_SHELL, 36, '\uE264', Category.MUSIC),
     GOLDEN_BANJO(HyruleInstrument::new, Material.WOODEN_SHOVEL, 41, '\uE269', Category.MUSIC),
+
+    PAN_FLUTE(RegularInstrument::new, Material.STICK, 43, '\uE26B', Category.MUSIC), // Flute
+    TRIANGLE(RegularInstrument::new, Material.STICK, 44, '\uE26C', Category.MUSIC), // Chime
+    WOODEN_DRUM(RegularInstrument::new, Material.STICK, 45, '\uE26D', Category.MUSIC), // Bass Drum
+    WOODEN_LUTE(RegularInstrument::new, Material.STICK, 46, '\uE26E', Category.MUSIC), // Guitar
+    WOODEN_OCARINA(RegularInstrument::new, Material.STICK, 47, '\uE26F', Category.MUSIC), // Flute
+    BANJO(RegularInstrument::new, Material.STICK, 48, '\uE270', Category.MUSIC), // Banjo
+    BIT_BOY(RegularInstrument::new, Material.STICK, 49, '\uE271', Category.MUSIC), // Bit
     // Enemy
     KOBOLD_HEAD(DummyMytem::new, Material.GREEN_CONCRETE, 1, (char) 0, Category.ENEMY),
     // Random
@@ -265,8 +274,8 @@ public enum Mytems {
     PIC_CAT(DummyMytem::new, Material.STRING, 40, '\uE268', Category.PICTURE),
     // Halloween
     CANDY_CORN(DummyMytem::new, Material.CARROT, 42, '\uE26A', Category.HALLOWEEN);
-    // Next Unicode Character: 0xE26B
-    // Next CustomModelData: 43
+    // Next Unicode Character: 0xE272
+    // Next CustomModelData: 50
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;
