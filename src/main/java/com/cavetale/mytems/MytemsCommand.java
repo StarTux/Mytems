@@ -92,7 +92,8 @@ public final class MytemsCommand implements TabExecutor {
         }
         for (Mytems mytems : Mytems.values()) {
             if (tag != null && !tag.isTagged(mytems)) continue;
-            lines.add(Component.join(JoinConfiguration.separator(Component.text(mytems.ordinal() + ") ", NamedTextColor.GRAY)),
+            lines.add(Component.join(JoinConfiguration.noSeparators(),
+                                     Component.text(mytems.ordinal() + ") ", NamedTextColor.GRAY),
                                      mytems.component.insertion(GsonComponentSerializer.gson().serialize(mytems.component)),
                                      mytems.getMytem().getDisplayName(),
                                      Component.space(),
