@@ -1,5 +1,6 @@
 package com.cavetale.mytems.item;
 
+import com.cavetale.core.event.player.PluginPlayerEvent;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
@@ -85,6 +86,10 @@ public final class MagicCape implements Mytem {
         if (event.isCancelled()) return;
         if (!event.isGliding()) return;
         event.setCancelled(true);
+        if (!PluginPlayerEvent.Name.START_FLYING.cancellable(MytemsPlugin.getInstance(), player).call()) {
+            player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.5f, 2.0f);
+            return;
+        }
         if (player.getLevel() == 0 && player.getExp() <= 0f) {
             player.sendActionBar(Component.text("Need exp!", NamedTextColor.DARK_RED));
             player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.5f, 2.0f);
