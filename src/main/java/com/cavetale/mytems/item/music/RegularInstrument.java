@@ -45,13 +45,14 @@ public final class RegularInstrument implements Mytem {
 
     @RequiredArgsConstructor
     private enum InstrumentType {
+        BANJO(Mytems.BANJO, Instrument.BANJO),
+        BIT_BOY(Mytems.BIT_BOY, Instrument.BIT),
+        GUITAR(Mytems.GUITAR, Instrument.GUITAR),
         PAN_FLUTE(Mytems.PAN_FLUTE, Instrument.FLUTE),
         TRIANGLE(Mytems.TRIANGLE, Instrument.CHIME),
         WOODEN_DRUM(Mytems.WOODEN_DRUM, Instrument.BASS_DRUM),
         WOODEN_LUTE(Mytems.WOODEN_LUTE, Instrument.GUITAR),
-        WOODEN_OCARINA(Mytems.WOODEN_OCARINA, Instrument.FLUTE),
-        BANJO(Mytems.BANJO, Instrument.BANJO),
-        BIT_BOY(Mytems.BIT_BOY, Instrument.BIT);
+        WOODEN_OCARINA(Mytems.WOODEN_OCARINA, Instrument.FLUTE);
 
         public final Mytems mytems;
         public final Instrument instrument;
