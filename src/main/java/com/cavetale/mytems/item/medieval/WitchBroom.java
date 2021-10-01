@@ -26,7 +26,7 @@ import org.bukkit.util.Vector;
 
 @RequiredArgsConstructor @Getter
 public final class WitchBroom implements Mytem {
-    public static final long MAX_LIFETIME = 1000L * 60L * 5L;
+    public static final long MAX_LIFETIME = 1000L * 60L * 2L;
     private final Mytems key;
     private ItemStack prototype;
     private Component displayName;
@@ -110,7 +110,7 @@ public final class WitchBroom implements Mytem {
                     player.sendMessage(Component.text("You exit the Witch Broom", NamedTextColor.GRAY));
                     return;
                 }
-                armorStand.setVelocity(lookAt.normalize().multiply(0.8));
+                armorStand.setVelocity(lookAt.normalize().multiply(0.6));
                 player.getWorld().spawnParticle(Particle.WAX_ON, location, 1, 0.0, 0.0, 0.0, 0.0);
             }
         }.runTaskTimer(MytemsPlugin.getInstance(), 0L, 0L);
