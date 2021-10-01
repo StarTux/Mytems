@@ -25,6 +25,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockDamageEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
@@ -126,6 +127,18 @@ public final class RegularInstrument implements Mytem {
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
         event.setUseInteractedBlock(Event.Result.DENY);
         event.setUseItemInHand(Event.Result.DENY);
+        if (Gui.of(player) != null) return;
+        openGui(player);
+    }
+
+    @Override
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player, ItemStack item) {
+        event.setCancelled(true);
+        if (Gui.of(player) != null) return;
+        openGui(player);
+    }
+
+    protected void openGui(Player player) {
         final int size = 4 * 9;
         Gui gui = new Gui()
             .size(size)
