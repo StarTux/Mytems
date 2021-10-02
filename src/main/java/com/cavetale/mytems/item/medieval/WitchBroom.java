@@ -101,7 +101,7 @@ public final class WitchBroom implements Mytem {
                     || armorStand.isDead()
                     || player.getVehicle() != armorStand
                     || lookAt.length() < 0.01
-                    || noMoveTicks >= 60
+                    || noMoveTicks >= 20
                     || y > 400;
                 if (shouldRemove) {
                     armorStand.remove();
