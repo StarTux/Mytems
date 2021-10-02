@@ -1,5 +1,6 @@
 package com.cavetale.mytems.item.medieval;
 
+import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.event.player.PluginPlayerEvent;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
@@ -66,16 +67,20 @@ public final class WitchBroom implements Mytem {
         event.setUseItemInHand(Event.Result.DENY);
         if (player.getVehicle() != null) return;
         if (player.isGliding() || player.isFlying() || !player.isOnGround()) return;
+        if (!PlayerBlockAbilityQuery.Action.FLY.query(player, player.getLocation().getBlock())) {
+            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 0.5f);
+            return;
+        }
+        if (!PluginPlayerEvent.Name.START_FLYING.cancellable(MytemsPlugin.getInstance(), player).call()) {
+            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 0.5f);
+            return;
+        }
         final ArmorStand armorStand = player.getWorld().spawn(player.getLocation(), ArmorStand.class, e -> {
                 e.setPersistent(false);
                 e.setVisible(false);
                 e.setSmall(true);
             });
-        if (!PluginPlayerEvent.Name.START_FLYING.cancellable(MytemsPlugin.getInstance(), player).call()) {
-            armorStand.remove();
-            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 0.5f);
-            return;
-        }
+        if (armorStand == null || armorStand.isDead()) return;
         armorStand.addPassenger(player);
         final long then = System.currentTimeMillis();
         new BukkitRunnable() {
