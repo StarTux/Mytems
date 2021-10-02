@@ -1,5 +1,6 @@
 package com.cavetale.mytems.item.captain;
 
+import com.cavetale.core.event.player.PluginPlayerEvent;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
@@ -130,6 +131,12 @@ public final class Blunderbuss implements Mytem {
     }
 
     public boolean boostHitEntity(Entity target, Vector direction) {
+        if (target instanceof Player) {
+            // Use START_FLYING for now!
+            if (!PluginPlayerEvent.Name.START_FLYING.cancellable(MytemsPlugin.getInstance(), (Player) target).call()) {
+                return false;
+            }
+        }
         Entity vehicle = target.getVehicle();
         if (vehicle != null) {
             if (vehicle.getType() == EntityType.ARMOR_STAND) return false;
