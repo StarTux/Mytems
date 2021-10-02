@@ -233,6 +233,8 @@ public enum Mytems {
     BANJO(RegularInstrument::new, Material.STICK, 48, '\uE270', Category.MUSIC), // Banjo
     BIT_BOY(RegularInstrument::new, Material.STICK, 49, '\uE271', Category.MUSIC), // Bit
     GUITAR(RegularInstrument::new, Material.STICK, 50, '\uE272', Category.MUSIC), // Guitar
+    WOODEN_HORN(RegularInstrument::new, Material.STICK, 55, '\uE277', Category.MUSIC), // Didgeridoo
+    MUSICAL_BELL(RegularInstrument::new, Material.STICK, 56, '\uE278', Category.MUSIC), // Bell
     // Enemy
     KOBOLD_HEAD(DummyMytem::new, Material.GREEN_CONCRETE, 1, (char) 0, Category.ENEMY),
     // Random
@@ -255,6 +257,7 @@ public enum Mytems {
     EAGLE(DummyMytem::new, Material.FEATHER, 19, '\uE24C', Category.UI),
     EARTH(DummyMytem::new, Material.ENDER_PEARL, 5, '\uE23D', Category.UI),
     EASTER_EGG(DummyMytem::new, Material.EGG, 345715, '\uE23C', Category.UI),
+    TRAFFIC_LIGHT(DummyMytem::new, Material.YELLOW_DYE, 57, '\uE279', Category.UI),
     // Reactions
     SURPRISED(DummyMytem::new, Material.SLIME_BALL, 21, '\uE255', Category.REACTION),
     HAPPY(DummyMytem::new, Material.SLIME_BALL, 22, '\uE256', Category.REACTION),
@@ -275,9 +278,13 @@ public enum Mytems {
     PIC_WOLF(DummyMytem::new, Material.BONE, 39, '\uE267', Category.PICTURE),
     PIC_CAT(DummyMytem::new, Material.STRING, 40, '\uE268', Category.PICTURE),
     // Halloween
-    CANDY_CORN(DummyMytem::new, Material.CARROT, 42, '\uE26A', Category.HALLOWEEN);
-    // Next Unicode Character: 0xE274
-    // Next CustomModelData: 52
+    CANDY_CORN(DummyMytem::new, Material.CARROT, 42, '\uE26A', Category.HALLOWEEN),
+    CHOCOLATE_BAR(DummyMytem::new, Material.PUMPKIN_PIE, 52, '\uE274', Category.HALLOWEEN),
+    LOLLIPOP(DummyMytem::new, Material.COOKIE, 53, '\uE275', Category.HALLOWEEN),
+    ORANGE_CANDY(DummyMytem::new, Material.COOKIE, 54, '\uE276', Category.HALLOWEEN),
+    ;
+    // Next Unicode Character: \uE27A
+    // Next CustomModelData: 58
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;

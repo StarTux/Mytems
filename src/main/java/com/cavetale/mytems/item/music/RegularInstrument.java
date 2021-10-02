@@ -49,9 +49,11 @@ public final class RegularInstrument implements Mytem {
         BANJO(Mytems.BANJO, Instrument.BANJO),
         BIT_BOY(Mytems.BIT_BOY, Instrument.BIT),
         GUITAR(Mytems.GUITAR, Instrument.GUITAR),
+        MUSICAL_BELL(Mytems.MUSICAL_BELL, Instrument.BELL),
         PAN_FLUTE(Mytems.PAN_FLUTE, Instrument.FLUTE),
         TRIANGLE(Mytems.TRIANGLE, Instrument.CHIME),
         WOODEN_DRUM(Mytems.WOODEN_DRUM, Instrument.BASS_DRUM),
+        WOODEN_HORN(Mytems.WOODEN_HORN, Instrument.DIDGERIDOO),
         WOODEN_LUTE(Mytems.WOODEN_LUTE, Instrument.GUITAR),
         WOODEN_OCARINA(Mytems.WOODEN_OCARINA, Instrument.FLUTE);
 
