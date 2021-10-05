@@ -5,40 +5,50 @@ import java.util.EnumSet;
 import java.util.List;
 
 public enum MytemsTag {
-    ACULA(Mytems.Category.ACULA),
-    BLOCK(Mytems.Category.BLOCK),
-    CLOUD_CITY(Mytems.Category.CLOUD_CITY),
-    CURRENCY(Mytems.Category.CURRENCY),
-    DUNE(Mytems.Category.DUNE),
-    DWARVEN(Mytems.Category.DWARVEN),
-    EASTER(Mytems.Category.EASTER),
-    EASTER_EGG(Mytems.Category.EASTER_EGG),
-    ENDERBALL(Mytems.Category.UTILITY),
-    ENEMY(Mytems.Category.ENEMY),
-    FRIENDS(Mytems.Category.FRIENDS),
-    HALLOWEEN(Mytems.Category.HALLOWEEN),
-    MAYPOLE(Mytems.Category.MAYPOLE),
-    MOB_CATCHER(Mytems.Category.MOB_CATCHER),
-    MUSIC(Mytems.Category.MUSIC),
-    PICTURE(Mytems.Category.PICTURE),
-    PIRATE(Mytems.Category.PIRATE),
-    POCKET_MOB(Mytems.Category.POCKET_MOB),
-    REACTION(Mytems.Category.REACTION),
-    RESOURCE(Mytems.Category.RESOURCE, Mytems.Category.MAYPOLE),
-    SANTA(Mytems.Category.SANTA),
-    SWAMPY(Mytems.Category.SWAMPY),
-    UI(Mytems.Category.UI),
-    UTILITY(Mytems.Category.UTILITY),
-    VOTE(Mytems.Category.VOTE),
-    WARDROBE(Mytems.Category.WARDROBE),
-    ITEM_SETS(MytemsTag.ACULA, MytemsTag.SANTA, MytemsTag.DUNE, MytemsTag.SWAMPY,
-              MytemsTag.DWARVEN, MytemsTag.EASTER),
+    ACULA,
+    BLOCK,
+    CLOUD_CITY,
+    CURRENCY,
+    DUNE,
+    DWARVEN,
+    EASTER,
+    EASTER_EGG,
+    ENEMY,
+    FRIENDS,
+    HALLOWEEN,
+    MAYPOLE,
+    MOB_CATCHER,
+    MUSIC,
+    MUSIC_HYRULE,
+    MUSIC_ALL(Mytems.Category.MUSIC, Mytems.Category.MUSIC_HYRULE),
+    PICTURE,
+    PIRATE,
+    POCKET_MOB,
+    REACTION,
+    RESOURCE(Mytems.Category.MAYPOLE),
+    SANTA,
+    SWAMPY,
+    UI,
+    UTILITY,
+    VOTE,
+    WARDROBE,
+    ITEM_SETS(Mytems.Category.ACULA, Mytems.Category.SANTA,
+              Mytems.Category.DUNE, Mytems.Category.SWAMPY,
+              Mytems.Category.DWARVEN, Mytems.Category.EASTER),
     EQUIPMENT(MytemsTag.ITEM_SETS, MytemsTag.PIRATE);
 
     private final EnumSet<Mytems> set;
 
     MytemsTag(final Enum... enums) {
         EnumSet<Mytems> theSet = EnumSet.noneOf(Mytems.class);
+        try {
+            Mytems.Category category = Mytems.Category.valueOf(name());
+            for (Mytems mytems : Mytems.values()) {
+                if (mytems.category == category) {
+                    theSet.add(mytems);
+                }
+            }
+        } catch (IllegalArgumentException iae) { }
         for (Enum e : enums) {
             if (e instanceof Mytems) {
                 theSet.add((Mytems) e);

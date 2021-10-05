@@ -135,7 +135,7 @@ public enum Mytems {
     CLUMP_OF_MOSS(Ingredient::new, Material.VINE, 849015, '\uE20F', Category.MAYPOLE),
     FIRE_AMANITA(Ingredient::new, Material.CRIMSON_FUNGUS, 849016, '\uE210', Category.MAYPOLE),
     // Enderball
-    ENDERBALL(Enderball::new),
+    ENDERBALL(Enderball::new, Material.DRAGON_EGG, (Integer) null, (char) 0, Category.UTILITY),
     // PocketMob
     POCKET_BAT(mytems -> new PocketMob(mytems, EntityType.BAT), Material.BAT_SPAWN_EGG, 908301, (char) 0, Category.POCKET_MOB),
     POCKET_BEE(mytems -> new PocketMob(mytems, EntityType.BEE), Material.BEE_SPAWN_EGG, 908301, (char) 0, Category.POCKET_MOB),
