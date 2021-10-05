@@ -8,9 +8,9 @@ import com.cavetale.mytems.MytemsTag;
 import com.cavetale.mytems.util.Json;
 import com.cavetale.mytems.util.Text;
 import io.papermc.paper.event.block.BlockPreDispenseEvent;
+import java.util.Objects;
 import java.util.Set;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
@@ -25,9 +25,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-@Getter @RequiredArgsConstructor
+@Getter
 public final class PocketMob implements Mytem, Listener {
     private final Mytems key;
+    private final PocketMobType pocketMobType;
     private final EntityType entityType;
     private Component displayName;
     private ItemStack prototype;
@@ -37,6 +38,13 @@ public final class PocketMob implements Mytem, Listener {
         void onPlayerRightClick(PocketMob pocketMob, PlayerInteractEvent event, Player player, ItemStack item);
 
         void onBlockPreDispense(PocketMob pocketMob, BlockPreDispenseEvent event);
+    }
+
+    public PocketMob(final Mytems key) {
+        this.key = key;
+        this.pocketMobType = Objects.requireNonNull(PocketMobType.of(key),
+                                                    "PocketMob EntityType undefined: " + key);
+        this.entityType = pocketMobType.entityType;
     }
 
     @Override
