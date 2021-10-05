@@ -21,6 +21,7 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -76,7 +77,7 @@ public final class WitchBroom implements Mytem, Listener {
         event.setUseItemInHand(Event.Result.DENY);
         if (flyingPlayers.contains(player.getUniqueId())) return;
         if (player.getVehicle() != null) return;
-        if (player.isGliding() || player.isFlying() || !player.isOnGround()) return;
+        if (player.isGliding() || player.isFlying() || !((Entity) player).isOnGround()) return;
         if (!PlayerBlockAbilityQuery.Action.FLY.query(player, player.getLocation().getBlock())) {
             player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 0.5f);
             return;
