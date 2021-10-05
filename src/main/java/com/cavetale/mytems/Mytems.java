@@ -238,7 +238,7 @@ public enum Mytems {
     RAINBOW_XYLOPHONE(RegularInstrument::new, Material.STICK, 59, '\uE27B', Category.MUSIC), // Xylophone
     ELECTRIC_GUITAR(RegularInstrument::new, Material.STICK, 60, '\uE27C', Category.MUSIC), // Bass Guitar
     POCKET_PIANO(RegularInstrument::new, Material.STICK, 61, '\uE27D', Category.MUSIC), // Piano
-    ELECTRIC_PIANO(RegularInstrument::new, Material.STICK, 62, '\uE27E', Category.MUSIC), // Piano
+    ELECTRIC_PIANO(RegularInstrument::new, Material.STICK, 62, '\uE27E', Category.MUSIC), // Pling
     // Enemy
     KOBOLD_HEAD(DummyMytem::new, Material.GREEN_CONCRETE, 1, (char) 0, Category.ENEMY),
     // Random
