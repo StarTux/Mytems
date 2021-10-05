@@ -52,6 +52,7 @@ public final class RegularInstrument implements Mytem {
 
     @RequiredArgsConstructor
     private enum InstrumentType {
+        ANGELIC_HARP(Mytems.ANGELIC_HARP, Instrument.PIANO),
         BANJO(Mytems.BANJO, Instrument.BANJO),
         BIT_BOY(Mytems.BIT_BOY, Instrument.BIT),
         CLICKS_AND_STICKS(Mytems.CLICKS_AND_STICKS, Instrument.STICKS),
