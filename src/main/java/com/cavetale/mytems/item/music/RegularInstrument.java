@@ -178,7 +178,7 @@ public final class RegularInstrument implements Mytem {
                      .append(Component.text(" Number Key", NamedTextColor.GRAY)));
             text.add(Component.text(SHARP + " Interval")
                      .append(Component.text(" F", NamedTextColor.GRAY)));
-            text.add(Component.text(FLAT + " Interval ")
+            text.add(Component.text(FLAT + " Interval")
                      .append(Component.text(" Q", NamedTextColor.GRAY)));
             ItemStack icon = Items.text(key.createIcon(), text);
             icon.setAmount(button.ordinal() + 1);
