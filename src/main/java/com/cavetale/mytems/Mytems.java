@@ -223,8 +223,8 @@ public enum Mytems {
     GOLDEN_SCYTHE(GoldenScythe::new, Material.GOLDEN_HOE, 4, '\uE23B', Category.UTILITY),
     WITCH_BROOM(WitchBroom::new, Material.WOODEN_SHOVEL, 51, '\uE273', Category.UTILITY),
     // Musical Instruments
-    OCARINA_OF_CHIME(HyruleInstrument::new, Material.NAUTILUS_SHELL, 36, '\uE264', Category.MUSIC),
-    GOLDEN_BANJO(HyruleInstrument::new, Material.WOODEN_SHOVEL, 41, '\uE269', Category.MUSIC),
+    OCARINA_OF_CHIME(HyruleInstrument::new, Material.NAUTILUS_SHELL, 36, '\uE264', Category.MUSIC_HYRULE),
+    GOLDEN_BANJO(HyruleInstrument::new, Material.WOODEN_SHOVEL, 41, '\uE269', Category.MUSIC_HYRULE),
     PAN_FLUTE(RegularInstrument::new, Material.STICK, 43, '\uE26B', Category.MUSIC), // Flute
     TRIANGLE(RegularInstrument::new, Material.STICK, 44, '\uE26C', Category.MUSIC), // Chime
     WOODEN_DRUM(RegularInstrument::new, Material.STICK, 45, '\uE26D', Category.MUSIC), // Bass Drum
@@ -235,6 +235,11 @@ public enum Mytems {
     GUITAR(RegularInstrument::new, Material.STICK, 50, '\uE272', Category.MUSIC), // Guitar
     WOODEN_HORN(RegularInstrument::new, Material.STICK, 55, '\uE277', Category.MUSIC), // Didgeridoo
     MUSICAL_BELL(RegularInstrument::new, Material.STICK, 56, '\uE278', Category.MUSIC), // Bell
+    COW_BELL(RegularInstrument::new, Material.STICK, 58, '\uE27A', Category.MUSIC), // Cow Bell
+    RAINBOW_XYLOPHONE(RegularInstrument::new, Material.STICK, 59, '\uE27B', Category.MUSIC), // Xylophone
+    ELECTRIC_GUITAR(RegularInstrument::new, Material.STICK, 60, '\uE27C', Category.MUSIC), // Bass Guitar
+    POCKET_PIANO(RegularInstrument::new, Material.STICK, 61, '\uE27D', Category.MUSIC), // Piano
+    ELECTRIC_PIANO(RegularInstrument::new, Material.STICK, 62, '\uE27E', Category.MUSIC), // Piano
     // Enemy
     KOBOLD_HEAD(DummyMytem::new, Material.GREEN_CONCRETE, 1, (char) 0, Category.ENEMY),
     // Random
@@ -283,8 +288,8 @@ public enum Mytems {
     LOLLIPOP(DummyMytem::new, Material.COOKIE, 53, '\uE275', Category.HALLOWEEN),
     ORANGE_CANDY(DummyMytem::new, Material.COOKIE, 54, '\uE276', Category.HALLOWEEN),
     ;
-    // Next Unicode Character: \uE27A
-    // Next CustomModelData: 58
+    // Next Unicode Character: \uE27F
+    // Next CustomModelData: 63
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;
@@ -310,6 +315,7 @@ public enum Mytems {
         MAYPOLE,
         MOB_CATCHER,
         MUSIC,
+        MUSIC_HYRULE,
         PICTURE,
         PIRATE,
         POCKET_MOB,

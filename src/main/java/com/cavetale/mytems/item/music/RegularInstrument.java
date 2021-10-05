@@ -25,6 +25,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockDamageEvent;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -48,9 +49,14 @@ public final class RegularInstrument implements Mytem {
     private enum InstrumentType {
         BANJO(Mytems.BANJO, Instrument.BANJO),
         BIT_BOY(Mytems.BIT_BOY, Instrument.BIT),
+        COW_BELL(Mytems.COW_BELL, Instrument.COW_BELL),
+        ELECTRIC_GUITAR(Mytems.ELECTRIC_GUITAR, Instrument.BASS_GUITAR),
+        ELECTRIC_PIANO(Mytems.ELECTRIC_PIANO, Instrument.PIANO),
         GUITAR(Mytems.GUITAR, Instrument.GUITAR),
         MUSICAL_BELL(Mytems.MUSICAL_BELL, Instrument.BELL),
         PAN_FLUTE(Mytems.PAN_FLUTE, Instrument.FLUTE),
+        POCKET_PIANO(Mytems.POCKET_PIANO, Instrument.PIANO),
+        RAINBOW_XYLOPHONE(Mytems.RAINBOW_XYLOPHONE, Instrument.XYLOPHONE),
         TRIANGLE(Mytems.TRIANGLE, Instrument.CHIME),
         WOODEN_DRUM(Mytems.WOODEN_DRUM, Instrument.BASS_DRUM),
         WOODEN_HORN(Mytems.WOODEN_HORN, Instrument.DIDGERIDOO),
@@ -120,6 +126,11 @@ public final class RegularInstrument implements Mytem {
         }
     }
 
+    private static final class GuiPrivateData {
+        boolean sharp;
+        boolean flat;
+    }
+
     @Override
     public void onBlockDamage(BlockDamageEvent event, Player player, ItemStack item) {
         event.setCancelled(true);
@@ -142,21 +153,33 @@ public final class RegularInstrument implements Mytem {
 
     protected void openGui(Player player) {
         final int size = 4 * 9;
+        Component guiDisplayName = Component.text().color(NamedTextColor.WHITE)
+            .append(Component.text(NOTE1 + " "))
+            .append(key.component)
+            .append(Component.text(displayNameString + " " + NOTE2))
+            .build();
         Gui gui = new Gui()
             .size(size)
-            .title(DefaultFont.guiBlankOverlay(size, COLOR, Component.text(NOTE1 + " " + displayNameString + " " + NOTE2,
-                                                                           NamedTextColor.WHITE)));
+            .title(DefaultFont.guiBlankOverlay(size, COLOR, guiDisplayName));
+        GuiPrivateData privateData = new GuiPrivateData();
         for (Button button : Button.values()) {
             List<Component> text = new ArrayList<>();
             text.add(Component.text(button.tone.name(), COLOR));
             if (button.flat != null) {
                 text.add(Component.text(button.tone.name() + FLAT, COLOR)
-                         .append(Component.text(" shift", NamedTextColor.GRAY)));
+                         .append(Component.text(" Shift", NamedTextColor.GRAY)));
             }
             if (button.sharp != null) {
                 text.add(Component.text(button.tone.name() + SHARP, COLOR)
-                         .append(Component.text(" right", NamedTextColor.GRAY)));
+                         .append(Component.text(" Right", NamedTextColor.GRAY)));
             }
+            text.add(Component.empty());
+            text.add(Component.text("Interval")
+                     .append(Component.text(" Number Key", NamedTextColor.GRAY)));
+            text.add(Component.text(SHARP + " Interval")
+                     .append(Component.text(" F", NamedTextColor.GRAY)));
+            text.add(Component.text(FLAT + " Interval ")
+                     .append(Component.text(" Q", NamedTextColor.GRAY)));
             ItemStack icon = Items.text(key.createIcon(), text);
             icon.setAmount(button.ordinal() + 1);
             final int x = button.octave == 0
@@ -164,19 +187,61 @@ public final class RegularInstrument implements Mytem {
                 : 1 + button.x;
             final int y = 1 + 1 - button.octave;
             gui.setItem(x, y, icon, click -> {
+                    if (click.getClick() == ClickType.DROP) {
+                        privateData.sharp = false;
+                        privateData.flat = true;
+                        player.sendActionBar(Component.text(FLAT, NamedTextColor.GOLD));
+                        return;
+                    } else if (click.getClick() == ClickType.SWAP_OFFHAND) {
+                        privateData.sharp = true;
+                        privateData.flat = false;
+                        player.sendActionBar(Component.text(SHARP, NamedTextColor.GOLD));
+                        return;
+                    }
                     final Note note;
+                    final boolean sharp;
+                    final boolean flat;
                     final boolean left = click.isLeftClick();
                     final boolean right = click.isRightClick();
                     final boolean shift = click.isShiftClick();
-                    if (left && !right && !shift) {
+                    final boolean isNumber = click.getClick() == ClickType.NUMBER_KEY;
+                    if (isNumber) {
+                        sharp = privateData.sharp;
+                        flat = privateData.flat;
+                        int index = button.ordinal() + click.getHotbarButton();
+                        Button[] allButtons = Button.values();
+                        Button theButton = allButtons[index % allButtons.length];
+                        if (sharp && !flat) {
+                            note = theButton.sharp;
+                        } else if (flat && !sharp) {
+                            note = theButton.flat;
+                        } else {
+                            note = theButton.natural;
+                        }
+                    } else if (left && !right && !shift) {
                         note = button.natural;
-                    } else if (left && !right && shift && button.flat != null) {
+                        sharp = false;
+                        flat = false;
+                    } else if (left && !right && shift) {
                         note = button.flat;
-                    } else if (!left && right && !shift && button.sharp != null) {
+                        sharp = false;
+                        flat = true;
+                    } else if (!left && right && !shift) {
                         note = button.sharp;
+                        sharp = true;
+                        flat = false;
                     } else {
-                        return;
+                        note = null;
+                        sharp = false;
+                        flat = false;
                     }
+                    privateData.sharp = false;
+                    privateData.flat = false;
+                    if (note == null) return;
+                    String noteName = note.getTone().name()
+                        + (sharp ? SHARP : "")
+                        + (flat ? FLAT : "");
+                    player.sendActionBar(Component.text(noteName, NamedTextColor.GOLD));
                     player.playNote(player.getLocation(), type.instrument, note);
                     for (Entity nearby : player.getNearbyEntities(16.0, 16.0, 16.0)) {
                         if (nearby instanceof Player) {
