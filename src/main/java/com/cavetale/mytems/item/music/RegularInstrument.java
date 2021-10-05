@@ -10,7 +10,9 @@ import com.cavetale.mytems.util.Gui;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.util.ArrayList;
+import java.util.EnumMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -21,11 +23,14 @@ import org.bukkit.Instrument;
 import org.bukkit.Location;
 import org.bukkit.Note;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -49,6 +54,7 @@ public final class RegularInstrument implements Mytem {
     private enum InstrumentType {
         BANJO(Mytems.BANJO, Instrument.BANJO),
         BIT_BOY(Mytems.BIT_BOY, Instrument.BIT),
+        CLICKS_AND_STICKS(Mytems.CLICKS_AND_STICKS, Instrument.STICKS),
         COW_BELL(Mytems.COW_BELL, Instrument.COW_BELL),
         ELECTRIC_GUITAR(Mytems.ELECTRIC_GUITAR, Instrument.BASS_GUITAR),
         ELECTRIC_PIANO(Mytems.ELECTRIC_PIANO, Instrument.PLING),
@@ -114,23 +120,82 @@ public final class RegularInstrument implements Mytem {
         public final int x;
         public final Note.Tone tone;
         public final int octave;
-        public final Note natural;
-        public final Note sharp;
-        public final Note flat;
+        public final RealNote natural;
+        public final RealNote sharp;
+        public final RealNote flat;
 
         Button(final int x, final Note.Tone tone, final int octave) {
             this.x = x;
             this.tone = tone;
             this.octave = octave;
-            this.natural = Note.natural(octave, tone);
-            this.sharp = tone.isSharpable() ? Note.sharp(octave, tone) : null;
-            this.flat = natural.flattened().getTone().isSharpable() ? Note.flat(octave, tone) : null;
+            this.natural = RealNote.of(tone, Semitone.NATURAL, octave);
+            this.sharp = tone.isSharpable()
+                ? RealNote.of(tone, Semitone.SHARP, octave)
+                : null;
+            this.flat = natural.bukkitNote.flattened().getTone().isSharpable()
+                ? RealNote.of(tone, Semitone.FLAT, octave)
+                : null;
+        }
+    }
+
+    @RequiredArgsConstructor
+    private enum Semitone {
+        NATURAL("", Mytems.INVISIBLE_ITEM) {
+            @Override public Note apply(Note in) {
+                return in;
+            }
+        },
+        SHARP("\u266F", Mytems.ARROW_UP) {
+            @Override public Note apply(Note in) {
+                return in.sharped();
+            }
+        },
+        FLAT("\u266D", Mytems.ARROW_DOWN) {
+            @Override public Note apply(Note in) {
+                return in.flattened();
+            }
+        };
+
+        public final String symbol;
+        public final Mytems mytems;
+        public abstract Note apply(Note in);
+    }
+
+    private static final class RealNote {
+        public final Note.Tone tone;
+        public final Semitone semitone;
+        public final Note bukkitNote;
+        public final String displayString;
+
+        private RealNote(final Note.Tone tone, final Semitone semitone, final Note bukkitNote) {
+            this.tone = tone;
+            this.semitone = semitone;
+            this.bukkitNote = bukkitNote;
+            this.displayString = tone.name() + semitone.symbol;
+        }
+
+        public static RealNote of(Note.Tone tone, Semitone semitone, int octave) {
+            Note bukkitNote = semitone.apply(Note.natural(octave, tone));
+            return bukkitNote.getTone() == tone || bukkitNote.isSharped()
+                ? new RealNote(tone, semitone, bukkitNote)
+                : new RealNote(bukkitNote.getTone(), Semitone.NATURAL, bukkitNote);
         }
     }
 
     private static final class GuiPrivateData {
-        boolean sharp;
-        boolean flat;
+        protected Map<Note.Tone, Semitone> semitones = new EnumMap<>(Note.Tone.class);
+
+        public Semitone semitoneOf(Note.Tone tone) {
+            return semitones.computeIfAbsent(tone, t -> Semitone.NATURAL);
+        }
+
+        public RealNote realNoteOf(Note.Tone tone, int octave) {
+            return RealNote.of(tone, semitoneOf(tone), octave);
+        }
+
+        public RealNote realNoteOf(Button button) {
+            return realNoteOf(button.tone, button.octave);
+        }
     }
 
     @Override
@@ -164,101 +229,119 @@ public final class RegularInstrument implements Mytem {
             .size(size)
             .title(DefaultFont.guiBlankOverlay(size, COLOR, guiDisplayName));
         GuiPrivateData privateData = new GuiPrivateData();
+        buildGui(gui, privateData);
+        gui.open(player);
+    }
+
+    protected void buildGui(Gui gui, GuiPrivateData privateData) {
         for (Button button : Button.values()) {
-            List<Component> text = new ArrayList<>();
-            text.add(Component.text(button.tone.name(), COLOR));
-            if (button.flat != null) {
-                text.add(Component.text(button.tone.name() + FLAT, COLOR)
-                         .append(Component.text(" Shift", NamedTextColor.GRAY)));
-            }
-            if (button.sharp != null) {
-                text.add(Component.text(button.tone.name() + SHARP, COLOR)
-                         .append(Component.text(" Right", NamedTextColor.GRAY)));
-            }
-            text.add(Component.empty());
-            text.add(Component.text("Interval")
-                     .append(Component.text(" Number Key", NamedTextColor.GRAY)));
-            text.add(Component.text(SHARP + " Interval")
-                     .append(Component.text(" F", NamedTextColor.GRAY)));
-            text.add(Component.text(FLAT + " Interval")
-                     .append(Component.text(" Q", NamedTextColor.GRAY)));
-            ItemStack icon = Items.text(key.createIcon(), text);
-            icon.setAmount(button.ordinal() + 1);
             final int x = button.octave == 0
                 ? 7 - button.x
                 : 1 + button.x;
             final int y = 1 + 1 - button.octave;
-            gui.setItem(x, y, icon, click -> {
-                    if (click.getClick() == ClickType.DROP) {
-                        privateData.sharp = false;
-                        privateData.flat = true;
-                        player.sendActionBar(Component.text(FLAT, NamedTextColor.GOLD));
-                        return;
-                    } else if (click.getClick() == ClickType.SWAP_OFFHAND) {
-                        privateData.sharp = true;
-                        privateData.flat = false;
-                        player.sendActionBar(Component.text(SHARP, NamedTextColor.GOLD));
-                        return;
-                    }
-                    final Note note;
-                    final boolean sharp;
-                    final boolean flat;
-                    final boolean left = click.isLeftClick();
-                    final boolean right = click.isRightClick();
-                    final boolean shift = click.isShiftClick();
-                    final boolean isNumber = click.getClick() == ClickType.NUMBER_KEY;
-                    if (isNumber) {
-                        sharp = privateData.sharp;
-                        flat = privateData.flat;
-                        int index = button.ordinal() + click.getHotbarButton();
-                        Button[] allButtons = Button.values();
-                        Button theButton = allButtons[index % allButtons.length];
-                        if (sharp && !flat) {
-                            note = theButton.sharp;
-                        } else if (flat && !sharp) {
-                            note = theButton.flat;
-                        } else {
-                            note = theButton.natural;
-                        }
-                    } else if (left && !right && !shift) {
-                        note = button.natural;
-                        sharp = false;
-                        flat = false;
-                    } else if (left && !right && shift) {
-                        note = button.flat;
-                        sharp = false;
-                        flat = true;
-                    } else if (!left && right && !shift) {
-                        note = button.sharp;
-                        sharp = true;
-                        flat = false;
-                    } else {
-                        note = null;
-                        sharp = false;
-                        flat = false;
-                    }
-                    privateData.sharp = false;
-                    privateData.flat = false;
-                    if (note == null) return;
-                    String noteName = note.getTone().name()
-                        + (sharp ? SHARP : "")
-                        + (flat ? FLAT : "");
-                    player.sendActionBar(Component.text(noteName, NamedTextColor.GOLD));
-                    player.playNote(player.getLocation(), type.instrument, note);
-                    for (Entity nearby : player.getNearbyEntities(16.0, 16.0, 16.0)) {
-                        if (nearby instanceof Player) {
-                            ((Player) nearby).playNote(player.getLocation(), type.instrument, note);
-                        }
-                    }
-                    Location particleLoc = player.getEyeLocation();
-                    particleLoc.add(particleLoc.getDirection().normalize().multiply(0.5));
-                    particleLoc.getWorld().spawnParticle(Particle.NOTE, particleLoc, 1, 0.125, 0.125, 0.125, 0.0);
-                    PluginPlayerEvent.Name.PLAY_NOTE.ultimate(MytemsPlugin.getInstance(), player)
-                        .detail(Detail.NOTE, note)
-                        .detail(Detail.INSTRUMENT, type.instrument)
-                        .call();
-                });
+            ItemStack icon = makeNoteButton(button, privateData);
+            gui.setItem(x, y, icon, click -> onClickButton(click, button, gui, privateData));
+            final int y2 = y == 1 ? 0 : 3;
+            ItemStack semiIcon = makeSemitoneButton(button, privateData);
+            gui.setItem(x, y2, semiIcon, click -> onClickSemitone(click, button, gui, privateData));
         }
-        gui.open(player);
+    }
+
+    protected ItemStack makeNoteButton(Button button, GuiPrivateData privateData) {
+        List<Component> text = new ArrayList<>();
+        RealNote realNote = privateData.realNoteOf(button.tone, button.octave);
+        text.add(Component.text(realNote.displayString, COLOR));
+        if (button.flat != null) {
+            text.add(Component.text(button.tone.name() + FLAT, COLOR)
+                     .append(Component.text(" Shift", NamedTextColor.GRAY)));
+        }
+        if (button.sharp != null) {
+            text.add(Component.text(button.tone.name() + SHARP, COLOR)
+                     .append(Component.text(" Right", NamedTextColor.GRAY)));
+        }
+        text.add(Component.empty());
+        text.add(Component.text("Interval")
+                 .append(Component.text(" Number Key", NamedTextColor.GRAY)));
+        text.add(Component.text(SHARP + " Interval")
+                 .append(Component.text(" F", NamedTextColor.GRAY)));
+        text.add(Component.text(FLAT + " Interval")
+                 .append(Component.text(" Q", NamedTextColor.GRAY)));
+        ItemStack icon = Items.text(key.createIcon(), text);
+        icon.setAmount(button.ordinal() + 1);
+        return icon;
+    }
+
+    protected ItemStack makeSemitoneButton(Button button, GuiPrivateData privateData) {
+        Semitone semitone = privateData.semitoneOf(button.tone);
+        List<Component> text = new ArrayList<>();
+        RealNote realNote = privateData.realNoteOf(button.tone, button.octave);
+        text.add(Component.text(realNote.displayString, COLOR));
+        text.add(Component.text("Sharpen", COLOR)
+                 .append(Component.text(" Left", NamedTextColor.GRAY)));
+        text.add(Component.text("Flatten", COLOR)
+                 .append(Component.text(" Right", NamedTextColor.GRAY)));
+        ItemStack icon = Items.text(semitone.mytems.createIcon(), text);
+        return icon;
+    }
+
+    protected void onClickButton(InventoryClickEvent event, Button button, Gui gui, GuiPrivateData privateData) {
+        if (event.getClick() == ClickType.DOUBLE_CLICK) return;
+        if (!(event.getWhoClicked() instanceof Player)) return;
+        Player player = (Player) event.getWhoClicked();
+        final RealNote note;
+        final boolean left = event.isLeftClick();
+        final boolean right = event.isRightClick();
+        final boolean shift = event.isShiftClick();
+        final boolean isNumber = event.getClick() == ClickType.NUMBER_KEY;
+        if (isNumber) {
+            int index = button.ordinal() + event.getHotbarButton();
+            Button[] allButtons = Button.values();
+            Button theButton = allButtons[index % allButtons.length];
+            note = privateData.realNoteOf(theButton);
+        } else if (left && !right && !shift) {
+            note = privateData.realNoteOf(button);
+        } else if (left && !right && shift) {
+            note = button.flat;
+        } else if (!left && right && !shift) {
+            note = button.sharp;
+        } else {
+            note = null;
+        }
+        if (note == null) return;
+        player.sendActionBar(Component.text(note.displayString, NamedTextColor.GOLD));
+        player.playNote(player.getLocation(), type.instrument, note.bukkitNote);
+        for (Entity nearby : player.getNearbyEntities(16.0, 16.0, 16.0)) {
+            if (nearby instanceof Player) {
+                ((Player) nearby).playNote(player.getLocation(), type.instrument, note.bukkitNote);
+            }
+        }
+        Location particleLoc = player.getEyeLocation();
+        particleLoc.add(particleLoc.getDirection().normalize().multiply(0.5));
+        particleLoc.getWorld().spawnParticle(Particle.NOTE, particleLoc, 1, 0.125, 0.125, 0.125, 0.0);
+        PluginPlayerEvent.Name.PLAY_NOTE.ultimate(MytemsPlugin.getInstance(), player)
+            .detail(Detail.NOTE, note.bukkitNote)
+            .detail(Detail.INSTRUMENT, type.instrument)
+            .call();
+    }
+
+    protected void onClickSemitone(InventoryClickEvent event, Button button, Gui gui, GuiPrivateData privateData) {
+        if (event.getClick() == ClickType.DOUBLE_CLICK) return;
+        if (!(event.getWhoClicked() instanceof Player)) return;
+        Player player = (Player) event.getWhoClicked();
+        final int interval;
+        if (event.isLeftClick()) {
+            interval = +1;
+        } else if (event.isRightClick()) {
+            interval = -1;
+        } else {
+            return;
+        }
+        Semitone semitone = privateData.semitoneOf(button.tone);
+        int index = (semitone.ordinal() + interval) % 3;
+        if (index < 0) index += 3;
+        Semitone newSemitone = Semitone.values()[index];
+        privateData.semitones.put(button.tone, newSemitone);
+        buildGui(gui, privateData);
+        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
     }
 }

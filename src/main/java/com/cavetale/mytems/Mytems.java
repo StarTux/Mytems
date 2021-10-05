@@ -241,6 +241,7 @@ public enum Mytems {
     ELECTRIC_PIANO(RegularInstrument::new, Material.STICK, 62, '\uE27E', Category.MUSIC), // Pling
     SNARE_DRUM(RegularInstrument::new, Material.STICK, 63, '\uE27F', Category.MUSIC), // Snare Drums
     IRON_XYLOPHONE(RegularInstrument::new, Material.STICK, 64, '\uE280', Category.MUSIC),
+    CLICKS_AND_STICKS(RegularInstrument::new, Material.STICK, 66, '\uE282', Category.MUSIC), // Sticks
     // Enemy
     KOBOLD_HEAD(DummyMytem::new, Material.GREEN_CONCRETE, 1, (char) 0, Category.ENEMY),
     // Random
@@ -264,6 +265,7 @@ public enum Mytems {
     EARTH(DummyMytem::new, Material.ENDER_PEARL, 5, '\uE23D', Category.UI),
     EASTER_EGG(DummyMytem::new, Material.EGG, 345715, '\uE23C', Category.UI),
     TRAFFIC_LIGHT(DummyMytem::new, Material.YELLOW_DYE, 57, '\uE279', Category.UI),
+    INVISIBLE_ITEM(DummyMytem::new, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 65, '\uE281', Category.UI),
     // Reactions
     SURPRISED(DummyMytem::new, Material.SLIME_BALL, 21, '\uE255', Category.REACTION),
     HAPPY(DummyMytem::new, Material.SLIME_BALL, 22, '\uE256', Category.REACTION),
@@ -288,8 +290,8 @@ public enum Mytems {
     CHOCOLATE_BAR(DummyMytem::new, Material.PUMPKIN_PIE, 52, '\uE274', Category.HALLOWEEN),
     LOLLIPOP(DummyMytem::new, Material.COOKIE, 53, '\uE275', Category.HALLOWEEN),
     ORANGE_CANDY(DummyMytem::new, Material.COOKIE, 54, '\uE276', Category.HALLOWEEN);
-    // Next Unicode Character: \uE281
-    // Next CustomModelData: 65
+    // Next Unicode Character: \uE283
+    // Next CustomModelData: 67
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;
