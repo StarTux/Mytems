@@ -239,6 +239,7 @@ public enum Mytems {
     ELECTRIC_GUITAR(RegularInstrument::new, Material.STICK, 60, '\uE27C', Category.MUSIC), // Bass Guitar
     POCKET_PIANO(RegularInstrument::new, Material.STICK, 61, '\uE27D', Category.MUSIC), // Piano
     ELECTRIC_PIANO(RegularInstrument::new, Material.STICK, 62, '\uE27E', Category.MUSIC), // Pling
+    SNARE_DRUM(RegularInstrument::new, Material.STICK, 63, '\uE27F', Category.MUSIC), // Snare Drums
     // Enemy
     KOBOLD_HEAD(DummyMytem::new, Material.GREEN_CONCRETE, 1, (char) 0, Category.ENEMY),
     // Random
@@ -286,8 +287,8 @@ public enum Mytems {
     CHOCOLATE_BAR(DummyMytem::new, Material.PUMPKIN_PIE, 52, '\uE274', Category.HALLOWEEN),
     LOLLIPOP(DummyMytem::new, Material.COOKIE, 53, '\uE275', Category.HALLOWEEN),
     ORANGE_CANDY(DummyMytem::new, Material.COOKIE, 54, '\uE276', Category.HALLOWEEN);
-    // Next Unicode Character: \uE27F
-    // Next CustomModelData: 63
+    // Next Unicode Character: \uE280
+    // Next CustomModelData: 64
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;

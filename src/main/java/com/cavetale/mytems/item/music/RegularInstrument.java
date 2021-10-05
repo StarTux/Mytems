@@ -61,6 +61,7 @@ public final class RegularInstrument implements Mytem {
         WOODEN_DRUM(Mytems.WOODEN_DRUM, Instrument.BASS_DRUM),
         WOODEN_HORN(Mytems.WOODEN_HORN, Instrument.DIDGERIDOO),
         WOODEN_LUTE(Mytems.WOODEN_LUTE, Instrument.GUITAR),
+        SNARE_DRUM(Mytems.SNARE_DRUM, Instrument.SNARE_DRUM),
         WOODEN_OCARINA(Mytems.WOODEN_OCARINA, Instrument.FLUTE);
 
         public final Mytems mytems;
