@@ -1,6 +1,8 @@
 package com.cavetale.mytems.item;
 
+import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.event.player.PluginPlayerEvent;
+import com.cavetale.core.event.player.PluginPlayerQuery;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
@@ -13,6 +15,7 @@ import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -20,13 +23,15 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 
 @RequiredArgsConstructor
-public final class MagicCape implements Mytem {
+public final class MagicCape implements Mytem, Listener {
     @Getter private final Mytems key;
     public static final float FLY_SPEED = 0.025f;
     public static final int COOLDOWN_SECONDS = 20;
@@ -66,6 +71,7 @@ public final class MagicCape implements Mytem {
         meta.lore(Text.wrapLore(description));
         key.markItemMeta(meta);
         prototype.setItemMeta(meta);
+        Bukkit.getPluginManager().registerEvents(this, MytemsPlugin.getInstance());
     }
 
     @Override
@@ -88,7 +94,7 @@ public final class MagicCape implements Mytem {
         event.setCancelled(true);
         Session session = MytemsPlugin.getInstance().getSessions().of(player);
         if (session.getFlying().isFlying()) return;
-        if (!PluginPlayerEvent.Name.START_FLYING.cancellable(MytemsPlugin.getInstance(), player).call()) {
+        if (!PlayerBlockAbilityQuery.Action.FLY.query(player, player.getLocation().getBlock())) {
             fail(player);
             return;
         }
@@ -100,6 +106,10 @@ public final class MagicCape implements Mytem {
             return;
         }
         session.setCooldown(key.id, COOLDOWN_SECONDS * 20);
+        if (!PluginPlayerEvent.Name.START_FLYING.cancellable(MytemsPlugin.getInstance(), player).call()) {
+            fail(player);
+            return;
+        }
         session.getFlying().setFlying(player, key, FLY_SPEED, this::onTickFlight, this::onEndFlight);
         Location location = player.getLocation();
         session.getFavorites().set(new MagicCapeFlight(location.getWorld().getName(),
@@ -162,5 +172,16 @@ public final class MagicCape implements Mytem {
         protected final int x;
         protected final int y;
         protected final int z;
+    }
+
+    @EventHandler
+    public void onPluginPlayerQuery(PluginPlayerQuery query) {
+        if (query.getName() == PluginPlayerQuery.Name.IS_FLYING) {
+            Player player = query.getPlayer();
+            Session session = MytemsPlugin.getInstance().getSessions().of(player);
+            if (session.getFlying().isFlying(key)) {
+                PluginPlayerQuery.Name.IS_FLYING.respond(query, MytemsPlugin.getInstance(), true);
+            }
+        }
     }
 }
