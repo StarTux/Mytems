@@ -17,6 +17,7 @@ import java.util.Objects;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Instrument;
@@ -37,10 +38,8 @@ import org.bukkit.inventory.ItemStack;
 
 @RequiredArgsConstructor
 public final class RegularInstrument implements Mytem {
-    public static final String FLAT = "\u266D";
-    public static final String SHARP = "\u266F";
-    public static final String NOTE1 = "\u266B";
-    public static final String NOTE2 = "\u266A";
+    public static final String NOTE1 = "\u266A";
+    public static final String NOTE2 = "\u266B";
     @Getter private final Mytems key;
     private String displayNameString;
     @Getter private Component displayName;
@@ -49,6 +48,14 @@ public final class RegularInstrument implements Mytem {
     private Instrument instrument;
     private static final TextColor COLOR = TextColor.color(0x6A5ACD);
     private InstrumentType type;
+    private static final Map<Note.Tone, Mytems> TONE_MYTEMS_MAP = Map
+        .of(Note.Tone.A, Mytems.LETTER_A,
+            Note.Tone.B, Mytems.LETTER_B,
+            Note.Tone.C, Mytems.LETTER_C,
+            Note.Tone.D, Mytems.LETTER_D,
+            Note.Tone.E, Mytems.LETTER_E,
+            Note.Tone.F, Mytems.LETTER_F,
+            Note.Tone.G, Mytems.LETTER_G);
 
     @RequiredArgsConstructor
     private enum InstrumentType {
@@ -146,12 +153,12 @@ public final class RegularInstrument implements Mytem {
                 return in;
             }
         },
-        SHARP("\u266F", Mytems.ARROW_UP) {
+        SHARP("\u266F", Mytems.MUSICAL_SHARP) {
             @Override public Note apply(Note in) {
                 return in.sharped();
             }
         },
-        FLAT("\u266D", Mytems.ARROW_DOWN) {
+        FLAT("\u266D", Mytems.MUSICAL_FLAT) {
             @Override public Note apply(Note in) {
                 return in.flattened();
             }
@@ -222,9 +229,9 @@ public final class RegularInstrument implements Mytem {
     protected void openGui(Player player) {
         final int size = 4 * 9;
         Component guiDisplayName = Component.text().color(NamedTextColor.WHITE)
-            .append(Component.text(NOTE1 + " "))
             .append(key.component)
-            .append(Component.text(displayNameString + " " + NOTE2))
+            .append(Component.text(displayNameString))
+            .append(Component.text(NOTE1 + NOTE2, NamedTextColor.GRAY))
             .build();
         Gui gui = new Gui()
             .size(size)
@@ -253,22 +260,21 @@ public final class RegularInstrument implements Mytem {
         RealNote realNote = privateData.realNoteOf(button.tone, button.octave);
         text.add(Component.text(realNote.displayString, COLOR));
         if (button.flat != null) {
-            text.add(Component.text(button.tone.name() + FLAT, COLOR)
+            text.add(Component.text(button.tone.name() + Semitone.FLAT.symbol, COLOR)
                      .append(Component.text(" Shift", NamedTextColor.GRAY)));
         }
         if (button.sharp != null) {
-            text.add(Component.text(button.tone.name() + SHARP, COLOR)
+            text.add(Component.text(button.tone.name() + Semitone.SHARP.symbol, COLOR)
                      .append(Component.text(" Right", NamedTextColor.GRAY)));
         }
         text.add(Component.empty());
         text.add(Component.text("Interval")
                  .append(Component.text(" Number Key", NamedTextColor.GRAY)));
-        text.add(Component.text(SHARP + " Interval")
+        text.add(Component.text(Semitone.SHARP.symbol + " Interval")
                  .append(Component.text(" F", NamedTextColor.GRAY)));
-        text.add(Component.text(FLAT + " Interval")
+        text.add(Component.text(Semitone.FLAT.symbol + " Interval")
                  .append(Component.text(" Q", NamedTextColor.GRAY)));
-        ItemStack icon = Items.text(key.createIcon(), text);
-        icon.setAmount(button.ordinal() + 1);
+        ItemStack icon = Items.text(TONE_MYTEMS_MAP.get(button.tone).createIcon(), text);
         return icon;
     }
 
@@ -309,7 +315,11 @@ public final class RegularInstrument implements Mytem {
             note = null;
         }
         if (note == null) return;
-        player.sendActionBar(Component.text(note.displayString, NamedTextColor.GOLD));
+        ComponentLike actionBar = Component.text()
+            .append(key.component)
+            .append(TONE_MYTEMS_MAP.get(note.tone).component)
+            .append(note.semitone != Semitone.NATURAL ? note.semitone.mytems.component : Component.empty());
+        player.sendActionBar(actionBar);
         player.playNote(player.getLocation(), type.instrument, note.bukkitNote);
         for (Entity nearby : player.getNearbyEntities(16.0, 16.0, 16.0)) {
             if (nearby instanceof Player) {
