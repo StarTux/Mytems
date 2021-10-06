@@ -15,6 +15,17 @@ public final class Favorites {
         return result;
     }
 
+    public void set(Object value) {
+        map.put(value.getClass(), value);
+    }
+
+    public <T> T get(Class<T> clz) {
+        Object result = map.get(clz);
+        return clz.isInstance(result)
+            ? clz.cast(result)
+            : null;
+    }
+
     public void clear(Class<?> clz) {
         map.remove(clz);
     }

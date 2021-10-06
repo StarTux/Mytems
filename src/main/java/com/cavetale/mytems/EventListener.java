@@ -45,7 +45,6 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
-import org.bukkit.event.player.PlayerToggleFlightEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
@@ -340,12 +339,6 @@ public final class EventListener implements Listener {
         Mytems mytems = Mytems.forItem(itemStack);
         if (mytems == null) return;
         mytems.getMytem().onToggleGlide(event, player, itemStack);
-    }
-
-    @EventHandler(priority = EventPriority.HIGHEST)
-    void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
-        if (event.isFlying()) return;
-        plugin.getSessions().of(event.getPlayer()).getFlying().onToggleOff();
     }
 
     @EventHandler(priority = EventPriority.HIGH)

@@ -14,6 +14,7 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerToggleFlightEvent;
 
 @RequiredArgsConstructor
 public final class Sessions implements Listener {
@@ -60,6 +61,13 @@ public final class Sessions implements Listener {
         Player player = event.getPlayer();
         Session session = sessions.remove(player.getUniqueId());
         if (session != null) session.disable(player);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST)
+    void onPlayerToggleFlight(PlayerToggleFlightEvent event) {
+        if (event.isFlying()) return;
+        Player player = event.getPlayer();
+        of(player).getFlying().onToggleOff(player);
     }
 
     private void tick() {

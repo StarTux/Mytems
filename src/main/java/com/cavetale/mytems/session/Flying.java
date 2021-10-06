@@ -1,5 +1,7 @@
 package com.cavetale.mytems.session;
 
+import com.cavetale.mytems.Mytems;
+import java.util.function.Consumer;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.entity.Player;
@@ -7,53 +9,43 @@ import org.bukkit.entity.Player;
 @RequiredArgsConstructor
 public final  class Flying {
     private final Session session;
-    private int flyingTicks = 0; // remaining
     @Getter private int flyTime;
-    private Runnable flyEndTask;
-    private Runnable flyTickTask;
-    boolean allowed = false;
+    private Consumer<Player> flyEndTask;
+    private Consumer<Player> flyTickTask;
+    @Getter private String flightCauseId;
+    @Getter private boolean flying;
     private float flyingSpeed;
 
     public void disable(Player player) {
-        if (flyingTicks > 0) {
+        if (flying) {
             stopFlying(player);
         }
     }
 
+    public boolean isFlying(Mytems mytems) {
+        return flying && mytems.id.equals(flightCauseId);
+    }
+
     public void tick(Player player) {
-        if (flyingTicks == 0) return;
-        flyingTicks -= 1;
-        if (flyingTicks == 0) {
-            Runnable run = flyEndTask;
-            if (run != null) {
-                flyEndTask = null;
-                run.run();
-            }
-            if (flyingTicks == 0) {
-                stopFlying(player);
-            }
-        } else {
-            startFlying();
-            if (flyTickTask != null) {
-                flyTickTask.run();
-            }
+        if (!flying) return;
+        if (flyTickTask != null) {
+            flyTickTask.accept(player);
         }
         flyTime += 1;
     }
 
-    public void setFlying(float speed, int ticks, Runnable tickTask, Runnable endTask) {
-        flyTickTask = tickTask;
-        flyEndTask = endTask;
-        flyingTicks = ticks;
-        flyingSpeed = speed;
-        startFlying();
+    public void setFlying(Player player, Mytems mytems, float speed, Consumer<Player> tickTask, Consumer<Player> endTask) {
+        this.flying = true;
+        this.flightCauseId = mytems.id;
+        this.flyTickTask = tickTask;
+        this.flyEndTask = endTask;
+        this.flyingSpeed = speed;
+        startFlying(player);
     }
 
-    private void startFlying() {
-        Player player = session.getPlayer();
+    private void startFlying(Player player) {
         if (!player.getAllowFlight()) {
             player.setAllowFlight(true);
-            allowed = true;
         }
         if (!player.isFlying()) {
             player.setFlying(true);
@@ -62,34 +54,18 @@ public final  class Flying {
     }
 
     public void stopFlying(Player player) {
-        flyingTicks = 0;
-        flyEndTask = null;
-        flyTickTask = null;
-        flyTime = 0;
+        this.flying = false;
+        this.flyEndTask = null;
+        this.flyTickTask = null;
+        this.flyTime = 0;
         player.setFlySpeed(0.1f);
         player.setFlying(false);
-        if (allowed) resetAllow();
-    }
-
-    void resetAllow() {
-        Player player = session.getPlayer();
-        allowed = false;
         player.setAllowFlight(false);
     }
 
-    public void onToggleOff() {
-        Player player = session.getPlayer();
-        if (flyingTicks == 0) return;
-        if (flyEndTask != null) flyEndTask.run();
-        flyTickTask = null;
-        flyEndTask = null;
-        flyingTicks = 0;
-        flyTime = 0;
-        player.setFlySpeed(0.1f);
-        if (allowed) resetAllow();
-    }
-
-    public boolean isFlying() {
-        return flyingTicks > 0;
+    public void onToggleOff(Player player) {
+        if (!flying) return;
+        if (flyEndTask != null) flyEndTask.accept(player);
+        stopFlying(player);
     }
 }
