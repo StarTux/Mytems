@@ -31,6 +31,7 @@ public enum MytemsTag {
     RESOURCE(Mytems.Category.MAYPOLE),
     SANTA,
     SWAMPY,
+    TREASURE,
     UI,
     UTILITY,
     VOTE,

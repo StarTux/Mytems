@@ -330,9 +330,11 @@ public enum Mytems {
     CANDY_CORN(DummyMytem::new, Material.CARROT, 42, '\uE26A', Category.HALLOWEEN),
     CHOCOLATE_BAR(DummyMytem::new, Material.PUMPKIN_PIE, 52, '\uE274', Category.HALLOWEEN),
     LOLLIPOP(DummyMytem::new, Material.COOKIE, 53, '\uE275', Category.HALLOWEEN),
-    ORANGE_CANDY(DummyMytem::new, Material.COOKIE, 54, '\uE276', Category.HALLOWEEN);
-    // Next CustomModelData: 108
-    // Next Unicode Character: \uE2AB
+    ORANGE_CANDY(DummyMytem::new, Material.COOKIE, 54, '\uE276', Category.HALLOWEEN),
+    GOLDEN_CUP(DummyMytem::new, Material.CLOCK, 108, '\uE2AB', Category.TREASURE),
+    HALLOWEEN_TOKEN(DummyMytem::new, Material.PAPER, 109, '\uE2AC', Category.HALLOWEEN);
+    // Next CustomModelData: 110
+    // Next Unicode Character: \uE2AD
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;
@@ -370,6 +372,7 @@ public enum Mytems {
         RESOURCE,
         SANTA,
         SWAMPY,
+        TREASURE,
         UI,
         UTILITY,
         VOTE,
