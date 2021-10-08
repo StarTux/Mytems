@@ -1,5 +1,6 @@
 package com.cavetale.mytems.item.dune;
 
+import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.gear.EntityAttribute;
@@ -30,7 +31,7 @@ import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
-import org.bukkit.event.entity.EntityCombustEvent;
+import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -227,7 +228,8 @@ public abstract class DuneItem implements GearItem {
                 if (event.getCause() != EntityDamageByEntityEvent.DamageCause.ENTITY_ATTACK) return;
                 if (ThreadLocalRandom.current().nextDouble() > 0.4) return;
                 int duration = 20 * 30;
-                EntityCombustEvent combustEvent = new EntityCombustEvent(damager, duration);
+                if (!PlayerEntityAbilityQuery.Action.IGNITE.query(player, damager)) return;
+                EntityCombustByEntityEvent combustEvent = new EntityCombustByEntityEvent(player, damager, duration);
                 Bukkit.getPluginManager().callEvent(combustEvent);
                 if (combustEvent.isCancelled()) return;
                 damager.setFireTicks(Math.max(damager.getFireTicks(), duration));
