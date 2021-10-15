@@ -1,14 +1,20 @@
 package com.cavetale.mytems.util;
 
+import com.destroystokyo.paper.profile.PlayerProfile;
+import com.destroystokyo.paper.profile.ProfileProperty;
 import java.util.Base64;
 import java.util.List;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
+import org.bukkit.inventory.meta.SkullMeta;
 
 public final class Items {
     private Items() { }
@@ -41,5 +47,16 @@ public final class Items {
             Repairable repairable = (Repairable) meta;
             repairable.setRepairCost(9999);
         }
+    }
+
+    public static ItemStack skull(UUID uuid, String name, String texture, String signature) {
+        ItemStack item = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta meta = (SkullMeta) item.getItemMeta();
+        PlayerProfile profile = Bukkit.getServer().createProfile(uuid, name);
+        ProfileProperty prop = new ProfileProperty("textures", texture, signature);
+        profile.setProperty(prop);
+        meta.setPlayerProfile(profile);
+        item.setItemMeta(meta);
+        return item;
     }
 }

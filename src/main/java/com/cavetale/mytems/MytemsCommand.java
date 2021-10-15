@@ -4,6 +4,7 @@ import com.cavetale.core.command.CommandContext;
 import com.cavetale.core.command.CommandNode;
 import com.cavetale.core.command.CommandWarn;
 import com.cavetale.mytems.gear.Equipment;
+import com.cavetale.mytems.item.music.Melody;
 import com.cavetale.mytems.session.Session;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -21,6 +22,8 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Instrument;
+import org.bukkit.Note.Tone;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
@@ -65,6 +68,7 @@ public final class MytemsCommand implements TabExecutor {
         rootNode.addChild("giveall").denyTabCompletion()
             .description("Give all items")
             .playerCaller(this::giveall);
+        rootNode.addChild("test").playerCaller(this::test);
         plugin.getCommand("mytems").setExecutor(this);
     }
 
@@ -270,6 +274,18 @@ public final class MytemsCommand implements TabExecutor {
             count += 1;
         }
         player.sendMessage("" + ChatColor.YELLOW + count + " mytems givem");
+        return true;
+    }
+
+    boolean test(Player player, String[] args) {
+        Melody.builder(Instrument.PIANO, 100L)
+            .beat(8, Tone.C, 0)
+            .beat(8, Tone.A, 0)
+            .beat(8, Tone.F, 0)
+            .beat(8, Tone.F, 0)
+            .beat(8, Tone.E, 0)
+            .beat(8, Tone.E, 0)
+            .build().play(player);
         return true;
     }
 }

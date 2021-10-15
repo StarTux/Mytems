@@ -1,7 +1,10 @@
 package com.cavetale.mytems;
 
+import com.cavetale.mytems.event.music.PlayerOpenMusicalInstrumentEvent;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.item.ChristmasToken;
+import com.cavetale.mytems.item.music.Melody;
+import com.cavetale.mytems.item.music.Semitone;
 import com.cavetale.worldmarker.item.ItemMarker;
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
 import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
@@ -13,7 +16,9 @@ import java.util.Objects;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
+import org.bukkit.Instrument;
 import org.bukkit.Location;
+import org.bukkit.Note.Tone;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Skull;
 import org.bukkit.enchantments.Enchantment;
@@ -378,5 +383,17 @@ public final class EventListener implements Listener {
         if (event.getPlugin() instanceof JavaPlugin) {
             plugin.onDisablePlugin((JavaPlugin) event.getPlugin());
         }
+    }
+
+    @EventHandler
+    void onPlayerOpenMusicalInstrument(PlayerOpenMusicalInstrumentEvent event) {
+        event.setHeroMelody(Melody.builder(Instrument.PIANO, 300L)
+                            .beat(8, Tone.C, Semitone.SHARP, 0)
+                            .beat(8, Tone.A, Semitone.FLAT, 0)
+                            .beat(8, Tone.F, 0)
+                            .beat(8, Tone.F, 0)
+                            .beat(8, Tone.E, 0)
+                            .beat(8, Tone.E, 0)
+                            .build());
     }
 }

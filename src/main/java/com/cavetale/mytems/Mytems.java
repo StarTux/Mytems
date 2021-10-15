@@ -23,10 +23,11 @@ import com.cavetale.mytems.item.dwarven.DwarvenItem;
 import com.cavetale.mytems.item.easter.EasterEgg;
 import com.cavetale.mytems.item.easter.EasterGear;
 import com.cavetale.mytems.item.easter.EasterToken;
+import com.cavetale.mytems.item.font.GlyphItem;
 import com.cavetale.mytems.item.medieval.GoldenScythe;
 import com.cavetale.mytems.item.medieval.WitchBroom;
 import com.cavetale.mytems.item.music.HyruleInstrument;
-import com.cavetale.mytems.item.music.RegularInstrument;
+import com.cavetale.mytems.item.music.MusicalInstrument;
 import com.cavetale.mytems.item.pocketmob.MobCatcher;
 import com.cavetale.mytems.item.pocketmob.PocketMob;
 import com.cavetale.mytems.item.santa.SantaBoots;
@@ -36,8 +37,10 @@ import com.cavetale.mytems.item.santa.SantaPants;
 import com.cavetale.mytems.item.swampy.SwampyItem;
 import com.cavetale.mytems.item.vote.VoteCandy;
 import com.cavetale.mytems.item.vote.VoteFirework;
+import com.cavetale.mytems.util.Items;
 import com.cavetale.worldmarker.item.ItemMarker;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import net.kyori.adventure.key.Key;
@@ -224,25 +227,25 @@ public enum Mytems {
     // Musical Instruments
     OCARINA_OF_CHIME(HyruleInstrument::new, Material.NAUTILUS_SHELL, 36, '\uE264', Category.MUSIC_HYRULE),
     GOLDEN_BANJO(HyruleInstrument::new, Material.WOODEN_SHOVEL, 41, '\uE269', Category.MUSIC_HYRULE),
-    PAN_FLUTE(RegularInstrument::new, Material.STICK, 43, '\uE26B', Category.MUSIC), // Flute
-    TRIANGLE(RegularInstrument::new, Material.STICK, 44, '\uE26C', Category.MUSIC), // Chime
-    WOODEN_DRUM(RegularInstrument::new, Material.STICK, 45, '\uE26D', Category.MUSIC), // Bass Drum
-    WOODEN_LUTE(RegularInstrument::new, Material.STICK, 46, '\uE26E', Category.MUSIC), // Guitar
-    WOODEN_OCARINA(RegularInstrument::new, Material.STICK, 47, '\uE26F', Category.MUSIC), // Flute
-    BANJO(RegularInstrument::new, Material.STICK, 48, '\uE270', Category.MUSIC), // Banjo
-    BIT_BOY(RegularInstrument::new, Material.STICK, 49, '\uE271', Category.MUSIC), // Bit
-    GUITAR(RegularInstrument::new, Material.STICK, 50, '\uE272', Category.MUSIC), // Guitar
-    WOODEN_HORN(RegularInstrument::new, Material.STICK, 55, '\uE277', Category.MUSIC), // Didgeridoo
-    MUSICAL_BELL(RegularInstrument::new, Material.STICK, 56, '\uE278', Category.MUSIC), // Bell
-    COW_BELL(RegularInstrument::new, Material.STICK, 58, '\uE27A', Category.MUSIC), // Cow Bell
-    RAINBOW_XYLOPHONE(RegularInstrument::new, Material.STICK, 59, '\uE27B', Category.MUSIC), // Xylophone
-    ELECTRIC_GUITAR(RegularInstrument::new, Material.STICK, 60, '\uE27C', Category.MUSIC), // Bass Guitar
-    POCKET_PIANO(RegularInstrument::new, Material.STICK, 61, '\uE27D', Category.MUSIC), // Piano
-    ELECTRIC_PIANO(RegularInstrument::new, Material.STICK, 62, '\uE27E', Category.MUSIC), // Pling
-    SNARE_DRUM(RegularInstrument::new, Material.STICK, 63, '\uE27F', Category.MUSIC), // Snare Drums
-    IRON_XYLOPHONE(RegularInstrument::new, Material.STICK, 64, '\uE280', Category.MUSIC),
-    CLICKS_AND_STICKS(RegularInstrument::new, Material.STICK, 66, '\uE282', Category.MUSIC), // Sticks
-    ANGELIC_HARP(RegularInstrument::new, Material.STICK, 67, '\uE283', Category.MUSIC), // Piano
+    PAN_FLUTE(MusicalInstrument::new, Material.STICK, 43, '\uE26B', Category.MUSIC), // Flute
+    TRIANGLE(MusicalInstrument::new, Material.STICK, 44, '\uE26C', Category.MUSIC), // Chime
+    WOODEN_DRUM(MusicalInstrument::new, Material.STICK, 45, '\uE26D', Category.MUSIC), // Bass Drum
+    WOODEN_LUTE(MusicalInstrument::new, Material.STICK, 46, '\uE26E', Category.MUSIC), // Guitar
+    WOODEN_OCARINA(MusicalInstrument::new, Material.STICK, 47, '\uE26F', Category.MUSIC), // Flute
+    BANJO(MusicalInstrument::new, Material.STICK, 48, '\uE270', Category.MUSIC), // Banjo
+    BIT_BOY(MusicalInstrument::new, Material.STICK, 49, '\uE271', Category.MUSIC), // Bit
+    GUITAR(MusicalInstrument::new, Material.STICK, 50, '\uE272', Category.MUSIC), // Guitar
+    WOODEN_HORN(MusicalInstrument::new, Material.STICK, 55, '\uE277', Category.MUSIC), // Didgeridoo
+    MUSICAL_BELL(MusicalInstrument::new, Material.STICK, 56, '\uE278', Category.MUSIC), // Bell
+    COW_BELL(MusicalInstrument::new, Material.STICK, 58, '\uE27A', Category.MUSIC), // Cow Bell
+    RAINBOW_XYLOPHONE(MusicalInstrument::new, Material.STICK, 59, '\uE27B', Category.MUSIC), // Xylophone
+    ELECTRIC_GUITAR(MusicalInstrument::new, Material.STICK, 60, '\uE27C', Category.MUSIC), // Bass Guitar
+    POCKET_PIANO(MusicalInstrument::new, Material.STICK, 61, '\uE27D', Category.MUSIC), // Piano
+    ELECTRIC_PIANO(MusicalInstrument::new, Material.STICK, 62, '\uE27E', Category.MUSIC), // Pling
+    SNARE_DRUM(MusicalInstrument::new, Material.STICK, 63, '\uE27F', Category.MUSIC), // Snare Drums
+    IRON_XYLOPHONE(MusicalInstrument::new, Material.STICK, 64, '\uE280', Category.MUSIC),
+    CLICKS_AND_STICKS(MusicalInstrument::new, Material.STICK, 66, '\uE282', Category.MUSIC), // Sticks
+    ANGELIC_HARP(MusicalInstrument::new, Material.STICK, 67, '\uE283', Category.MUSIC), // Piano
     // Enemy
     KOBOLD_HEAD(DummyMytem::new, Material.GREEN_CONCRETE, 1, (char) 0, Category.ENEMY),
     // Random
@@ -267,46 +270,46 @@ public enum Mytems {
     TRAFFIC_LIGHT(DummyMytem::new, Material.YELLOW_DYE, 57, '\uE279', Category.UI),
     INVISIBLE_ITEM(DummyMytem::new, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 65, '\uE281', Category.UI),
     // Leters
-    LETTER_A(DummyMytem::new, Material.POLISHED_DIORITE, 68, '\uE284', Category.LETTER),
-    LETTER_B(DummyMytem::new, Material.POLISHED_DIORITE, 69, '\uE285', Category.LETTER),
-    LETTER_C(DummyMytem::new, Material.POLISHED_DIORITE, 70, '\uE286', Category.LETTER),
-    LETTER_D(DummyMytem::new, Material.POLISHED_DIORITE, 71, '\uE287', Category.LETTER),
-    LETTER_E(DummyMytem::new, Material.POLISHED_DIORITE, 72, '\uE288', Category.LETTER),
-    LETTER_F(DummyMytem::new, Material.POLISHED_DIORITE, 73, '\uE289', Category.LETTER),
-    LETTER_G(DummyMytem::new, Material.POLISHED_DIORITE, 74, '\uE28A', Category.LETTER),
-    LETTER_H(DummyMytem::new, Material.POLISHED_DIORITE, 75, '\uE28B', Category.LETTER),
-    LETTER_I(DummyMytem::new, Material.POLISHED_DIORITE, 76, '\uE28C', Category.LETTER),
-    LETTER_J(DummyMytem::new, Material.POLISHED_DIORITE, 77, '\uE28D', Category.LETTER),
-    LETTER_K(DummyMytem::new, Material.POLISHED_DIORITE, 78, '\uE28E', Category.LETTER),
-    LETTER_L(DummyMytem::new, Material.POLISHED_DIORITE, 80, '\uE28F', Category.LETTER),
-    LETTER_M(DummyMytem::new, Material.POLISHED_DIORITE, 81, '\uE290', Category.LETTER),
-    LETTER_N(DummyMytem::new, Material.POLISHED_DIORITE, 82, '\uE291', Category.LETTER),
-    LETTER_O(DummyMytem::new, Material.POLISHED_DIORITE, 83, '\uE292', Category.LETTER),
-    LETTER_P(DummyMytem::new, Material.POLISHED_DIORITE, 84, '\uE293', Category.LETTER),
-    LETTER_Q(DummyMytem::new, Material.POLISHED_DIORITE, 85, '\uE294', Category.LETTER),
-    LETTER_R(DummyMytem::new, Material.POLISHED_DIORITE, 86, '\uE295', Category.LETTER),
-    LETTER_S(DummyMytem::new, Material.POLISHED_DIORITE, 87, '\uE296', Category.LETTER),
-    LETTER_T(DummyMytem::new, Material.POLISHED_DIORITE, 88, '\uE297', Category.LETTER),
-    LETTER_U(DummyMytem::new, Material.POLISHED_DIORITE, 89, '\uE298', Category.LETTER),
-    LETTER_V(DummyMytem::new, Material.POLISHED_DIORITE, 90, '\uE299', Category.LETTER),
-    LETTER_W(DummyMytem::new, Material.POLISHED_DIORITE, 91, '\uE29A', Category.LETTER),
-    LETTER_X(DummyMytem::new, Material.POLISHED_DIORITE, 92, '\uE29B', Category.LETTER),
-    LETTER_Y(DummyMytem::new, Material.POLISHED_DIORITE, 93, '\uE29C', Category.LETTER),
-    LETTER_Z(DummyMytem::new, Material.POLISHED_DIORITE, 94, '\uE29D', Category.LETTER),
-    NUMBER_0(DummyMytem::new, Material.POLISHED_GRANITE, 95, '\uE29E', Category.NUMBER),
-    NUMBER_1(DummyMytem::new, Material.POLISHED_GRANITE, 96, '\uE29F', Category.NUMBER),
-    NUMBER_2(DummyMytem::new, Material.POLISHED_GRANITE, 97, '\uE2A0', Category.NUMBER),
-    NUMBER_3(DummyMytem::new, Material.POLISHED_GRANITE, 98, '\uE2A1', Category.NUMBER),
-    NUMBER_4(DummyMytem::new, Material.POLISHED_GRANITE, 99, '\uE2A2', Category.NUMBER),
-    NUMBER_5(DummyMytem::new, Material.POLISHED_GRANITE, 100, '\uE2A3', Category.NUMBER),
-    NUMBER_6(DummyMytem::new, Material.POLISHED_GRANITE, 101, '\uE2A4', Category.NUMBER),
-    NUMBER_7(DummyMytem::new, Material.POLISHED_GRANITE, 102, '\uE2A5', Category.NUMBER),
-    NUMBER_8(DummyMytem::new, Material.POLISHED_GRANITE, 103, '\uE2A6', Category.NUMBER),
-    NUMBER_9(DummyMytem::new, Material.POLISHED_GRANITE, 104, '\uE2A7', Category.NUMBER),
-    MUSICAL_SHARP(DummyMytem::new, Material.NOTE_BLOCK, 105, '\uE2A8', Category.MUSICAL),
-    MUSICAL_FLAT(DummyMytem::new, Material.NOTE_BLOCK, 106, '\uE2A9', Category.MUSICAL),
-    EXCLAMATION_MARK(DummyMytem::new, Material.BARRIER, 107, '\uE2AA', Category.PUNCTUATION),
-    QUESTION_MARK(DummyMytem::new, Material.BARRIER, 17, '\uE24A', Category.PUNCTUATION),
+    LETTER_A(GlyphItem::new, Material.PLAYER_HEAD, 68, '\uE284', Category.LETTER),
+    LETTER_B(GlyphItem::new, Material.PLAYER_HEAD, 69, '\uE285', Category.LETTER),
+    LETTER_C(GlyphItem::new, Material.PLAYER_HEAD, 70, '\uE286', Category.LETTER),
+    LETTER_D(GlyphItem::new, Material.PLAYER_HEAD, 71, '\uE287', Category.LETTER),
+    LETTER_E(GlyphItem::new, Material.PLAYER_HEAD, 72, '\uE288', Category.LETTER),
+    LETTER_F(GlyphItem::new, Material.PLAYER_HEAD, 73, '\uE289', Category.LETTER),
+    LETTER_G(GlyphItem::new, Material.PLAYER_HEAD, 74, '\uE28A', Category.LETTER),
+    LETTER_H(GlyphItem::new, Material.PLAYER_HEAD, 75, '\uE28B', Category.LETTER),
+    LETTER_I(GlyphItem::new, Material.PLAYER_HEAD, 76, '\uE28C', Category.LETTER),
+    LETTER_J(GlyphItem::new, Material.PLAYER_HEAD, 77, '\uE28D', Category.LETTER),
+    LETTER_K(GlyphItem::new, Material.PLAYER_HEAD, 78, '\uE28E', Category.LETTER),
+    LETTER_L(GlyphItem::new, Material.PLAYER_HEAD, 80, '\uE28F', Category.LETTER),
+    LETTER_M(GlyphItem::new, Material.PLAYER_HEAD, 81, '\uE290', Category.LETTER),
+    LETTER_N(GlyphItem::new, Material.PLAYER_HEAD, 82, '\uE291', Category.LETTER),
+    LETTER_O(GlyphItem::new, Material.PLAYER_HEAD, 83, '\uE292', Category.LETTER),
+    LETTER_P(GlyphItem::new, Material.PLAYER_HEAD, 84, '\uE293', Category.LETTER),
+    LETTER_Q(GlyphItem::new, Material.PLAYER_HEAD, 85, '\uE294', Category.LETTER),
+    LETTER_R(GlyphItem::new, Material.PLAYER_HEAD, 86, '\uE295', Category.LETTER),
+    LETTER_S(GlyphItem::new, Material.PLAYER_HEAD, 87, '\uE296', Category.LETTER),
+    LETTER_T(GlyphItem::new, Material.PLAYER_HEAD, 88, '\uE297', Category.LETTER),
+    LETTER_U(GlyphItem::new, Material.PLAYER_HEAD, 89, '\uE298', Category.LETTER),
+    LETTER_V(GlyphItem::new, Material.PLAYER_HEAD, 90, '\uE299', Category.LETTER),
+    LETTER_W(GlyphItem::new, Material.PLAYER_HEAD, 91, '\uE29A', Category.LETTER),
+    LETTER_X(GlyphItem::new, Material.PLAYER_HEAD, 92, '\uE29B', Category.LETTER),
+    LETTER_Y(GlyphItem::new, Material.PLAYER_HEAD, 93, '\uE29C', Category.LETTER),
+    LETTER_Z(GlyphItem::new, Material.PLAYER_HEAD, 94, '\uE29D', Category.LETTER),
+    NUMBER_0(GlyphItem::new, Material.PLAYER_HEAD, 95, '\uE29E', Category.NUMBER),
+    NUMBER_1(GlyphItem::new, Material.PLAYER_HEAD, 96, '\uE29F', Category.NUMBER),
+    NUMBER_2(GlyphItem::new, Material.PLAYER_HEAD, 97, '\uE2A0', Category.NUMBER),
+    NUMBER_3(GlyphItem::new, Material.PLAYER_HEAD, 98, '\uE2A1', Category.NUMBER),
+    NUMBER_4(GlyphItem::new, Material.PLAYER_HEAD, 99, '\uE2A2', Category.NUMBER),
+    NUMBER_5(GlyphItem::new, Material.PLAYER_HEAD, 100, '\uE2A3', Category.NUMBER),
+    NUMBER_6(GlyphItem::new, Material.PLAYER_HEAD, 101, '\uE2A4', Category.NUMBER),
+    NUMBER_7(GlyphItem::new, Material.PLAYER_HEAD, 102, '\uE2A5', Category.NUMBER),
+    NUMBER_8(GlyphItem::new, Material.PLAYER_HEAD, 103, '\uE2A6', Category.NUMBER),
+    NUMBER_9(GlyphItem::new, Material.PLAYER_HEAD, 104, '\uE2A7', Category.NUMBER),
+    MUSICAL_SHARP(GlyphItem::new, Material.PLAYER_HEAD, 105, '\uE2A8', Category.MUSICAL),
+    MUSICAL_FLAT(GlyphItem::new, Material.PLAYER_HEAD, 106, '\uE2A9', Category.MUSICAL),
+    EXCLAMATION_MARK(GlyphItem::new, Material.PLAYER_HEAD, 107, '\uE2AA', Category.PUNCTUATION),
+    QUESTION_MARK(GlyphItem::new, Material.PLAYER_HEAD, 17, '\uE24A', Category.PUNCTUATION),
     // Reactions
     SURPRISED(DummyMytem::new, Material.SLIME_BALL, 21, '\uE255', Category.REACTION),
     HAPPY(DummyMytem::new, Material.SLIME_BALL, 22, '\uE256', Category.REACTION),
@@ -513,8 +516,17 @@ public enum Mytems {
      * stats, id, or lore attached.
      */
     public ItemStack createIcon() {
-        ItemStack item = new ItemStack(material);
+        final ItemStack item;
+        if (material == Material.PLAYER_HEAD) {
+            item = Items.text(createItemStack(), List.of());
+        } else {
+            item = new ItemStack(material);
+        }
         item.editMeta(meta -> meta.setCustomModelData(customModelData));
         return item;
+    }
+
+    public ItemStack createIcon(List<Component> text) {
+        return Items.text(createIcon(), text);
     }
 }
