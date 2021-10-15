@@ -46,8 +46,12 @@ public final class Beat {
     }
 
     public boolean countsAs(Touch touch) {
-        return bukkitNote.getTone() == touch.bukkitNote.getTone()
-            && bukkitNote.isSharped() == touch.bukkitNote.isSharped();
+        return tone == touch.tone && semitone == touch.semitone;
+    }
+
+    public boolean countsAs(Note otherNote) {
+        return bukkitNote.getTone() == otherNote.getTone()
+            && bukkitNote.isSharped() == otherNote.isSharped();
     }
 
     public Beat withTicks(int newTicks) {
