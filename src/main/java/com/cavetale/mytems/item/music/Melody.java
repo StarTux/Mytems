@@ -14,15 +14,36 @@ import org.bukkit.entity.Player;
 
 @Getter @RequiredArgsConstructor
 public final class Melody {
+    protected final Map<Tone, Semitone> keys;
     protected final List<Beat> beats;
     protected final long speed; // millis per tick
 
     public Melody withSpeed(long newSpeed) {
-        return new Melody(beats, newSpeed);
+        return new Melody(keys, beats, newSpeed);
+    }
+
+    public int getSize() {
+        return beats.size();
+    }
+
+    public Beat getBeat(int index) {
+        return beats.get(index);
     }
 
     public int getMaxScore() {
-        return beats.size() * 2;
+        return beats.size();
+    }
+
+    public int getAverageTicks() {
+        int total = 0;
+        int size = 0;
+        for (Beat beat : beats) {
+            if (beat.ticks > 0) {
+                total += beat.ticks;
+                size += 1;
+            }
+        }
+        return total / size;
     }
 
     public MelodyReplay play(Melody melody, Location location, double range) {
@@ -49,7 +70,7 @@ public final class Melody {
 
         public Melody build() {
             if (beats.isEmpty()) throw new IllegalStateException("beats is empty");
-            return new Melody(List.copyOf(beats), speed);
+            return new Melody(Map.copyOf(keyMap), List.copyOf(beats), speed);
         }
 
         public Builder speed(long newSpeed) {
@@ -89,47 +110,55 @@ public final class Melody {
         }
 
         public Builder beat(int ticks, Instrument instrument, Tone tone, Semitone semitone, int octave) {
-            beats.add(Beat.of(ticks, instrument, tone, semitone, octave));
+            beats.add(Beat.of(ticks, instrument, tone, semitone, true, octave));
             return this;
         }
 
         public Builder beat(int ticks, Tone tone, Semitone semitone, int octave) {
-            beats.add(Beat.of(ticks, defaultInstrument, tone, semitone, octave));
+            beats.add(Beat.of(ticks, defaultInstrument, tone, semitone, true, octave));
             return this;
         }
 
         public Builder beat(int ticks, Instrument instrument, Tone tone, int octave) {
-            return beat(ticks, instrument, tone, defaultSemitone(tone), octave);
+            beats.add(Beat.of(ticks, instrument, tone, defaultSemitone(tone), false, octave));
+            return this;
         }
 
         public Builder beat(int ticks, Tone tone, int octave) {
-            return beat(ticks, defaultInstrument, tone, defaultSemitone(tone), octave);
+            beats.add(Beat.of(ticks, defaultInstrument, tone, defaultSemitone(tone), false, octave));
+            return this;
         }
 
         public Builder beat(Instrument instrument, Tone tone, Semitone semitone, int octave) {
-            return beat(0, instrument, tone, semitone, octave);
+            beats.add(Beat.of(0, instrument, tone, semitone, true, octave));
+            return this;
         }
 
         public Builder beat(Tone tone, Semitone semitone, int octave) {
-            return beat(0, defaultInstrument, tone, semitone, octave);
+            beats.add(Beat.of(0, defaultInstrument, tone, semitone, true, octave));
+            return this;
         }
 
         public Builder beat(Instrument instrument, Tone tone, int octave) {
-            return beat(0, instrument, tone, octave);
+            beats.add(Beat.of(0, instrument, tone, defaultSemitone(tone), false, octave));
+            return this;
         }
 
         public Builder beat(Tone tone, int octave) {
-            return beat(0, defaultInstrument, tone, octave);
+            beats.add(Beat.of(0, defaultInstrument, tone, defaultSemitone(tone), false, octave));
+            return this;
         }
     }
 
     private static final class Tag {
+        Map<Tone, Semitone> keys;
         List<String> beats;
         long speed;
     }
 
     public String serialize() {
         Tag tag = new Tag();
+        tag.keys = keys;
         tag.beats = new ArrayList<>(beats.size());
         for (Beat beat : beats) {
             tag.beats.add(beat.serialize());
@@ -142,8 +171,8 @@ public final class Melody {
         if (tag == null || tag.beats == null) return null;
         List<Beat> beatList = new ArrayList<>(tag.beats.size());
         for (String it : tag.beats) {
-            beatList.add(Beat.deserialize(it));
+            beatList.add(Beat.deserialize(tag.keys, it));
         }
-        return new Melody(beatList, tag.speed);
+        return new Melody(tag.keys, beatList, tag.speed);
     }
 }

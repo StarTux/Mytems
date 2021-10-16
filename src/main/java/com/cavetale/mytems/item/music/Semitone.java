@@ -6,7 +6,7 @@ import org.bukkit.Note;
 
 @RequiredArgsConstructor
 public enum Semitone {
-    NATURAL("", Mytems.INVISIBLE_ITEM) {
+    NATURAL("\u266E", Mytems.INVISIBLE_ITEM) {
         @Override public Note apply(Note in) {
             return in;
         }

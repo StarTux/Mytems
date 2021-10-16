@@ -167,6 +167,7 @@ public final class MusicalInstrument implements Mytem {
         protected BukkitTask task;
         protected long lastTick;
         protected int score;
+        protected int maxScore;
     }
 
     @Override
@@ -195,6 +196,9 @@ public final class MusicalInstrument implements Mytem {
         GuiPrivateData privateData = new GuiPrivateData();
         if (openEvent.isHeroMode()) {
             privateData.hero = new Hero(openEvent.getHeroMelody());
+            for (Beat beat : privateData.hero.melody.getBeats()) {
+                if (beat.ticks > 0) privateData.hero.maxScore += 1;
+            }
         }
         final int size = (openEvent.isHeroMode() ? 6 : 4) * 9;
         Component guiDisplayName = Component.text().color(NamedTextColor.WHITE)
@@ -210,6 +214,7 @@ public final class MusicalInstrument implements Mytem {
             gui.setItem(5 * 9 + HERO_POINTER, Mytems.ARROW_UP.createIcon());
             privateData.hero.grid = new Beat[10];
             privateData.hero.replay = new MelodyReplay(privateData.hero.melody, beat -> {
+                    if (beat.ticks == 0) return true;
                     privateData.hero.grid[9] = beat;
                     return true;
             });
@@ -218,7 +223,7 @@ public final class MusicalInstrument implements Mytem {
                         privateData.hero.replay.start();
                     }
                     long now = System.currentTimeMillis();
-                    if (now - privateData.hero.lastTick < 50L * 3L) return;
+                    if (now - privateData.hero.lastTick < 50L * 4L) return;
                     privateData.hero.lastTick = now;
                     int noteCount = 0;
                     for (int i = 0; i < privateData.hero.grid.length; i += 1) {
@@ -234,8 +239,9 @@ public final class MusicalInstrument implements Mytem {
                         }
                         if (i == 0) {
                             PlayerBeatEvent.Action.MISS_BEAT.call(player, type, privateData.hero.melody, beat);
-                            updateHeroScore(-1, gui, privateData);
-                            updateHeroIcon(gui, Mytems.EMPTY_HEART.createIcon(List.of(Component.text("Too Late", NamedTextColor.DARK_RED))));
+                            updateHeroScore(0, gui, privateData);
+                            updateHeroIcon(gui, Mytems.EMPTY_HEART.createIcon(List.of(Component.text("You Missed", NamedTextColor.DARK_RED))));
+                            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, SoundCategory.MASTER, 2.0f, 0.5f);
                         } else {
                             privateData.hero.grid[i - 1] = beat;
                             gui.setItem(HERO_OFFSET + i - 1, TONE_MYTEMS_MAP.get(beat.tone).createIcon());
@@ -249,12 +255,12 @@ public final class MusicalInstrument implements Mytem {
                         }
                     }
                     if (noteCount == 0 && privateData.hero.replay.didStop()) {
-                        new PlayerMelodyCompleteEvent(player, type, privateData.hero.melody, privateData.hero.score).callEvent();
+                        new PlayerMelodyCompleteEvent(player, type, privateData.hero.melody,
+                                                      privateData.hero.score, privateData.hero.maxScore).callEvent();
                         updateHeroIcon(gui, null);
                         privateData.stopHero();
                     }
-                }, 40L, 1L);
-            updateHeroScore(0, gui, privateData);
+                }, 80L, 1L);
         }
         gui.onClose(evt -> {
                 new PlayerCloseMusicalInstrumentEvent(player, type).callEvent();
@@ -284,12 +290,22 @@ public final class MusicalInstrument implements Mytem {
         if (privateData.hero == null) {
             // Shorten this in hero mode!
             if (button.flat != null) {
-                text.add(Component.text(button.tone.name() + Semitone.FLAT.symbol, COLOR)
-                         .append(Component.text(" Shift", NamedTextColor.GRAY)));
+                if (privateData.semitones.get(button.tone) == Semitone.FLAT) {
+                    text.add(Component.text(button.tone.name() + Semitone.NATURAL.symbol, COLOR)
+                             .append(Component.text(" Shift", NamedTextColor.GRAY)));
+                } else {
+                    text.add(Component.text(button.tone.name() + Semitone.FLAT.symbol, COLOR)
+                             .append(Component.text(" Shift", NamedTextColor.GRAY)));
+                }
             }
             if (button.sharp != null) {
-                text.add(Component.text(button.tone.name() + Semitone.SHARP.symbol, COLOR)
-                         .append(Component.text(" Right", NamedTextColor.GRAY)));
+                if (privateData.semitones.get(button.tone) == Semitone.SHARP) {
+                    text.add(Component.text(button.tone.name() + Semitone.NATURAL.symbol, COLOR)
+                             .append(Component.text(" Right", NamedTextColor.GRAY)));
+                } else {
+                    text.add(Component.text(button.tone.name() + Semitone.SHARP.symbol, COLOR)
+                             .append(Component.text(" Right", NamedTextColor.GRAY)));
+                }
             }
             text.add(Component.empty());
             text.add(Component.text("Interval")
@@ -333,9 +349,13 @@ public final class MusicalInstrument implements Mytem {
         } else if (left && !right && !shift) {
             touch = privateData.realNoteOf(button);
         } else if (left && !right && shift) {
-            touch = button.flat;
+            touch = privateData.semitones.get(button.tone) == Semitone.FLAT
+                ? button.natural
+                : button.flat;
         } else if (!left && right && !shift) {
-            touch = button.sharp;
+            touch = privateData.semitones.get(button.tone) == Semitone.SHARP
+                ? button.natural
+                : button.sharp;
         } else {
             touch = null;
         }
@@ -366,7 +386,7 @@ public final class MusicalInstrument implements Mytem {
                     privateData.hero.grid[i] = null;
                     if (i <= HERO_POINTER) {
                         PlayerBeatEvent.Action.HIT_BEAT.call(player, type, privateData.hero.melody, beat);
-                        updateHeroScore(2, gui, privateData);
+                        updateHeroScore(1, gui, privateData);
                         updateHeroIcon(gui, Mytems.STAR.createIcon(List.of(Component.text("Perfect", NamedTextColor.GOLD))));
                     } else {
                         PlayerBeatEvent.Action.PLAY_BEAT_EARLY.call(player, type, privateData.hero.melody, beat);
@@ -385,6 +405,7 @@ public final class MusicalInstrument implements Mytem {
             PlayerBeatEvent.Action.PLAY_OUT_OF_TUNE.call(player, type, privateData.hero.melody);
             updateHeroScore(-1, gui, privateData);
             updateHeroIcon(gui, Mytems.NO.createIcon(List.of(Component.text("Wrong!", NamedTextColor.DARK_RED))));
+            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, SoundCategory.MASTER, 2.0f, 0.5f);
         }
     }
 

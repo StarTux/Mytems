@@ -15,6 +15,7 @@ public final class PlayerMelodyCompleteEvent extends Event {
     protected final InstrumentType instrumentType;
     protected final Melody melody;
     protected final int score;
+    protected final int maxScore;
 
     public HandlerList getHandlers() {
         return handlerList;
