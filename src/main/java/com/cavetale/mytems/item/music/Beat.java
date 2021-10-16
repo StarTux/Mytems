@@ -20,7 +20,6 @@ public final class Beat {
     public final Semitone semitone;
     public final boolean accidental;
     public final Note bukkitNote;
-    public final String displayString;
 
     private Beat(final int ticks, final Instrument instrument,
                  final Tone tone, final Semitone semitone, final boolean accidental,
@@ -31,7 +30,6 @@ public final class Beat {
         this.semitone = semitone;
         this.accidental = accidental;
         this.bukkitNote = bukkitNote;
-        this.displayString = tone.name() + semitone.symbol;
     }
 
     public static Beat of(int ticks, Instrument instrument, Tone tone, Semitone semitone, boolean accidental, int octave) {

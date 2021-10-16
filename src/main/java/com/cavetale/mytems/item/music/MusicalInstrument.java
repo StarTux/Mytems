@@ -137,12 +137,12 @@ public final class MusicalInstrument implements Mytem {
             return semitones.computeIfAbsent(tone, t -> Semitone.NATURAL);
         }
 
-        public Touch realNoteOf(Note.Tone tone, int octave) {
+        public Touch touchOf(Note.Tone tone, int octave) {
             return Touch.of(tone, semitoneOf(tone), octave);
         }
 
-        public Touch realNoteOf(Button button) {
-            return realNoteOf(button.tone, button.octave);
+        public Touch touchOf(Button button) {
+            return touchOf(button.tone, button.octave);
         }
 
         protected void stopHero() {
@@ -285,8 +285,8 @@ public final class MusicalInstrument implements Mytem {
 
     protected ItemStack makeNoteButton(Button button, GuiPrivateData privateData) {
         List<Component> text = new ArrayList<>();
-        Touch realNote = privateData.realNoteOf(button.tone, button.octave);
-        text.add(Component.text(realNote.displayString, COLOR));
+        Touch touch = privateData.touchOf(button.tone, button.octave);
+        text.add(Component.text(touch.toString(), COLOR));
         if (privateData.hero == null) {
             // Shorten this in hero mode!
             if (button.flat != null) {
@@ -322,8 +322,8 @@ public final class MusicalInstrument implements Mytem {
     protected ItemStack makeSemitoneButton(Button button, GuiPrivateData privateData) {
         Semitone semitone = privateData.semitoneOf(button.tone);
         List<Component> text = new ArrayList<>();
-        Touch realNote = privateData.realNoteOf(button.tone, button.octave);
-        text.add(Component.text(realNote.displayString, COLOR));
+        Touch touch = privateData.touchOf(button.tone, button.octave);
+        text.add(Component.text(touch.toString(), COLOR));
         text.add(Component.text("Sharpen", COLOR)
                  .append(Component.text(" Left", NamedTextColor.GRAY)));
         text.add(Component.text("Flatten", COLOR)
@@ -345,9 +345,9 @@ public final class MusicalInstrument implements Mytem {
             int index = button.ordinal() + event.getHotbarButton();
             Button[] allButtons = Button.values();
             Button theButton = allButtons[index % allButtons.length];
-            touch = privateData.realNoteOf(theButton);
+            touch = privateData.touchOf(theButton);
         } else if (left && !right && !shift) {
-            touch = privateData.realNoteOf(button);
+            touch = privateData.touchOf(button);
         } else if (left && !right && shift) {
             touch = privateData.semitones.get(button.tone) == Semitone.FLAT
                 ? button.natural

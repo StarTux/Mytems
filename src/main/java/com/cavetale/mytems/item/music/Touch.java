@@ -10,13 +10,11 @@ public final class Touch {
     public final Note.Tone tone;
     public final Semitone semitone;
     public final Note bukkitNote;
-    public final String displayString;
 
     private Touch(final Note.Tone tone, final Semitone semitone, final Note bukkitNote) {
         this.tone = tone;
         this.semitone = semitone;
         this.bukkitNote = bukkitNote;
-        this.displayString = tone.name() + semitone.symbol;
     }
 
     public static Touch of(Note.Tone tone, Semitone semitone, int octave) {
@@ -28,5 +26,13 @@ public final class Touch {
 
     public boolean countsAs(Note other) {
         return bukkitNote.getTone() == other.getTone() && bukkitNote.isSharped() == other.isSharped();
+    }
+
+    @Override
+    public String toString() {
+        final int octave = bukkitNote.getOctave();
+        return tone.name()
+            + (semitone != Semitone.NATURAL ? semitone.symbol : "")
+            + (octave == 0 ? "" : (octave == 2 ? "''" : "'"));
     }
 }
