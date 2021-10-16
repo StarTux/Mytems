@@ -46,7 +46,7 @@ public final class Melody {
         return total / size;
     }
 
-    public MelodyReplay play(Melody melody, Location location, double range) {
+    public MelodyReplay play(Location location, double range) {
         return MelodyReplay.play(this, location, range);
     }
 
