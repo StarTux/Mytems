@@ -15,6 +15,7 @@ import java.util.function.Function;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Entity;
@@ -133,7 +134,7 @@ public final class MytemsPlugin extends JavaPlugin {
         int count = 0;
         for (int i = 0; i < inventory.getSize(); i += 1) {
             ItemStack itemStack = inventory.getItem(i);
-            if (itemStack == null || itemStack.getAmount() == 0) continue;
+            if (itemStack == null || itemStack.getType() == Material.AIR) continue;
             ItemStack newItemStack = fixItemStack(itemStack);
             if (newItemStack == null) continue;
             inventory.setItem(i, newItemStack);
@@ -151,7 +152,7 @@ public final class MytemsPlugin extends JavaPlugin {
      *   context, null otherwise
      */
     public ItemStack fixItemStack(ItemStack oldItemStack) {
-        if (oldItemStack == null || oldItemStack.getAmount() == 0) return null;
+        if (oldItemStack == null || oldItemStack.getType() == Material.AIR) return null;
         Mytems key = Mytems.forItem(oldItemStack);
         if (key != null) {
             String serialized = key.serializeItem(oldItemStack);

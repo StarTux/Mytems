@@ -23,6 +23,7 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Instrument;
+import org.bukkit.Material;
 import org.bukkit.Note.Tone;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -156,7 +157,7 @@ public final class MytemsCommand implements TabExecutor {
     boolean base64(Player player, String[] args) {
         if (args.length != 0) return false;
         ItemStack itemStack = player.getInventory().getItemInMainHand();
-        if (itemStack == null || itemStack.getAmount() <= 0) {
+        if (itemStack == null || itemStack.getType() == Material.AIR) {
             throw new CommandWarn("There's no item in your main hand!");
         }
         byte[] bytes = itemStack.serializeAsBytes();
@@ -215,7 +216,7 @@ public final class MytemsCommand implements TabExecutor {
     boolean serialize(Player player, String[] args) {
         if (args.length != 0) return false;
         ItemStack itemStack = player.getInventory().getItemInMainHand();
-        if (itemStack == null || itemStack.getAmount() == 0) {
+        if (itemStack == null || itemStack.getType() == Material.AIR) {
             throw new CommandWarn("No item in your hand!");
         }
         Mytems mytems = Mytems.forItem(itemStack);
@@ -237,7 +238,7 @@ public final class MytemsCommand implements TabExecutor {
     boolean testserialize(Player player, String[] args) {
         if (args.length != 0) return false;
         ItemStack itemStack = player.getInventory().getItemInMainHand();
-        if (itemStack == null || itemStack.getAmount() == 0) {
+        if (itemStack == null || itemStack.getType() == Material.AIR) {
             throw new CommandWarn("No item in your hand!");
         }
         Mytems mytems = Mytems.forItem(itemStack);
