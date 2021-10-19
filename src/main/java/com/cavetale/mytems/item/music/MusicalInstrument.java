@@ -26,13 +26,14 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
+import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Instrument;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Note;
+import org.bukkit.Note.Tone;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -45,6 +46,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.scheduler.BukkitTask;
 
@@ -57,19 +59,19 @@ public final class MusicalInstrument implements Mytem {
     @Getter private final Mytems key;
     private String displayNameString;
     @Getter private Component displayName;
-    private List<Component> lore;
+    private List<Component> baseText;
     private ItemStack prototype;
     private Instrument instrument;
     private static final TextColor COLOR = TextColor.color(0x6A5ACD);
     private InstrumentType type;
-    private static final Map<Note.Tone, Mytems> TONE_MYTEMS_MAP = Map
-        .of(Note.Tone.A, Mytems.LETTER_A,
-            Note.Tone.B, Mytems.LETTER_B,
-            Note.Tone.C, Mytems.LETTER_C,
-            Note.Tone.D, Mytems.LETTER_D,
-            Note.Tone.E, Mytems.LETTER_E,
-            Note.Tone.F, Mytems.LETTER_F,
-            Note.Tone.G, Mytems.LETTER_G);
+    private static final Map<Tone, Mytems> TONE_MYTEMS_MAP = Map
+        .of(Tone.A, Mytems.LETTER_A,
+            Tone.B, Mytems.LETTER_B,
+            Tone.C, Mytems.LETTER_C,
+            Tone.D, Mytems.LETTER_D,
+            Tone.E, Mytems.LETTER_E,
+            Tone.F, Mytems.LETTER_F,
+            Tone.G, Mytems.LETTER_G);
     private static final NamespacedKey SHARP_KEY = new NamespacedKey(MytemsPlugin.getInstance(), "sharp");
     private static final NamespacedKey FLAT_KEY = new NamespacedKey(MytemsPlugin.getInstance(), "flat");
 
@@ -84,12 +86,12 @@ public final class MusicalInstrument implements Mytem {
         Objects.requireNonNull(type, "type=null");
         this.displayNameString = Text.toCamelCase(key, " ");
         this.displayName = Component.text(displayNameString, COLOR);
-        List<Component> text = List.of(displayName,
-                                       Component.text("Right-click", NamedTextColor.GREEN)
-                                       .append(Component.text(" to play", NamedTextColor.GRAY)));
+        baseText = List.of(displayName,
+                           Component.text("Right-click", NamedTextColor.GREEN)
+                           .append(Component.text(" to play", NamedTextColor.GRAY)));
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.text(meta, text);
+                Items.text(meta, baseText);
                 key.markItemMeta(meta);
             });
     }
@@ -100,29 +102,29 @@ public final class MusicalInstrument implements Mytem {
     }
 
     enum Button {
-        G(0, Note.Tone.G, 0),
-        A(1, Note.Tone.A, 0),
-        B(2, Note.Tone.B, 0),
-        C(3, Note.Tone.C, 0),
-        D(4, Note.Tone.D, 0),
-        E(5, Note.Tone.E, 0),
-        F(6, Note.Tone.F, 0),
-        G1(0, Note.Tone.G, 1),
-        A1(1, Note.Tone.A, 1),
-        B1(2, Note.Tone.B, 1),
-        C1(3, Note.Tone.C, 1),
-        D1(4, Note.Tone.D, 1),
-        E1(5, Note.Tone.E, 1),
-        F1(6, Note.Tone.F, 1);
+        G(0, Tone.G, 0),
+        A(1, Tone.A, 0),
+        B(2, Tone.B, 0),
+        C(3, Tone.C, 0),
+        D(4, Tone.D, 0),
+        E(5, Tone.E, 0),
+        F(6, Tone.F, 0),
+        G1(0, Tone.G, 1),
+        A1(1, Tone.A, 1),
+        B1(2, Tone.B, 1),
+        C1(3, Tone.C, 1),
+        D1(4, Tone.D, 1),
+        E1(5, Tone.E, 1),
+        F1(6, Tone.F, 1);
 
         public final int x;
-        public final Note.Tone tone;
+        public final Tone tone;
         public final int octave;
         public final Touch natural;
         public final Touch sharp;
         public final Touch flat;
 
-        Button(final int x, final Note.Tone tone, final int octave) {
+        Button(final int x, final Tone tone, final int octave) {
             this.x = x;
             this.tone = tone;
             this.octave = octave;
@@ -136,15 +138,15 @@ public final class MusicalInstrument implements Mytem {
         }
     }
 
-    private static final class GuiPrivateData {
-        protected Map<Note.Tone, Semitone> semitones = new EnumMap<>(Note.Tone.class);
+    private final class GuiPrivateData {
+        protected Map<Tone, Semitone> semitones = new EnumMap<>(Tone.class);
         protected Hero hero;
 
-        public Semitone semitoneOf(Note.Tone tone) {
+        public Semitone semitoneOf(Tone tone) {
             return semitones.computeIfAbsent(tone, t -> Semitone.NATURAL);
         }
 
-        public Touch touchOf(Note.Tone tone, int octave) {
+        public Touch touchOf(Tone tone, int octave) {
             return Touch.of(tone, semitoneOf(tone), octave);
         }
 
@@ -173,7 +175,7 @@ public final class MusicalInstrument implements Mytem {
                 for (int i = 0; i < sharpString.length(); i += 1) {
                     String c = sharpString.substring(i, i + 1);
                     try {
-                        Note.Tone tone = Note.Tone.valueOf(c);
+                        Tone tone = Tone.valueOf(c);
                         semitones.put(tone, Semitone.SHARP);
                     } catch (IllegalArgumentException iae) {
                         MytemsPlugin.getInstance().getLogger()
@@ -186,7 +188,7 @@ public final class MusicalInstrument implements Mytem {
                 for (int i = 0; i < flatString.length(); i += 1) {
                     String c = flatString.substring(i, i + 1);
                     try {
-                        Note.Tone tone = Note.Tone.valueOf(c);
+                        Tone tone = Tone.valueOf(c);
                         semitones.put(tone, Semitone.FLAT);
                     } catch (IllegalArgumentException iae) {
                         MytemsPlugin.getInstance().getLogger()
@@ -200,7 +202,7 @@ public final class MusicalInstrument implements Mytem {
         protected void save(ItemStack item) {
             StringBuilder sharpString = new StringBuilder();
             StringBuilder flatString = new StringBuilder();
-            for (Note.Tone tone : Note.Tone.values()) {
+            for (Tone tone : Tone.values()) {
                 Semitone semitone = semitones.get(tone);
                 if (semitone == Semitone.SHARP) {
                     sharpString.append(tone.name());
@@ -220,6 +222,7 @@ public final class MusicalInstrument implements Mytem {
                     } else {
                         Tags.set(tag, FLAT_KEY, flatString.toString());
                     }
+                    updateLore(meta, sharpString.toString(), flatString.toString());
                 });
         }
     }
@@ -543,8 +546,38 @@ public final class MusicalInstrument implements Mytem {
                     if (tag.flat != null) {
                         Tags.set(tag2, FLAT_KEY, tag.flat);
                     }
+                    updateLore(meta, tag.sharp, tag.flat);
                 });
         }
         return result;
+    }
+
+    protected void updateLore(ItemMeta meta, String sharp, String flat) {
+        List<Component> line = new ArrayList<>();
+        if (sharp != null) {
+            for (int i = 0; i < sharp.length(); i += 1) {
+                try {
+                    Tone tone = Tone.valueOf(sharp.substring(i, i + 1));
+                    line.add(Component.join(JoinConfiguration.noSeparators(),
+                                            TONE_MYTEMS_MAP.get(tone).component,
+                                            Semitone.SHARP.mytems.component));
+                } catch (IllegalArgumentException iae) { }
+            }
+        }
+        if (flat != null) {
+            for (int i = 0; i < flat.length(); i += 1) {
+                try {
+                    Tone tone = Tone.valueOf(flat.substring(i, i + 1));
+                    line.add(Component.join(JoinConfiguration.noSeparators(),
+                                            TONE_MYTEMS_MAP.get(tone).component,
+                                            Semitone.FLAT.mytems.component));
+                } catch (IllegalArgumentException iae) { }
+            }
+        }
+        List<Component> text = new ArrayList<>(baseText);
+        if (!line.isEmpty()) {
+            text.add(Component.join(JoinConfiguration.separator(Component.space()), line));
+        }
+        Items.text(meta, text);
     }
 }
