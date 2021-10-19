@@ -33,7 +33,7 @@ public final class Beat {
     }
 
     public static Beat of(int ticks, Instrument instrument, Tone tone, Semitone semitone, boolean accidental, int octave) {
-        Note bukkitNote = semitone.apply(Note.natural(octave, tone));
+        Note bukkitNote = semitone.bukkitNote(octave, tone);
         return bukkitNote.getTone() == tone || bukkitNote.isSharped()
             ? new Beat(ticks, instrument, tone, semitone, accidental, bukkitNote)
             : new Beat(ticks, instrument, bukkitNote.getTone(), Semitone.NATURAL, accidental, bukkitNote);

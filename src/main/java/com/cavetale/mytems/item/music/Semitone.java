@@ -2,29 +2,30 @@ package com.cavetale.mytems.item.music;
 
 import com.cavetale.mytems.Mytems;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.Note.Tone;
 import org.bukkit.Note;
 
 @RequiredArgsConstructor
 public enum Semitone {
     NATURAL("\u266E", Mytems.INVISIBLE_ITEM) {
-        @Override public Note apply(Note in) {
-            return in;
+        @Override public Note bukkitNote(int octave, Tone tone) {
+            return Note.natural(octave, tone);
         }
     },
     SHARP("\u266F", Mytems.MUSICAL_SHARP) {
-        @Override public Note apply(Note in) {
-            return in.sharped();
+        @Override public Note bukkitNote(int octave, Tone tone) {
+            return Note.sharp(octave, tone);
         }
     },
     FLAT("\u266D", Mytems.MUSICAL_FLAT) {
-        @Override public Note apply(Note in) {
-            return in.flattened();
+        @Override public Note bukkitNote(int octave, Tone tone) {
+            return Note.flat(octave, tone);
         }
     };
 
     public final String symbol;
     public final Mytems mytems;
-    public abstract Note apply(Note in);
+    public abstract Note bukkitNote(int octave, Tone tone);
 
     public String serialize() {
         return symbol;

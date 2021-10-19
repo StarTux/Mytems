@@ -18,7 +18,7 @@ public final class Touch {
     }
 
     public static Touch of(Note.Tone tone, Semitone semitone, int octave) {
-        Note bukkitNote = semitone.apply(Note.natural(octave, tone));
+        Note bukkitNote = semitone.bukkitNote(octave, tone);
         return bukkitNote.getTone() == tone || bukkitNote.isSharped()
             ? new Touch(tone, semitone, bukkitNote)
             : new Touch(bukkitNote.getTone(), Semitone.NATURAL, bukkitNote);
