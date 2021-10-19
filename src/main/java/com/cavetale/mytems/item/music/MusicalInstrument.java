@@ -3,6 +3,7 @@ package com.cavetale.mytems.item.music;
 import com.cavetale.core.event.player.PluginPlayerEvent.Detail;
 import com.cavetale.core.event.player.PluginPlayerEvent;
 import com.cavetale.core.font.DefaultFont;
+import com.cavetale.core.util.Json;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
@@ -14,11 +15,13 @@ import com.cavetale.mytems.item.font.Glyph;
 import com.cavetale.mytems.util.Gui;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
+import com.cavetale.worldmarker.util.Tags;
 import java.util.ArrayList;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.logging.Level;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
@@ -28,6 +31,7 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Instrument;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Note;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -41,6 +45,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.scheduler.BukkitTask;
 
 @RequiredArgsConstructor
@@ -65,6 +70,8 @@ public final class MusicalInstrument implements Mytem {
             Note.Tone.E, Mytems.LETTER_E,
             Note.Tone.F, Mytems.LETTER_F,
             Note.Tone.G, Mytems.LETTER_G);
+    private static final NamespacedKey SHARP_KEY = new NamespacedKey(MytemsPlugin.getInstance(), "sharp");
+    private static final NamespacedKey FLAT_KEY = new NamespacedKey(MytemsPlugin.getInstance(), "flat");
 
     @Override
     public void enable() {
@@ -157,6 +164,64 @@ public final class MusicalInstrument implements Mytem {
             }
             hero = null;
         }
+
+        protected void load(ItemStack item) {
+            PersistentDataContainer tag = item.getItemMeta().getPersistentDataContainer();
+            String sharpString = Tags.getString(tag, SHARP_KEY);
+            String flatString = Tags.getString(tag, FLAT_KEY);
+            if (sharpString != null) {
+                for (int i = 0; i < sharpString.length(); i += 1) {
+                    String c = sharpString.substring(i, i + 1);
+                    try {
+                        Note.Tone tone = Note.Tone.valueOf(c);
+                        semitones.put(tone, Semitone.SHARP);
+                    } catch (IllegalArgumentException iae) {
+                        MytemsPlugin.getInstance().getLogger()
+                            .log(Level.SEVERE, "load sharp: " + c, iae);
+                        return;
+                    }
+                }
+            }
+            if (flatString != null) {
+                for (int i = 0; i < flatString.length(); i += 1) {
+                    String c = flatString.substring(i, i + 1);
+                    try {
+                        Note.Tone tone = Note.Tone.valueOf(c);
+                        semitones.put(tone, Semitone.FLAT);
+                    } catch (IllegalArgumentException iae) {
+                        MytemsPlugin.getInstance().getLogger()
+                            .log(Level.SEVERE, "load flat: " + c, iae);
+                        return;
+                    }
+                }
+            }
+        }
+
+        protected void save(ItemStack item) {
+            StringBuilder sharpString = new StringBuilder();
+            StringBuilder flatString = new StringBuilder();
+            for (Note.Tone tone : Note.Tone.values()) {
+                Semitone semitone = semitones.get(tone);
+                if (semitone == Semitone.SHARP) {
+                    sharpString.append(tone.name());
+                } else if (semitone == Semitone.FLAT) {
+                    flatString.append(tone.name());
+                }
+            }
+            item.editMeta(meta -> {
+                    PersistentDataContainer tag = meta.getPersistentDataContainer();
+                    if (sharpString.isEmpty()) {
+                        tag.remove(SHARP_KEY);
+                    } else {
+                        Tags.set(tag, SHARP_KEY, sharpString.toString());
+                    }
+                    if (flatString.isEmpty()) {
+                        tag.remove(FLAT_KEY);
+                    } else {
+                        Tags.set(tag, FLAT_KEY, flatString.toString());
+                    }
+                });
+        }
     }
 
     @RequiredArgsConstructor
@@ -180,20 +245,21 @@ public final class MusicalInstrument implements Mytem {
         event.setUseInteractedBlock(Event.Result.DENY);
         event.setUseItemInHand(Event.Result.DENY);
         if (Gui.of(player) != null) return;
-        openGui(player);
+        openGui(player, item);
     }
 
     @Override
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player, ItemStack item) {
         event.setCancelled(true);
         if (Gui.of(player) != null) return;
-        openGui(player);
+        openGui(player, item);
     }
 
-    protected void openGui(Player player) {
+    protected void openGui(Player player, ItemStack instrumentItemStack) {
         PlayerOpenMusicalInstrumentEvent openEvent = new PlayerOpenMusicalInstrumentEvent(player, type);
         openEvent.callEvent();
         GuiPrivateData privateData = new GuiPrivateData();
+        privateData.load(instrumentItemStack);
         if (openEvent.isHeroMode()) {
             privateData.hero = new Hero(openEvent.getHeroMelody());
             for (Beat beat : privateData.hero.melody.getBeats()) {
@@ -263,6 +329,7 @@ public final class MusicalInstrument implements Mytem {
                 }, 80L, 1L);
         }
         gui.onClose(evt -> {
+                privateData.save(instrumentItemStack);
                 new PlayerCloseMusicalInstrumentEvent(player, type).callEvent();
                 privateData.stopHero();
             });
@@ -443,5 +510,41 @@ public final class MusicalInstrument implements Mytem {
         privateData.semitones.put(button.tone, newSemitone);
         buildGui(gui, privateData);
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
+    }
+
+    protected static final class MusicalInstrumentTag {
+        protected String flat;
+        protected String sharp;
+
+        public boolean isEmpty() {
+            return flat == null && sharp == null;
+        }
+    }
+
+    @Override
+    public String serializeTag(ItemStack itemStack) {
+        MusicalInstrumentTag result = new MusicalInstrumentTag();
+        PersistentDataContainer tag = itemStack.getItemMeta().getPersistentDataContainer();
+        result.sharp = Tags.getString(tag, SHARP_KEY);
+        result.flat = Tags.getString(tag, FLAT_KEY);
+        return result.isEmpty() ? null : Json.serialize(result);
+    }
+
+    @Override
+    public ItemStack deserializeTag(String serialized, Player player) {
+        ItemStack result = createItemStack();
+        MusicalInstrumentTag tag = Json.deserialize(serialized, MusicalInstrumentTag.class);
+        if (!tag.isEmpty()) {
+            result.editMeta(meta -> {
+                    PersistentDataContainer tag2 = meta.getPersistentDataContainer();
+                    if (tag.sharp != null) {
+                        Tags.set(tag2, SHARP_KEY, tag.sharp);
+                    }
+                    if (tag.flat != null) {
+                        Tags.set(tag2, FLAT_KEY, tag.flat);
+                    }
+                });
+        }
+        return result;
     }
 }
