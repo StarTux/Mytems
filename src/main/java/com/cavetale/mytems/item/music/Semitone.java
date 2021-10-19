@@ -14,6 +14,7 @@ public enum Semitone {
     },
     SHARP("\u266F", Mytems.MUSICAL_SHARP) {
         @Override public Note bukkitNote(int octave, Tone tone) {
+            if (tone == Tone.F) octave += 1;
             return Note.sharp(octave, tone);
         }
     },
