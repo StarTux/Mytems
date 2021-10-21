@@ -11,6 +11,7 @@ import org.bukkit.Instrument;
 import org.bukkit.Location;
 import org.bukkit.Note.Tone;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
 
 @Getter @RequiredArgsConstructor
 public final class Melody {
@@ -46,12 +47,12 @@ public final class Melody {
         return total / size;
     }
 
-    public MelodyReplay play(Location location, double range) {
-        return MelodyReplay.play(this, location, range);
+    public MelodyReplay play(Plugin plugin, Location location, double range) {
+        return MelodyReplay.play(plugin, this, location, range);
     }
 
-    public MelodyReplay play(Player player) {
-        return MelodyReplay.play(this, player);
+    public MelodyReplay play(Plugin plugin, Player player) {
+        return MelodyReplay.play(plugin, this, player);
     }
 
     public static Builder builder(Instrument instrument, long speed) {

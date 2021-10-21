@@ -282,8 +282,7 @@ public final class MusicalInstrument implements Mytem {
         if (openEvent.isHeroMode()) {
             gui.setItem(5 * 9 + HERO_POINTER, Mytems.ARROW_UP.createIcon());
             privateData.hero.grid = new Beat[10];
-            privateData.hero.replay = new MelodyReplay(privateData.hero.melody, beat -> {
-                    if (beat.ticks == 0) return true;
+            privateData.hero.replay = new MelodyReplay(MytemsPlugin.getInstance(), privateData.hero.melody, beat -> {
                     privateData.hero.grid[9] = beat;
                     return true;
             });
