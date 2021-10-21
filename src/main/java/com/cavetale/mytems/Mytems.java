@@ -24,6 +24,9 @@ import com.cavetale.mytems.item.easter.EasterEgg;
 import com.cavetale.mytems.item.easter.EasterGear;
 import com.cavetale.mytems.item.easter.EasterToken;
 import com.cavetale.mytems.item.font.GlyphItem;
+import com.cavetale.mytems.item.halloween.HalloweenCandy;
+import com.cavetale.mytems.item.halloween.HalloweenToken2;
+import com.cavetale.mytems.item.halloween.HalloweenToken;
 import com.cavetale.mytems.item.medieval.GoldenScythe;
 import com.cavetale.mytems.item.medieval.WitchBroom;
 import com.cavetale.mytems.item.music.HyruleInstrument;
@@ -330,14 +333,15 @@ public enum Mytems {
     PIC_WOLF(DummyMytem::new, Material.BONE, 39, '\uE267', Category.PICTURE),
     PIC_CAT(DummyMytem::new, Material.STRING, 40, '\uE268', Category.PICTURE),
     // Halloween
-    CANDY_CORN(DummyMytem::new, Material.CARROT, 42, '\uE26A', Category.HALLOWEEN),
-    CHOCOLATE_BAR(DummyMytem::new, Material.PUMPKIN_PIE, 52, '\uE274', Category.HALLOWEEN),
-    LOLLIPOP(DummyMytem::new, Material.COOKIE, 53, '\uE275', Category.HALLOWEEN),
-    ORANGE_CANDY(DummyMytem::new, Material.COOKIE, 54, '\uE276', Category.HALLOWEEN),
+    CANDY_CORN(HalloweenCandy::new, Material.CARROT, 42, '\uE26A', Category.HALLOWEEN),
+    CHOCOLATE_BAR(HalloweenCandy::new, Material.PUMPKIN_PIE, 52, '\uE274', Category.HALLOWEEN),
+    LOLLIPOP(HalloweenCandy::new, Material.COOKIE, 53, '\uE275', Category.HALLOWEEN),
+    ORANGE_CANDY(HalloweenCandy::new, Material.COOKIE, 54, '\uE276', Category.HALLOWEEN),
     GOLDEN_CUP(DummyMytem::new, Material.GOLD_NUGGET, 108, '\uE2AB', Category.TREASURE),
-    HALLOWEEN_TOKEN(DummyMytem::new, Material.PAPER, 109, '\uE2AC', Category.HALLOWEEN);
-    // Next CustomModelData: 110
-    // Next Unicode Character: \uE2AD
+    HALLOWEEN_TOKEN(HalloweenToken::new, Material.PUMPKIN, 109, '\uE2AC', Category.HALLOWEEN),
+    HALLOWEEN_TOKEN_2(HalloweenToken2::new, Material.JACK_O_LANTERN, 110, '\uE2AD', Category.HALLOWEEN);
+    // Next CustomModelData: 111
+    // Next Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;

@@ -62,7 +62,8 @@ public final class MusicalInstrument implements Mytem {
     private List<Component> baseText;
     private ItemStack prototype;
     private Instrument instrument;
-    private static final TextColor COLOR = TextColor.color(0x6A5ACD);
+    private static final TextColor COLOR = TextColor.color(0xFFAA88);
+    private static final TextColor BG = TextColor.color(0x6A5ACD);
     private InstrumentType type;
     private static final Map<Tone, Mytems> TONE_MYTEMS_MAP = Map
         .of(Tone.A, Mytems.LETTER_A,
@@ -270,14 +271,14 @@ public final class MusicalInstrument implements Mytem {
             }
         }
         final int size = (openEvent.isHeroMode() ? 6 : 4) * 9;
-        Component guiDisplayName = Component.text().color(NamedTextColor.WHITE)
+        Component guiDisplayName = Component.text()
             .append(key.component)
-            .append(Component.text(displayNameString))
+            .append(displayName)
             .append(Component.text(NOTE1 + NOTE2, NamedTextColor.GRAY))
             .build();
         Gui gui = new Gui()
             .size(size)
-            .title(DefaultFont.guiBlankOverlay(size, COLOR, guiDisplayName));
+            .title(DefaultFont.guiBlankOverlay(size, BG, guiDisplayName));
         buildGui(gui, privateData);
         if (openEvent.isHeroMode()) {
             gui.setItem(5 * 9 + HERO_POINTER, Mytems.ARROW_UP.createIcon());
