@@ -95,7 +95,7 @@ public final class PocketMob implements Mytem, Listener {
     @Override
     public ItemStack deserializeTag(String serialized) {
         ItemStack itemStack = createItemStack();
-        PocketMobTag tag = Json.deserialize(serialized, PocketMobTag.class);
+        PocketMobTag tag = Json.deserialize(serialized, PocketMobTag.class, PocketMobTag::new);
         tag.store(itemStack, this);
         return itemStack;
     }

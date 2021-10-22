@@ -73,8 +73,8 @@ public final class MusicalInstrument implements Mytem {
             Tone.E, Mytems.LETTER_E,
             Tone.F, Mytems.LETTER_F,
             Tone.G, Mytems.LETTER_G);
-    private static final NamespacedKey SHARP_KEY = new NamespacedKey(MytemsPlugin.getInstance(), "sharp");
-    private static final NamespacedKey FLAT_KEY = new NamespacedKey(MytemsPlugin.getInstance(), "flat");
+    protected static final NamespacedKey SHARP_KEY = new NamespacedKey(MytemsPlugin.getInstance(), "sharp");
+    protected static final NamespacedKey FLAT_KEY = new NamespacedKey(MytemsPlugin.getInstance(), "flat");
 
     @Override
     public void enable() {
@@ -515,41 +515,25 @@ public final class MusicalInstrument implements Mytem {
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
     }
 
-    protected static final class MusicalInstrumentTag {
-        protected String flat;
-        protected String sharp;
-
-        public boolean isEmpty() {
-            return flat == null && sharp == null;
-        }
+    @Override
+    public String serializeTag(ItemStack itemStack) {
+        MusicalInstrumentTag musicalInstrumentTag = new MusicalInstrumentTag();
+        musicalInstrumentTag.load(itemStack, this);
+        return musicalInstrumentTag.isEmpty() ? null : Json.serialize(musicalInstrumentTag);
     }
 
     @Override
-    public String serializeTag(ItemStack itemStack) {
-        MusicalInstrumentTag result = new MusicalInstrumentTag();
-        PersistentDataContainer tag = itemStack.getItemMeta().getPersistentDataContainer();
-        result.sharp = Tags.getString(tag, SHARP_KEY);
-        result.flat = Tags.getString(tag, FLAT_KEY);
-        return result.isEmpty() ? null : Json.serialize(result);
+    public ItemStack deserializeTag(String serialized) {
+        ItemStack itemStack = createItemStack();
+        MusicalInstrumentTag musicalInstrumentTag = Json.deserialize(serialized, MusicalInstrumentTag.class,
+                                                                     MusicalInstrumentTag::new);
+        musicalInstrumentTag.store(itemStack, this);
+        return itemStack;
     }
 
     @Override
     public ItemStack deserializeTag(String serialized, Player player) {
-        ItemStack result = createItemStack();
-        MusicalInstrumentTag tag = Json.deserialize(serialized, MusicalInstrumentTag.class);
-        if (!tag.isEmpty()) {
-            result.editMeta(meta -> {
-                    PersistentDataContainer tag2 = meta.getPersistentDataContainer();
-                    if (tag.sharp != null) {
-                        Tags.set(tag2, SHARP_KEY, tag.sharp);
-                    }
-                    if (tag.flat != null) {
-                        Tags.set(tag2, FLAT_KEY, tag.flat);
-                    }
-                    updateLore(meta, tag.sharp, tag.flat);
-                });
-        }
-        return result;
+        return deserializeTag(serialized);
     }
 
     protected void updateLore(ItemMeta meta, String sharp, String flat) {
