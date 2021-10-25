@@ -108,17 +108,55 @@ public enum Mytems {
     EASTER_CHESTPLATE(EasterGear.Chestplate::new, Material.LEATHER_CHESTPLATE, 345712, '\uE219', Category.EASTER),
     EASTER_LEGGINGS(EasterGear.Leggings::new, Material.LEATHER_LEGGINGS, 345713, '\uE21A', Category.EASTER),
     EASTER_BOOTS(EasterGear.Boots::new, Material.LEATHER_BOOTS, 345714, '\uE21B', Category.EASTER),
-    //
-    TOILET(Toilet::new, Material.CAULDRON, 498101, (char) 0, Category.BLOCK), // APRIL
+    // Furniture
+    TOILET(Toilet::new, Material.CAULDRON, 498101, (char) 0, Category.FURNITURE), // APRIL
+    BOSS_CHEST(DummyMytem::new, Material.CHEST, 7413004, (char) 0, Category.FURNITURE),
+    OAK_CHAIR(DummyMytem::new, Material.OAK_PLANKS, 135, (char) 0, Category.FURNITURE),
+    SPRUCE_CHAIR(DummyMytem::new, Material.SPRUCE_PLANKS, 136, (char) 0, Category.FURNITURE),
+    WHITE_ARMCHAIR(DummyMytem::new, Material.WHITE_WOOL, 137, (char) 0, Category.FURNITURE),
+    WHITE_SOFA_LEFT(DummyMytem::new, Material.WHITE_WOOL, 138, (char) 0, Category.FURNITURE),
+    WHITE_SOFA_RIGHT(DummyMytem::new, Material.WHITE_WOOL, 139, (char) 0, Category.FURNITURE),
+    RED_ARMCHAIR(DummyMytem::new, Material.RED_WOOL, 140, (char) 0, Category.FURNITURE),
+    RED_SOFA_LEFT(DummyMytem::new, Material.RED_WOOL, 141, (char) 0, Category.FURNITURE),
+    RED_SOFA_RIGHT(DummyMytem::new, Material.RED_WOOL, 142, (char) 0, Category.FURNITURE),
+    BLACK_ARMCHAIR(DummyMytem::new, Material.RED_WOOL, 143, (char) 0, Category.FURNITURE),
+    BLACK_SOFA_LEFT(DummyMytem::new, Material.RED_WOOL, 144, (char) 0, Category.FURNITURE),
+    BLACK_SOFA_RIGHT(DummyMytem::new, Material.RED_WOOL, 145, (char) 0, Category.FURNITURE),
+    // Utility
     WEDDING_RING(WeddingRing::new, Material.PLAYER_HEAD, 7413002, '\uE21C', Category.FRIENDS),
     MAGIC_MAP(MagicMap::new, Material.FILLED_MAP, 7413005, '\uE21D', Category.UTILITY),
-    BOSS_CHEST(DummyMytem::new, Material.CHEST, 7413004, (char) 0, Category.BLOCK),
     // Wardrobe
     WHITE_BUNNY_EARS(WardrobeItem::new, Material.IRON_BOOTS, 3919001, (char) 0, Category.WARDROBE), // EPIC
     RED_LIGHTSABER(WardrobeItem::new, Material.END_ROD, 3919002, (char) 0, Category.WARDROBE),
     BLUE_LIGHTSABER(WardrobeItem::new, Material.END_ROD, 3919003, (char) 0, Category.WARDROBE),
     PIRATE_HAT(WardrobeItem::new, Material.BLACK_DYE, 3919004, (char) 0, Category.WARDROBE),
     COWBOY_HAT(WardrobeItem::new, Material.BROWN_DYE, 3919005, (char) 0, Category.WARDROBE),
+    ANGEL_HALO(WardrobeItem::new, Material.LIGHT_WEIGHTED_PRESSURE_PLATE, 111, (char) 0, Category.WARDROBE),
+    // Cat Ears
+    BLACK_CAT_EARS(WardrobeItem::new, Material.BLACK_CARPET, 112, (char) 0, Category.CAT_EARS),
+    CYAN_CAT_EARS(WardrobeItem::new, Material.CYAN_CARPET, 113, (char) 0, Category.CAT_EARS),
+    LIGHT_BLUE_CAT_EARS(WardrobeItem::new, Material.LIGHT_BLUE_CARPET, 114, (char) 0, Category.CAT_EARS),
+    LIME_CAT_EARS(WardrobeItem::new, Material.LIME_CARPET, 115, (char) 0, Category.CAT_EARS),
+    ORANGE_CAT_EARS(WardrobeItem::new, Material.ORANGE_CARPET, 116, (char) 0, Category.CAT_EARS),
+    PINK_CAT_EARS(WardrobeItem::new, Material.PINK_CARPET, 117, (char) 0, Category.CAT_EARS),
+    RED_CAT_EARS(WardrobeItem::new, Material.RED_CARPET, 118, (char) 0, Category.CAT_EARS),
+    WHITE_CAT_EARS(WardrobeItem::new, Material.WHITE_CARPET, 119, (char) 0, Category.CAT_EARS),
+    // Sunglasses
+    BLACK_SUNGLASSES(WardrobeItem::new, Material.ANVIL, 120, (char) 0, Category.SUNGLASSES),
+    BLUE_SUNGLASSES(WardrobeItem::new, Material.ANVIL, 121, (char) 0, Category.SUNGLASSES),
+    CYAN_SUNGLASSES(WardrobeItem::new, Material.ANVIL, 122, (char) 0, Category.SUNGLASSES),
+    GRAY_SUNGLASSES(WardrobeItem::new, Material.ANVIL, 123, (char) 0, Category.SUNGLASSES),
+    GREEN_SUNGLASSES(WardrobeItem::new, Material.ANVIL, 124, (char) 0, Category.SUNGLASSES),
+    LIGHT_BLUE_SUNGLASSES(WardrobeItem::new, Material.ANVIL, 125, (char) 0, Category.SUNGLASSES),
+    LIGHT_GRAY_SUNGLASSES(WardrobeItem::new, Material.ANVIL, 126, (char) 0, Category.SUNGLASSES),
+    LIME_SUNGLASSES(WardrobeItem::new, Material.ANVIL, 127, (char) 0, Category.SUNGLASSES),
+    MAGENTA_SUNGLASSES(WardrobeItem::new, Material.ANVIL, 128, (char) 0, Category.SUNGLASSES),
+    PURPLE_SUNGLASSES(WardrobeItem::new, Material.ANVIL, 129, (char) 0, Category.SUNGLASSES),
+    ORANGE_SUNGLASSES(WardrobeItem::new, Material.ANVIL, 130, (char) 0, Category.SUNGLASSES),
+    PINK_SUNGLASSES(WardrobeItem::new, Material.ANVIL, 131, (char) 0, Category.SUNGLASSES),
+    RED_SUNGLASSES(WardrobeItem::new, Material.ANVIL, 132, (char) 0, Category.SUNGLASSES),
+    WHITE_SUNGLASSES(WardrobeItem::new, Material.ANVIL, 133, (char) 0, Category.SUNGLASSES),
+    YELLOW_SUNGLASSES(WardrobeItem::new, Material.ANVIL, 134, (char) 0, Category.SUNGLASSES),
     // Vote
     VOTE_CANDY(VoteCandy::new, Material.COOKIE, 9073001, '\uE21E', Category.VOTE), // VOTE
     VOTE_FIREWORK(VoteFirework::new, Material.FIREWORK_ROCKET, 9073002, '\uE21F', Category.VOTE),
@@ -340,7 +378,7 @@ public enum Mytems {
     GOLDEN_CUP(DummyMytem::new, Material.GOLD_NUGGET, 108, '\uE2AB', Category.TREASURE),
     HALLOWEEN_TOKEN(HalloweenToken::new, Material.PUMPKIN, 109, '\uE2AC', Category.HALLOWEEN),
     HALLOWEEN_TOKEN_2(HalloweenToken2::new, Material.JACK_O_LANTERN, 110, '\uE2AD', Category.HALLOWEEN);
-    // Next CustomModelData: 111
+    // Next CustomModelData: 146
     // Next Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
@@ -354,7 +392,7 @@ public enum Mytems {
 
     public enum Category {
         ACULA,
-        BLOCK,
+        CAT_EARS,
         CLOUD_CITY,
         CURRENCY,
         DUNE,
@@ -363,6 +401,7 @@ public enum Mytems {
         EASTER_EGG,
         ENEMY,
         FRIENDS,
+        FURNITURE,
         HALLOWEEN,
         LETTER,
         MAYPOLE,
@@ -378,6 +417,7 @@ public enum Mytems {
         REACTION,
         RESOURCE,
         SANTA,
+        SUNGLASSES,
         SWAMPY,
         TREASURE,
         UI,

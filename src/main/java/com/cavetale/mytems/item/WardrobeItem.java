@@ -43,11 +43,13 @@ public final class WardrobeItem implements Mytem {
 
     @Override
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
+        if (player.isOp()) return;
         event.setCancelled(true);
     }
 
     @Override
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player, ItemStack item) {
+        if (player.isOp()) return;
         event.setCancelled(true);
     }
 
@@ -63,6 +65,7 @@ public final class WardrobeItem implements Mytem {
 
     @Override
     public void onPlayerDrop(PlayerDropItemEvent event, Player player, ItemStack item) {
+        if (player.isOp()) return;
         event.getItemDrop().remove();
     }
 
