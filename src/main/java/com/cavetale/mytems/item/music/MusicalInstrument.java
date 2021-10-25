@@ -354,39 +354,35 @@ public final class MusicalInstrument implements Mytem {
     }
 
     protected ItemStack makeNoteButton(Button button, GuiPrivateData privateData) {
-        List<Component> text = new ArrayList<>();
         Touch touch = privateData.touchOf(button.tone, button.octave);
-        text.add(Component.text(touch.toString(), COLOR));
-        if (privateData.hero == null) {
+        if (privateData.hero != null) {
             // Shorten this in hero mode!
-            if (button.flat != null) {
-                if (privateData.semitones.get(button.tone) == Semitone.FLAT) {
-                    text.add(Component.text(button.tone.name() + Semitone.NATURAL.symbol, COLOR)
-                             .append(Component.text(" Shift", NamedTextColor.GRAY)));
-                } else {
-                    text.add(Component.text(button.tone.name() + Semitone.FLAT.symbol, COLOR)
-                             .append(Component.text(" Shift", NamedTextColor.GRAY)));
-                }
-            }
-            if (button.sharp != null) {
-                if (privateData.semitones.get(button.tone) == Semitone.SHARP) {
-                    text.add(Component.text(button.tone.name() + Semitone.NATURAL.symbol, COLOR)
-                             .append(Component.text(" Right", NamedTextColor.GRAY)));
-                } else {
-                    text.add(Component.text(button.tone.name() + Semitone.SHARP.symbol, COLOR)
-                             .append(Component.text(" Right", NamedTextColor.GRAY)));
-                }
-            }
-            text.add(Component.empty());
-            text.add(Component.text("Interval")
-                     .append(Component.text(" Number Key", NamedTextColor.GRAY)));
-            text.add(Component.text(Semitone.SHARP.symbol + " Interval")
-                     .append(Component.text(" F", NamedTextColor.GRAY)));
-            text.add(Component.text(Semitone.FLAT.symbol + " Interval")
-                     .append(Component.text(" Q", NamedTextColor.GRAY)));
+            return Items.text(TONE_MYTEMS_MAP.get(button.tone).createIcon(),
+                              List.of(Component.text(touch.toString(), COLOR)));
         }
-        ItemStack icon = Items.text(TONE_MYTEMS_MAP.get(button.tone).createIcon(), text);
-        return icon;
+        List<Component> text = new ArrayList<>();
+        text.add(Component.text(touch.toString(), COLOR));
+        if (button.flat != null) {
+            if (privateData.semitones.get(button.tone) == Semitone.FLAT) {
+                text.add(Component.text(button.tone.name() + Semitone.NATURAL.symbol, COLOR)
+                         .append(Component.text(" Shift", NamedTextColor.GRAY)));
+            } else {
+                text.add(Component.text(button.tone.name() + Semitone.FLAT.symbol, COLOR)
+                         .append(Component.text(" Shift", NamedTextColor.GRAY)));
+            }
+        }
+        if (button.sharp != null) {
+            if (privateData.semitones.get(button.tone) == Semitone.SHARP) {
+                text.add(Component.text(button.tone.name() + Semitone.NATURAL.symbol, COLOR)
+                         .append(Component.text(" Right", NamedTextColor.GRAY)));
+            } else {
+                text.add(Component.text(button.tone.name() + Semitone.SHARP.symbol, COLOR)
+                         .append(Component.text(" Right", NamedTextColor.GRAY)));
+            }
+        }
+        text.add(Component.text("Keyboard", COLOR)
+                 .append(Component.text(" 1-9", NamedTextColor.GRAY)));
+        return Items.text(TONE_MYTEMS_MAP.get(button.tone).createIcon(), text);
     }
 
     protected ItemStack makeSemitoneButton(Button button, GuiPrivateData privateData) {
