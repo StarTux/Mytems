@@ -126,12 +126,12 @@ public enum Mytems {
     WEDDING_RING(WeddingRing::new, Material.PLAYER_HEAD, 7413002, '\uE21C', Category.FRIENDS),
     MAGIC_MAP(MagicMap::new, Material.FILLED_MAP, 7413005, '\uE21D', Category.UTILITY),
     // Wardrobe
-    WHITE_BUNNY_EARS(WardrobeItem::new, Material.IRON_BOOTS, 3919001, (char) 0, Category.WARDROBE), // EPIC
-    RED_LIGHTSABER(WardrobeItem::new, Material.END_ROD, 3919002, (char) 0, Category.WARDROBE),
-    BLUE_LIGHTSABER(WardrobeItem::new, Material.END_ROD, 3919003, (char) 0, Category.WARDROBE),
-    PIRATE_HAT(WardrobeItem::new, Material.BLACK_DYE, 3919004, (char) 0, Category.WARDROBE),
-    COWBOY_HAT(WardrobeItem::new, Material.BROWN_DYE, 3919005, (char) 0, Category.WARDROBE),
-    ANGEL_HALO(WardrobeItem::new, Material.LIGHT_WEIGHTED_PRESSURE_PLATE, 111, (char) 0, Category.WARDROBE),
+    WHITE_BUNNY_EARS(WardrobeItem::new, Material.IRON_BOOTS, 3919001, (char) 0, Category.WARDROBE_HAT), // EPIC
+    RED_LIGHTSABER(WardrobeItem::new, Material.END_ROD, 3919002, (char) 0, Category.WARDROBE_HANDHELD),
+    BLUE_LIGHTSABER(WardrobeItem::new, Material.END_ROD, 3919003, (char) 0, Category.WARDROBE_HANDHELD),
+    PIRATE_HAT(WardrobeItem::new, Material.BLACK_DYE, 3919004, (char) 0, Category.WARDROBE_HAT),
+    COWBOY_HAT(WardrobeItem::new, Material.BROWN_DYE, 3919005, (char) 0, Category.WARDROBE_HAT),
+    ANGEL_HALO(WardrobeItem::new, Material.LIGHT_WEIGHTED_PRESSURE_PLATE, 111, (char) 0, Category.WARDROBE_HAT),
     // Cat Ears
     BLACK_CAT_EARS(WardrobeItem::new, Material.BLACK_CARPET, 112, (char) 0, Category.CAT_EARS),
     CYAN_CAT_EARS(WardrobeItem::new, Material.CYAN_CARPET, 113, (char) 0, Category.CAT_EARS),
@@ -157,6 +157,17 @@ public enum Mytems {
     RED_SUNGLASSES(WardrobeItem::new, Material.ANVIL, 132, (char) 0, Category.SUNGLASSES),
     WHITE_SUNGLASSES(WardrobeItem::new, Material.ANVIL, 133, (char) 0, Category.SUNGLASSES),
     YELLOW_SUNGLASSES(WardrobeItem::new, Material.ANVIL, 134, (char) 0, Category.SUNGLASSES),
+    // November 2021
+    GOLDEN_CROWN(WardrobeItem::new, Material.GOLD_INGOT, 146, (char) 0, Category.WARDROBE_HAT),
+    DEVIL_HORNS(WardrobeItem::new, Material.NETHERITE_LEGGINGS, 147, (char) 0, Category.WARDROBE_HAT),
+    ELF_HAT(WardrobeItem::new, Material.RED_WOOL, 148, (char) 0, Category.WARDROBE_HAT),
+    FIREMAN_HELMET(WardrobeItem::new, Material.RED_CONCRETE, 149, (char) 0, Category.WARDROBE_HAT),
+    PLAGUE_DOCTOR(WardrobeItem::new, Material.BLACK_CONCRETE, 150, (char) 0, Category.WARDROBE_HAT),
+    PLAGUE_DOCTOR_2(WardrobeItem::new, Material.BLACK_CONCRETE, 151, (char) 0, Category.WARDROBE_HAT),
+    PUMPKIN_STUB(WardrobeItem::new, Material.SEA_PICKLE, 152, (char) 0, Category.WARDROBE_HAT),
+    STOCKING_CAP(WardrobeItem::new, Material.RED_WOOL, 153, (char) 0, Category.WARDROBE_HAT),
+    STRAW_HAT(WardrobeItem::new, Material.HAY_BLOCK, 154, (char) 0, Category.WARDROBE_HAT),
+    WITCH_HAT(WardrobeItem::new, Material.SHULKER_BOX, 155, (char) 0, Category.WARDROBE_HAT),
     // Vote
     VOTE_CANDY(VoteCandy::new, Material.COOKIE, 9073001, '\uE21E', Category.VOTE), // VOTE
     VOTE_FIREWORK(VoteFirework::new, Material.FIREWORK_ROCKET, 9073002, '\uE21F', Category.VOTE),
@@ -378,7 +389,7 @@ public enum Mytems {
     GOLDEN_CUP(DummyMytem::new, Material.GOLD_NUGGET, 108, '\uE2AB', Category.TREASURE),
     HALLOWEEN_TOKEN(HalloweenToken::new, Material.PUMPKIN, 109, '\uE2AC', Category.HALLOWEEN),
     HALLOWEEN_TOKEN_2(HalloweenToken2::new, Material.JACK_O_LANTERN, 110, '\uE2AD', Category.HALLOWEEN);
-    // Next CustomModelData: 146
+    // Next CustomModelData: 156
     // Next Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
@@ -424,6 +435,9 @@ public enum Mytems {
         UTILITY,
         VOTE,
         WARDROBE,
+        WARDROBE_HANDHELD,
+        WARDROBE_HAT,
+        NEW,
         UNKNOWN;
     }
 

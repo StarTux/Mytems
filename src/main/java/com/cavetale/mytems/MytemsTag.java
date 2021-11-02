@@ -39,11 +39,15 @@ public enum MytemsTag {
     UI,
     UTILITY,
     VOTE,
-    WARDROBE(Mytems.Category.CAT_EARS, Mytems.Category.SUNGLASSES),
+    WARDROBE_HANDHELD,
+    WARDROBE_HAT,
+    WARDROBE(Mytems.Category.WARDROBE_HAT, Mytems.Category.WARDROBE_HANDHELD,
+             Mytems.Category.CAT_EARS, Mytems.Category.SUNGLASSES),
     ITEM_SETS(Mytems.Category.ACULA, Mytems.Category.SANTA,
               Mytems.Category.DUNE, Mytems.Category.SWAMPY,
               Mytems.Category.DWARVEN, Mytems.Category.EASTER),
-    EQUIPMENT(MytemsTag.ITEM_SETS, MytemsTag.PIRATE);
+    EQUIPMENT(MytemsTag.ITEM_SETS, MytemsTag.PIRATE),
+    NEW;
 
     private final EnumSet<Mytems> set;
 
