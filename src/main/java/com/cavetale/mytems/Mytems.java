@@ -37,6 +37,7 @@ import com.cavetale.mytems.item.santa.SantaBoots;
 import com.cavetale.mytems.item.santa.SantaHat;
 import com.cavetale.mytems.item.santa.SantaJacket;
 import com.cavetale.mytems.item.santa.SantaPants;
+import com.cavetale.mytems.item.scarlet.ScarletItem;
 import com.cavetale.mytems.item.swampy.SwampyItem;
 import com.cavetale.mytems.item.vote.VoteCandy;
 import com.cavetale.mytems.item.vote.VoteFirework;
@@ -388,9 +389,15 @@ public enum Mytems {
     ORANGE_CANDY(HalloweenCandy::new, Material.COOKIE, 54, '\uE276', Category.HALLOWEEN),
     GOLDEN_CUP(DummyMytem::new, Material.GOLD_NUGGET, 108, '\uE2AB', Category.TREASURE),
     HALLOWEEN_TOKEN(HalloweenToken::new, Material.PUMPKIN, 109, '\uE2AC', Category.HALLOWEEN),
-    HALLOWEEN_TOKEN_2(HalloweenToken2::new, Material.JACK_O_LANTERN, 110, '\uE2AD', Category.HALLOWEEN);
-    // Next CustomModelData: 156
-    // Next Unicode Character: \uE2AE
+    HALLOWEEN_TOKEN_2(HalloweenToken2::new, Material.JACK_O_LANTERN, 110, '\uE2AD', Category.HALLOWEEN),
+    // Scarlet
+    SCARLET_HELMET(ScarletItem.Helmet::new, Material.NETHERITE_HELMET, 156, (char) 156, Category.SCARLET),
+    SCARLET_CHESTPLATE(ScarletItem.Chestplate::new, Material.NETHERITE_CHESTPLATE, 157, (char) 157, Category.SCARLET),
+    SCARLET_LEGGINGS(ScarletItem.Leggings::new, Material.NETHERITE_LEGGINGS, 158, (char) 158, Category.SCARLET),
+    SCARLET_BOOTS(ScarletItem.Boots::new, Material.NETHERITE_BOOTS, 159, (char) 159, Category.SCARLET),
+    SCARLET_SWORD(ScarletItem.Sword::new, Material.NETHERITE_SWORD, 160, (char) 160, Category.SCARLET);
+    // Next CustomModelData: 161
+    // Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;
@@ -428,6 +435,7 @@ public enum Mytems {
         REACTION,
         RESOURCE,
         SANTA,
+        SCARLET,
         SUNGLASSES,
         SWAMPY,
         TREASURE,

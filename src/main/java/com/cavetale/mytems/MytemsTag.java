@@ -33,6 +33,7 @@ public enum MytemsTag {
     REACTION,
     RESOURCE(Mytems.Category.MAYPOLE),
     SANTA,
+    SCARLET,
     SUNGLASSES,
     SWAMPY,
     TREASURE,
