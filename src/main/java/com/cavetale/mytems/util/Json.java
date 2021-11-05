@@ -8,12 +8,10 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.function.Supplier;
-import java.util.regex.Pattern;
 
 public final class Json {
     public static final Gson GSON = new GsonBuilder().setLenient().disableHtmlEscaping().create();
     public static final Gson PRETTY = new GsonBuilder().setLenient().disableHtmlEscaping().setPrettyPrinting().create();
-    private static final Pattern SIMPLE = Pattern.compile("[0-9a-zA-Z_-]+");
 
     private Json() { }
 

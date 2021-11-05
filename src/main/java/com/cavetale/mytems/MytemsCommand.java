@@ -1,10 +1,16 @@
 package com.cavetale.mytems;
 
+import com.cavetale.core.command.AbstractCommand;
 import com.cavetale.core.command.CommandContext;
 import com.cavetale.core.command.CommandNode;
 import com.cavetale.core.command.CommandWarn;
+import com.cavetale.core.util.Json;
 import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.session.Session;
+import com.cavetale.mytems.util.Skull;
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
@@ -12,9 +18,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -22,19 +28,17 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
-import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
-@RequiredArgsConstructor
-public final class MytemsCommand implements TabExecutor {
-    private final MytemsPlugin plugin;
-    private CommandNode rootNode;
+public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
+    protected MytemsCommand(final MytemsPlugin plugin) {
+        super(plugin, "mytems");
+    }
 
-    public void enable() {
-        rootNode = new CommandNode("mytems");
+    @Override
+    protected void onEnable() {
         rootNode.addChild("list").arguments("[tag]")
             .completableList(Stream.of(MytemsTag.values())
                              .map(MytemsTag::name).map(String::toLowerCase)
@@ -45,41 +49,33 @@ public final class MytemsCommand implements TabExecutor {
             .description("Give an item to a player")
             .senderCaller(this::give)
             .completer(this::giveComplete);
-        rootNode.addChild("base64").denyTabCompletion()
-            .description("Serialize the item in your hand to base64")
-            .playerCaller(this::base64);
         rootNode.addChild("equipment")
             .description("Display player equipment")
             .senderCaller(this::equipment);
         rootNode.addChild("session")
             .description("Display session info")
             .senderCaller(this::session);
-        rootNode.addChild("serialize").denyTabCompletion()
-            .description("Serialize the mytem in your hand")
-            .playerCaller(this::serialize);
-        rootNode.addChild("testserialize").denyTabCompletion()
-            .description("Test serialize the mytem in your hand")
-            .playerCaller(this::testserialize);
         rootNode.addChild("fixall").denyTabCompletion()
             .description("Fix all player inventories")
             .senderCaller(this::fixall);
-        rootNode.addChild("giveall").denyTabCompletion()
-            .description("Give all items")
-            .playerCaller(this::giveall);
-        plugin.getCommand("mytems").setExecutor(this);
+        // Serialize
+        CommandNode serializeNode = rootNode.addChild("serialize")
+            .description("Item serialization commands");
+        serializeNode.addChild("test").denyTabCompletion()
+            .description("Test serialization on hand")
+            .playerCaller(this::serializeTest);
+        serializeNode.addChild("mytems").denyTabCompletion()
+            .description("Serialize hand via mytems")
+            .playerCaller(this::serializeMytems);
+        serializeNode.addChild("base64").denyTabCompletion()
+            .description("Serialize hand via base64")
+            .playerCaller(this::serializeBase64);
+        serializeNode.addChild("head").denyTabCompletion()
+            .description("Serialize player head in hand")
+            .playerCaller(this::serializeHead);
     }
 
-    @Override
-    public boolean onCommand(final CommandSender sender, final Command command, final String alias, final String[] args) {
-        return rootNode.call(sender, command, alias, args);
-    }
-
-    @Override
-    public List<String> onTabComplete(final CommandSender sender, final Command command, final String alias, final String[] args) {
-        return rootNode.complete(sender, command, alias, args);
-    }
-
-    boolean list(CommandSender sender, String[] args) {
+    protected boolean list(CommandSender sender, String[] args) {
         if (args.length > 1) return false;
         List<Component> lines = new ArrayList<>();
         MytemsTag tag = null;
@@ -103,7 +99,7 @@ public final class MytemsCommand implements TabExecutor {
         return true;
     }
 
-    boolean give(CommandSender sender, String[] args) {
+    protected boolean give(CommandSender sender, String[] args) {
         if (args.length != 2 && args.length != 3) return false;
         String targetArg = args[0];
         String mytemArg = args[1];
@@ -150,32 +146,8 @@ public final class MytemsCommand implements TabExecutor {
         return true;
     }
 
-    boolean base64(Player player, String[] args) {
-        if (args.length != 0) return false;
-        ItemStack itemStack = player.getInventory().getItemInMainHand();
-        if (itemStack == null || itemStack.getType() == Material.AIR) {
-            throw new CommandWarn("There's no item in your main hand!");
-        }
-        byte[] bytes = itemStack.serializeAsBytes();
-        String string = Base64.getEncoder().encodeToString(bytes);
-        Component component = Component.text("Base64: ").color(NamedTextColor.GRAY).insertion(string)
-            .append(Component.text(string).color(NamedTextColor.WHITE));
-        player.sendMessage(component);
-        plugin.getLogger().info("Serialize " + itemStack.getType() + ": " + string);
-        return true;
-    }
 
-    List<String> giveComplete(CommandContext context, CommandNode node, String[] args) {
-        if (args.length <= 1) return null; // <player>
-        if (args.length > 2) return Collections.emptyList();
-        String arg = args[args.length - 1];
-        return Stream.concat(Stream.of(Mytems.values()).map(m -> m.id),
-                             Stream.of(MytemsTag.values()).map(t -> "#" + t.name().toLowerCase()))
-            .filter(s -> s.contains(arg))
-            .collect(Collectors.toList());
-    }
-
-    boolean equipment(CommandSender sender, String[] args) {
+    protected boolean equipment(CommandSender sender, String[] args) {
         Player target;
         if (args.length == 0 && sender instanceof Player) {
             target = (Player) sender;
@@ -197,7 +169,7 @@ public final class MytemsCommand implements TabExecutor {
         return true;
     }
 
-    boolean session(CommandSender sender, String[] args) {
+    protected boolean session(CommandSender sender, String[] args) {
         int index = 0;
         for (Session session : plugin.sessions.all()) {
             UUID uuid = session.getUuid();
@@ -209,29 +181,14 @@ public final class MytemsCommand implements TabExecutor {
         return true;
     }
 
-    boolean serialize(Player player, String[] args) {
-        if (args.length != 0) return false;
-        ItemStack itemStack = player.getInventory().getItemInMainHand();
-        if (itemStack == null || itemStack.getType() == Material.AIR) {
-            throw new CommandWarn("No item in your hand!");
-        }
-        Mytems mytems = Mytems.forItem(itemStack);
-        if (mytems == null) {
-            throw new CommandWarn("No Mytem in your hand!");
-        }
-        String serialized = mytems.serializeItem(itemStack);
-        player.sendMessage(ChatColor.YELLOW + "Serialized item in hand: " + ChatColor.RESET + serialized);
-        return true;
-    }
-
-    boolean fixall(CommandSender sender, String[] args) {
+    protected boolean fixall(CommandSender sender, String[] args) {
         if (args.length != 0) return false;
         plugin.fixAllPlayerInventoriesLater();
         sender.sendMessage(ChatColor.YELLOW + "Fixing all player inventories");
         return true;
     }
 
-    boolean testserialize(Player player, String[] args) {
+    protected boolean serializeTest(Player player, String[] args) {
         if (args.length != 0) return false;
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         if (itemStack == null || itemStack.getType() == Material.AIR) {
@@ -263,14 +220,65 @@ public final class MytemsCommand implements TabExecutor {
         return true;
     }
 
-    boolean giveall(Player player, String[] args) {
+    protected boolean serializeMytems(Player player, String[] args) {
         if (args.length != 0) return false;
-        int count = 0;
-        for (Mytems mytems : Mytems.values()) {
-            mytems.giveItemStack(player, 1);
-            count += 1;
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        if (itemStack == null || itemStack.getType() == Material.AIR) {
+            throw new CommandWarn("No item in your hand!");
         }
-        player.sendMessage("" + ChatColor.YELLOW + count + " mytems givem");
+        Mytems mytems = Mytems.forItem(itemStack);
+        if (mytems == null) {
+            throw new CommandWarn("No Mytem in your hand!");
+        }
+        String serialized = mytems.serializeItem(itemStack);
+        player.sendMessage(ChatColor.YELLOW + "Serialized item in hand: " + ChatColor.RESET + serialized);
         return true;
+    }
+
+    protected boolean serializeBase64(Player player, String[] args) {
+        if (args.length != 0) return false;
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        if (itemStack == null || itemStack.getType() == Material.AIR) {
+            throw new CommandWarn("There's no item in your main hand!");
+        }
+        byte[] bytes = itemStack.serializeAsBytes();
+        String string = Base64.getEncoder().encodeToString(bytes);
+        Component component = Component.text("Base64: ").color(NamedTextColor.GRAY).insertion(string)
+            .append(Component.text(string).color(NamedTextColor.WHITE));
+        player.sendMessage(component);
+        plugin.getLogger().info("Serialize " + itemStack.getType() + ": " + string);
+        plugin.getDataFolder().mkdirs();
+        File file = new File(plugin.getDataFolder(), "base64.txt");
+        try {
+            Files.write(file.toPath(), string.getBytes());
+        } catch (IOException ioe) {
+            plugin.getLogger().log(Level.SEVERE, "Writing " + file, ioe);
+        }
+        return true;
+    }
+
+    protected boolean serializeHead(Player player, String[] args) {
+        if (args.length != 0) return false;
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        if (itemStack == null || itemStack.getType() != Material.PLAYER_HEAD) {
+            throw new CommandWarn("There's no player head in your main hand!");
+        }
+        Skull skull = Skull.of(itemStack);
+        player.sendMessage(Json.serialize(skull));
+        plugin.getLogger().info("Serialize Head: " + Json.serialize(skull));
+        plugin.getDataFolder().mkdirs();
+        File file = new File(plugin.getDataFolder(), "head.json");
+        Json.save(file, skull, true);
+        return false;
+    }
+
+    protected List<String> giveComplete(CommandContext context, CommandNode node, String[] args) {
+        if (args.length <= 1) return null; // <player>
+        if (args.length > 2) return Collections.emptyList();
+        String arg = args[args.length - 1];
+        return Stream.concat(Stream.of(Mytems.values()).map(m -> m.id),
+                             Stream.of(MytemsTag.values()).map(t -> "#" + t.name().toLowerCase()))
+            .filter(s -> s.contains(arg))
+            .collect(Collectors.toList());
     }
 }
