@@ -7,6 +7,7 @@ import com.cavetale.core.command.CommandWarn;
 import com.cavetale.core.util.Json;
 import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.session.Session;
+import com.cavetale.mytems.util.JavaItem;
 import com.cavetale.mytems.util.Skull;
 import java.io.File;
 import java.io.IOException;
@@ -73,6 +74,9 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         serializeNode.addChild("head").denyTabCompletion()
             .description("Serialize player head in hand")
             .playerCaller(this::serializeHead);
+        serializeNode.addChild("java").denyTabCompletion()
+            .description("Serialize hand to Java")
+            .playerCaller(this::serializeJava);
     }
 
     protected boolean list(CommandSender sender, String[] args) {
@@ -269,7 +273,27 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         plugin.getDataFolder().mkdirs();
         File file = new File(plugin.getDataFolder(), "head.json");
         Json.save(file, skull, true);
-        return false;
+        return true;
+    }
+
+    protected boolean serializeJava(Player player, String[] args) {
+        if (args.length != 0) return false;
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        if (itemStack == null || itemStack.getType() == Material.AIR) {
+            throw new CommandWarn("There's no item in your main hand!");
+        }
+        List<String> lines = JavaItem.serializeToLines(itemStack);
+        String string = String.join("\n", lines);
+        player.sendMessage(Component.text(string, NamedTextColor.YELLOW));
+        plugin.getLogger().info("Serialize " + itemStack.getType() + ": " + string);
+        plugin.getDataFolder().mkdirs();
+        File file = new File(plugin.getDataFolder(), "Item.java");
+        try {
+            Files.write(file.toPath(), (string + "\n").getBytes());
+        } catch (IOException ioe) {
+            plugin.getLogger().log(Level.SEVERE, "Writing " + file, ioe);
+        }
+        return true;
     }
 
     protected List<String> giveComplete(CommandContext context, CommandNode node, String[] args) {

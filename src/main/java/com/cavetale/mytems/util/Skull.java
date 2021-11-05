@@ -24,8 +24,16 @@ public final class Skull {
         return create(this.name, this.uuid, this.texture, this.signature);
     }
 
+    public void apply(SkullMeta meta) {
+        apply(meta, name, uuid, texture, signature);
+    }
+
     public static Skull of(ItemStack itemStack) {
         SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
+        return of(meta);
+    }
+
+    public static Skull of(SkullMeta meta) {
         PlayerProfile profile = meta.getPlayerProfile();
         Skull skull = new Skull();
         skull.name = profile.getName();
@@ -53,13 +61,15 @@ public final class Skull {
                                    @NonNull String texture,
                                    String signature) {
         ItemStack item = new ItemStack(Material.PLAYER_HEAD);
-        SkullMeta meta = (SkullMeta) item.getItemMeta();
+        item.editMeta(meta -> apply((SkullMeta) meta, name, uuid, texture, signature));
+        return item;
+    }
+
+    public static void apply(@NonNull SkullMeta meta, String name, UUID uuid, @NonNull String texture, String signature) {
         PlayerProfile profile = Bukkit.createProfile(uuid, name);
         ProfileProperty property = new ProfileProperty("textures", texture, signature);
         profile.setProperty(property);
         meta.setPlayerProfile(profile);
-        item.setItemMeta(meta);
-        return item;
     }
 
     public static ItemStack create(String name, UUID uuid, String texture) {
