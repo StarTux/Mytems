@@ -391,12 +391,13 @@ public enum Mytems {
     HALLOWEEN_TOKEN(HalloweenToken::new, Material.PUMPKIN, 109, '\uE2AC', Category.HALLOWEEN),
     HALLOWEEN_TOKEN_2(HalloweenToken2::new, Material.JACK_O_LANTERN, 110, '\uE2AD', Category.HALLOWEEN),
     // Scarlet
-    SCARLET_HELMET(ScarletItem.Helmet::new, Material.NETHERITE_HELMET, 156, (char) 156, Category.SCARLET),
+    SCARLET_HELMET(ScarletItem.Helmet::new, Material.PLAYER_HEAD, 156, (char) 156, Category.SCARLET),
     SCARLET_CHESTPLATE(ScarletItem.Chestplate::new, Material.NETHERITE_CHESTPLATE, 157, (char) 157, Category.SCARLET),
     SCARLET_LEGGINGS(ScarletItem.Leggings::new, Material.NETHERITE_LEGGINGS, 158, (char) 158, Category.SCARLET),
     SCARLET_BOOTS(ScarletItem.Boots::new, Material.NETHERITE_BOOTS, 159, (char) 159, Category.SCARLET),
-    SCARLET_SWORD(ScarletItem.Sword::new, Material.NETHERITE_SWORD, 160, (char) 160, Category.SCARLET);
-    // Next CustomModelData: 161
+    SCARLET_SWORD(ScarletItem.Sword::new, Material.NETHERITE_SWORD, 160, (char) 160, Category.SCARLET),
+    SCARLET_SHIELD(ScarletItem.Shield::new, Material.SHIELD, 161, (char) 0, Category.SCARLET);
+    // Next CustomModelData: 162
     // Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();

@@ -37,6 +37,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -79,6 +80,7 @@ public final class HyruleInstrument implements Mytem {
         prototype.editMeta(meta -> {
                 meta.displayName(displayName);
                 meta.lore(lore);
+                meta.addItemFlags(ItemFlag.values());
                 key.markItemMeta(meta);
             });
     }

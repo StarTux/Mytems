@@ -2,8 +2,7 @@ package com.cavetale.mytems.item.font;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
-import java.util.List;
+import com.cavetale.mytems.util.Skull;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -23,10 +22,10 @@ public final class GlyphItem implements Mytem {
         Glyph glyph = Objects.requireNonNull(Glyph.MYTEMS_MAP.get(key));
         displayName = Component.text(glyph.string.toUpperCase(), NamedTextColor.WHITE);
         ItemStack item = key.material == Material.PLAYER_HEAD
-            ? Items.skull(glyph.uuid, glyph.string, glyph.texture, null)
+            ? Skull.create(glyph.string.toUpperCase(), glyph.uuid, glyph.texture, null)
             : new ItemStack(key.material);
         key.markItemStack(item);
-        prototype = Items.text(item, List.of(displayName));
+        prototype = item;
     }
 
     @Override

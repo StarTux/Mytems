@@ -20,6 +20,15 @@ public final class Skull {
     protected String signature;
     protected List<DummyProperty> properties;
 
+    public Skull() { }
+
+    public Skull(final String name, final UUID uuid, @NonNull final String texture, final String signature) {
+        this.name = name;
+        this.uuid = uuid;
+        this.texture = texture;
+        this.signature = signature;
+    }
+
     public ItemStack create() {
         return create(this.name, this.uuid, this.texture, this.signature);
     }

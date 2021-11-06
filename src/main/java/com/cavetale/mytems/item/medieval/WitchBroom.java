@@ -29,6 +29,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
@@ -51,6 +52,7 @@ public final class WitchBroom implements Mytem, Listener {
         prototype.editMeta(meta -> {
                 Items.unbreakable(meta);
                 Items.text(meta, text);
+                meta.addItemFlags(ItemFlag.values());
                 key.markItemMeta(meta);
             });
         Bukkit.getPluginManager().registerEvents(this, MytemsPlugin.getInstance());
