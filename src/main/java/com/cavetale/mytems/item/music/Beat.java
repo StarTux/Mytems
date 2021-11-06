@@ -6,6 +6,8 @@ import org.bukkit.Instrument;
 import org.bukkit.Location;
 import org.bukkit.Note.Tone;
 import org.bukkit.Note;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 
 /**
@@ -40,7 +42,7 @@ public final class Beat {
     }
 
     public void play(Player player, Location location) {
-        player.playNote(location, instrument, bukkitNote);
+        player.playSound(location, Sounds.of(instrument).sound, SoundCategory.MUSIC, 1.0f, Notes.of(bukkitNote).pitch);
     }
 
     public void play(Location location, double range) {

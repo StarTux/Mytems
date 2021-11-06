@@ -431,12 +431,8 @@ public final class MusicalInstrument implements Mytem {
             .append(TONE_MYTEMS_MAP.get(touch.tone).component)
             .append(touch.semitone != Semitone.NATURAL ? touch.semitone.mytems.component : Component.empty());
         player.sendActionBar(actionBar);
-        player.playNote(player.getLocation(), type.instrument, touch.bukkitNote);
-        for (Entity nearby : player.getNearbyEntities(16.0, 16.0, 16.0)) {
-            if (nearby instanceof Player) {
-                ((Player) nearby).playNote(player.getLocation(), type.instrument, touch.bukkitNote);
-            }
-        }
+        player.getWorld().playSound(player.getLocation(), Sounds.of(type.instrument).sound, SoundCategory.PLAYERS,
+                                    1.0f, Notes.of(touch.bukkitNote).pitch);
         Location particleLoc = player.getEyeLocation();
         particleLoc.add(particleLoc.getDirection().normalize().multiply(0.5));
         particleLoc.getWorld().spawnParticle(Particle.NOTE, particleLoc, 1, 0.125, 0.125, 0.125, 0.0);
