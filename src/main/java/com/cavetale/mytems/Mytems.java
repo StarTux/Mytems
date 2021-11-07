@@ -412,8 +412,19 @@ public enum Mytems {
     SCARLET_LEGGINGS(ScarletItem.Leggings::new, Material.LEATHER_LEGGINGS, 158, (char) 158, Category.SCARLET),
     SCARLET_BOOTS(ScarletItem.Boots::new, Material.LEATHER_BOOTS, 159, (char) 159, Category.SCARLET),
     SCARLET_SWORD(ScarletItem.Sword::new, Material.NETHERITE_SWORD, 160, (char) 160, Category.SCARLET),
-    SCARLET_SHIELD(ScarletItem.Shield::new, Material.SHIELD, 161, (char) 161, Category.SCARLET);
-    // Next CustomModelData: 177
+    SCARLET_SHIELD(ScarletItem.Shield::new, Material.SHIELD, 161, (char) 161, Category.SCARLET),
+    // Keys
+    COPPER_KEY(DummyMytem::new, Material.COPPER_INGOT, 177, (char) 177, Category.KEY),
+    SILVER_KEY(DummyMytem::new, Material.IRON_INGOT, 178, (char) 178, Category.KEY),
+    GOLDEN_KEY(DummyMytem::new, Material.GOLD_INGOT, 179, (char) 179, Category.KEY),
+    COPPER_KEYHOLE(DummyMytem::new, Material.COPPER_INGOT, 180, (char) 180, Category.KEYHOLE),
+    SILVER_KEYHOLE(DummyMytem::new, Material.IRON_INGOT, 181, (char) 181, Category.KEYHOLE),
+    GOLDEN_KEYHOLE(DummyMytem::new, Material.GOLD_INGOT, 182, (char) 182, Category.KEYHOLE),
+    // COINS
+    COPPER_COIN(DummyMytem::new, Material.COPPER_INGOT, 183, (char) 183, Category.COIN),
+    SILVER_COIN(DummyMytem::new, Material.IRON_INGOT, 184, (char) 184, Category.COIN),
+    GOLDEN_COIN(DummyMytem::new, Material.GOLD_INGOT, 185, (char) 185, Category.COIN);
+    // Next CustomModelData: 186
     // Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
@@ -429,6 +440,7 @@ public enum Mytems {
         ACULA,
         CAT_EARS,
         CLOUD_CITY,
+        COIN,
         CURRENCY,
         DUNE,
         DWARVEN,
@@ -438,6 +450,8 @@ public enum Mytems {
         FRIENDS,
         FURNITURE,
         HALLOWEEN,
+        KEY,
+        KEYHOLE,
         LETTER,
         MAYPOLE,
         MOB_CATCHER,
