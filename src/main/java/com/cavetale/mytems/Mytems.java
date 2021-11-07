@@ -168,7 +168,23 @@ public enum Mytems {
     PUMPKIN_STUB(WardrobeItem::new, Material.SEA_PICKLE, 152, (char) 0, Category.WARDROBE_HAT),
     STOCKING_CAP(WardrobeItem::new, Material.RED_WOOL, 153, (char) 0, Category.WARDROBE_HAT),
     STRAW_HAT(WardrobeItem::new, Material.HAY_BLOCK, 154, (char) 0, Category.WARDROBE_HAT),
-    WITCH_HAT(WardrobeItem::new, Material.SHULKER_BOX, 155, (char) 0, Category.WARDROBE_HAT),
+    // Witch Hats
+    WHITE_WITCH_HAT(DummyMytem::new, Material.WHITE_SHULKER_BOX, 155, (char) 0, Category.WITCH_HAT),
+    ORANGE_WITCH_HAT(DummyMytem::new, Material.ORANGE_SHULKER_BOX, 162, (char) 0, Category.WITCH_HAT),
+    MAGENTA_WITCH_HAT(DummyMytem::new, Material.MAGENTA_SHULKER_BOX, 163, (char) 0, Category.WITCH_HAT),
+    LIGHT_BLUE_WITCH_HAT(DummyMytem::new, Material.LIGHT_BLUE_SHULKER_BOX, 164, (char) 0, Category.WITCH_HAT),
+    YELLOW_WITCH_HAT(DummyMytem::new, Material.YELLOW_SHULKER_BOX, 165, (char) 0, Category.WITCH_HAT),
+    LIME_WITCH_HAT(DummyMytem::new, Material.LIME_SHULKER_BOX, 166, (char) 0, Category.WITCH_HAT),
+    PINK_WITCH_HAT(DummyMytem::new, Material.PINK_SHULKER_BOX, 167, (char) 0, Category.WITCH_HAT),
+    GRAY_WITCH_HAT(DummyMytem::new, Material.GRAY_SHULKER_BOX, 168, (char) 0, Category.WITCH_HAT),
+    LIGHT_GRAY_WITCH_HAT(DummyMytem::new, Material.LIGHT_GRAY_SHULKER_BOX, 169, (char) 0, Category.WITCH_HAT),
+    CYAN_WITCH_HAT(DummyMytem::new, Material.CYAN_SHULKER_BOX, 170, (char) 0, Category.WITCH_HAT),
+    PURPLE_WITCH_HAT(DummyMytem::new, Material.PURPLE_SHULKER_BOX, 171, (char) 0, Category.WITCH_HAT),
+    BLUE_WITCH_HAT(DummyMytem::new, Material.BLUE_SHULKER_BOX, 172, (char) 0, Category.WITCH_HAT),
+    BROWN_WITCH_HAT(DummyMytem::new, Material.BROWN_SHULKER_BOX, 173, (char) 0, Category.WITCH_HAT),
+    GREEN_WITCH_HAT(DummyMytem::new, Material.GREEN_SHULKER_BOX, 174, (char) 0, Category.WITCH_HAT),
+    RED_WITCH_HAT(DummyMytem::new, Material.RED_SHULKER_BOX, 175, (char) 0, Category.WITCH_HAT),
+    BLACK_WITCH_HAT(DummyMytem::new, Material.BLACK_SHULKER_BOX, 176, (char) 0, Category.WITCH_HAT),
     // Vote
     VOTE_CANDY(VoteCandy::new, Material.COOKIE, 9073001, '\uE21E', Category.VOTE), // VOTE
     VOTE_FIREWORK(VoteFirework::new, Material.FIREWORK_ROCKET, 9073002, '\uE21F', Category.VOTE),
@@ -397,7 +413,7 @@ public enum Mytems {
     SCARLET_BOOTS(ScarletItem.Boots::new, Material.LEATHER_BOOTS, 159, (char) 159, Category.SCARLET),
     SCARLET_SWORD(ScarletItem.Sword::new, Material.NETHERITE_SWORD, 160, (char) 160, Category.SCARLET),
     SCARLET_SHIELD(ScarletItem.Shield::new, Material.SHIELD, 161, (char) 161, Category.SCARLET);
-    // Next CustomModelData: 162
+    // Next CustomModelData: 177
     // Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
@@ -446,6 +462,7 @@ public enum Mytems {
         WARDROBE,
         WARDROBE_HANDHELD,
         WARDROBE_HAT,
+        WITCH_HAT,
         NEW,
         UNKNOWN;
     }
