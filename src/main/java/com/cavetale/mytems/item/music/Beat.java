@@ -42,11 +42,11 @@ public final class Beat {
     }
 
     public void play(Player player, Location location) {
-        player.playSound(location, Sounds.of(instrument).sound, SoundCategory.MUSIC, 1.0f, Notes.of(bukkitNote).pitch);
+        player.playSound(location, Sounds.of(instrument).sound, SoundCategory.MASTER, 1.0f, Notes.of(bukkitNote).pitch);
     }
 
     public void play(Location location) {
-        location.getWorld().playSound(location, Sounds.of(instrument).sound, SoundCategory.MUSIC, 1.0f, Notes.of(bukkitNote).pitch);
+        location.getWorld().playSound(location, Sounds.of(instrument).sound, SoundCategory.MASTER, 1.0f, Notes.of(bukkitNote).pitch);
     }
 
     public int getOctave() {
