@@ -45,10 +45,8 @@ public final class Beat {
         player.playSound(location, Sounds.of(instrument).sound, SoundCategory.MUSIC, 1.0f, Notes.of(bukkitNote).pitch);
     }
 
-    public void play(Location location, double range) {
-        for (Player player : location.getWorld().getNearbyEntitiesByType(Player.class, location, range, range, range)) {
-            play(player, location);
-        }
+    public void play(Location location) {
+        location.getWorld().playSound(location, Sounds.of(instrument).sound, SoundCategory.MUSIC, 1.0f, Notes.of(bukkitNote).pitch);
     }
 
     public int getOctave() {

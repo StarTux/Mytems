@@ -35,10 +35,10 @@ public final class MelodyReplay {
         return result;
     }
 
-    public static MelodyReplay play(Plugin plugin, Melody melody, Location location, double range) {
+    public static MelodyReplay play(Plugin plugin, Melody melody, Location location) {
         MelodyReplay result = new MelodyReplay(plugin, melody, beat -> {
                 if (!location.isChunkLoaded()) return false;
-                beat.play(location, range);
+                beat.play(location);
                 return true;
         });
         result.start();

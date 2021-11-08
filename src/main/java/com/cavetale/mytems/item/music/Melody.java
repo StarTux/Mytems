@@ -47,8 +47,8 @@ public final class Melody {
         return total / size;
     }
 
-    public MelodyReplay play(Plugin plugin, Location location, double range) {
-        return MelodyReplay.play(plugin, this, location, range);
+    public MelodyReplay play(Plugin plugin, Location location) {
+        return MelodyReplay.play(plugin, this, location);
     }
 
     public MelodyReplay play(Plugin plugin, Player player) {
