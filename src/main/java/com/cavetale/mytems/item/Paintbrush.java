@@ -1,5 +1,6 @@
 package com.cavetale.mytems.item;
 
+import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
@@ -25,6 +26,7 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.RayTraceResult;
@@ -110,6 +112,7 @@ public final class Paintbrush implements Mytem {
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
         event.setUseInteractedBlock(Event.Result.DENY);
         event.setUseItemInHand(Event.Result.DENY);
+        if (event.getHand() != EquipmentSlot.HAND) return;
         if (event.hasBlock()) {
             player.sendActionBar(Component.text("Too close! Get some distance.", NamedTextColor.RED));
             return;
@@ -122,13 +125,14 @@ public final class Paintbrush implements Mytem {
             session.setCooldown(key.id, 20);
             return;
         }
-        paintBlock(rayTraceResult.getHitBlock(), rayTraceResult.getHitBlockFace());
+        Block block = rayTraceResult.getHitBlock();
+        if (!PlayerBlockAbilityQuery.Action.USE.query(player, block)) return;
+        paintBlock(block, rayTraceResult.getHitBlockFace());
     }
 
     private boolean paintBlock(Block targetBlock, BlockFace face) {
         BlockColor targetBlockColor = BlockColor.of(targetBlock.getType());
         if (targetBlockColor == null) return false;
-        if (targetBlockColor == brush.blockColor) return false;
         BlockColor.Suffix suffix = targetBlockColor.suffixOf(targetBlock.getType());
         if (suffix == null) return false;
         switch (suffix) {
@@ -169,6 +173,7 @@ public final class Paintbrush implements Mytem {
     public void onPlayerLeftClick(PlayerInteractEvent event, Player player, ItemStack item) {
         event.setUseInteractedBlock(Event.Result.DENY);
         event.setUseItemInHand(Event.Result.DENY);
+        if (event.getHand() != EquipmentSlot.HAND) return;
         if (item.getAmount() > 1) return;
         final Block block;
         final BlockFace face;
