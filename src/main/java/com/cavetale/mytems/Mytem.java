@@ -47,6 +47,8 @@ public interface Mytem {
 
     default void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) { }
 
+    default void onPlayerLeftClick(PlayerInteractEvent event, Player player, ItemStack item) { }
+
     default void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player, ItemStack item) { }
 
     default void onPlayerFallDamage(EntityDamageEvent event, Player player, ItemStack item) { }

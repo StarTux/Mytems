@@ -63,12 +63,21 @@ public final class EventListener implements Listener {
     void onPlayerInteract(PlayerInteractEvent event) {
         switch (event.getAction()) {
         case RIGHT_CLICK_BLOCK:
-        case RIGHT_CLICK_AIR:
+        case RIGHT_CLICK_AIR: {
             ItemStack item = event.getItem();
             Mytems mytems = Mytems.forItem(item);
             if (mytems == null) return;
             mytems.getMytem().onPlayerRightClick(event, event.getPlayer(), item);
             break;
+        }
+        case LEFT_CLICK_BLOCK:
+        case LEFT_CLICK_AIR: {
+            ItemStack item = event.getItem();
+            Mytems mytems = Mytems.forItem(item);
+            if (mytems == null) return;
+            mytems.getMytem().onPlayerLeftClick(event, event.getPlayer(), item);
+            break;
+        }
         default: break;
         }
     }

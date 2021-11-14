@@ -29,6 +29,7 @@ public enum MytemsTag {
     MUSIC_ALL(Mytems.Category.MUSIC, Mytems.Category.MUSIC_HYRULE),
     MUSIC_HYRULE,
     NUMBER,
+    PAINTBRUSH,
     PICTURE,
     PIRATE,
     POCKET_MOB,

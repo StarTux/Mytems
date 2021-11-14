@@ -7,6 +7,7 @@ import com.cavetale.mytems.item.Ingredient;
 import com.cavetale.mytems.item.KittyCoin;
 import com.cavetale.mytems.item.MagicCape;
 import com.cavetale.mytems.item.MagicMap;
+import com.cavetale.mytems.item.Paintbrush;
 import com.cavetale.mytems.item.Toilet;
 import com.cavetale.mytems.item.UnicornHorn;
 import com.cavetale.mytems.item.WardrobeItem;
@@ -420,11 +421,28 @@ public enum Mytems {
     COPPER_KEYHOLE(DummyMytem::new, Material.COPPER_INGOT, 180, (char) 180, Category.KEYHOLE),
     SILVER_KEYHOLE(DummyMytem::new, Material.IRON_INGOT, 181, (char) 181, Category.KEYHOLE),
     GOLDEN_KEYHOLE(DummyMytem::new, Material.GOLD_INGOT, 182, (char) 182, Category.KEYHOLE),
-    // COINS
+    // Coins
     COPPER_COIN(DummyMytem::new, Material.COPPER_INGOT, 183, (char) 183, Category.COIN),
     SILVER_COIN(DummyMytem::new, Material.IRON_INGOT, 184, (char) 184, Category.COIN),
-    GOLDEN_COIN(DummyMytem::new, Material.GOLD_INGOT, 185, (char) 185, Category.COIN);
-    // Next CustomModelData: 186
+    GOLDEN_COIN(DummyMytem::new, Material.GOLD_INGOT, 185, (char) 185, Category.COIN),
+    // Paintbrush
+    BLACK_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 186, (char) 186, Category.PAINTBRUSH),
+    RED_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 187, (char) 187, Category.PAINTBRUSH),
+    GREEN_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 188, (char) 188, Category.PAINTBRUSH),
+    BROWN_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 189, (char) 189, Category.PAINTBRUSH),
+    BLUE_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 190, (char) 190, Category.PAINTBRUSH),
+    PURPLE_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 191, (char) 191, Category.PAINTBRUSH),
+    CYAN_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 192, (char) 192, Category.PAINTBRUSH),
+    LIGHT_GRAY_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 193, (char) 193, Category.PAINTBRUSH),
+    GRAY_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 194, (char) 194, Category.PAINTBRUSH),
+    PINK_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 195, (char) 195, Category.PAINTBRUSH),
+    LIME_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 196, (char) 196, Category.PAINTBRUSH),
+    YELLOW_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 197, (char) 197, Category.PAINTBRUSH),
+    LIGHT_BLUE_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 198, (char) 198, Category.PAINTBRUSH),
+    MAGENTA_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 199, (char) 199, Category.PAINTBRUSH),
+    ORANGE_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 200, (char) 200, Category.PAINTBRUSH),
+    WHITE_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 201, (char) 201, Category.PAINTBRUSH);
+    // Next CustomModelData: 202
     // Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
@@ -459,6 +477,7 @@ public enum Mytems {
         MUSICAL,
         MUSIC_HYRULE,
         NUMBER,
+        PAINTBRUSH,
         PICTURE,
         PIRATE,
         POCKET_MOB,
