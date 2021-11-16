@@ -8,6 +8,7 @@ import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.BlockColor;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
+import com.cavetale.worldmarker.block.BlockMarker;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +34,7 @@ import org.bukkit.util.RayTraceResult;
 
 @RequiredArgsConstructor @Getter
 public final class Paintbrush implements Mytem {
-    public static final double RANGE = 32.0;
+    public static final double RANGE = 48.0;
     private final Mytems key;
     private ItemStack prototype;
     private List<Component> text;
@@ -150,14 +151,18 @@ public final class Paintbrush implements Mytem {
         BlockData newBlockData = brackIndex > 0
             ? Bukkit.createBlockData(newMaterial, oldBlockData.substring(brackIndex))
             : newMaterial.createBlockData();
-        final int maxDist = targetBlock.getWorld().getNoTickViewDistance();
-        final int chunkX = targetBlock.getX() >> 4;
-        final int chunkZ = targetBlock.getZ() >> 4;
-        for (Player player : targetBlock.getWorld().getPlayers()) {
-            Location loc = player.getLocation();
-            if (Math.abs((loc.getBlockX() >> 4) - chunkX) > maxDist) continue;
-            if (Math.abs((loc.getBlockZ() >> 4) - chunkZ) > maxDist) continue;
-            player.sendBlockChange(targetBlock.getLocation(), newBlockData);
+        if (BlockMarker.hasId(targetBlock, "paintbrush_canvas")) {
+            targetBlock.setBlockData(newBlockData);
+        } else {
+            final int maxDist = targetBlock.getWorld().getNoTickViewDistance();
+            final int chunkX = targetBlock.getX() >> 4;
+            final int chunkZ = targetBlock.getZ() >> 4;
+            for (Player player : targetBlock.getWorld().getPlayers()) {
+                Location loc = player.getLocation();
+                if (Math.abs((loc.getBlockX() >> 4) - chunkX) > maxDist) continue;
+                if (Math.abs((loc.getBlockZ() >> 4) - chunkZ) > maxDist) continue;
+                player.sendBlockChange(targetBlock.getLocation(), newBlockData);
+            }
         }
         targetBlock.getWorld().playSound(targetBlock.getLocation(),
                                          Sound.ITEM_BUCKET_FILL, SoundCategory.MASTER, 0.5f, 2.0f);
