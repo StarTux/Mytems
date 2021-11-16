@@ -339,7 +339,7 @@ public enum Mytems {
     EASTER_EGG(DummyMytem::new, Material.EGG, 345715, '\uE23C', Category.UI),
     TRAFFIC_LIGHT(DummyMytem::new, Material.YELLOW_DYE, 57, '\uE279', Category.UI),
     INVISIBLE_ITEM(DummyMytem::new, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 65, '\uE281', Category.UI),
-    PAINT_PALETTE(DummyMytem::new, Material.STICK, 202, (char) 202, Category.UI), 
+    PAINT_PALETTE(DummyMytem::new, Material.STICK, 202, (char) 202, Category.UI),
     // Leters
     LETTER_A(GlyphItem::new, Material.PLAYER_HEAD, 68, '\uE284', Category.LETTER),
     LETTER_B(GlyphItem::new, Material.PLAYER_HEAD, 69, '\uE285', Category.LETTER),
