@@ -81,10 +81,6 @@ public final class PocketMob implements Mytem, Listener {
         event.setCancelled(true);
     }
 
-    public String getEntityTypeName() {
-        return Text.toCamelCase(entityType, " ");
-    }
-
     @Override
     public String serializeTag(ItemStack itemStack) {
         PocketMobTag tag = new PocketMobTag();

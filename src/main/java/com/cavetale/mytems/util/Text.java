@@ -117,6 +117,10 @@ public final class Text {
         return String.join(glue, toks);
     }
 
+    public static String toCamelCase(Enum en) {
+        return toCamelCase(en, " ");
+    }
+
     private static int clampRGB(int val) {
         return Math.min(255, Math.max(0, val));
     }

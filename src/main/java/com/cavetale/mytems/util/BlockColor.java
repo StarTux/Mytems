@@ -4,6 +4,7 @@ import com.cavetale.mytems.MytemsPlugin;
 import java.util.EnumMap;
 import java.util.Map;
 import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 
 /**
@@ -53,6 +54,7 @@ public enum BlockColor {
     public final TextColor textColor;
     public final org.bukkit.Color bukkitColor;
     private static final Map<Material, BlockColor> MATERIAL_MAP = new EnumMap<>(Material.class);
+    private static final Map<DyeColor, BlockColor> DYE_COLOR_MAP = new EnumMap<>(DyeColor.class);
     private final Map<Suffix, Material> suffixMap = new EnumMap<>(Suffix.class);
     private final Map<Material, Suffix> materialSuffixMap = new EnumMap<>(Material.class);
 
@@ -71,6 +73,7 @@ public enum BlockColor {
                     MATERIAL_MAP.put(material, blockColor);
                     blockColor.suffixMap.put(suffix, material);
                     blockColor.materialSuffixMap.put(material, suffix);
+                    DYE_COLOR_MAP.put(DyeColor.valueOf(blockColor.name()), blockColor);
                 } catch (IllegalArgumentException iae) {
                     MytemsPlugin.getInstance().getLogger().warning("BlockColor: Material not found: " + key);
                 }
@@ -80,6 +83,10 @@ public enum BlockColor {
 
     public static BlockColor of(Material material) {
         return MATERIAL_MAP.get(material);
+    }
+
+    public static BlockColor of(DyeColor dyeColor) {
+        return DYE_COLOR_MAP.get(dyeColor);
     }
 
     public Material getMaterial(Suffix suffix) {

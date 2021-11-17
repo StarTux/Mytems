@@ -13,7 +13,7 @@ public final class Items {
     private Items() { }
 
     public static Component nonItalic(Component in) {
-        if (Component.empty().equals(in)) return in;
+        if (in == null || Component.empty().equals(in)) return in;
         return Component.text().append(in).decoration(TextDecoration.ITALIC, false).build();
     }
 
