@@ -1,6 +1,7 @@
 package com.cavetale.mytems.item;
 
 import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
+import com.cavetale.core.event.block.PlayerChangeBlockEvent;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
@@ -32,6 +33,15 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.RayTraceResult;
 
+/**
+ * Paintbrush in 16 colors.  It can change the color of any colored
+ * block.
+ *
+ * The paintbrush works where the player has the ability to "USE" the
+ * block.  If the block is marked via WrldMarker as
+ * "paintbrush_canvas", the block will actually change.  Otherwise, a
+ * block update packet is sent to all nearby players.
+ */
 @RequiredArgsConstructor @Getter
 public final class Paintbrush implements Mytem {
     public static final double RANGE = 48.0;
@@ -127,11 +137,18 @@ public final class Paintbrush implements Mytem {
             return;
         }
         Block block = rayTraceResult.getHitBlock();
-        if (!PlayerBlockAbilityQuery.Action.USE.query(player, block)) return;
-        paintBlock(block, rayTraceResult.getHitBlockFace());
+        paintBlock(player, block, rayTraceResult.getHitBlockFace());
     }
 
-    private boolean paintBlock(Block targetBlock, BlockFace face) {
+    /**
+     * Paint a target block.  The color is implied by this instance.
+     *
+     * @param targetBlock the target block
+     * @param face the BlockFace that will display particle effects
+     * @return true if the block was updated in any way, false otherwise
+     */
+    private boolean paintBlock(Player player, Block targetBlock, BlockFace face) {
+        if (!PlayerBlockAbilityQuery.Action.USE.query(player, targetBlock)) return false;
         BlockColor targetBlockColor = BlockColor.of(targetBlock.getType());
         if (targetBlockColor == null) return false;
         BlockColor.Suffix suffix = targetBlockColor.suffixOf(targetBlock.getType());
@@ -152,16 +169,18 @@ public final class Paintbrush implements Mytem {
             ? Bukkit.createBlockData(newMaterial, oldBlockData.substring(brackIndex))
             : newMaterial.createBlockData();
         if (BlockMarker.hasId(targetBlock, "paintbrush_canvas")) {
+            if (targetBlock.getType() == newBlockData.getMaterial()) return false;
+            new PlayerChangeBlockEvent(player, targetBlock, newBlockData).callEvent();
             targetBlock.setBlockData(newBlockData);
         } else {
             final int maxDist = targetBlock.getWorld().getNoTickViewDistance();
             final int chunkX = targetBlock.getX() >> 4;
             final int chunkZ = targetBlock.getZ() >> 4;
-            for (Player player : targetBlock.getWorld().getPlayers()) {
+            for (Player nearby : targetBlock.getWorld().getPlayers()) {
                 Location loc = player.getLocation();
                 if (Math.abs((loc.getBlockX() >> 4) - chunkX) > maxDist) continue;
                 if (Math.abs((loc.getBlockZ() >> 4) - chunkZ) > maxDist) continue;
-                player.sendBlockChange(targetBlock.getLocation(), newBlockData);
+                nearby.sendBlockChange(targetBlock.getLocation(), newBlockData);
             }
         }
         targetBlock.getWorld().playSound(targetBlock.getLocation(),
