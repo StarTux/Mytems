@@ -224,6 +224,15 @@ public final class PocketMobTag extends MytemTag {
                 nameComponents.add(finalNameComponent);
             }
             text.add(1, Component.text(String.join(" ", nameComponents), COLOR_BG));
+        } else {
+            Map<String, Object> map = parseMobTag();
+            Object o;
+            o = map.get("Health");
+            if (o instanceof Number) {
+                text.add(Component.join(JoinConfiguration.noSeparators(),
+                                        Component.text("Health ", COLOR_BG),
+                                        Component.text(((Number) o).intValue(), COLOR_FG)));
+            }
         }
         Items.text(meta, text);
         itemStack.setItemMeta(meta);
