@@ -134,6 +134,7 @@ public enum Mytems {
     PIRATE_HAT(WardrobeItem::new, Material.BLACK_DYE, 3919004, (char) 0, Category.WARDROBE_HAT),
     COWBOY_HAT(WardrobeItem::new, Material.BROWN_DYE, 3919005, (char) 0, Category.WARDROBE_HAT),
     ANGEL_HALO(WardrobeItem::new, Material.LIGHT_WEIGHTED_PRESSURE_PLATE, 111, (char) 0, Category.WARDROBE_HAT),
+    TOP_HAT(WardrobeItem::new, Material.BLACK_WOOL, 203, (char) 0, Category.WARDROBE_HAT), 
     // Cat Ears
     BLACK_CAT_EARS(WardrobeItem::new, Material.BLACK_CARPET, 112, (char) 0, Category.CAT_EARS),
     CYAN_CAT_EARS(WardrobeItem::new, Material.CYAN_CARPET, 113, (char) 0, Category.CAT_EARS),
@@ -443,7 +444,7 @@ public enum Mytems {
     MAGENTA_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 199, (char) 199, Category.PAINTBRUSH),
     ORANGE_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 200, (char) 200, Category.PAINTBRUSH),
     WHITE_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 201, (char) 201, Category.PAINTBRUSH);
-    // Next CustomModelData: 203
+    // Next CustomModelData: 204
     // Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
