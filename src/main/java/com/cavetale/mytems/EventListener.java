@@ -18,6 +18,7 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.Skull;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentOffer;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -46,6 +47,8 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.server.PluginDisableEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.EntitiesLoadEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -387,5 +390,21 @@ public final class EventListener implements Listener {
         if (event.getPlugin() instanceof JavaPlugin) {
             plugin.onDisablePlugin((JavaPlugin) event.getPlugin());
         }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    protected void onChunkLoad(ChunkLoadEvent event) {
+        Bukkit.getScheduler().runTask(plugin, () -> {
+                plugin.fixChunkBlocks(event.getChunk());
+            });
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    protected void onEntitiesLoad(EntitiesLoadEvent event) {
+        Bukkit.getScheduler().runTask(plugin, () -> {
+                for (Entity entity : event.getEntities()) {
+                    plugin.fixEntity(entity);
+                }
+            });
     }
 }

@@ -15,13 +15,21 @@ import java.util.function.Function;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Material;
 import org.bukkit.Tag;
+import org.bukkit.World;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Container;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EntityEquipment;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -51,6 +59,17 @@ public final class MytemsPlugin extends JavaPlugin {
             String name = it.name().toLowerCase();
             Emoji.addEmoji(name, it.component, it.getMytem().getDisplayName(),
                            GlyphPolicy.PUBLIC, it);
+        }
+        for (Player player : Bukkit.getOnlinePlayers()) {
+            fixPlayerInventory(player);
+        }
+        for (World world : Bukkit.getWorlds()) {
+            for (Entity entity : world.getEntities()) {
+                fixEntity(entity);
+            }
+            for (Chunk chunk : world.getLoadedChunks()) {
+                fixChunkBlocks(chunk);
+            }
         }
     }
 
@@ -141,6 +160,48 @@ public final class MytemsPlugin extends JavaPlugin {
             count += 1;
         }
         return count;
+    }
+
+    /**
+     * Fix the blocks (and block entities) in a chunk.  Specifically
+     * skip the entities in the chunk as they may not be loaded yet!
+     */
+    protected int fixChunkBlocks(Chunk chunk) {
+        if (!chunk.isLoaded()) return 0;
+        int result = 0;
+        for (BlockState blockState : chunk.getTileEntities()) {
+            if (blockState instanceof Container container) {
+                result += fixInventory(container.getInventory());
+            }
+        }
+        return result;
+    }
+
+    /**
+     * Attempt to fix item on an entity which are visible to players.
+     * Especially item frames and living entities with equipped items.
+     */
+    protected void fixEntity(Entity entity) {
+        if (entity.isDead()) return;
+        if (entity instanceof Player) return;
+        if (entity instanceof ItemFrame itemFrame) {
+            ItemStack itemStack = fixItemStack(itemFrame.getItem());
+            if (itemStack != null) {
+                itemFrame.setItem(itemStack);
+            }
+        }
+        if (entity instanceof LivingEntity livingEntity) {
+            EntityEquipment entityEquipment = livingEntity.getEquipment();
+            for (EquipmentSlot slot : EquipmentSlot.values()) {
+                ItemStack itemStack = fixItemStack(entityEquipment.getItem(slot));
+                if (itemStack != null) {
+                    entityEquipment.setItem(slot, itemStack);
+                }
+            }
+        }
+        if (entity instanceof InventoryHolder inventoryHolder) {
+            fixInventory(inventoryHolder.getInventory());
+        }
     }
 
     /**
