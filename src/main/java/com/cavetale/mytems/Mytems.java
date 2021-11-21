@@ -1,5 +1,6 @@
 package com.cavetale.mytems;
 
+import com.cavetale.mytems.item.ArmorPart;
 import com.cavetale.mytems.item.ChristmasToken;
 import com.cavetale.mytems.item.DummyMytem;
 import com.cavetale.mytems.item.Enderball;
@@ -444,8 +445,14 @@ public enum Mytems {
     LIGHT_BLUE_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 198, (char) 198, Category.PAINTBRUSH),
     MAGENTA_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 199, (char) 199, Category.PAINTBRUSH),
     ORANGE_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 200, (char) 200, Category.PAINTBRUSH),
-    WHITE_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 201, (char) 201, Category.PAINTBRUSH);
-    // Next CustomModelData: 205
+    WHITE_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 201, (char) 201, Category.PAINTBRUSH),
+    // Armor Parts
+    RUSTY_BUCKET(ArmorPart::new, Material.BUCKET, 205, (char) 205, Category.ARMOR_PART),
+    BRITTLE_BARREL(ArmorPart::new, Material.BARREL, 206, (char) 206, Category.ARMOR_PART),
+    CORRODED_DRUM(ArmorPart::new, Material.CAULDRON, 207, (char) 207, Category.ARMOR_PART),
+    FLOTSAM_CAN(ArmorPart::new, Material.FLOWER_POT, 208, (char) 208, Category.ARMOR_PART),
+    BENT_PITCHFORK(ArmorPart::new, Material.LIGHTNING_ROD, 209, (char) 209, Category.ARMOR_PART);
+    // Next CustomModelData: 210
     // Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
@@ -459,6 +466,7 @@ public enum Mytems {
 
     public enum Category {
         ACULA,
+        ARMOR_PART,
         CAT_EARS,
         CLOUD_CITY,
         COIN,

@@ -39,6 +39,7 @@ import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -340,6 +341,15 @@ public final class EventListener implements Listener {
                 mytems.getMytem().onBlockDamage(event, player, itemStack);
             }
         }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    void onPlayerBucketFill(PlayerBucketFillEvent event) {
+        ItemStack itemStack = event.getItemStack();
+        if (itemStack == null) return;
+        Mytems mytems = Mytems.forItem(itemStack);
+        if (mytems == null) return;
+        mytems.getMytem().onBucketFill(event, event.getPlayer(), itemStack);
     }
 
     @EventHandler(priority = EventPriority.HIGH)

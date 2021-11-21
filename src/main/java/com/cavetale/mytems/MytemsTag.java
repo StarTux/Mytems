@@ -6,6 +6,7 @@ import java.util.List;
 
 public enum MytemsTag {
     ACULA,
+    ARMOR_PART,
     CAT_EARS,
     CLOUD_CITY,
     COIN,
