@@ -134,7 +134,7 @@ public enum Mytems {
     PIRATE_HAT(WardrobeItem::new, Material.BLACK_DYE, 3919004, (char) 0, Category.WARDROBE_HAT),
     COWBOY_HAT(WardrobeItem::new, Material.BROWN_DYE, 3919005, (char) 0, Category.WARDROBE_HAT),
     ANGEL_HALO(WardrobeItem::new, Material.LIGHT_WEIGHTED_PRESSURE_PLATE, 111, (char) 0, Category.WARDROBE_HAT),
-    TOP_HAT(WardrobeItem::new, Material.BLACK_WOOL, 203, (char) 0, Category.WARDROBE_HAT), 
+    TOP_HAT(WardrobeItem::new, Material.BLACK_WOOL, 203, (char) 0, Category.WARDROBE_HAT),
     // Cat Ears
     BLACK_CAT_EARS(WardrobeItem::new, Material.BLACK_CARPET, 112, (char) 0, Category.CAT_EARS),
     CYAN_CAT_EARS(WardrobeItem::new, Material.CYAN_CARPET, 113, (char) 0, Category.CAT_EARS),
@@ -341,6 +341,7 @@ public enum Mytems {
     TRAFFIC_LIGHT(DummyMytem::new, Material.YELLOW_DYE, 57, '\uE279', Category.UI),
     INVISIBLE_ITEM(DummyMytem::new, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 65, '\uE281', Category.UI),
     PAINT_PALETTE(DummyMytem::new, Material.STICK, 202, (char) 202, Category.UI),
+    MOON(DummyMytem::new, Material.YELLOW_DYE, 204, (char) 204, Category.UI),
     // Leters
     LETTER_A(GlyphItem::new, Material.PLAYER_HEAD, 68, '\uE284', Category.LETTER),
     LETTER_B(GlyphItem::new, Material.PLAYER_HEAD, 69, '\uE285', Category.LETTER),
@@ -444,7 +445,7 @@ public enum Mytems {
     MAGENTA_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 199, (char) 199, Category.PAINTBRUSH),
     ORANGE_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 200, (char) 200, Category.PAINTBRUSH),
     WHITE_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 201, (char) 201, Category.PAINTBRUSH);
-    // Next CustomModelData: 204
+    // Next CustomModelData: 205
     // Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
