@@ -130,7 +130,7 @@ public final class JavaItem {
         }
         // Lore
         List<Component> lore = meta.lore();
-        if (!lore.isEmpty()) {
+        if (lore != null && !lore.isEmpty()) {
             List<String> loreLines = new ArrayList<>();
             for (int i = 0; i < lore.size(); i += 1) {
                 Component component = lore.get(i);
