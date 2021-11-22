@@ -13,13 +13,17 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.ChatColor;
+import org.bukkit.DyeColor;
+import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Banner;
 import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -33,14 +37,11 @@ public final class JavaItem {
 
     public static List<String> serializeToLines(ItemStack itemStack) {
         List<String> lines = new ArrayList<>();
-        if (itemStack.getAmount() > 1) {
-            lines.add(String.format("ItemStack itemStack = new ItemStack(Material.%s, %d);",
-                                    itemStack.getType().name(),
-                                    itemStack.getAmount()));
-        } else {
-            lines.add(String.format("ItemStack itemStack = new ItemStack(Material.%s);",
-                                    itemStack.getType().name()));
-        }
+        Material material = itemStack.getType();
+        int amount = itemStack.getAmount();
+        lines.add(amount > 1
+                  ? String.format("ItemStack itemStack = new ItemStack(Material.%s, %d);", material.name(), amount)
+                  : String.format("ItemStack itemStack = new ItemStack(Material.%s);", material.name()));
         List<String> metaLines = serializeToLines(itemStack.getItemMeta());
         if (!metaLines.isEmpty()) {
             lines.add("itemStack.editMeta(meta -> {");
@@ -101,6 +102,18 @@ public final class JavaItem {
                 lines.add("    " + quote(skull.getTexture()) + ",");
                 lines.add("    " + (skull.getSignature() != null ? quote(skull.getSignature()) : "null") + ");");
             }
+        }
+        if (meta instanceof BannerMeta bannerMeta) {
+            lines.add("BannerMeta bannerMeta = (BannerMeta) meta;");
+            List<String> patternList = new ArrayList<>();
+            for (Pattern pattern : bannerMeta.getPatterns()) {
+                DyeColor patternColor = pattern.getColor();
+                PatternType patternType = pattern.getPattern();
+                patternList.add(String.format("new Pattern(DyeColor.%s, PatternType.%s)",
+                                              patternColor.name(),
+                                              patternType.name()));
+            }
+            lines.addAll(sandwich("bannerMeta.setPatterns(List.of(", "    ", patternList, ",", "));"));
         }
         if (meta instanceof BlockStateMeta) {
             BlockStateMeta blockStateMeta = (BlockStateMeta) meta;
