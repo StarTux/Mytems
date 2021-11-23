@@ -3,6 +3,7 @@ package com.cavetale.mytems;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Level;
 import lombok.Data;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
@@ -87,7 +88,16 @@ public class MytemTag {
             case DISPLAY_NAME: {
                 if (!itemStack.hasItemMeta()) continue;
                 ItemMeta meta = itemStack.getItemMeta();
-                Component displayName = meta.displayName();
+                if (!meta.hasDisplayName()) continue;
+                Component displayName;
+                try {
+                    // Encountered an EOFException here.
+                    // Probably because hasDisplayName was not checked
+                    displayName = meta.displayName();
+                } catch (Exception e) {
+                    MytemsPlugin.getInstance().getLogger().log(Level.SEVERE, "displayName", e);
+                    continue;
+                }
                 if (displayName == null) continue;
                 displayNameJson = GsonComponentSerializer.gson().serialize(displayName);
                 break;
