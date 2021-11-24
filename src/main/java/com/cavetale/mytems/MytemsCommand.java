@@ -1,12 +1,14 @@
 package com.cavetale.mytems;
 
 import com.cavetale.core.command.AbstractCommand;
+import com.cavetale.core.command.CommandArgCompleter;
 import com.cavetale.core.command.CommandContext;
 import com.cavetale.core.command.CommandNode;
 import com.cavetale.core.command.CommandWarn;
 import com.cavetale.core.util.Json;
 import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.session.Session;
+import com.cavetale.mytems.util.Blocks;
 import com.cavetale.mytems.util.JavaItem;
 import com.cavetale.mytems.util.Skull;
 import java.io.File;
@@ -29,6 +31,8 @@ import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -59,6 +63,11 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         rootNode.addChild("fixall").denyTabCompletion()
             .description("Fix all player inventories")
             .senderCaller(this::fixall);
+        rootNode.addChild("placeblock").arguments("<mytems> <facing>")
+            .description("Place a Mytem as a block")
+            .completers(CommandArgCompleter.enumLowerList(Mytems.class),
+                        CommandArgCompleter.enumLowerList(BlockFace.class))
+            .playerCaller(this::placeBlock);
         // Serialize
         CommandNode serializeNode = rootNode.addChild("serialize")
             .description("Item serialization commands");
@@ -293,6 +302,27 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         } catch (IOException ioe) {
             plugin.getLogger().log(Level.SEVERE, "Writing " + file, ioe);
         }
+        return true;
+    }
+
+    protected boolean placeBlock(Player player, String[] args) {
+        if (args.length != 2) return false;
+        Mytems mytems = Mytems.forId(args[0]);
+        if (mytems == null) throw new CommandWarn("Invalid id: " + args[0]);
+        BlockFace blockFace;
+        try {
+            blockFace = BlockFace.valueOf(args[1].toUpperCase());
+        } catch (IllegalArgumentException iae) {
+            throw new CommandWarn("Invalid block face: " + args[1]);
+        }
+        Block block = player.getLocation().getBlock();
+        player.sendMessage(Component.text("Spawning ", NamedTextColor.YELLOW)
+                           .append(mytems.getMytem().getDisplayName())
+                           .append(Component.text(" as block at"
+                                                  + " " + block.getX()
+                                                  + " " + block.getY()
+                                                  + " " + block.getZ())));
+        Blocks.place(mytems, block, blockFace);
         return true;
     }
 
