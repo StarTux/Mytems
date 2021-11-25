@@ -3,6 +3,7 @@ package com.cavetale.mytems;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.item.ChristmasToken;
 import com.cavetale.worldmarker.item.ItemMarker;
+import com.cavetale.worldmarker.util.Tags;
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
 import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
@@ -11,9 +12,12 @@ import com.destroystokyo.paper.profile.PlayerProfile;
 import com.destroystokyo.paper.profile.ProfileProperty;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Skull;
 import org.bukkit.enchantments.Enchantment;
@@ -53,14 +57,19 @@ import org.bukkit.event.world.EntitiesLoadEvent;
 import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @RequiredArgsConstructor
 public final class EventListener implements Listener {
     private final MytemsPlugin plugin;
+    private NamespacedKey fixBlocksKey;
+    private long fixBlocksValue;
 
     public void enable() {
         Bukkit.getPluginManager().registerEvents(this, plugin);
+        fixBlocksKey = new NamespacedKey(plugin, "fixblocks");
+        fixBlocksValue = ThreadLocalRandom.current().nextLong();
     }
 
     @EventHandler
@@ -404,8 +413,13 @@ public final class EventListener implements Listener {
 
     @EventHandler(priority = EventPriority.MONITOR)
     protected void onChunkLoad(ChunkLoadEvent event) {
+        final Chunk chunk = event.getChunk();
         Bukkit.getScheduler().runTask(plugin, () -> {
-                plugin.fixChunkBlocks(event.getChunk());
+                PersistentDataContainer tag = chunk.getPersistentDataContainer();
+                Long value = Tags.getLong(tag, fixBlocksKey);
+                if (value != null && value == fixBlocksValue) return;
+                Tags.set(tag, fixBlocksKey, fixBlocksValue);
+                plugin.fixChunkBlocks(chunk);
             });
     }
 
