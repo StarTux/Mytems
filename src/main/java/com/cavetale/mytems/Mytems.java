@@ -325,6 +325,10 @@ public enum Mytems {
     // UI
     OK(DummyMytem::new, Material.BLUE_CONCRETE, 7, '\uE23F', Category.UI),
     NO(DummyMytem::new, Material.RED_CONCRETE, 8, '\uE240', Category.UI),
+    ON(DummyMytem::new, Material.ENDER_EYE, 210, (char) 210, Category.UI),
+    OFF(DummyMytem::new, Material.ENDER_PEARL, 211, (char) 211, Category.UI),
+    REDO(DummyMytem::new, Material.EGG, 212, (char) 212, Category.UI),
+    DICE(DummyMytem::new, Material.TURTLE_EGG, 213, (char) 213, Category.UI),
     HEART(DummyMytem::new, Material.HEART_OF_THE_SEA, 9, '\uE241', Category.UI),
     HALF_HEART(DummyMytem::new, Material.NAUTILUS_SHELL, 10, '\uE242', Category.UI),
     EMPTY_HEART(DummyMytem::new, Material.NAUTILUS_SHELL, 13, '\uE246', Category.UI),
@@ -452,7 +456,7 @@ public enum Mytems {
     BRITTLE_BARREL(ArmorPart::new, Material.BARREL, 206, (char) 206, Category.ARMOR_PART),
     FLOTSAM_CAN(ArmorPart::new, Material.FLOWER_POT, 208, (char) 208, Category.ARMOR_PART),
     BENT_PITCHFORK(ArmorPart::new, Material.LIGHTNING_ROD, 209, (char) 209, Category.ARMOR_PART);
-    // Next CustomModelData: 210
+    // Next CustomModelData: 214
     // Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
