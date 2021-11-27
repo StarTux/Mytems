@@ -2,50 +2,66 @@ package com.cavetale.mytems.item;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
+import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Skull;
-import com.cavetale.mytems.util.Text;
+import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.JoinConfiguration;
+import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.ChatColor;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 @Getter @RequiredArgsConstructor
 public final class ChristmasToken implements Mytem {
     private final Mytems key;
-    private static final String SKULL_NAME = "Christmas Token";
-    public static final UUID SKULL_ID = UUID.fromString("6d46f5a1-a833-414c-ba0d-9842cb59316e");
-    public static final String SKULL_TEXTURE = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjU2MTJkYzdiODZkNzFhZmMxMTk3MzAxYzE1ZmQ5NzllOWYzOWU3YjFmNDFkOGYxZWJkZjgxMTU1NzZlMmUifX19";
     private ItemStack prototype;
-    private String description = ""
-        + ChatColor.DARK_GRAY + "Christmas Event 2020"
-        + "\n\n" + ChatColor.BLUE + "Ho ho ho! Find out how to exchange this token for actual goodies."
-        + "\n\n" + ChatColor.BLUE + "You will when Santa comes to town.";
     private Component displayName;
-
-    private Component xmasify(String in) {
-        int len = in.length();
-        int iter = 255 / len;
-        Component component = Component.empty();
-        for (int i = 0; i < len; i += 1) {
-            int white = 255 - Math.abs(i - (len / 2)) * 2 * iter;
-            component = component.append(Component.text(in.substring(i, i + 1)).color(TextColor.color(white, white, 255)));
-        }
-        return component;
-    }
 
     @Override
     public void enable() {
-        displayName = xmasify("Christmas Token");
-        prototype = Skull.create(SKULL_NAME, SKULL_ID, SKULL_TEXTURE);
-        ItemMeta meta = prototype.getItemMeta();
-        meta.lore(Text.wrapLore(description));
-        meta.displayName(displayName);
-        key.markItemMeta(meta);
-        prototype.setItemMeta(meta);
+        displayName = Component.join(JoinConfiguration.noSeparators(), new Component[] {
+                Component.text("C", TextColor.color(0x1111ff)),
+                Component.text("h", TextColor.color(0x3333ff)),
+                Component.text("r", NamedTextColor.BLUE),
+                Component.text("i", TextColor.color(0x7777ff)),
+                Component.text("s", TextColor.color(0x9999ff)),
+                Component.text("t", TextColor.color(0xbbbbff)),
+                Component.text("m", TextColor.color(0xddddff)),
+                Component.text("a", NamedTextColor.WHITE),
+                Component.text("s", TextColor.color(0xddddff)),
+                Component.text(" ", TextColor.color(0xbbbbff)),
+                Component.text("T", TextColor.color(0x9999ff)),
+                Component.text("o", TextColor.color(0x7777ff)),
+                Component.text("k", NamedTextColor.BLUE),
+                Component.text("e", TextColor.color(0x3333ff)),
+                Component.text("n", TextColor.color(0x1111ff)),
+            });
+        List<Component> text = List.of(new Component[] {
+                displayName,
+                Component.text("Christmas Event 2020", NamedTextColor.DARK_GRAY),
+                Component.empty(),
+                Component.text("Ho ho ho! Find out how to", NamedTextColor.BLUE),
+                Component.text("exchange this token for actual", NamedTextColor.BLUE),
+                Component.text("goodies.", NamedTextColor.BLUE),
+                Component.empty(),
+                Component.text("You will when Santa comes to", NamedTextColor.BLUE),
+                Component.text("town.", NamedTextColor.BLUE),
+            });
+        String texture = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6"
+            + "Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUv"
+            + "ZjU2MTJkYzdiODZkNzFhZmMxMTk3MzAxYzE1ZmQ5Nzll"
+            + "OWYzOWU3YjFmNDFkOGYxZWJkZjgxMTU1NzZlMmUifX19";
+        prototype = Skull.create("Christmas Token",
+                                 UUID.fromString("6d46f5a1-a833-414c-ba0d-9842cb59316e"),
+                                 texture,
+                                 null);
+        prototype.editMeta(meta -> {
+                Items.text(meta, text);
+                key.markItemMeta(meta);
+            });
     }
 
     @Override

@@ -8,6 +8,7 @@ public enum MytemsTag {
     ACULA,
     ARMOR_PART,
     CAT_EARS,
+    CHRISTMAS,
     CLOUD_CITY,
     COIN,
     CURRENCY,

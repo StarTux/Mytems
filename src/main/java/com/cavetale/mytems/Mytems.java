@@ -76,7 +76,7 @@ public enum Mytems {
     KITTY_COIN(KittyCoin::new, Material.PLAYER_HEAD, 7413001, '\uE200', Category.CURRENCY),
     RAINBOW_KITTY_COIN(KittyCoin::new, Material.PLAYER_HEAD, 7413007, '\uE243', Category.CURRENCY),
     // Christmas 2020
-    CHRISTMAS_TOKEN(ChristmasToken::new, Category.CURRENCY),
+    CHRISTMAS_TOKEN(ChristmasToken::new, Category.CHRISTMAS),
     SANTA_HAT(SantaHat::new, Material.PLAYER_HEAD, 7413101, '\uE221', Category.SANTA),
     SANTA_JACKET(SantaJacket::new, Material.LEATHER_CHESTPLATE, 4713102, '\uE222', Category.SANTA),
     SANTA_PANTS(SantaPants::new, Material.LEATHER_LEGGINGS, 4713103, '\uE223', Category.SANTA),
@@ -472,6 +472,7 @@ public enum Mytems {
         ACULA,
         ARMOR_PART,
         CAT_EARS,
+        CHRISTMAS,
         CLOUD_CITY,
         COIN,
         CURRENCY,
@@ -553,7 +554,7 @@ public enum Mytems {
     }
 
     Mytems(final Function<Mytems, Mytem> ctor, final Category category) {
-        this(ctor, (Material) null, (Integer) null, (char) 0, Category.UNKNOWN);
+        this(ctor, (Material) null, (Integer) null, (char) 0, category);
     }
 
     Mytems(final Function<Mytems, Mytem> ctor) {
