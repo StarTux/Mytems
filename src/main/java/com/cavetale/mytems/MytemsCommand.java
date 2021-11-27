@@ -83,9 +83,10 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         serializeNode.addChild("head").denyTabCompletion()
             .description("Serialize player head in hand")
             .playerCaller(this::serializeHead);
-        serializeNode.addChild("java").denyTabCompletion()
-            .description("Serialize hand to Java")
-            .playerCaller(this::serializeJava);
+        serializeNode.addChild("java").arguments("item")
+            .completers(CommandArgCompleter.enumLowerList(Mytems.class))
+            .description("Serialize item to Java")
+            .senderCaller(this::serializeJava);
     }
 
     protected boolean list(CommandSender sender, String[] args) {
@@ -285,15 +286,26 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         return true;
     }
 
-    protected boolean serializeJava(Player player, String[] args) {
-        if (args.length != 0) return false;
-        ItemStack itemStack = player.getInventory().getItemInMainHand();
-        if (itemStack == null || itemStack.getType() == Material.AIR) {
-            throw new CommandWarn("There's no item in your main hand!");
+    protected boolean serializeJava(CommandSender sender, String[] args) {
+        ItemStack itemStack;
+        if (args.length >= 1) {
+            String serialized = String.join(" ", args);
+            itemStack = Mytems.deserializeItem(serialized);
+            if (itemStack == null) {
+                throw new CommandWarn("Invalid item: " + serialized);
+            }
+        } else if (sender instanceof Player) {
+            Player player = (Player) sender;
+            itemStack = player.getInventory().getItemInMainHand();
+            if (itemStack == null || itemStack.getType() == Material.AIR) {
+                throw new CommandWarn("There's no item in your main hand!");
+            }
+        } else {
+            return false;
         }
         List<String> lines = JavaItem.serializeToLines(itemStack);
         String string = String.join("\n", lines);
-        player.sendMessage(Component.text(string, NamedTextColor.YELLOW));
+        sender.sendMessage(Component.text(string, NamedTextColor.YELLOW));
         plugin.getLogger().info("Serialize " + itemStack.getType() + ": " + string);
         plugin.getDataFolder().mkdirs();
         File file = new File(plugin.getDataFolder(), "Item.java");
