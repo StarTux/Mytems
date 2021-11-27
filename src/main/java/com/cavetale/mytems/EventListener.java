@@ -1,25 +1,17 @@
 package com.cavetale.mytems;
 
 import com.cavetale.mytems.gear.SetBonus;
-import com.cavetale.mytems.item.ChristmasToken;
 import com.cavetale.worldmarker.item.ItemMarker;
 import com.cavetale.worldmarker.util.Tags;
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
 import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
-import com.destroystokyo.paper.profile.PlayerProfile;
-import com.destroystokyo.paper.profile.ProfileProperty;
-import java.util.Objects;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
-import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Skull;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.entity.Entity;
@@ -30,7 +22,6 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
-import org.bukkit.event.block.BlockDropItemEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -288,33 +279,6 @@ public final class EventListener implements Listener {
     @EventHandler
     void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
         plugin.sessions.of(event.getPlayer()).equipmentDidChange();
-    }
-
-    /**
-     * Restore the Christmas Token and fix the missing id bug.
-     */
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-    public void onBlockDropItem(BlockDropItemEvent event) {
-        BlockState state = event.getBlockState();
-        if (event.getItems().size() != 1) return;
-        if (!(state instanceof Skull)) return;
-        Skull skull = (Skull) state;
-        PlayerProfile profile = skull.getPlayerProfile();
-        if (profile == null) return;
-        UUID id = profile.getId();
-        if (!Objects.equals(id, ChristmasToken.SKULL_ID)) return;
-        if (!profile.hasProperty("textures")) return;
-        for (ProfileProperty property : profile.getProperties()) {
-            if (Objects.equals(property.getName(), "textures")
-                && Objects.equals(property.getValue(), ChristmasToken.SKULL_TEXTURE)) {
-                // Success!
-                Location location = event.getItems().get(0).getLocation();
-                event.setCancelled(true);
-                ItemStack drop = Mytems.CHRISTMAS_TOKEN.createItemStack(event.getPlayer());
-                location.getWorld().dropItem(location, drop);
-                return;
-            }
-        }
     }
 
     @EventHandler(priority = EventPriority.HIGH)
