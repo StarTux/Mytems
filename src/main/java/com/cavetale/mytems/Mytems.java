@@ -2,6 +2,7 @@ package com.cavetale.mytems;
 
 import com.cavetale.mytems.item.ArmorPart;
 import com.cavetale.mytems.item.ChristmasToken;
+import com.cavetale.mytems.item.DiceItem;
 import com.cavetale.mytems.item.DummyMytem;
 import com.cavetale.mytems.item.Enderball;
 import com.cavetale.mytems.item.Ingredient;
@@ -328,7 +329,7 @@ public enum Mytems {
     ON(DummyMytem::new, Material.ENDER_EYE, 210, (char) 210, Category.UI),
     OFF(DummyMytem::new, Material.ENDER_PEARL, 211, (char) 211, Category.UI),
     REDO(DummyMytem::new, Material.EGG, 212, (char) 212, Category.UI),
-    DICE(DummyMytem::new, Material.TURTLE_EGG, 213, (char) 213, Category.UI),
+    DICE(DiceItem::new, Material.PLAYER_HEAD, 213, (char) 213, Category.UTILITY),
     HEART(DummyMytem::new, Material.HEART_OF_THE_SEA, 9, '\uE241', Category.UI),
     HALF_HEART(DummyMytem::new, Material.NAUTILUS_SHELL, 10, '\uE242', Category.UI),
     EMPTY_HEART(DummyMytem::new, Material.NAUTILUS_SHELL, 13, '\uE246', Category.UI),
