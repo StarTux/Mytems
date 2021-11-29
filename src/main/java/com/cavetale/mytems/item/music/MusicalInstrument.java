@@ -522,11 +522,6 @@ public final class MusicalInstrument implements Mytem {
         return itemStack;
     }
 
-    @Override
-    public ItemStack deserializeTag(String serialized, Player player) {
-        return deserializeTag(serialized);
-    }
-
     protected void updateLore(ItemMeta meta, String sharp, String flat) {
         List<Component> line = new ArrayList<>();
         if (sharp != null) {

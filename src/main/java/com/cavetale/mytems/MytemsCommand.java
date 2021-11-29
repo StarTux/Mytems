@@ -140,7 +140,7 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         }
         if (amount < 1) throw new CommandWarn("Invalid amount: " + amountArg);
         for (Mytems mytems : mytemsList) {
-            ItemStack item = mytems.createItemStack(target);
+            ItemStack item = mytems.createItemStack();
             item.setAmount(amount);
             int retain = 0;
             for (ItemStack drop : target.getInventory().addItem(item).values()) {

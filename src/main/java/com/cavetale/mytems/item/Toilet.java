@@ -207,7 +207,7 @@ public final class Toilet implements Mytem, Listener {
             block.setType(Material.AIR);
         }
         if (itemFrame != null && block.getWorld().getGameRuleValue(GameRule.DO_TILE_DROPS)) {
-            loc.getWorld().dropItem(loc, createItemStack(player));
+            loc.getWorld().dropItem(loc, createItemStack());
         }
     }
 

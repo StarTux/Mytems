@@ -90,11 +90,6 @@ public final class PocketMob implements Mytem, Listener {
         return itemStack;
     }
 
-    @Override
-    public ItemStack deserializeTag(String serialized, Player player) {
-        return deserializeTag(serialized);
-    }
-
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOWEST)
     void onBlockPreDispense(BlockPreDispenseEvent event) {
         ItemStack itemStack = event.getItemStack();
