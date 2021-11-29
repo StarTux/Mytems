@@ -1,6 +1,5 @@
 package com.cavetale.mytems.item.acula;
 
-import com.cavetale.mytems.MytemPersistenceFlag;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
@@ -9,9 +8,7 @@ import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.gear.Slot;
 import com.cavetale.mytems.util.Text;
 import java.util.ArrayList;
-import java.util.EnumSet;
 import java.util.List;
-import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
@@ -76,10 +73,5 @@ abstract class AculaItem implements GearItem {
         updateItemLore(meta);
         itemStack.setItemMeta(meta);
         return itemStack;
-    }
-
-    @Override
-    public Set<MytemPersistenceFlag> getMytemPersistenceFlags() {
-        return EnumSet.of(MytemPersistenceFlag.DURABILITY);
     }
 }

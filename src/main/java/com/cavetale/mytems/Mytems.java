@@ -606,15 +606,9 @@ public enum Mytems {
             : mytems.getMytem().createItemStack();
     }
 
+    @Deprecated
     public static ItemStack deserializeItem(String serialized, Player player) {
-        int index = serialized.indexOf("{");
-        String id = index >= 0 ? serialized.substring(0, index) : serialized;
-        Mytems mytems = forId(id);
-        if (mytems == null) return null;
-        String tag = index >= 0 ? serialized.substring(index) : null;
-        return tag != null
-            ? mytems.getMytem().deserializeTag(tag, player)
-            : mytems.getMytem().createItemStack();
+        return deserializeItem(serialized);
     }
 
     public void markItemMeta(ItemMeta meta) {
@@ -634,12 +628,13 @@ public enum Mytems {
         return getMytem().createItemStack();
     }
 
+    @Deprecated
     public ItemStack createItemStack(Player player) {
-        return getMytem().createItemStack(player);
+        return getMytem().createItemStack();
     }
 
     public void giveItemStack(Player player, int amount) {
-        ItemStack itemStack = createItemStack(player);
+        ItemStack itemStack = createItemStack();
         itemStack.setAmount(amount);
         for (ItemStack drop : player.getInventory().addItem(itemStack).values()) {
             player.getWorld().dropItem(player.getEyeLocation(), itemStack).setPickupDelay(0);

@@ -52,8 +52,8 @@ public final class Stompers extends AculaItem {
     public ItemStack create() {
         ItemStack item = new ItemStack(Material.NETHERITE_BOOTS);
         ItemMeta meta = item.getItemMeta();
+        meta.setUnbreakable(true);
         meta.displayName(displayName);
-        meta.addEnchant(Enchantment.DURABILITY, 3, true);
         meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
         meta.addEnchant(Enchantment.PROTECTION_FALL, 4, true);
         ((Repairable) meta).setRepairCost(9999);

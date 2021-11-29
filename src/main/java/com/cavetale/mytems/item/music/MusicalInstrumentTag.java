@@ -19,14 +19,14 @@ public final class MusicalInstrumentTag extends MytemTag {
     }
 
     public void load(ItemStack itemStack, MusicalInstrument instance) {
-        super.load(itemStack, instance.getMytemPersistenceFlags());
+        super.load(itemStack);
         PersistentDataContainer tag = itemStack.getItemMeta().getPersistentDataContainer();
         sharp = Tags.getString(tag, MusicalInstrument.SHARP_KEY);
         flat = Tags.getString(tag, MusicalInstrument.FLAT_KEY);
     }
 
     public void store(ItemStack itemStack, MusicalInstrument instance) {
-        super.store(itemStack, instance.getMytemPersistenceFlags());
+        super.store(itemStack);
         if (!musicalInstrumentIsEmpty()) {
             itemStack.editMeta(meta -> {
                     PersistentDataContainer tag = meta.getPersistentDataContainer();

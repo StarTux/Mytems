@@ -38,6 +38,7 @@ public final class BatMask extends AculaItem {
         @SuppressWarnings("LineLength")
         ItemStack item = makeSkull(skullId, "BatMask", skullTexture, null);
         ItemMeta meta = item.getItemMeta();
+        meta.setUnbreakable(true);
         AttributeModifier attr;
         attr = new AttributeModifier(UUID.randomUUID(), key.id, 10.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD);
         meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, attr);

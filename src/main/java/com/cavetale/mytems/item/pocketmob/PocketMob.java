@@ -1,19 +1,18 @@
 package com.cavetale.mytems.item.pocketmob;
 
 import com.cavetale.mytems.Mytem;
-import com.cavetale.mytems.MytemPersistenceFlag;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.MytemsTag;
+import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Json;
 import com.cavetale.mytems.util.Text;
 import io.papermc.paper.event.block.BlockPreDispenseEvent;
+import java.util.List;
 import java.util.Objects;
-import java.util.Set;
 import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -49,10 +48,10 @@ public final class PocketMob implements Mytem, Listener {
 
     @Override
     public void enable() {
-        displayName = Component.text(Text.toCamelCase(key, " ")).decoration(TextDecoration.ITALIC, false);
+        displayName = Component.text(Text.toCamelCase(key, " "));
         prototype = new ItemStack(key.material).ensureServerConversions();
         ItemMeta meta = prototype.getItemMeta();
-        meta.displayName(displayName);
+        Items.text(meta, List.of(displayName));
         key.markItemMeta(meta);
         prototype.setItemMeta(meta);
         Bukkit.getPluginManager().registerEvents(this, MytemsPlugin.getInstance());
@@ -61,11 +60,6 @@ public final class PocketMob implements Mytem, Listener {
     @Override
     public ItemStack createItemStack() {
         return prototype.clone();
-    }
-
-    @Override
-    public Set<MytemPersistenceFlag> getMytemPersistenceFlags() {
-        return MytemPersistenceFlag.DISPLAY_NAME.toSet();
     }
 
     @Override

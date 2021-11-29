@@ -2,7 +2,6 @@ package com.cavetale.mytems;
 
 import com.cavetale.mytems.util.Json;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
-import java.util.Set;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -36,6 +35,7 @@ public interface Mytem {
     /**
      * Create a fresh copy for the player.
      */
+    @Deprecated
     default ItemStack createItemStack(Player player) {
         return createItemStack();
     }
@@ -80,17 +80,13 @@ public interface Mytem {
 
     default void onPlayerArmorEquip(PlayerArmorChangeEvent event, Player player, ItemStack item) { }
 
-    default Set<MytemPersistenceFlag> getMytemPersistenceFlags() {
-        return MytemPersistenceFlag.NONE;
-    }
-
     /**
-     * These can be overridden entirely. The default version attempts
-     * to respect the MytemPersistenceFlags.
+     * These can be overridden entirely.
      */
     default String serializeTag(ItemStack itemStack) {
+        if (itemStack.getAmount() == 1) return null;
         MytemTag tag = new MytemTag();
-        tag.load(itemStack, getMytemPersistenceFlags());
+        tag.load(itemStack);
         return tag.isEmpty() ? null : Json.serialize(tag);
     }
 
@@ -99,20 +95,19 @@ public interface Mytem {
      * recommended to override the other one, or both.
      */
     default ItemStack deserializeTag(String serialized) {
-        return deserializeTag(serialized, (Player) null);
+        ItemStack itemStack = createItemStack();
+        MytemTag tag = Json.deserialize(serialized, MytemTag.class);
+        if (tag != null && !tag.isEmpty()) {
+            tag.store(itemStack);
+        }
+        return itemStack;
     }
 
     /**
      * Deserialize an item tag with a new owner.
      */
+    @Deprecated
     default ItemStack deserializeTag(String serialized, Player player) {
-        ItemStack itemStack = createItemStack();
-        MytemTag tag = Json.deserialize(serialized, MytemTag.class);
-        Set<MytemPersistenceFlag> flags = getMytemPersistenceFlags();
-        if (player != null && flags.contains(MytemPersistenceFlag.OWNER)) {
-            tag.setOwner(MytemOwner.ofPlayer(player));
-        }
-        tag.store(itemStack, flags);
-        return itemStack;
+        return deserializeTag(serialized);
     }
 }

@@ -12,7 +12,6 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.kyori.adventure.text.Component;
@@ -70,7 +69,7 @@ public final class PocketMobTag extends MytemTag {
     }
 
     public void load(ItemStack itemStack, PocketMob pocketMob) {
-        super.load(itemStack, pocketMob.getMytemPersistenceFlags());
+        super.load(itemStack);
         if (!itemStack.hasItemMeta()) return;
         ItemMeta meta = itemStack.getItemMeta();
         PersistentDataContainer tag = meta.getPersistentDataContainer();
@@ -101,18 +100,21 @@ public final class PocketMobTag extends MytemTag {
      * accordingly.
      */
     public void store(ItemStack itemStack, PocketMob pocketMob) {
-        super.store(itemStack, Set.of()); // WE set the displayName below!
+        super.store(itemStack);
         ItemMeta meta = itemStack.getItemMeta();
         PersistentDataContainer tag = meta.getPersistentDataContainer();
         if (mobTag != null) {
             Tags.set(tag, KEY_MOB_TAG, mobTag);
         }
         List<Component> text = new ArrayList<>();
-        Component displayName = getDisplayName();
-        text.add(!Component.empty().equals(displayName) ? displayName : null);
+        text.add(null);
         if (mob != null) {
             Tags.set(tag, KEY_MOB, mob);
             Entity entity = deserializeMob(Bukkit.getWorlds().get(0));
+            if (entity != null) {
+                Component customName = entity.customName();
+                text.set(0, customName);
+            }
             if (entity instanceof Mob mobEntity) {
                 Component customName = mobEntity.customName();
                 if (customName != null && !Component.empty().equals(customName)) {
@@ -153,7 +155,9 @@ public final class PocketMobTag extends MytemTag {
                 text.add(prop("Jump", "" + (int) Math.round(100.0 * ahorse.getJumpStrength())));
                 text.add(prop("Speed", "" + (int) Math.round(100.0 * ahorse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getValue())));
             } else if (entity instanceof Colorable colorable) { // Sheep, Shulker
-                text.add(prop("Color", BlockColor.of(colorable.getColor())));
+                BlockColor blockColor = BlockColor.of(colorable.getColor());
+                text.add(prop("Color", blockColor));
+                nameComponents.add(0, blockColor.niceName);
             } else if (entity instanceof Cat cat) {
                 nameComponents.add(Text.toCamelCase(cat.getCatType()));
                 text.add(prop("Collar", BlockColor.of(cat.getCollarColor())));
@@ -223,7 +227,11 @@ public final class PocketMobTag extends MytemTag {
             if (finalNameComponent != null) {
                 nameComponents.add(finalNameComponent);
             }
-            text.add(1, Component.text(String.join(" ", nameComponents), COLOR_BG));
+            if (text.get(0) == null) {
+                text.set(0, Component.text(String.join(" ", nameComponents), COLOR_FG));
+            } else {
+                text.add(1, Component.text(String.join(" ", nameComponents), COLOR_BG));
+            }
         } else {
             Map<String, Object> map = parseMobTag();
             Object o;

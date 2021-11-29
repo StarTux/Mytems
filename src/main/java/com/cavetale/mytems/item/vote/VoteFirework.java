@@ -2,12 +2,12 @@ package com.cavetale.mytems.item.vote;
 
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
+import com.cavetale.mytems.util.Items;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
@@ -35,15 +35,17 @@ public final class VoteFirework extends VoteItem implements Listener {
 
     @Override
     public void enable() {
-        displayName = Component.text("Voting Firework").color(NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false);
+        super.enable();
+        displayName = Component.text("Voting Firework").color(NamedTextColor.GOLD);
         prototype = new ItemStack(key.material);
         FireworkMeta meta = (FireworkMeta) prototype.getItemMeta();
-        meta.displayName(displayName);
-        List<Component> lore = new ArrayList<>();
-        lore.add(Component.text("Firework with incredible").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
-        lore.add(Component.text("magical effects!").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
-        lore.add(Component.text(""));
-        meta.lore(lore);
+        List<Component> text = new ArrayList<>();
+        text.add(displayName);
+        text.add(Component.text("Firework with incredible").color(NamedTextColor.GRAY));
+        text.add(Component.text("magical effects!").color(NamedTextColor.GRAY));
+        text.add(Component.empty());
+        text.addAll(baseLore);
+        Items.text(meta, text);
         meta.addEffect(FireworkEffect.builder().withColor(Color.RED).build());
         meta.addItemFlags(ItemFlag.values());
         meta.addItemFlags(ItemFlag.values());

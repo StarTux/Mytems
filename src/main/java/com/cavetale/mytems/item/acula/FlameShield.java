@@ -7,7 +7,6 @@ import java.util.UUID;
 import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -37,11 +36,10 @@ public final class FlameShield extends AculaItem {
     public ItemStack create() {
         ItemStack item = baseItem.clone();
         ItemMeta meta = item.getItemMeta();
+        meta.setUnbreakable(true);
         meta.displayName(displayName);
         Repairable repairable = (Repairable) meta;
         repairable.setRepairCost(9999);
-        meta.addEnchant(Enchantment.DURABILITY, 4, true);
-        meta.addEnchant(Enchantment.MENDING, 1, true);
         meta.addAttributeModifier(Attribute.GENERIC_ARMOR,
                                   new AttributeModifier(UUID.randomUUID(), key.id, 4, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND));
         meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS,

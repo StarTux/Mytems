@@ -104,6 +104,7 @@ public final class DrAculaStaff extends AculaItem {
     public ItemStack create() {
         ItemStack item = new ItemStack(Material.NETHERITE_SWORD);
         ItemMeta meta = item.getItemMeta();
+        meta.setUnbreakable(true);
         meta.displayName(displayName);
         Repairable repairable = (Repairable) meta;
         repairable.setRepairCost(9999);

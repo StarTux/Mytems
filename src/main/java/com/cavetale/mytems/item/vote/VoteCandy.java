@@ -1,11 +1,11 @@
 package com.cavetale.mytems.item.vote;
 
 import com.cavetale.mytems.Mytems;
+import com.cavetale.mytems.util.Items;
 import java.util.ArrayList;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
@@ -47,15 +47,17 @@ public final class VoteCandy extends VoteItem {
 
     @Override
     public void enable() {
-        displayName = Component.text("Voting Candy").color(NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false);
+        super.enable();
+        displayName = Component.text("Voting Candy").color(NamedTextColor.GOLD);
         prototype = new ItemStack(key.material);
         ItemMeta meta = prototype.getItemMeta();
-        meta.displayName(displayName);
-        List<Component> lore = new ArrayList<>();
-        lore.add(Component.text("Gives unobtainable potion").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
-        lore.add(Component.text("effects when eaten.").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
-        lore.add(Component.empty());
-        meta.lore(lore);
+        List<Component> text = new ArrayList<>();
+        text.add(displayName);
+        text.add(Component.text("Gives unobtainable potion").color(NamedTextColor.GRAY));
+        text.add(Component.text("effects when eaten.").color(NamedTextColor.GRAY));
+        text.add(Component.empty());
+        text.addAll(baseLore);
+        Items.text(meta, text);
         prototype.setItemMeta(meta);
         meta.addItemFlags(ItemFlag.values());
         key.markItemMeta(meta);

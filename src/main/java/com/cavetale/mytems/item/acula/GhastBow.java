@@ -41,8 +41,8 @@ public final class GhastBow extends AculaItem {
     public ItemStack create() {
         ItemStack item = new ItemStack(Material.BOW);
         ItemMeta meta = item.getItemMeta();
+        meta.setUnbreakable(true);
         meta.displayName(displayName);
-        meta.addEnchant(Enchantment.DURABILITY, 3, true);
         meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
         meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
         ((Repairable) meta).setRepairCost(9999);

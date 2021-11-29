@@ -111,20 +111,14 @@ public final class EventListener implements Listener {
         if (mytems == null) return;
         switch (event.getView().getType()) {
         case GRINDSTONE:
-            if (!mytems.getMytem().getMytemPersistenceFlags().contains(MytemPersistenceFlag.ENCHANTMENTS)) {
-                event.setResult(null);
-            }
+            event.setResult(null);
             break;
         case ANVIL: {
             AnvilInventory inv = (AnvilInventory) event.getInventory();
             if (inv.getRenameText() != null) {
-                if (!mytems.getMytem().getMytemPersistenceFlags().contains(MytemPersistenceFlag.DISPLAY_NAME)) {
-                    event.setResult(null);
-                }
+                event.setResult(null);
             } else {
-                if (!mytems.getMytem().getMytemPersistenceFlags().contains(MytemPersistenceFlag.ENCHANTMENTS)) {
-                    event.setResult(null);
-                }
+                event.setResult(null);
             }
             break;
         }
@@ -138,12 +132,10 @@ public final class EventListener implements Listener {
         ItemStack item = event.getItem();
         Mytems mytems = Mytems.forItem(item);
         if (mytems == null) return;
-        if (!mytems.getMytem().getMytemPersistenceFlags().contains(MytemPersistenceFlag.ENCHANTMENTS)) {
-            for (EnchantmentOffer offer : event.getOffers()) {
-                offer.setCost(9999);
-                offer.setEnchantment(Enchantment.VANISHING_CURSE);
-                offer.setEnchantmentLevel(1);
-            }
+        for (EnchantmentOffer offer : event.getOffers()) {
+            offer.setCost(9999);
+            offer.setEnchantment(Enchantment.VANISHING_CURSE);
+            offer.setEnchantmentLevel(1);
         }
     }
 
