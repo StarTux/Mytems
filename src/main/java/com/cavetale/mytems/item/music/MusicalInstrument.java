@@ -282,8 +282,8 @@ public final class MusicalInstrument implements Mytem {
         if (openEvent.isHeroMode()) {
             gui.setItem(5 * 9 + HERO_POINTER, Mytems.ARROW_UP.createIcon());
             privateData.hero.grid = new Beat[10];
-            privateData.hero.replay = new MelodyReplay(MytemsPlugin.getInstance(), privateData.hero.melody, beat -> {
-                    privateData.hero.grid[9] = beat;
+            privateData.hero.replay = new MelodyReplay(MytemsPlugin.getInstance(), privateData.hero.melody, (melody, beat) -> {
+                    privateData.hero.grid[9] = beat.cooked(melody);
                     return true;
             });
             privateData.hero.task = Bukkit.getScheduler().runTaskTimer(MytemsPlugin.getInstance(), () -> {
@@ -443,7 +443,7 @@ public final class MusicalInstrument implements Mytem {
             for (int i = 0; i < privateData.hero.grid.length; i += 1) {
                 Beat beat = privateData.hero.grid[i];
                 if (beat == null) continue;
-                if (beat.countsAs(touch)) {
+                if (beat.countsAs(privateData.hero.melody, touch)) {
                     privateData.hero.grid[i] = null;
                     if (i <= HERO_POINTER) {
                         PlayerBeatEvent.Action.HIT_BEAT.call(player, type, privateData.hero.melody, beat);

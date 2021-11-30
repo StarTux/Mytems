@@ -28,7 +28,8 @@ public enum Semitone {
     public final Mytems mytems;
     public abstract Note bukkitNote(int octave, Tone tone);
 
-    public String serialize() {
+    @Override
+    public String toString() {
         return symbol;
     }
 
