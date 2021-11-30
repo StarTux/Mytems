@@ -427,9 +427,9 @@ public enum Mytems {
     COPPER_KEY(DummyMytem::new, Material.COPPER_INGOT, 177, (char) 177, Category.KEY),
     SILVER_KEY(DummyMytem::new, Material.IRON_INGOT, 178, (char) 178, Category.KEY),
     GOLDEN_KEY(DummyMytem::new, Material.GOLD_INGOT, 179, (char) 179, Category.KEY),
-    COPPER_KEYHOLE(DummyMytem::new, Material.COPPER_INGOT, 180, (char) 180, Category.KEYHOLE),
-    SILVER_KEYHOLE(DummyMytem::new, Material.IRON_INGOT, 181, (char) 181, Category.KEYHOLE),
-    GOLDEN_KEYHOLE(DummyMytem::new, Material.GOLD_INGOT, 182, (char) 182, Category.KEYHOLE),
+    COPPER_KEYHOLE(DummyMytem::new, Material.COPPER_BLOCK, 180, (char) 180, Category.KEYHOLE),
+    SILVER_KEYHOLE(DummyMytem::new, Material.IRON_BLOCK, 181, (char) 181, Category.KEYHOLE),
+    GOLDEN_KEYHOLE(DummyMytem::new, Material.GOLD_BLOCK, 182, (char) 182, Category.KEYHOLE),
     // Coins
     COPPER_COIN(DummyMytem::new, Material.COPPER_INGOT, 183, (char) 183, Category.COIN),
     SILVER_COIN(DummyMytem::new, Material.IRON_INGOT, 184, (char) 184, Category.COIN),
@@ -628,14 +628,19 @@ public enum Mytems {
         return getMytem().createItemStack();
     }
 
+    public ItemStack createItemStack(int amount) {
+        ItemStack itemStack = getMytem().createItemStack();
+        itemStack.setAmount(amount);
+        return itemStack;
+    }
+
     @Deprecated
     public ItemStack createItemStack(Player player) {
         return getMytem().createItemStack();
     }
 
     public void giveItemStack(Player player, int amount) {
-        ItemStack itemStack = createItemStack();
-        itemStack.setAmount(amount);
+        ItemStack itemStack = createItemStack(amount);
         for (ItemStack drop : player.getInventory().addItem(itemStack).values()) {
             player.getWorld().dropItem(player.getEyeLocation(), itemStack).setPickupDelay(0);
         }
