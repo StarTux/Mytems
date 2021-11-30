@@ -7,6 +7,7 @@ import com.cavetale.core.command.CommandNode;
 import com.cavetale.core.command.CommandWarn;
 import com.cavetale.core.util.Json;
 import com.cavetale.mytems.gear.Equipment;
+import com.cavetale.mytems.item.font.Glyph;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Blocks;
 import com.cavetale.mytems.util.JavaItem;
@@ -68,6 +69,9 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
             .completers(CommandArgCompleter.enumLowerList(Mytems.class),
                         CommandArgCompleter.enumLowerList(BlockFace.class))
             .playerCaller(this::placeBlock);
+        rootNode.addChild("glyph").arguments("<text...>")
+            .description("Turn text into glyphs")
+            .senderCaller(this::glyph);
         // Serialize
         CommandNode serializeNode = rootNode.addChild("serialize")
             .description("Item serialization commands");
@@ -199,6 +203,32 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         if (args.length != 0) return false;
         plugin.fixAllPlayerInventoriesLater();
         sender.sendMessage(ChatColor.YELLOW + "Fixing all player inventories");
+        return true;
+    }
+
+    protected boolean glyph(CommandSender sender, String[] args) {
+        if (args.length == 0) return false;
+        String original = String.join(" ", args);
+        StringBuilder result = new StringBuilder();
+        List<Component> preview = new ArrayList<>();
+        for (int i = 0; i < original.length(); i += 1) {
+            char c = original.charAt(i);
+            Glyph glyph = c == ' ' ? null : Glyph.toGlyph(c);
+            result.append(glyph != null
+                          ? ":" + glyph.mytems.name().toLowerCase() + ":"
+                          : "" + c);
+            preview.add(glyph != null
+                        ? glyph.mytems.component
+                        : Component.text(c));
+        }
+        String output = result.toString();
+        sender.sendMessage(Component.text("Preview ", NamedTextColor.YELLOW)
+                           .append(Component.join(JoinConfiguration.noSeparators(),
+                                                  preview)
+                                   .color(NamedTextColor.WHITE)
+                                   .insertion(output)));
+        sender.sendMessage(Component.text("Raw ", NamedTextColor.YELLOW)
+                           .append(Component.text(output, NamedTextColor.WHITE).insertion(output)));
         return true;
     }
 
