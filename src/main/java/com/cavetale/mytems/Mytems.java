@@ -454,7 +454,7 @@ public enum Mytems {
     // Armor Parts
     RUSTY_BUCKET(ArmorPart::new, Material.BUCKET, 205, (char) 205, Category.ARMOR_PART),
     OLD_OVEN_LID(ArmorPart::new, Material.NETHERITE_SCRAP, 207, (char) 207, Category.ARMOR_PART),
-    BRITTLE_BARREL(ArmorPart::new, Material.BARREL, 206, (char) 206, Category.ARMOR_PART),
+    SOOTY_STOVE_PIPE(ArmorPart::new, Material.BARREL, 206, (char) 206, Category.ARMOR_PART),
     FLOTSAM_CAN(ArmorPart::new, Material.FLOWER_POT, 208, (char) 208, Category.ARMOR_PART),
     BENT_PITCHFORK(ArmorPart::new, Material.LIGHTNING_ROD, 209, (char) 209, Category.ARMOR_PART);
     // Next CustomModelData: 214
@@ -529,6 +529,7 @@ public enum Mytems {
         ID_MAP.put("vote:candy", VOTE_CANDY); // legacy
         ID_MAP.put("vote:firework", VOTE_FIREWORK); // legacy
         ID_MAP.put("corroded_drum", OLD_OVEN_LID);
+        ID_MAP.put("brittle_barrel", SOOTY_STOVE_PIPE);
     }
 
     Mytems(final Function<Mytems, Mytem> ctor, final Material material, final Integer customModelData, final char character, final Category category) {
