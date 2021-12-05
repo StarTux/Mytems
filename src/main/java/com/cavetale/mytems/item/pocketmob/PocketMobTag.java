@@ -19,6 +19,7 @@ import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
@@ -155,9 +156,12 @@ public final class PocketMobTag extends MytemTag {
                 text.add(prop("Jump", "" + (int) Math.round(100.0 * ahorse.getJumpStrength())));
                 text.add(prop("Speed", "" + (int) Math.round(100.0 * ahorse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getValue())));
             } else if (entity instanceof Colorable colorable) { // Sheep, Shulker
-                BlockColor blockColor = BlockColor.of(colorable.getColor());
-                text.add(prop("Color", blockColor));
-                nameComponents.add(0, blockColor.niceName);
+                DyeColor dyeColor = colorable.getColor();
+                if (dyeColor != null) {
+                    BlockColor blockColor = BlockColor.of(dyeColor);
+                    text.add(prop("Color", blockColor));
+                    nameComponents.add(0, blockColor.niceName);
+                }
             } else if (entity instanceof Cat cat) {
                 nameComponents.add(Text.toCamelCase(cat.getCatType()));
                 text.add(prop("Collar", BlockColor.of(cat.getCollarColor())));
