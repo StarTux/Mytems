@@ -32,6 +32,7 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Instrument;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Note.Tone;
 import org.bukkit.Particle;
@@ -52,7 +53,8 @@ import org.bukkit.scheduler.BukkitTask;
 @RequiredArgsConstructor
 public final class MusicalInstrument implements Mytem {
     protected static final int HERO_OFFSET = 4 * 9;
-    protected static final int HERO_POINTER = 4;
+    protected static final int HERO_CLOCK = 5 * 9;
+    protected static final int GRID_TIME = 20 * 6;
     public static final String NOTE1 = "\u266A";
     public static final String NOTE2 = "\u266B";
     @Getter private final Mytems key;
@@ -156,10 +158,6 @@ public final class MusicalInstrument implements Mytem {
 
         protected void stopHero() {
             if (hero == null) return;
-            if (hero.replay != null) {
-                hero.replay.stop();
-                hero.replay = null;
-            }
             if (hero.task != null) {
                 hero.task.cancel();
                 hero.task = null;
@@ -230,10 +228,12 @@ public final class MusicalInstrument implements Mytem {
     @RequiredArgsConstructor
     private static final class Hero {
         protected final Melody melody;
-        protected MelodyReplay replay;
-        protected Beat[] grid;
+        protected Beat[] grid = new Beat[3];
+        protected int gridIndex; // 0-3
+        protected int gridTime;
+        protected int melodyIndex = 0;
         protected BukkitTask task;
-        protected long lastTick;
+        protected long lastTick = 0L;
         protected int score;
         protected int maxScore;
     }
@@ -280,54 +280,24 @@ public final class MusicalInstrument implements Mytem {
             .title(DefaultFont.guiBlankOverlay(size, BG, guiDisplayName));
         buildGui(gui, privateData);
         if (openEvent.isHeroMode()) {
-            gui.setItem(5 * 9 + HERO_POINTER, Mytems.ARROW_UP.createIcon());
-            privateData.hero.grid = new Beat[10];
-            privateData.hero.replay = new MelodyReplay(MytemsPlugin.getInstance(), privateData.hero.melody, (melody, beat) -> {
-                    privateData.hero.grid[9] = beat.cooked(melody);
-                    return true;
-            });
+            updateHeroScore(0, gui, privateData);
+            gui.setItem(HERO_CLOCK, new ItemStack(Material.CLOCK, 64));
             privateData.hero.task = Bukkit.getScheduler().runTaskTimer(MytemsPlugin.getInstance(), () -> {
-                    if (privateData.hero.lastTick == 0) {
-                        privateData.hero.replay.start();
+                    if (privateData.hero.lastTick == 0L) {
+                        makeHeroGrid(player, gui, privateData);
                     }
                     long now = System.currentTimeMillis();
-                    if (now - privateData.hero.lastTick < 50L * 4L) return;
                     privateData.hero.lastTick = now;
-                    int noteCount = 0;
-                    for (int i = 0; i < privateData.hero.grid.length; i += 1) {
-                        Beat beat = privateData.hero.grid[i];
-                        privateData.hero.grid[i] = null;
-                        if (beat == null) continue;
-                        noteCount += 1;
-                        if (i < 9) {
-                            gui.setItem(HERO_OFFSET + i, null);
-                            if (i < 8 && beat.semitone != Semitone.NATURAL) {
-                                gui.setItem(HERO_OFFSET + i + 1, null);
-                            }
-                        }
-                        if (i == 0) {
-                            PlayerBeatEvent.Action.MISS_BEAT.call(player, type, privateData.hero.melody, beat);
-                            updateHeroScore(0, gui, privateData);
-                            updateHeroIcon(gui, Mytems.EMPTY_HEART.createIcon(List.of(Component.text("You Missed", NamedTextColor.DARK_RED))));
-                            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, SoundCategory.MASTER, 2.0f, 0.5f);
-                        } else {
-                            privateData.hero.grid[i - 1] = beat;
-                            gui.setItem(HERO_OFFSET + i - 1, TONE_MYTEMS_MAP.get(beat.tone).createIcon());
-                            if (i < 9) {
-                                if (beat.semitone == Semitone.SHARP) {
-                                    gui.setItem(HERO_OFFSET + i, Mytems.MUSICAL_SHARP.createIcon());
-                                } else if (beat.semitone == Semitone.FLAT) {
-                                    gui.setItem(HERO_OFFSET + i, Mytems.MUSICAL_FLAT.createIcon());
-                                }
-                            }
-                        }
+                    privateData.hero.gridTime += 1;
+                    if (privateData.hero.gridTime > GRID_TIME) {
+                        PlayerBeatEvent.Action.MISS_BEAT.call(player, type, privateData.hero.melody);
+                        updateHeroScore(0, gui, privateData);
+                        player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, SoundCategory.MASTER, 2.0f, 0.5f);
+                        progressHeroGrid(player, gui, privateData);
+                        return;
                     }
-                    if (noteCount == 0 && privateData.hero.replay.didStop()) {
-                        new PlayerMelodyCompleteEvent(player, type, privateData.hero.melody,
-                                                      privateData.hero.score, privateData.hero.maxScore).callEvent();
-                        updateHeroIcon(gui, null);
-                        privateData.stopHero();
-                    }
+                    final int itemAmount = Math.max(1, 64 - ((privateData.hero.gridTime * 64) / GRID_TIME));
+                    gui.getInventory().getItem(HERO_CLOCK).setAmount(itemAmount);
                 }, 80L, 1L);
         }
         gui.onClose(evt -> {
@@ -336,6 +306,41 @@ public final class MusicalInstrument implements Mytem {
                 privateData.stopHero();
             });
         gui.open(player);
+    }
+
+    protected void progressHeroGrid(Player player, Gui gui, GuiPrivateData privateData) {
+        privateData.hero.melodyIndex += 3;
+        privateData.hero.gridTime = 0;
+        privateData.hero.gridIndex = 0;
+        if (privateData.hero.melodyIndex >= privateData.hero.melody.getBeats().size()) {
+            new PlayerMelodyCompleteEvent(player, type, privateData.hero.melody,
+                                          privateData.hero.score, privateData.hero.maxScore).callEvent();
+            privateData.stopHero();
+            return;
+        }
+        makeHeroGrid(player, gui, privateData);
+    }
+
+    protected void makeHeroGrid(Player player, Gui gui, GuiPrivateData privateData) {
+        for (int i = 0; i < 3; i += 1) {
+            int index = privateData.hero.melodyIndex + i;
+            Beat beat = index < privateData.hero.melody.getBeats().size()
+                ? privateData.hero.melody.getBeats().get(index)
+                : null;
+            privateData.hero.grid[i] = beat;
+            if (beat == null) {
+                gui.setItem(HERO_OFFSET + i * 3, null);
+                gui.setItem(HERO_OFFSET + i * 3 + 1, null);
+            } else {
+                beat = beat.cooked(privateData.hero.melody);
+                gui.setItem(HERO_OFFSET + i * 3,
+                            TONE_MYTEMS_MAP.get(beat.tone).createIcon(List.of(Component.text(beat.toString()))));
+                gui.setItem(HERO_OFFSET + i * 3 + 1,
+                            beat.semitone != null && beat.semitone != Semitone.NATURAL
+                            ? beat.semitone.mytems.createIcon()
+                            : null);
+            }
+        }
     }
 
     protected void buildGui(Gui gui, GuiPrivateData privateData) {
@@ -440,33 +445,21 @@ public final class MusicalInstrument implements Mytem {
             .detail(Detail.INSTRUMENT, type.instrument)
             .call();
         if (privateData.hero != null) {
-            for (int i = 0; i < privateData.hero.grid.length; i += 1) {
-                Beat beat = privateData.hero.grid[i];
-                if (beat == null) continue;
-                if (beat.countsAs(privateData.hero.melody, touch)) {
-                    privateData.hero.grid[i] = null;
-                    if (i <= HERO_POINTER) {
-                        PlayerBeatEvent.Action.HIT_BEAT.call(player, type, privateData.hero.melody, beat);
-                        updateHeroScore(1, gui, privateData);
-                        updateHeroIcon(gui, Mytems.STAR.createIcon(List.of(Component.text("Perfect", NamedTextColor.GOLD))));
-                    } else {
-                        PlayerBeatEvent.Action.PLAY_BEAT_EARLY.call(player, type, privateData.hero.melody, beat);
-                        updateHeroScore(1, gui, privateData);
-                        updateHeroIcon(gui, Mytems.OK.createIcon(List.of(Component.text("Correct", NamedTextColor.GREEN))));
-                    }
-                    if (i < 9) {
-                        gui.setItem(HERO_OFFSET + i, null);
-                        if (i < 8 && beat.semitone != Semitone.NATURAL) {
-                            gui.setItem(HERO_OFFSET + i + 1, null);
-                        }
-                    }
-                    return;
+            Beat beat = privateData.hero.grid[privateData.hero.gridIndex];
+            if (beat != null && beat.countsAs(privateData.hero.melody, touch)) {
+                PlayerBeatEvent.Action.HIT_BEAT.call(player, type, privateData.hero.melody, beat);
+                updateHeroScore(1, gui, privateData);
+                gui.setItem(HERO_OFFSET + privateData.hero.gridIndex * 3, null);
+                gui.setItem(HERO_OFFSET + privateData.hero.gridIndex * 3 + 1, null);
+                privateData.hero.gridIndex += 1;
+                if (privateData.hero.gridIndex >= 3) {
+                    progressHeroGrid(player, gui, privateData);
                 }
+            } else {
+                PlayerBeatEvent.Action.PLAY_OUT_OF_TUNE.call(player, type, privateData.hero.melody);
+                updateHeroScore(-1, gui, privateData);
+                player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, SoundCategory.MASTER, 2.0f, 0.5f);
             }
-            PlayerBeatEvent.Action.PLAY_OUT_OF_TUNE.call(player, type, privateData.hero.melody);
-            updateHeroScore(-1, gui, privateData);
-            updateHeroIcon(gui, Mytems.NO.createIcon(List.of(Component.text("Wrong!", NamedTextColor.DARK_RED))));
-            player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, SoundCategory.MASTER, 2.0f, 0.5f);
         }
     }
 
@@ -479,10 +472,6 @@ public final class MusicalInstrument implements Mytem {
                                      ? items.get(items.size() - 1 - i)
                                      : (ItemStack) null));
         }
-    }
-
-    protected void updateHeroIcon(Gui gui, ItemStack heroIcon) {
-        gui.setItem(gui.getSize() - 9, heroIcon);
     }
 
     protected void onClickSemitone(InventoryClickEvent event, Button button, Gui gui, GuiPrivateData privateData) {

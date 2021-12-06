@@ -25,9 +25,8 @@ public final class PlayerBeatEvent extends Event {
     @RequiredArgsConstructor
     public enum Action {
         HIT_BEAT(true, true),
-        PLAY_BEAT_EARLY(false, true),
         PLAY_OUT_OF_TUNE(false, false),
-        MISS_BEAT(false, true);
+        MISS_BEAT(false, false);
 
         public final boolean good;
         public final boolean hasBeat;
