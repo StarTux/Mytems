@@ -452,7 +452,7 @@ public final class MusicalInstrument implements Mytem {
                 gui.setItem(HERO_OFFSET + privateData.hero.gridIndex * 3, null);
                 gui.setItem(HERO_OFFSET + privateData.hero.gridIndex * 3 + 1, null);
                 privateData.hero.gridIndex += 1;
-                if (privateData.hero.gridIndex >= 3) {
+                if (privateData.hero.gridIndex >= 3 || privateData.hero.grid[privateData.hero.gridIndex] == null) {
                     progressHeroGrid(player, gui, privateData);
                 }
             } else {
