@@ -229,6 +229,7 @@ public final class MusicalInstrument implements Mytem {
     private static final class Hero {
         protected final Melody melody;
         protected Beat[] grid = new Beat[3];
+        protected int gridCount = 0; // beats in grid
         protected int gridIndex; // 0-3
         protected int gridTime;
         protected int melodyIndex = 0;
@@ -284,7 +285,7 @@ public final class MusicalInstrument implements Mytem {
             gui.setItem(HERO_CLOCK, new ItemStack(Material.CLOCK, 64));
             privateData.hero.task = Bukkit.getScheduler().runTaskTimer(MytemsPlugin.getInstance(), () -> {
                     if (privateData.hero.lastTick == 0L) {
-                        makeHeroGrid(player, gui, privateData);
+                        progressHeroGrid(player, gui, privateData);
                     }
                     long now = System.currentTimeMillis();
                     privateData.hero.lastTick = now;
@@ -309,29 +310,36 @@ public final class MusicalInstrument implements Mytem {
     }
 
     protected void progressHeroGrid(Player player, Gui gui, GuiPrivateData privateData) {
-        privateData.hero.melodyIndex += 3;
+        privateData.hero.melodyIndex += privateData.hero.gridCount;
         privateData.hero.gridTime = 0;
         privateData.hero.gridIndex = 0;
+        privateData.hero.gridCount = 0;
         if (privateData.hero.melodyIndex >= privateData.hero.melody.getBeats().size()) {
             new PlayerMelodyCompleteEvent(player, type, privateData.hero.melody,
                                           privateData.hero.score, privateData.hero.maxScore).callEvent();
             privateData.stopHero();
             return;
         }
-        makeHeroGrid(player, gui, privateData);
-    }
-
-    protected void makeHeroGrid(Player player, Gui gui, GuiPrivateData privateData) {
         for (int i = 0; i < 3; i += 1) {
             int index = privateData.hero.melodyIndex + i;
             Beat beat = index < privateData.hero.melody.getBeats().size()
                 ? privateData.hero.melody.getBeats().get(index)
                 : null;
+            if (i == 2
+                && beat != null
+                && beat.tone == Tone.G
+                && privateData.hero.grid[0] != null
+                && privateData.hero.grid[0].tone == Tone.F
+                && privateData.hero.grid[1] != null
+                && privateData.hero.grid[1].tone == Tone.A) {
+                beat = null;
+            }
             privateData.hero.grid[i] = beat;
             if (beat == null) {
                 gui.setItem(HERO_OFFSET + i * 3, null);
                 gui.setItem(HERO_OFFSET + i * 3 + 1, null);
             } else {
+                privateData.hero.gridCount += 1;
                 beat = beat.cooked(privateData.hero.melody);
                 gui.setItem(HERO_OFFSET + i * 3,
                             TONE_MYTEMS_MAP.get(beat.tone).createIcon(List.of(Component.text(beat.toString()))));
