@@ -10,6 +10,7 @@ import com.cavetale.mytems.item.KittyCoin;
 import com.cavetale.mytems.item.MagicCape;
 import com.cavetale.mytems.item.MagicMap;
 import com.cavetale.mytems.item.Paintbrush;
+import com.cavetale.mytems.item.SnowShovel;
 import com.cavetale.mytems.item.Toilet;
 import com.cavetale.mytems.item.UnicornHorn;
 import com.cavetale.mytems.item.WardrobeItem;
@@ -76,12 +77,18 @@ public enum Mytems {
     // Generic
     KITTY_COIN(KittyCoin::new, Material.PLAYER_HEAD, 7413001, '\uE200', Category.CURRENCY),
     RAINBOW_KITTY_COIN(KittyCoin::new, Material.PLAYER_HEAD, 7413007, '\uE243', Category.CURRENCY),
-    // Christmas 2020
+    // Christmas
     CHRISTMAS_TOKEN(ChristmasToken::new, Category.CHRISTMAS),
     SANTA_HAT(SantaHat::new, Material.PLAYER_HEAD, 7413101, '\uE221', Category.SANTA),
     SANTA_JACKET(SantaJacket::new, Material.LEATHER_CHESTPLATE, 4713102, '\uE222', Category.SANTA),
     SANTA_PANTS(SantaPants::new, Material.LEATHER_LEGGINGS, 4713103, '\uE223', Category.SANTA),
     SANTA_BOOTS(SantaBoots::new, Material.LEATHER_BOOTS, 4713104, '\uE224', Category.SANTA),
+    BLUE_CHRISTMAS_BALL(DummyMytem::new, Material.BLUE_STAINED_GLASS, 214, (char) 214, Category.CHRISTMAS),
+    GREEN_CHRISTMAS_BALL(DummyMytem::new, Material.GREEN_STAINED_GLASS, 215, (char) 215, Category.CHRISTMAS),
+    ORANGE_CHRISTMAS_BALL(DummyMytem::new, Material.ORANGE_STAINED_GLASS, 216, (char) 216, Category.CHRISTMAS),
+    PINK_CHRISTMAS_BALL(DummyMytem::new, Material.PINK_STAINED_GLASS, 217, (char) 217, Category.CHRISTMAS),
+    PURPLE_CHRISTMAS_BALL(DummyMytem::new, Material.PURPLE_STAINED_GLASS, 218, (char) 218, Category.CHRISTMAS),
+    YELLOW_CHRISTMAS_BALL(DummyMytem::new, Material.YELLOW_STAINED_GLASS, 219, (char) 219, Category.CHRISTMAS),
     // Dune set
     DUNE_HELMET(DuneItem.Helmet::new, Material.PLAYER_HEAD, 7413201, '\uE225', Category.DUNE),
     DUNE_CHESTPLATE(DuneItem.Chestplate::new, Material.GOLDEN_CHESTPLATE, 7413202, '\uE226', Category.DUNE),
@@ -129,6 +136,7 @@ public enum Mytems {
     // Utility
     WEDDING_RING(WeddingRing::new, Material.PLAYER_HEAD, 7413002, '\uE21C', Category.FRIENDS),
     MAGIC_MAP(MagicMap::new, Material.FILLED_MAP, 7413005, '\uE21D', Category.UTILITY),
+    SNOW_SHOVEL(SnowShovel::new, Material.IRON_SHOVEL, 220, (char) 220, Category.UTILITY),
     // Wardrobe
     WHITE_BUNNY_EARS(WardrobeItem::new, Material.IRON_BOOTS, 3919001, (char) 0, Category.WARDROBE_HAT), // EPIC
     RED_LIGHTSABER(WardrobeItem::new, Material.END_ROD, 3919002, (char) 0, Category.WARDROBE_HANDHELD),
@@ -457,8 +465,8 @@ public enum Mytems {
     SOOTY_STOVE_PIPE(ArmorPart::new, Material.BARREL, 206, (char) 206, Category.ARMOR_PART),
     FLOTSAM_CAN(ArmorPart::new, Material.FLOWER_POT, 208, (char) 208, Category.ARMOR_PART),
     BENT_PITCHFORK(ArmorPart::new, Material.LIGHTNING_ROD, 209, (char) 209, Category.ARMOR_PART);
-    // Next CustomModelData: 214
-    // Next High Unicode Character: \uE2AE
+    // Next CustomModelData: 221
+    // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
     public final String id;
