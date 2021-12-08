@@ -49,8 +49,7 @@ public final class Beat {
     }
 
     public boolean countsAs(Melody melody, Touch touch) {
-        Note note = bukkitNote(melody);
-        return note.getTone() == touch.tone && note.isSharped() == touch.bukkitNote.isSharped();
+        return countsAs(melody, touch.bukkitNote);
     }
 
     public boolean countsAs(Melody melody, Note otherNote) {
