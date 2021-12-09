@@ -78,7 +78,7 @@ public enum Mytems {
     KITTY_COIN(KittyCoin::new, Material.PLAYER_HEAD, 7413001, '\uE200', Category.CURRENCY),
     RAINBOW_KITTY_COIN(KittyCoin::new, Material.PLAYER_HEAD, 7413007, '\uE243', Category.CURRENCY),
     // Christmas
-    CHRISTMAS_TOKEN(ChristmasToken::new, Category.CHRISTMAS),
+    CHRISTMAS_TOKEN(ChristmasToken::new, Material.PLAYER_HEAD, 221, (char) 221, Category.CHRISTMAS),
     SANTA_HAT(SantaHat::new, Material.PLAYER_HEAD, 7413101, '\uE221', Category.SANTA),
     SANTA_JACKET(SantaJacket::new, Material.LEATHER_CHESTPLATE, 4713102, '\uE222', Category.SANTA),
     SANTA_PANTS(SantaPants::new, Material.LEATHER_LEGGINGS, 4713103, '\uE223', Category.SANTA),
@@ -465,7 +465,7 @@ public enum Mytems {
     SOOTY_STOVE_PIPE(ArmorPart::new, Material.BARREL, 206, (char) 206, Category.ARMOR_PART),
     FLOTSAM_CAN(ArmorPart::new, Material.FLOWER_POT, 208, (char) 208, Category.ARMOR_PART),
     BENT_PITCHFORK(ArmorPart::new, Material.LIGHTNING_ROD, 209, (char) 209, Category.ARMOR_PART);
-    // Next CustomModelData: 221
+    // Next CustomModelData: 222
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
