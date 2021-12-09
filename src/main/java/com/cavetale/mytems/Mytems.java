@@ -663,10 +663,13 @@ public enum Mytems {
         final ItemStack item;
         if (material == Material.PLAYER_HEAD) {
             item = Items.text(createItemStack(), List.of());
+            ItemMarker.resetId(item);
         } else {
             item = new ItemStack(material);
         }
-        item.editMeta(meta -> meta.setCustomModelData(customModelData));
+        if (customModelData != null) {
+            item.editMeta(meta -> meta.setCustomModelData(customModelData));
+        }
         return item;
     }
 
