@@ -32,6 +32,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
+import org.bukkit.loot.Lootable;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @Getter
@@ -171,6 +172,9 @@ public final class MytemsPlugin extends JavaPlugin {
         int result = 0;
         for (BlockState blockState : chunk.getTileEntities()) {
             if (blockState instanceof Container container) {
+                if (container instanceof Lootable lootable && lootable.getLootTable() != null) {
+                    continue; // Skip chest
+                }
                 result += fixInventory(container.getInventory());
             }
         }
