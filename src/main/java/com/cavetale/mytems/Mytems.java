@@ -89,6 +89,7 @@ public enum Mytems {
     PINK_CHRISTMAS_BALL(DummyMytem::new, Material.PINK_STAINED_GLASS, 217, (char) 217, Category.CHRISTMAS),
     PURPLE_CHRISTMAS_BALL(DummyMytem::new, Material.PURPLE_STAINED_GLASS, 218, (char) 218, Category.CHRISTMAS),
     YELLOW_CHRISTMAS_BALL(DummyMytem::new, Material.YELLOW_STAINED_GLASS, 219, (char) 219, Category.CHRISTMAS),
+    KNITTED_BEANIE(DummyMytem::new, Material.LEATHER_HELMET, 222, (char) 222, Category.CHRISTMAS),
     // Dune set
     DUNE_HELMET(DuneItem.Helmet::new, Material.PLAYER_HEAD, 7413201, '\uE225', Category.DUNE),
     DUNE_CHESTPLATE(DuneItem.Chestplate::new, Material.GOLDEN_CHESTPLATE, 7413202, '\uE226', Category.DUNE),
@@ -465,7 +466,7 @@ public enum Mytems {
     SOOTY_STOVE_PIPE(ArmorPart::new, Material.BARREL, 206, (char) 206, Category.ARMOR_PART),
     FLOTSAM_CAN(ArmorPart::new, Material.FLOWER_POT, 208, (char) 208, Category.ARMOR_PART),
     BENT_PITCHFORK(ArmorPart::new, Material.LIGHTNING_ROD, 209, (char) 209, Category.ARMOR_PART);
-    // Next CustomModelData: 222
+    // Next CustomModelData: 223
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
