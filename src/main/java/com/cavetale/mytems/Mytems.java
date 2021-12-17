@@ -138,6 +138,7 @@ public enum Mytems {
     WEDDING_RING(WeddingRing::new, Material.PLAYER_HEAD, 7413002, '\uE21C', Category.FRIENDS),
     MAGIC_MAP(MagicMap::new, Material.FILLED_MAP, 7413005, '\uE21D', Category.UTILITY),
     SNOW_SHOVEL(SnowShovel::new, Material.IRON_SHOVEL, 220, (char) 220, Category.UTILITY),
+    HASTY_PICKAXE(DummyMytem::new, Material.GOLDEN_PICKAXE, 223, (char) 223, Category.UTILITY),
     // Wardrobe
     WHITE_BUNNY_EARS(WardrobeItem::new, Material.IRON_BOOTS, 3919001, (char) 0, Category.WARDROBE_HAT), // EPIC
     RED_LIGHTSABER(WardrobeItem::new, Material.END_ROD, 3919002, (char) 0, Category.WARDROBE_HANDHELD),
@@ -466,7 +467,7 @@ public enum Mytems {
     SOOTY_STOVE_PIPE(ArmorPart::new, Material.BARREL, 206, (char) 206, Category.ARMOR_PART),
     FLOTSAM_CAN(ArmorPart::new, Material.FLOWER_POT, 208, (char) 208, Category.ARMOR_PART),
     BENT_PITCHFORK(ArmorPart::new, Material.LIGHTNING_ROD, 209, (char) 209, Category.ARMOR_PART);
-    // Next CustomModelData: 223
+    // Next CustomModelData: 224
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
