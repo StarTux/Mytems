@@ -415,6 +415,23 @@ public enum Mytems {
     WINK_SMILE(DummyMytem::new, Material.SLIME_BALL, 33, '\uE261', Category.REACTION),
     MIND_BLOWN(DummyMytem::new, Material.SLIME_BALL, 34, '\uE262', Category.REACTION),
     WINK(DummyMytem::new, Material.SLIME_BALL, 35, '\uE263', Category.REACTION),
+    COW_FACE(DummyMytem::new, Material.SLIME_BALL, 224, (char) 224, Category.REACTION),
+    CREEPER_FACE(DummyMytem::new, Material.SLIME_BALL, 225, (char) 225, Category.REACTION),
+    ENDERMAN_FACE(DummyMytem::new, Material.SLIME_BALL, 226, (char) 226, Category.REACTION),
+    GHAST_FACE(DummyMytem::new, Material.SLIME_BALL, 227, (char) 227, Category.REACTION),
+    PIG_FACE(DummyMytem::new, Material.SLIME_BALL, 228, (char) 228, Category.REACTION),
+    SHEEP_FACE(DummyMytem::new, Material.SLIME_BALL, 229, (char) 229, Category.REACTION),
+    SKELETON_FACE(DummyMytem::new, Material.SLIME_BALL, 230, (char) 230, Category.REACTION),
+    SLIME_FACE(DummyMytem::new, Material.SLIME_BALL, 231, (char) 231, Category.REACTION),
+    SPIDER_FACE(DummyMytem::new, Material.SLIME_BALL, 232, (char) 232, Category.REACTION),
+    SQUID_FACE(DummyMytem::new, Material.SLIME_BALL, 233, (char) 233, Category.REACTION),
+    STEVE_FACE(DummyMytem::new, Material.SLIME_BALL, 234, (char) 234, Category.REACTION),
+    ALEX_FACE(DummyMytem::new, Material.SLIME_BALL, 235, (char) 235, Category.REACTION),
+    VILLAGER_FACE(DummyMytem::new, Material.SLIME_BALL, 236, (char) 236, Category.REACTION),
+    PILLAGER_FACE(DummyMytem::new, Material.SLIME_BALL, 237, (char) 237, Category.REACTION),
+    WITHER_FACE(DummyMytem::new, Material.SLIME_BALL, 238, (char) 238, Category.REACTION),
+    ZOMBIE_FACE(DummyMytem::new, Material.SLIME_BALL, 239, (char) 239, Category.REACTION),
+    WITCH_FACE(DummyMytem::new, Material.SLIME_BALL, 240, (char) 240, Category.REACTION),
     // Pic
     PIC_WOLF(DummyMytem::new, Material.BONE, 39, '\uE267', Category.PICTURE),
     PIC_CAT(DummyMytem::new, Material.STRING, 40, '\uE268', Category.PICTURE),
@@ -467,7 +484,7 @@ public enum Mytems {
     SOOTY_STOVE_PIPE(ArmorPart::new, Material.BARREL, 206, (char) 206, Category.ARMOR_PART),
     FLOTSAM_CAN(ArmorPart::new, Material.FLOWER_POT, 208, (char) 208, Category.ARMOR_PART),
     BENT_PITCHFORK(ArmorPart::new, Material.LIGHTNING_ROD, 209, (char) 209, Category.ARMOR_PART);
-    // Next CustomModelData: 224
+    // Next CustomModelData: 241
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
