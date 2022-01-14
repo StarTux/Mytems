@@ -39,4 +39,13 @@ public class MytemTag {
             itemStack.setAmount(amount);
         }
     }
+
+    /**
+     * Determine if the information in this tag may be discarded in
+     * favor of efficient storage.  This is intended for Mass Storage,
+     * which cannot store non-empty, non-dismissable item tags.
+     */
+    public boolean isDismissable() {
+        return isEmpty();
+    }
 }

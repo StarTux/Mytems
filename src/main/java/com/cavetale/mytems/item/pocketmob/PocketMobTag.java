@@ -275,4 +275,9 @@ public final class PocketMobTag extends MytemTag {
             return new HashMap<>();
         }
     }
+
+    @Override
+    public boolean isDismissable() {
+        return false;
+    }
 }

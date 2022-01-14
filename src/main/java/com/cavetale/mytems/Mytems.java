@@ -1,5 +1,6 @@
 package com.cavetale.mytems;
 
+import com.cavetale.core.util.Json;
 import com.cavetale.mytems.item.ArmorPart;
 import com.cavetale.mytems.item.ArmorStandEditor;
 import com.cavetale.mytems.item.ChristmasToken;
@@ -612,9 +613,9 @@ public enum Mytems {
      * exists.
      */
     public String serializeItem(ItemStack itemStack) {
-        String tag = getMytem().serializeTag(itemStack);
-        return tag != null
-            ? id + tag
+        MytemTag tag = getMytem().serializeTag(itemStack);
+        return tag != null && !tag.isEmpty()
+            ? id + Json.serialize(tag)
             : id;
     }
 
@@ -696,5 +697,18 @@ public enum Mytems {
 
     public ItemStack createIcon(List<Component> text) {
         return Items.text(createIcon(), text);
+    }
+
+    public boolean isItem(ItemStack item) {
+        return forItem(item) == this;
+    }
+
+    public static boolean isIn(ItemStack item, Mytems... mytemsList) {
+        Mytems mytems = forItem(item);
+        if (mytems == null) return false;
+        for (Mytems it : mytemsList) {
+            if (mytems == it) return true;
+        }
+        return false;
     }
 }

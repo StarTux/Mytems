@@ -504,10 +504,10 @@ public final class MusicalInstrument implements Mytem {
     }
 
     @Override
-    public String serializeTag(ItemStack itemStack) {
+    public MusicalInstrumentTag serializeTag(ItemStack itemStack) {
         MusicalInstrumentTag musicalInstrumentTag = new MusicalInstrumentTag();
         musicalInstrumentTag.load(itemStack, this);
-        return musicalInstrumentTag.isEmpty() ? null : Json.serialize(musicalInstrumentTag);
+        return musicalInstrumentTag;
     }
 
     @Override

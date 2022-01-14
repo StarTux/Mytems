@@ -83,11 +83,11 @@ public interface Mytem {
     /**
      * These can be overridden entirely.
      */
-    default String serializeTag(ItemStack itemStack) {
+    default MytemTag serializeTag(ItemStack itemStack) {
         if (itemStack.getAmount() == 1) return null;
         MytemTag tag = new MytemTag();
         tag.load(itemStack);
-        return tag.isEmpty() ? null : Json.serialize(tag);
+        return tag;
     }
 
     /**
@@ -101,13 +101,5 @@ public interface Mytem {
             tag.store(itemStack);
         }
         return itemStack;
-    }
-
-    /**
-     * Deserialize an item tag with a new owner.
-     */
-    @Deprecated
-    default ItemStack deserializeTag(String serialized, Player player) {
-        return deserializeTag(serialized);
     }
 }

@@ -40,4 +40,9 @@ public final class MusicalInstrumentTag extends MytemTag {
                 });
         }
     }
+
+    @Override
+    public boolean isDismissable() {
+        return super.isEmpty();
+    }
 }
