@@ -57,7 +57,7 @@ public final class TreeChopperTag extends MytemTag {
     }
 
     public static int getMaxLogBlocks(int level) {
-        return 10 * (1 << level);
+        return 5 + 5 * (1 << level);
     }
 
     public static int getMaxLeafBlocks(int level) {

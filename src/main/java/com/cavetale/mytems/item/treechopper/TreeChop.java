@@ -74,6 +74,7 @@ public final class TreeChop {
         logBlocks.add(brokenBlock);
         // Blocks already searched, good or not
         Set<Block> done = new HashSet<>();
+        done.add(brokenBlock);
         // Crawl over logs.  Neighboring logs will be added to the
         // list.  Leaves go into their own list and will be searched
         // after.  Search is abandoned with corresponding return value
@@ -144,7 +145,7 @@ public final class TreeChop {
                 }
             }
         }
-        return logBlocks.size() > 1 ? SUCCESS : NOTHING_FOUND;
+        return logBlocks.size() > 2 ? SUCCESS : NOTHING_FOUND;
     }
 
     public void chop(Player player) {
@@ -178,6 +179,10 @@ public final class TreeChop {
 
             @Override
             public void run() {
+                if (!player.isOnline()) {
+                    cancel();
+                    return;
+                }
                 if (doVines) {
                     ItemStack shears = new ItemStack(Material.SHEARS);
                     for (Block vineBlock : leafBlocks) {
@@ -201,7 +206,7 @@ public final class TreeChop {
                     logBlock.breakNaturally(axeItem, true);
                     brokenBlocks += 1;
                     if (primaryType != null
-                        && replanted < 4
+                        && replanted < leafBlocks.size()
                         && logBlock.getY() == minHeight
                         && SAPLING_PLACEABLE.isTagged(logBlock.getRelative(BlockFace.DOWN).getType())) {
                         List<Material> saplingTypes = List.copyOf(primaryType.saplings.getValues());
@@ -211,7 +216,14 @@ public final class TreeChop {
                         logBlock.setType(saplingType);
                         replanted += 1;
                     }
-                    if (enchanter > 0 && ThreadLocalRandom.current().nextInt(50) < enchanter) {
+                    if (player.getSaturation() >= 0.01f) {
+                        // Buff saturation over food level
+                        player.setSaturation(Math.max(0.0f, player.getSaturation() - 0.025f));
+                    }
+                    if (ThreadLocalRandom.current().nextInt(20) == 0) {
+                        player.setFoodLevel(Math.max(0, player.getFoodLevel() - 1));
+                    }
+                    if (enchanter > 0 && ThreadLocalRandom.current().nextInt(100) < enchanter) {
                         player.giveExp(1, true);
                     }
                     return true;
@@ -223,7 +235,7 @@ public final class TreeChop {
                     PlayerBreakBlockEvent.call(player, leafBlock);
                     leafBlock.breakNaturally(axeItem, true);
                     brokenBlocks += 1;
-                    if (enchanter > 0 && ThreadLocalRandom.current().nextInt(100) < enchanter) {
+                    if (enchanter > 0 && ThreadLocalRandom.current().nextInt(200) < enchanter) {
                         player.giveExp(1, true);
                     }
                     return true;

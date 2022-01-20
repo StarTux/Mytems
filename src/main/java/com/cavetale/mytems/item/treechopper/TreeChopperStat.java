@@ -11,8 +11,8 @@ import org.bukkit.inventory.ItemStack;
 
 public enum TreeChopperStat {
     XP(Type.BASE, 100, "Experience", () -> null),
-    CHOP(Type.UPGRADE, 6, "Chopping", () -> new ItemStack(Material.OAK_LOG)),
-    LEAF(Type.UPGRADE, 5, "Leaf Blower", () -> new ItemStack(Material.OAK_LEAVES)),
+    CHOP(Type.UPGRADE, 5, "Chopping", () -> new ItemStack(Material.OAK_LOG)),
+    LEAF(Type.UPGRADE, 4, "Leaf Blower", () -> new ItemStack(Material.OAK_LEAVES)),
     FORTUNE(Type.UPGRADE, 3, "Fortune", () -> Mytems.DICE.createIcon()),
     SILK(Type.UPGRADE, 2, "Shears", () -> new ItemStack(Material.SHEARS)),
     REPLANT(Type.UPGRADE, 1, "Replant", () -> new ItemStack(Material.OAK_SAPLING)),

@@ -104,7 +104,9 @@ public final class TreeChopper implements Mytem {
         int xp = tag.getStat(TreeChopperStat.XP);
         int upgradeCost = tag.getUpgradeCost();
         if (xp < upgradeCost) {
-            xp = Math.min(upgradeCost, xp + chop.logBlocks.size());
+            int xpBonus = chop.logBlocks.size() / Math.max(1, 2 * tag.getStat(TreeChopperStat.CHOP))
+                + chop.leafBlocks.size() / Math.max(1, 2 + 2 * tag.getStat(TreeChopperStat.LEAF));
+            xp = Math.min(upgradeCost, xp + Math.max(1, xpBonus));
             tag.setStat(TreeChopperStat.XP, xp);
             tag.store(itemStack);
             Items.text(itemStack, makeItemTooltip(tag));
@@ -283,7 +285,7 @@ public final class TreeChopper implements Mytem {
                 || maxLevelExceeded
                 || conflicts;
             List<Component> tooltip = new ArrayList<>();
-            int level = tag.getStat(stat) + 1;
+            int level = Math.min(stat.maxLevel, tag.getStat(stat) + 1);
             tooltip.add(text(stat.displayName + " " + roman(level), locked ? ALLRED : ALLGREEN));
             tooltip.add(text("Max Level " + roman(stat.maxLevel),
                              maxLevelExceeded ? ALLRED : GRAY, ITALIC));
