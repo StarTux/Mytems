@@ -78,6 +78,7 @@ public final class TreeChopper implements Mytem {
         if (!Tag.LOGS.isTagged(block.getType())) return;
         if (Exploits.isPlayerPlaced(block)) return;
         if (player.getFoodLevel() < 2) {
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_BURP, 0.5f, 0.75f);
             player.sendActionBar(text("You're low on food!", GRAY));
             return;
         }
