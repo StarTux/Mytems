@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 
@@ -45,15 +46,17 @@ public final class TreeChopperTag extends MytemTag {
                     if (value == null) continue;
                     Tags.set(tag, MytemsPlugin.namespacedKey(stat.key), value);
                 }
+                // Max is 7 which insta breaks logs
+                meta.addEnchant(Enchantment.DIG_SPEED, 2 + getStat(TreeChopperStat.SPEED), true);
             });
     }
 
     public int getStat(TreeChopperStat stat) {
-        return stats.getOrDefault(stat.key, 0);
+        return Math.min(stat.maxLevel, Math.max(0, stats.getOrDefault(stat.key, 0)));
     }
 
-    public void setStat(TreeChopperStat stat, int level) {
-        stats.put(stat.key, level);
+    public void setStat(TreeChopperStat stat, int value) {
+        stats.put(stat.key, Math.min(stat.maxLevel, Math.max(0, value)));
     }
 
     public static int getMaxLogBlocks(int level) {

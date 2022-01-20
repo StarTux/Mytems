@@ -24,6 +24,7 @@ import org.bukkit.SoundCategory;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
@@ -76,6 +77,10 @@ public final class TreeChopper implements Mytem {
         Block block = event.getBlock();
         if (!Tag.LOGS.isTagged(block.getType())) return;
         if (Exploits.isPlayerPlaced(block)) return;
+        if (player.getFoodLevel() < 2) {
+            player.sendActionBar(text("You're low on food!", GRAY));
+            return;
+        }
         TreeChopperTag tag = serializeTag(itemStack);
         TreeChop chop = new TreeChop(tag);
         TreeChopStatus status = chop.fill(player, block);
@@ -98,15 +103,22 @@ public final class TreeChopper implements Mytem {
         case NOTHING_FOUND:
         default: return;
         }
+        if (chop.saplingBlocks.isEmpty()) return;
         event.setCancelled(true);
         chop.chop(player);
         if (!tag.upgradeIsPossible()) return;
         int xp = tag.getStat(TreeChopperStat.XP);
         int upgradeCost = tag.getUpgradeCost();
-        if (xp < upgradeCost) {
-            int xpBonus = chop.logBlocks.size() / Math.max(1, 2 * tag.getStat(TreeChopperStat.CHOP))
-                + chop.leafBlocks.size() / Math.max(1, 2 + 2 * tag.getStat(TreeChopperStat.LEAF));
-            xp = Math.min(upgradeCost, xp + Math.max(1, xpBonus));
+        int xpBonus = 0;
+        if (xp < upgradeCost && !chop.saplingBlocks.isEmpty()) {
+            // Need blocks on the ground to get xp: Otherwise, cutting
+            // top-to-bottom would yield way too much!
+            xpBonus = 1;
+            for (int i = 1; i <= chop.logBlocks.size(); i *= 2) {
+                xpBonus += 1;
+            }
+            xpBonus = Math.max(1, (xpBonus - 1) / 2 + 1);
+            xp = Math.min(upgradeCost, xp + xpBonus);
             tag.setStat(TreeChopperStat.XP, xp);
             tag.store(itemStack);
             Items.text(itemStack, makeItemTooltip(tag));
@@ -119,7 +131,7 @@ public final class TreeChopper implements Mytem {
                 .color(WHITE);
             player.sendMessage(msg);
             player.sendActionBar(msg);
-        } else {
+        } else if (xpBonus > 0) {
             Component msg = join(noSeparators(),
                                  displayName,
                                  text(" " + xp),
@@ -132,6 +144,7 @@ public final class TreeChopper implements Mytem {
 
     @Override
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack itemStack) {
+        event.setUseInteractedBlock(Event.Result.DENY);
         TreeChopperTag tag = serializeTag(itemStack);
         int xp = tag.getStat(TreeChopperStat.XP);
         int upgradeCost = tag.getUpgradeCost();
@@ -170,6 +183,16 @@ public final class TreeChopper implements Mytem {
                         text("/"),
                         text(tag.getUpgradeCost(), ALLGREEN))
                    .color(WHITE));
+        if (level <= 0) {
+            result.add(text("Break the base of a tree", GRAY));
+            result.add(text("to chop it down entirely.", GRAY));
+            result.add(text("Chopped trees grant ex-", GRAY));
+            result.add(text("perience which unlock", GRAY));
+            result.add(text("powerful upgrades!", GRAY));
+            result.add(join(noSeparators(),
+                            text("right-click ", ALLGREEN),
+                            text("Upgrade Menu", GRAY)));
+        }
         for (TreeChopperStat stat : TreeChopperStat.values()) {
             if (stat.type != TreeChopperStat.Type.UPGRADE) continue;
             int value = tag.getStat(stat);
@@ -257,7 +280,8 @@ public final class TreeChopper implements Mytem {
         tag.setStat(stat, value);
         tag.store(itemStack);
         Items.text(itemStack, makeItemTooltip(tag));
-        player.sendMessage(text(stat.displayName + " changed from " + oldValue + " to " + value, YELLOW));
+        int newValue = tag.getStat(stat);
+        player.sendMessage(text(stat.displayName + " changed from " + oldValue + " to " + newValue, YELLOW));
         return true;
     }
 
@@ -288,7 +312,7 @@ public final class TreeChopper implements Mytem {
             int level = Math.min(stat.maxLevel, tag.getStat(stat) + 1);
             tooltip.add(text(stat.displayName + " " + roman(level), locked ? ALLRED : ALLGREEN));
             tooltip.add(text("Max Level " + roman(stat.maxLevel),
-                             maxLevelExceeded ? ALLRED : GRAY, ITALIC));
+                             maxLevelExceeded ? GOLD : GRAY, ITALIC));
             for (Map.Entry<TreeChopperStat, Integer> requirement : stat.requirements.entrySet()) {
                 tooltip.add(text("Requires " + requirement.getKey().displayName
                                  + " " + roman(requirement.getValue()),
@@ -299,7 +323,9 @@ public final class TreeChopper implements Mytem {
                                  conflicts ? ALLRED : GRAY, ITALIC));
             }
             tooltip.addAll(getStatDescription(stat, level));
-            ItemStack icon = locked ? Mytems.COPPER_KEYHOLE.createIcon() : stat.icon.get();
+            ItemStack icon = maxLevelExceeded
+                ? Mytems.STAR.createIcon()
+                : locked ? Mytems.COPPER_KEYHOLE.createIcon() : stat.icon.get();
             Items.text(icon, tooltip);
             int itemIndex = i++;
             gui.setItem(itemIndex, icon, click -> {

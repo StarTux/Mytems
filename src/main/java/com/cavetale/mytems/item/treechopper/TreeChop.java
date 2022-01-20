@@ -2,6 +2,7 @@ package com.cavetale.mytems.item.treechopper;
 
 import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.event.block.PlayerBreakBlockEvent;
+import com.cavetale.core.event.block.PlayerChangeBlockEvent;
 import com.cavetale.mytems.MytemsPlugin;
 import com.destroystokyo.paper.MaterialSetTag;
 import com.winthier.exploits.Exploits;
@@ -40,16 +41,21 @@ public final class TreeChop {
                 Material.GRASS_BLOCK,
                 Material.PODZOL,
                 Material.FARMLAND,
+                // Wrold Gen
+                Material.GRAVEL,
+                Material.SAND,
             }));
     private static final List<Face> FACES = Face.all();
     protected final TreeChopperTag tag;
     protected final List<Block> logBlocks = new ArrayList<>();
     protected final List<Block> leafBlocks = new ArrayList<>();
+    protected final List<Block> saplingBlocks = new ArrayList<>(); // for placement
     protected final Map<ChoppedType, Integer> leafCount = new EnumMap<>(ChoppedType.class);
     protected int minHeight;
     // Used for chopping
-    protected ChoppedType primaryType = null;
+    protected ChoppedType replantType = null;
     protected boolean doVines;
+    protected boolean doReplant;
     protected int enchanter;
     protected int brokenBlocks;
 
@@ -69,12 +75,16 @@ public final class TreeChop {
         }
         minHeight = brokenBlock.getY();
         doVines = tag.getStat(TreeChopperStat.SILK) >= 2;
+        doReplant = tag.getStat(TreeChopperStat.REPLANT) >= 1;
         enchanter = tag.getStat(TreeChopperStat.ENCH);
         // Log blocks is initialized with the original block!
         logBlocks.add(brokenBlock);
         // Blocks already searched, good or not
         Set<Block> done = new HashSet<>();
         done.add(brokenBlock);
+        if (SAPLING_PLACEABLE.isTagged(brokenBlock.getRelative(BlockFace.DOWN).getType())) {
+            saplingBlocks.add(brokenBlock);
+        }
         // Crawl over logs.  Neighboring logs will be added to the
         // list.  Leaves go into their own list and will be searched
         // after.  Search is abandoned with corresponding return value
@@ -95,8 +105,10 @@ public final class TreeChop {
                         return TOO_MANY_LOGS;
                     }
                     logBlocks.add(nbor);
-                    int x = nbor.getX();
-                    int z = nbor.getZ();
+                    if (logBlock.getY() <= minHeight + 1 && SAPLING_PLACEABLE.isTagged(logBlock.getRelative(BlockFace.DOWN).getType())) {
+                        // Need this to replant AND to determine if xp are given!
+                        saplingBlocks.add(nbor);
+                    }
                 } else if (Tag.LEAVES.isTagged(nbor.getType())) {
                     if (nbor.getBlockData() instanceof Leaves leaves && leaves.isPersistent()) continue;
                     if (leafBlocks.size() >= tag.getMaxLeafBlocks()) continue;
@@ -156,7 +168,7 @@ public final class TreeChop {
         if (silk > 0) axeItem.addUnsafeEnchantments(Map.of(Enchantment.SILK_TOUCH, silk));
         // Determine the primary tree type.
         // If replant is not unlocked, we skip this!
-        if (tag.getStat(TreeChopperStat.REPLANT) > 0 && leafBlocks.size() >= 4) {
+        if (doReplant && !leafBlocks.isEmpty()) {
             for (Block leafBlock : leafBlocks) {
                 ChoppedType type = ChoppedType.of(leafBlock);
                 if (type == null) continue;
@@ -166,7 +178,7 @@ public final class TreeChop {
             for (ChoppedType type : ChoppedType.values()) {
                 int count = leafCount.getOrDefault(type, 0);
                 if (count > highest) {
-                    primaryType = type;
+                    replantType = type;
                     highest = count;
                 }
             }
@@ -175,7 +187,7 @@ public final class TreeChop {
         new BukkitRunnable() {
             protected int logBlockIndex;
             protected int leafBlockIndex;
-            protected int replanted;
+            protected int saplingBlocksPlaced;
 
             @Override
             public void run() {
@@ -192,58 +204,62 @@ public final class TreeChop {
                         vineBlock.breakNaturally(shears, true);
                     }
                 }
+                int blocksBrokenNow = 0;
                 for (int i = 0; i <= speed; i += 1) {
-                    if (!iter()) break;
+                    if (logBlockIndex < logBlocks.size()) {
+                        Block logBlock = logBlocks.get(logBlockIndex++);
+                        if (!Tag.LOGS.isTagged(logBlock.getType())) continue;
+                        if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, logBlock)) continue;
+                        PlayerBreakBlockEvent.call(player, logBlock);
+                        logBlock.breakNaturally(axeItem, true);
+                        brokenBlocks += 1;
+                        if (player.getSaturation() >= 0.01f) {
+                            // Buff saturation over food level
+                            player.setSaturation(Math.max(0.0f, player.getSaturation() - 0.025f));
+                        }
+                        if (ThreadLocalRandom.current().nextInt(20) == 0) {
+                            player.setFoodLevel(Math.max(0, player.getFoodLevel() - 1));
+                        }
+                        if (enchanter > 0 && ThreadLocalRandom.current().nextInt(100) < enchanter) {
+                            player.giveExp(1, true);
+                        }
+                        blocksBrokenNow += 1;
+                    }
                 }
-            }
-
-            private boolean iter() {
-                if (logBlockIndex < logBlocks.size()) {
-                    Block logBlock = logBlocks.get(logBlockIndex++);
-                    if (!Tag.LOGS.isTagged(logBlock.getType())) return true;
-                    if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, logBlock)) return true;
-                    PlayerBreakBlockEvent.call(player, logBlock);
-                    logBlock.breakNaturally(axeItem, true);
-                    brokenBlocks += 1;
-                    if (primaryType != null
-                        && replanted < leafBlocks.size()
-                        && logBlock.getY() == minHeight
-                        && SAPLING_PLACEABLE.isTagged(logBlock.getRelative(BlockFace.DOWN).getType())) {
-                        List<Material> saplingTypes = List.copyOf(primaryType.saplings.getValues());
+                if (blocksBrokenNow > 0) return;
+                for (int i = 0; i <= 2 * speed; i += 1) {
+                    if (leafBlockIndex < leafBlocks.size()) {
+                        Block leafBlock = leafBlocks.get(leafBlockIndex++);
+                        if (!Tag.LEAVES.isTagged(leafBlock.getType())) continue;
+                        if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, leafBlock)) continue;
+                        PlayerBreakBlockEvent.call(player, leafBlock);
+                        leafBlock.breakNaturally(axeItem, true);
+                        brokenBlocks += 1;
+                        if (enchanter > 0 && ThreadLocalRandom.current().nextInt(200) < enchanter) {
+                            player.giveExp(1, true);
+                        }
+                        blocksBrokenNow += 1;
+                    }
+                }
+                if (blocksBrokenNow > 0) return;
+                if (doReplant && replantType != null) {
+                    for (Block saplingBlock : saplingBlocks) {
+                        if (!saplingBlock.isEmpty()) continue;
+                        if (!SAPLING_PLACEABLE.isTagged(saplingBlock.getRelative(BlockFace.DOWN).getType())) continue;
+                        if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, saplingBlock)) continue;
+                        List<Material> saplingTypes = List.copyOf(replantType.saplings.getValues());
                         Material saplingType = saplingTypes.size() > 1
                             ? saplingTypes.get(ThreadLocalRandom.current().nextInt(saplingTypes.size()))
                             : saplingTypes.get(0);
-                        logBlock.setType(saplingType);
-                        replanted += 1;
+                        new PlayerChangeBlockEvent(player, saplingBlock, saplingType.createBlockData()).callEvent();
+                        saplingBlock.setType(saplingType);
+                        saplingBlocksPlaced += 1;
+                        if (saplingBlocksPlaced >= leafBlocks.size()) continue;
                     }
-                    if (player.getSaturation() >= 0.01f) {
-                        // Buff saturation over food level
-                        player.setSaturation(Math.max(0.0f, player.getSaturation() - 0.025f));
-                    }
-                    if (ThreadLocalRandom.current().nextInt(20) == 0) {
-                        player.setFoodLevel(Math.max(0, player.getFoodLevel() - 1));
-                    }
-                    if (enchanter > 0 && ThreadLocalRandom.current().nextInt(100) < enchanter) {
-                        player.giveExp(1, true);
-                    }
-                    return true;
-                }
-                if (leafBlockIndex < leafBlocks.size()) {
-                    Block leafBlock = leafBlocks.get(leafBlockIndex++);
-                    if (!Tag.LEAVES.isTagged(leafBlock.getType())) return true;
-                    if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, leafBlock)) return true;
-                    PlayerBreakBlockEvent.call(player, leafBlock);
-                    leafBlock.breakNaturally(axeItem, true);
-                    brokenBlocks += 1;
-                    if (enchanter > 0 && ThreadLocalRandom.current().nextInt(200) < enchanter) {
-                        player.giveExp(1, true);
-                    }
-                    return true;
                 }
                 cancel();
-                return false;
             }
-        }.runTaskTimer(MytemsPlugin.getInstance(), 0L, 1L);
+        }.runTaskTimer(MytemsPlugin.getInstance(), 0L, 3L);
     }
 
     private record Face(int x, int y, int z) {
