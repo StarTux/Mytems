@@ -8,7 +8,8 @@ api-version: 1.17
 author: StarTux
 website: https://github.com/StarTux/Mytems
 
-depend: [Core, WorldMarker, Exploits]
+depend: [Core, WorldMarker]
+softdepend: [Exploits]
 softdepend: []
 
 commands:

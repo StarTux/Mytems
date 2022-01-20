@@ -10,7 +10,7 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Gui;
 import com.cavetale.mytems.util.Items;
-import com.winthier.exploits.Exploits;
+import com.cavetale.mytems.util.PlayerPlacedBlocks;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -76,7 +76,7 @@ public final class TreeChopper implements Mytem {
         if (event.isCancelled()) return;
         Block block = event.getBlock();
         if (!Tag.LOGS.isTagged(block.getType())) return;
-        if (Exploits.isPlayerPlaced(block)) return;
+        if (PlayerPlacedBlocks.isPlayerPlaced(block)) return;
         if (player.getFoodLevel() < 2) {
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_BURP, 0.5f, 0.75f);
             player.sendActionBar(text("You're low on food!", GRAY));

@@ -4,8 +4,8 @@ import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.event.block.PlayerBreakBlockEvent;
 import com.cavetale.core.event.block.PlayerChangeBlockEvent;
 import com.cavetale.mytems.MytemsPlugin;
+import com.cavetale.mytems.util.PlayerPlacedBlocks;
 import com.destroystokyo.paper.MaterialSetTag;
-import com.winthier.exploits.Exploits;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumMap;
@@ -96,7 +96,7 @@ public final class TreeChop {
                 if (done.contains(nbor)) continue;
                 done.add(nbor);
                 if (nbor.getY() < minHeight) continue;
-                if (Exploits.isPlayerPlaced(nbor)) continue;
+                if (PlayerPlacedBlocks.isPlayerPlaced(nbor)) continue;
                 if (Tag.LOGS.isTagged(nbor.getType())) {
                     if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, nbor)) {
                         continue;
@@ -134,7 +134,7 @@ public final class TreeChop {
                 if (nbor.getY() < minHeight) continue;
                 // Do your voodoo to figure out if the leaf block is
                 // too far way.
-                if (Exploits.isPlayerPlaced(nbor)) continue;
+                if (PlayerPlacedBlocks.isPlayerPlaced(nbor)) continue;
                 if (Tag.LEAVES.isTagged(nbor.getType())) {
                     if (nbor.getBlockData() instanceof Leaves leaves && leaves.isPersistent()) continue;
                     boolean isConnected = false;
