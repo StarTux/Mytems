@@ -45,6 +45,7 @@ import com.cavetale.mytems.item.santa.SantaJacket;
 import com.cavetale.mytems.item.santa.SantaPants;
 import com.cavetale.mytems.item.scarlet.ScarletItem;
 import com.cavetale.mytems.item.swampy.SwampyItem;
+import com.cavetale.mytems.item.treechopper.TreeChopper;
 import com.cavetale.mytems.item.vote.VoteCandy;
 import com.cavetale.mytems.item.vote.VoteFirework;
 import com.cavetale.mytems.util.Items;
@@ -141,6 +142,7 @@ public enum Mytems {
     MAGIC_MAP(MagicMap::new, Material.FILLED_MAP, 7413005, '\uE21D', Category.UTILITY),
     SNOW_SHOVEL(SnowShovel::new, Material.IRON_SHOVEL, 220, (char) 220, Category.UTILITY),
     HASTY_PICKAXE(DummyMytem::new, Material.GOLDEN_PICKAXE, 223, (char) 223, Category.UTILITY),
+    TREE_CHOPPER(TreeChopper::new, Material.GOLDEN_AXE, 242, (char) 242, Category.UTILITY),
     ARMOR_STAND_EDITOR(ArmorStandEditor::new, Material.FLINT, 241, (char) 241, Category.UTILITY),
     // Wardrobe
     WHITE_BUNNY_EARS(WardrobeItem::new, Material.IRON_BOOTS, 3919001, (char) 0, Category.WARDROBE_HAT), // EPIC
@@ -487,7 +489,7 @@ public enum Mytems {
     SOOTY_STOVE_PIPE(ArmorPart::new, Material.BARREL, 206, (char) 206, Category.ARMOR_PART),
     FLOTSAM_CAN(ArmorPart::new, Material.FLOWER_POT, 208, (char) 208, Category.ARMOR_PART),
     BENT_PITCHFORK(ArmorPart::new, Material.LIGHTNING_ROD, 209, (char) 209, Category.ARMOR_PART);
-    // Next CustomModelData: 242
+    // Next CustomModelData: 243
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();

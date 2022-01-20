@@ -17,6 +17,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.BlockState;
@@ -279,5 +280,9 @@ public final class MytemsPlugin extends JavaPlugin {
             }
         }
         customMytemSlots.removeIf(slot -> plugin.equals(slot.plugin));
+    }
+
+    public static NamespacedKey namespacedKey(String value) {
+        return new NamespacedKey(instance, value);
     }
 }

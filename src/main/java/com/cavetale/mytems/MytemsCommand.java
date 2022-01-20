@@ -25,6 +25,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.format.NamedTextColor;
@@ -39,6 +40,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
+    @Getter protected CommandNode itemNode;
+
     protected MytemsCommand(final MytemsPlugin plugin) {
         super(plugin, "mytems");
     }
@@ -91,6 +94,8 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
             .completers(CommandArgCompleter.enumLowerList(Mytems.class))
             .description("Serialize item to Java")
             .senderCaller(this::serializeJava);
+        itemNode = rootNode.addChild("item")
+            .description("Item specific commands");
     }
 
     protected boolean list(CommandSender sender, String[] args) {
@@ -376,5 +381,9 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
                              Stream.of(MytemsTag.values()).map(t -> "#" + t.name().toLowerCase()))
             .filter(s -> s.contains(arg))
             .collect(Collectors.toList());
+    }
+
+    public CommandNode registerItemCommand(Mytems key) {
+        return itemNode.addChild(key.id);
     }
 }

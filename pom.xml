@@ -71,6 +71,7 @@
       <groupId>com.google.code.findbugs</groupId>
       <artifactId>jsr305</artifactId>
       <version>3.0.2</version>
+      <scope>provided</scope>
     </dependency>
 
     <!-- WorldMarker -->
@@ -86,7 +87,15 @@
       <groupId>com.cavetale.core</groupId>
       <artifactId>core</artifactId>
       <version>0.1-SNAPSHOT</version>
-      <scope>compile</scope>
+      <scope>provided</scope>
+    </dependency>
+
+    <!-- Exploits -->
+    <dependency>
+      <groupId>com.winthier.exploits</groupId>
+      <artifactId>exploits</artifactId>
+      <version>0.1-SNAPSHOT</version>
+      <scope>provided</scope>
     </dependency>
 
     <!-- JUnit Testing -->
