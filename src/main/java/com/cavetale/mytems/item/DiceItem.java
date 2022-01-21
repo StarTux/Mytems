@@ -125,7 +125,7 @@ public final class DiceItem implements Mytem {
         final String numberString = numberString(roll);
         item.editMeta(meta -> meta.displayName(join(noSeparators(),
                                                     displayName,
-                                                    text(" " + numberString, WHITE))
+                                                    text(" [" + numberString + "]", WHITE))
                                                .decoration(ITALIC, false)));
         for (Player nearby : player.getLocation().getNearbyEntitiesByType(Player.class, 32.0, 32.0, 32.0)) {
             Component message = join(noSeparators(),
@@ -149,7 +149,7 @@ public final class DiceItem implements Mytem {
         final String numberString = numberString(roll);
         item.editMeta(meta -> meta.displayName(join(noSeparators(),
                                                     displayName,
-                                                    text(" " + numberString, WHITE))
+                                                    text(" [" + numberString + "]", WHITE))
                                                .decoration(ITALIC, false)));
         player.sendActionBar(join(noSeparators(),
                                   text("Your dice rolls ", AQUA),
