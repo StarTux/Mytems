@@ -27,6 +27,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static net.kyori.adventure.text.Component.join;
@@ -145,6 +146,7 @@ public final class TreeChopper implements Mytem {
 
     @Override
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack itemStack) {
+        if (event.getHand() != EquipmentSlot.HAND) return;
         event.setUseInteractedBlock(Event.Result.DENY);
         TreeChopperTag tag = serializeTag(itemStack);
         int xp = tag.getStat(TreeChopperStat.XP);
