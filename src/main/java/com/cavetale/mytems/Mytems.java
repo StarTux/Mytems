@@ -344,7 +344,13 @@ public enum Mytems {
     ON(DummyMytem::new, Material.ENDER_EYE, 210, (char) 210, Category.UI),
     OFF(DummyMytem::new, Material.ENDER_PEARL, 211, (char) 211, Category.UI),
     REDO(DummyMytem::new, Material.EGG, 212, (char) 212, Category.UI),
-    DICE(DiceItem::new, Material.PLAYER_HEAD, 213, (char) 213, Category.UTILITY),
+    DICE(DiceItem::new, Material.PLAYER_HEAD, 213, (char) 213, Category.DICE),
+    DICE4(DiceItem::new, Material.PRISMARINE_SHARD, 243, (char) 243, Category.DICE),
+    DICE8(DiceItem::new, Material.PRISMARINE_SHARD, 244, (char) 244, Category.DICE),
+    DICE10(DiceItem::new, Material.PRISMARINE_SHARD, 245, (char) 245, Category.DICE),
+    DICE12(DiceItem::new, Material.PRISMARINE_SHARD, 246, (char) 246, Category.DICE),
+    DICE20(DiceItem::new, Material.PRISMARINE_SHARD, 247, (char) 247, Category.DICE),
+    DICE100(DiceItem::new, Material.PRISMARINE_SHARD, 248, (char) 248, Category.DICE),
     HEART(DummyMytem::new, Material.HEART_OF_THE_SEA, 9, '\uE241', Category.UI),
     HALF_HEART(DummyMytem::new, Material.NAUTILUS_SHELL, 10, '\uE242', Category.UI),
     EMPTY_HEART(DummyMytem::new, Material.NAUTILUS_SHELL, 13, '\uE246', Category.UI),
@@ -489,7 +495,7 @@ public enum Mytems {
     SOOTY_STOVE_PIPE(ArmorPart::new, Material.BARREL, 206, (char) 206, Category.ARMOR_PART),
     FLOTSAM_CAN(ArmorPart::new, Material.FLOWER_POT, 208, (char) 208, Category.ARMOR_PART),
     BENT_PITCHFORK(ArmorPart::new, Material.LIGHTNING_ROD, 209, (char) 209, Category.ARMOR_PART);
-    // Next CustomModelData: 243
+    // Next CustomModelData: 249
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
@@ -509,6 +515,7 @@ public enum Mytems {
         CLOUD_CITY,
         COIN,
         CURRENCY,
+        DICE,
         DUNE,
         DWARVEN,
         EASTER,

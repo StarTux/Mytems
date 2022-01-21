@@ -12,6 +12,7 @@ public enum MytemsTag {
     CLOUD_CITY,
     COIN,
     CURRENCY,
+    DICE,
     DUNE,
     DWARVEN,
     EASTER,
