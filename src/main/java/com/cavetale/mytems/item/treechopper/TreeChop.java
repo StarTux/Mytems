@@ -254,7 +254,7 @@ public final class TreeChop {
                         new PlayerChangeBlockEvent(player, saplingBlock, saplingType.createBlockData()).callEvent();
                         saplingBlock.setType(saplingType);
                         saplingBlocksPlaced += 1;
-                        if (saplingBlocksPlaced >= leafBlocks.size()) continue;
+                        if (saplingBlocksPlaced >= leafBlocks.size()) break;
                     }
                 }
                 cancel();
