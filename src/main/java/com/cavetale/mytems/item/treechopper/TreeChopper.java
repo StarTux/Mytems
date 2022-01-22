@@ -83,6 +83,11 @@ public final class TreeChopper implements Mytem {
             player.sendActionBar(text("You're low on food!", GRAY));
             return;
         }
+        TreeChopperSession session = MytemsPlugin.getInstance().getSessions().of(player)
+            .getFavorites().getOrSet(TreeChopperSession.class, TreeChopperSession::new);
+        if (session.x == block.getX() && session.y == block.getY() && session.z == block.getZ()) {
+            return;
+        }
         TreeChopperTag tag = serializeTag(itemStack);
         TreeChop chop = new TreeChop(tag);
         TreeChopStatus status = chop.fill(player, block);
@@ -108,6 +113,9 @@ public final class TreeChopper implements Mytem {
         if (chop.saplingBlocks.isEmpty()) return;
         event.setCancelled(true);
         chop.chop(player);
+        session.x = block.getX();
+        session.y = block.getY();
+        session.z = block.getZ();
         if (!tag.upgradeIsPossible()) return;
         int xp = tag.getStat(TreeChopperStat.XP);
         int upgradeCost = tag.getUpgradeCost();
