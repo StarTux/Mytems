@@ -23,6 +23,7 @@ import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
@@ -67,6 +68,9 @@ public final class TreeChopper implements Mytem {
                 .completers(CommandArgCompleter.integer(i -> true))
                 .playerCaller((player, args) -> statCommand(stat, player, args));
         }
+        commandNode.addChild("debug").denyTabCompletion()
+            .description("Dump debug information")
+            .senderCaller(this::debug);
     }
 
     @Override
@@ -391,6 +395,20 @@ public final class TreeChopper implements Mytem {
         player.playSound(player.getLocation(),
                          Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER,
                          0.5f, 1.0f);
+        return true;
+    }
+
+    protected boolean debug(CommandSender sender, String[] args) {
+        if (args.length != 0) return false;
+        sender.sendMessage("Chopping " + TreeChop.CHOPPING.size() + " blocks:");
+        int i = 0;
+        for (Block block : TreeChop.CHOPPING) {
+            if (i++ >= 9) break;
+            sender.sendMessage("- " + block.getWorld().getName()
+                               + " " + block.getX()
+                               + " " + block.getY()
+                               + " " + block.getZ());
+        }
         return true;
     }
 }

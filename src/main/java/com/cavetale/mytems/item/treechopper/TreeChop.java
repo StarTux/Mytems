@@ -45,6 +45,7 @@ public final class TreeChop {
                 Material.GRAVEL,
                 Material.SAND,
             }));
+    protected static final Set<Block> CHOPPING = new HashSet<>();
     private static final List<Face> FACES = Face.all();
     protected final TreeChopperTag tag;
     protected final List<Block> logBlocks = new ArrayList<>();
@@ -95,6 +96,7 @@ public final class TreeChop {
                 Block nbor = logBlock.getRelative(face.x, face.y, face.z);
                 if (done.contains(nbor)) continue;
                 done.add(nbor);
+                if (CHOPPING.contains(nbor)) continue;
                 if (nbor.getY() < minHeight) continue;
                 if (PlayerPlacedBlocks.isPlayerPlaced(nbor)) continue;
                 if (Tag.LOGS.isTagged(nbor.getType())) {
@@ -131,6 +133,7 @@ public final class TreeChop {
                 Block nbor = leafBlock.getRelative(face.x, face.y, face.z);
                 if (done.contains(nbor)) continue;
                 done.add(nbor);
+                if (CHOPPING.contains(nbor)) continue;
                 if (nbor.getY() < minHeight) continue;
                 // Do your voodoo to figure out if the leaf block is
                 // too far way.
@@ -184,6 +187,8 @@ public final class TreeChop {
             }
         }
         final int speed = tag.getStat(TreeChopperStat.SPEED);
+        CHOPPING.addAll(logBlocks);
+        CHOPPING.addAll(leafBlocks);
         new BukkitRunnable() {
             protected int logBlockIndex;
             protected int leafBlockIndex;
@@ -191,10 +196,6 @@ public final class TreeChop {
 
             @Override
             public void run() {
-                if (!player.isOnline()) {
-                    cancel();
-                    return;
-                }
                 if (doVines) {
                     ItemStack shears = new ItemStack(Material.SHEARS);
                     for (Block vineBlock : leafBlocks) {
@@ -213,15 +214,17 @@ public final class TreeChop {
                         PlayerBreakBlockEvent.call(player, logBlock);
                         logBlock.breakNaturally(axeItem, true);
                         brokenBlocks += 1;
-                        if (player.getSaturation() >= 0.01f) {
-                            // Buff saturation over food level
-                            player.setSaturation(Math.max(0.0f, player.getSaturation() - 0.025f));
-                        }
-                        if (ThreadLocalRandom.current().nextInt(20) == 0) {
-                            player.setFoodLevel(Math.max(0, player.getFoodLevel() - 1));
-                        }
-                        if (enchanter > 0 && ThreadLocalRandom.current().nextInt(100) < enchanter) {
-                            player.giveExp(1, true);
+                        if (player.isOnline()) {
+                            if (player.getSaturation() >= 0.01f) {
+                                // Buff saturation over food level
+                                player.setSaturation(Math.max(0.0f, player.getSaturation() - 0.025f));
+                            }
+                            if (ThreadLocalRandom.current().nextInt(20) == 0) {
+                                player.setFoodLevel(Math.max(0, player.getFoodLevel() - 1));
+                            }
+                            if (enchanter > 0 && ThreadLocalRandom.current().nextInt(100) < enchanter) {
+                                player.giveExp(1, true);
+                            }
                         }
                         blocksBrokenNow += 1;
                     }
@@ -235,7 +238,7 @@ public final class TreeChop {
                         PlayerBreakBlockEvent.call(player, leafBlock);
                         leafBlock.breakNaturally(axeItem, true);
                         brokenBlocks += 1;
-                        if (enchanter > 0 && ThreadLocalRandom.current().nextInt(200) < enchanter) {
+                        if (enchanter > 0 && ThreadLocalRandom.current().nextInt(200) < enchanter && player.isOnline()) {
                             player.giveExp(1, true);
                         }
                         blocksBrokenNow += 1;
@@ -258,6 +261,8 @@ public final class TreeChop {
                     }
                 }
                 cancel();
+                CHOPPING.removeAll(logBlocks);
+                CHOPPING.removeAll(leafBlocks);
             }
         }.runTaskTimer(MytemsPlugin.getInstance(), 0L, 3L);
     }
