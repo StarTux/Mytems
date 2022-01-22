@@ -218,8 +218,7 @@ public final class TreeChop {
                             if (player.getSaturation() >= 0.01f) {
                                 // Buff saturation over food level
                                 player.setSaturation(Math.max(0.0f, player.getSaturation() - 0.025f));
-                            }
-                            if (ThreadLocalRandom.current().nextInt(20) == 0) {
+                            } else if (ThreadLocalRandom.current().nextInt(20) == 0) {
                                 player.setFoodLevel(Math.max(0, player.getFoodLevel() - 1));
                             }
                             if (enchanter > 0 && ThreadLocalRandom.current().nextInt(100) < enchanter) {
