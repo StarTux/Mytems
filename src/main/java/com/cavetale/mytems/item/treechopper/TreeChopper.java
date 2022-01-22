@@ -24,8 +24,10 @@ import org.bukkit.SoundCategory;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
@@ -74,10 +76,25 @@ public final class TreeChopper implements Mytem {
 
     @Override
     public void onBlockBreak(BlockBreakEvent event, Player player, ItemStack itemStack) {
+        tryToChop((Cancellable) event, player, itemStack, event.getBlock());
+    }
+
+    @Override
+    public void onBlockDamage(BlockDamageEvent event, Player player, ItemStack itemStack) {
+        tryToChop((Cancellable) event, player, itemStack, event.getBlock());
+    }
+
+    private void tryToChop(Cancellable event, Player player, ItemStack itemStack, Block block) {
         if (event.isCancelled()) return;
-        Block block = event.getBlock();
         if (!Tag.LOGS.isTagged(block.getType())) return;
         if (PlayerPlacedBlocks.isPlayerPlaced(block)) return;
+        TreeChopperTag tag = serializeTag(itemStack);
+        if (event instanceof BlockDamageEvent && tag.getStat(TreeChopperStat.SPEED) == 0) {
+            return;
+        }
+        if (event instanceof BlockBreakEvent && tag.getStat(TreeChopperStat.SPEED) != 0) {
+            return;
+        }
         if (player.getFoodLevel() < 2) {
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_BURP, 0.5f, 0.75f);
             player.sendActionBar(text("You're low on food!", GRAY));
@@ -88,7 +105,6 @@ public final class TreeChopper implements Mytem {
         if (session.x == block.getX() && session.y == block.getY() && session.z == block.getZ()) {
             return;
         }
-        TreeChopperTag tag = serializeTag(itemStack);
         TreeChop chop = new TreeChop(tag);
         TreeChopStatus status = chop.fill(player, block);
         if (false) {
