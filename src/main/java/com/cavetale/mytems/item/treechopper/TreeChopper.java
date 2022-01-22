@@ -266,7 +266,7 @@ public final class TreeChopper implements Mytem {
             return List.of(text("Chopped trees are", DARK_GRAY),
                            text("instantly replanted", DARK_GRAY));
         case SPEED: {
-            int n = value + 1;
+            int n = TreeChopperTag.getChoppingSpeed(value);
             return List.of(text("Chop trees " + n + " times", DARK_GRAY),
                            text("as fast", DARK_GRAY));
         }

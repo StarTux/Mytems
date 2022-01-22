@@ -186,7 +186,7 @@ public final class TreeChop {
                 }
             }
         }
-        final int speed = tag.getStat(TreeChopperStat.SPEED);
+        final int speed = tag.getChoppingSpeed();
         CHOPPING.addAll(logBlocks);
         CHOPPING.addAll(leafBlocks);
         new BukkitRunnable() {

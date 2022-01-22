@@ -46,6 +46,7 @@ public enum TreeChopperStat {
             stat.requirements = new EnumMap<>(TreeChopperStat.class);
         }
         addConflict(SILK, FORTUNE);
+        addConflict(SILK, REPLANT);
         SILK.requirements.put(LEAF, 1);
         FORTUNE.requirements.put(LEAF, 1);
         REPLANT.requirements.put(LEAF, 1);

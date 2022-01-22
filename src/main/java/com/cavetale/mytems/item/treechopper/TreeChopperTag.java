@@ -74,6 +74,16 @@ public final class TreeChopperTag extends MytemTag {
         return getMaxLeafBlocks(getStat(TreeChopperStat.LEAF));
     }
 
+    public static int getChoppingSpeed(int speedLevel) {
+        return speedLevel > 0
+            ? speedLevel * 2
+            : 1;
+    }
+
+    public int getChoppingSpeed() {
+        return getChoppingSpeed(getStat(TreeChopperStat.SPEED));
+    }
+
     public int getLevel() {
         int result = 0;
         for (TreeChopperStat stat : TreeChopperStat.values()) {
