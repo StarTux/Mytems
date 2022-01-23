@@ -104,6 +104,10 @@ public final class TreeChopper implements Mytem {
             player.sendActionBar(text("You're low on food!", GRAY));
             return;
         }
+        if (player.getVehicle() != null || player.isGliding() || player.isFlying() || player.isSwimming()) {
+            player.sendActionBar(text("Cannot chop unless you're on your feet", GRAY));
+            return;
+        }
         TreeChopperSession session = MytemsPlugin.getInstance().getSessions().of(player)
             .getFavorites().getOrSet(TreeChopperSession.class, TreeChopperSession::new);
         if (session.x == block.getX() && session.y == block.getY() && session.z == block.getZ()) {
