@@ -10,7 +10,6 @@ website: https://github.com/StarTux/Mytems
 
 depend: [Core, WorldMarker]
 softdepend: [Exploits]
-softdepend: []
 
 commands:
 
