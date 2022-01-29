@@ -43,6 +43,7 @@ public enum MytemsTag {
     SCARLET,
     SUNGLASSES,
     SWAMPY,
+    TECHNICAL,
     TREASURE,
     UI,
     UTILITY,

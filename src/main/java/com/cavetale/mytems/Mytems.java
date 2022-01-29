@@ -29,6 +29,7 @@ import com.cavetale.mytems.item.dwarven.DwarvenItem;
 import com.cavetale.mytems.item.easter.EasterEgg;
 import com.cavetale.mytems.item.easter.EasterGear;
 import com.cavetale.mytems.item.easter.EasterToken;
+import com.cavetale.mytems.item.farawaymap.FarawayMap;
 import com.cavetale.mytems.item.font.GlyphItem;
 import com.cavetale.mytems.item.halloween.HalloweenCandy;
 import com.cavetale.mytems.item.halloween.HalloweenToken2;
@@ -494,8 +495,10 @@ public enum Mytems {
     OLD_OVEN_LID(ArmorPart::new, Material.NETHERITE_SCRAP, 207, (char) 207, Category.ARMOR_PART),
     SOOTY_STOVE_PIPE(ArmorPart::new, Material.BARREL, 206, (char) 206, Category.ARMOR_PART),
     FLOTSAM_CAN(ArmorPart::new, Material.FLOWER_POT, 208, (char) 208, Category.ARMOR_PART),
-    BENT_PITCHFORK(ArmorPart::new, Material.LIGHTNING_ROD, 209, (char) 209, Category.ARMOR_PART);
-    // Next CustomModelData: 249
+    BENT_PITCHFORK(ArmorPart::new, Material.LIGHTNING_ROD, 209, (char) 209, Category.ARMOR_PART),
+    // Technical
+    FARAWAY_MAP(FarawayMap::new, Material.PAPER, 249, (char) 249, Category.TECHNICAL);
+    // Next CustomModelData: 250
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
@@ -544,6 +547,7 @@ public enum Mytems {
         SCARLET,
         SUNGLASSES,
         SWAMPY,
+        TECHNICAL,
         TREASURE,
         UI,
         UTILITY,
@@ -622,10 +626,7 @@ public enum Mytems {
      * exists.
      */
     public String serializeItem(ItemStack itemStack) {
-        MytemTag tag = getMytem().serializeTag(itemStack);
-        return tag != null && !tag.isEmpty()
-            ? id + Json.serialize(tag)
-            : id;
+        return serializeWithTag(getMytem().serializeTag(itemStack));
     }
 
     public static String serializeMytem(ItemStack item) {
@@ -633,6 +634,25 @@ public enum Mytems {
         return mytems != null
             ? mytems.serializeItem(item)
             : null;
+    }
+
+    public String serializeSingleItem(ItemStack itemStack) {
+        MytemTag tag = getMytem().serializeTag(itemStack);
+        if (tag != null) tag.setAmount(null);
+        return serializeWithTag(tag);
+    }
+
+    public static String serializeSingleMytem(ItemStack item) {
+        Mytems mytems = Mytems.forItem(item);
+        return mytems != null
+            ? mytems.serializeSingleItem(item)
+            : null;
+    }
+
+    public String serializeWithTag(MytemTag tag) {
+        return tag != null && !tag.isDismissable()
+            ? id + Json.serialize(tag)
+            : id;
     }
 
     public static ItemStack deserializeItem(String serialized) {
