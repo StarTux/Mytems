@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.util.Vector;
 
 @Getter
@@ -29,15 +28,8 @@ public final class Stompers extends AculaItem {
     private final String description = "\n\n"
         + ChatColor.RED + "When first discovered, my clumsy assistant managed to drop these shoes to the ground."
         + "\n\n"
-        + ChatColor.RED + "The resulting damage sustained by my prizeless collection of glassware has yet to be evaluated."
-        + " May their new owner have more luck."
-        + " " + ChatColor.DARK_GRAY + ChatColor.UNDERLINE + "Unknown"
-        + "\n\n"
-        + ChatColor.RED + "USE " + ChatColor.GRAY + "Taking fall damage"
-        + "\n"
-        + ChatColor.GRAY + "deals " + damageFactorStr + "x base damage"
-        + "\n"
-        + ChatColor.GRAY + "to enemies within " + radiusStr + " blocks.";
+        + ChatColor.RED + "fall damage " + ChatColor.GRAY
+        + ChatColor.GRAY + "Deal " + damageFactorStr + "x base damage to enemies within " + radiusStr + " blocks";
 
     public Stompers(final Mytems key) {
         super(key);
@@ -47,10 +39,8 @@ public final class Stompers extends AculaItem {
     protected ItemStack getRawItemStack() {
         ItemStack item = new ItemStack(Material.NETHERITE_BOOTS);
         item.editMeta(meta -> {
-                meta.setUnbreakable(true);
                 meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
                 meta.addEnchant(Enchantment.PROTECTION_FALL, 4, true);
-                ((Repairable) meta).setRepairCost(9999);
             });
         return item;
     }

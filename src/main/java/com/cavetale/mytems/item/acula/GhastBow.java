@@ -7,7 +7,6 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LargeFireball;
 import org.bukkit.entity.Player;
@@ -15,18 +14,16 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.SmallFireball;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Repairable;
+import org.bukkit.potion.PotionType;
 
 @Getter
 public final class GhastBow extends AculaItem {
     private final String rawDisplayName = "Ghast Bow";
-    private final String description = "\n\n"
+    private final String description = ""
         + ChatColor.RED + "Legend has it the bowstring of this unique item was soaked in ghast tears."
         + " They say it's the only weapon which may lower a vampire's guard..."
         + "\n\n"
-        + ChatColor.RED + "USE " + ChatColor.GRAY + "Shooting a regular arrow will launch a fireball instead"
-        + "\n"
-        + ChatColor.RED + "Cost " + ChatColor.GRAY + "1 XP Level";
+        + ChatColor.RED + "shoot " + ChatColor.GRAY + "Launch fireball for 1 exp level";
 
     public GhastBow(final Mytems key) {
         super(key);
@@ -34,19 +31,19 @@ public final class GhastBow extends AculaItem {
 
     @Override
     protected ItemStack getRawItemStack() {
-        ItemStack item = new ItemStack(Material.BOW);
-        item.editMeta(meta -> {
-                meta.setUnbreakable(true);
-                meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
-                meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
-                ((Repairable) meta).setRepairCost(9999);
-            });
-        return item;
+        return new ItemStack(Material.BOW);
     }
 
     @Override
     public void onPlayerShootBow(EntityShootBowEvent event, Player player, ItemStack item) {
-        if (!(event.getProjectile() instanceof Arrow)) return;
+        if (event.getConsumable() != null && event.getConsumable().getType() == Material.ARROW) {
+            event.setConsumeItem(false);
+        }
+        if (!(event.getProjectile() instanceof Arrow arrow)) return;
+        if (!arrow.hasCustomEffects() && arrow.getBasePotionData().getType() == PotionType.UNCRAFTABLE) {
+            // Normal arrow, not tipped. The interface TippedArrow is deprecated.
+            arrow.setFireTicks(200);
+        }
         if (player.getLevel() < 1) return;
         Projectile projectile;
         float force = event.getForce();

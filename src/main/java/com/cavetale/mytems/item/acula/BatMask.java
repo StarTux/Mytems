@@ -28,7 +28,6 @@ public final class BatMask extends AculaItem {
                                       "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjc2NjE5NjUyZmFmZWM5MGNlOThkZjUwMTNjNjNkYzZhNzc3NzZhYjI3ODczYjczZGFmYjJiNmJkZWIxODUifX19",
                                       null);
         item.editMeta(meta -> {
-                meta.setUnbreakable(true);
                 AttributeModifier attr;
                 attr = new AttributeModifier(UUID.randomUUID(), key.id, 10.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD);
                 meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, attr);

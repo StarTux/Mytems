@@ -9,8 +9,9 @@ import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Repairable;
 
@@ -28,11 +29,12 @@ abstract class AculaItem implements GearItem {
 
     @Override
     public final void enable() {
-        displayName = creepify(getRawDisplayName(), false);
+        displayName = creepify(getRawDisplayName());
         prototype = getRawItemStack();
-        baseLore = Text.wrapLore("\n\n" + getDescription());
+        baseLore = Text.wrapLore(getDescription());
         prototype.editMeta(meta -> {
                 Items.text(meta, createTooltip());
+                meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
                 if (meta instanceof Repairable repairable) {
                     repairable.setRepairCost(9999);
                     meta.setUnbreakable(true);
@@ -52,14 +54,14 @@ abstract class AculaItem implements GearItem {
         return AculaItemSet.getInstance();
     }
 
-    protected Component creepify(String in, boolean bold) {
+    protected Component creepify(String in) {
         int len = in.length();
         int iter = 255 / len * 3 / 4;
-        Component component = bold ? Component.empty().decorate(TextDecoration.BOLD) : Component.empty();
+        TextComponent.Builder cb = Component.text();
         for (int i = 0; i < len; i += 1) {
-            component = component.append(Component.text(in.substring(i, i + 1)).color(TextColor.color(255 - iter * i, 0, 0)));
+            cb.append(Component.text(in.substring(i, i + 1), TextColor.color(255 - iter * i, 0, 0)));
         }
-        return component;
+        return cb.build();
     }
 
     @Override

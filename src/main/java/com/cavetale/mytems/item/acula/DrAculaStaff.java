@@ -22,7 +22,6 @@ import org.bukkit.entity.Bat;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import static org.bukkit.attribute.AttributeModifier.Operation.*;
@@ -36,13 +35,8 @@ public final class DrAculaStaff extends AculaItem {
     private final String description = ""
         + ChatColor.RED + "This staff was found among the mysterious doctor's belongings in the inn he stayed at, long after he had fled town."
         + "\n\n"
-        + ChatColor.RED + "He was never seen again, but his legend never ceased."
-        + "\n\n"
-        + ChatColor.RED + "USE " + ChatColor.GRAY + "Right click to disappear"
-        + "\n"
-        + ChatColor.RED + "Duration " + ChatColor.GRAY + durationSeconds + "s"
-        + "\n"
-        + ChatColor.RED + "Cooldown " + ChatColor.GRAY + cooldownSeconds + "s";
+        + ChatColor.RED + "right-click "
+        + ChatColor.GRAY + "Disappear for " + durationSeconds + "s";
 
     public DrAculaStaff(final Mytems key) {
         super(key);
@@ -52,10 +46,6 @@ public final class DrAculaStaff extends AculaItem {
     protected ItemStack getRawItemStack() {
         ItemStack item = new ItemStack(Material.NETHERITE_SWORD);
         item.editMeta(meta -> {
-                meta.setUnbreakable(true);
-                meta.displayName(displayName);
-                Repairable repairable = (Repairable) meta;
-                repairable.setRepairCost(9999);
                 AttributeModifier attr;
                 attr = new AttributeModifier(UUID.randomUUID(), key.id, 12.0, ADD_NUMBER, HAND);
                 meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, attr);

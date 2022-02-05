@@ -8,7 +8,7 @@ import lombok.Getter;
 
 @Getter
 public final class AculaItemSet implements ItemSet {
-    private final String name = "Acula";
+    private final String name = "Acula Set";
     private static AculaItemSet instance = null;
     private final List<SetBonus> setBonuses;
 
