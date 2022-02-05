@@ -1,14 +1,11 @@
 package com.cavetale.mytems.item.scarlet;
 
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
-import com.cavetale.mytems.gear.Slot;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Skull;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
@@ -25,12 +22,10 @@ import org.bukkit.block.Banner;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -40,39 +35,21 @@ public abstract class ScarletItem implements GearItem {
     protected static final TextColor TEXT_COLOR = TextColor.color(0xFF2400);
     protected static final Color LEATHER_COLOR = Color.fromRGB(0x8c2924);
     protected final Mytems key;
-    // Set by ctor:
+    // Set by ctor of subclasses:
     protected Component displayName;
-    protected List<Component> baseText;
+    protected List<Component> baseLore;
     protected ItemStack prototype;
 
     @Override
     public final void enable() {
         prototype.editMeta(meta -> {
+                Items.text(meta, createTooltip());
                 if (meta instanceof Repairable) {
                     ((Repairable) meta).setRepairCost(9999);
                     meta.setUnbreakable(true);
                 }
-                updateItemLore(meta);
                 key.markItemMeta(meta);
             });
-    }
-
-    @Override
-    public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Slot slot) {
-        List<Component> text = new ArrayList<>(baseText);
-        List<SetBonus> setBonuses = ScarletItemSet.getInstance().getSetBonuses();
-        if (!setBonuses.isEmpty()) {
-            int count = equipment == null ? 0 : equipment.countSetItems(ScarletItemSet.instance);
-            text.add(Component.empty());
-            text.add(Component.text("Set Bonus [" + count + "]", slot != null ? TEXT_COLOR : NamedTextColor.DARK_GRAY));
-            for (SetBonus setBonus : ScarletItemSet.instance.getSetBonuses()) {
-                final int need = setBonus.getRequiredItemCount();
-                final boolean has = count >= need;
-                text.add(Component.text("(" + need + ") " + setBonus.getDescription(),
-                                        has ? TEXT_COLOR : NamedTextColor.DARK_GRAY));
-            }
-        }
-        Items.text(meta, text);
     }
 
     @Override
@@ -90,7 +67,7 @@ public abstract class ScarletItem implements GearItem {
         public Helmet(final Mytems key) {
             super(key);
             displayName = Component.text("Scarlet Helmet", TEXT_COLOR);
-            baseText = List.of(new Component[] {
+            baseLore = List.of(new Component[] {
                     displayName,
                     Component.empty(),
                     Component.text("A sturdy helmet that", NamedTextColor.GRAY),
@@ -130,7 +107,7 @@ public abstract class ScarletItem implements GearItem {
         public Chestplate(final Mytems key) {
             super(key);
             displayName = Component.text("Scarlet Chestplate", TEXT_COLOR);
-            baseText = List.of(new Component[] {
+            baseLore = List.of(new Component[] {
                     displayName,
                     Component.empty(),
                     Component.text("Clad with the color", NamedTextColor.GRAY),
@@ -172,7 +149,7 @@ public abstract class ScarletItem implements GearItem {
         public Leggings(final Mytems key) {
             super(key);
             displayName = Component.text("Scarlet Leggings", TEXT_COLOR);
-            baseText = List.of(new Component[] {
+            baseLore = List.of(new Component[] {
                     displayName,
                     Component.empty(),
                     Component.text("Overlapping metal plates", NamedTextColor.GRAY),
@@ -213,7 +190,7 @@ public abstract class ScarletItem implements GearItem {
         public Boots(final Mytems key) {
             super(key);
             displayName = Component.text("Scarlet Boots", TEXT_COLOR);
-            baseText = List.of(new Component[] {
+            baseLore = List.of(new Component[] {
                     displayName,
                     Component.empty(),
                     Component.text("A pair of armored boots", NamedTextColor.GRAY),
@@ -254,7 +231,7 @@ public abstract class ScarletItem implements GearItem {
         public Sword(final Mytems key) {
             super(key);
             displayName = Component.text("Scarlet Broadsword", TEXT_COLOR);
-            baseText = List.of(new Component[] {
+            baseLore = List.of(new Component[] {
                     displayName,
                     Component.empty(),
                     Component.text("A heavy and unwieldy", NamedTextColor.GRAY),
@@ -293,7 +270,7 @@ public abstract class ScarletItem implements GearItem {
         public Shield(final Mytems key) {
             super(key);
             displayName = Component.text("Scarlet Shield", TEXT_COLOR);
-            baseText = List.of(new Component[] {
+            baseLore = List.of(new Component[] {
                     displayName,
                     Component.empty(),
                     Component.text("An ornate shield", NamedTextColor.GRAY),

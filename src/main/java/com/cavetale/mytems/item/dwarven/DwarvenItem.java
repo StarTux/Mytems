@@ -1,26 +1,21 @@
 package com.cavetale.mytems.item.dwarven;
 
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
-import com.cavetale.mytems.gear.Slot;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -35,28 +30,27 @@ public abstract class DwarvenItem implements GearItem {
 
     @Override
     public final void enable() {
-        displayName = fancify(getRawDisplayName(), false);
+        displayName = fancify(getRawDisplayName());
         prototype = Items.deserialize(getSerialized());
-        ItemMeta meta = prototype.getItemMeta();
         baseLore = Text.wrapLore(Text.colorize("\n\n" + getDescription()));
-        updateItemLore(meta);
-        if (meta instanceof Repairable) {
-            ((Repairable) meta).setRepairCost(9999);
-            meta.setUnbreakable(true);
-        }
-        key.markItemMeta(meta);
-        prototype.setItemMeta(meta);
+        prototype.editMeta(meta -> {
+                Items.text(meta, createTooltip());
+                if (meta instanceof Repairable) {
+                    ((Repairable) meta).setRepairCost(9999);
+                    meta.setUnbreakable(true);
+                }
+                key.markItemMeta(meta);
+            });
     }
 
-    protected final Component fancify(String in, boolean bold) {
+    protected final Component fancify(String in) {
         int len = in.length();
-        Component component = Component.empty().decoration(TextDecoration.ITALIC, false);
-        if (bold) component = component.decorate(TextDecoration.BOLD);
+        TextComponent.Builder cb = Component.text();
         for (int i = 0; i < len; i += 1) {
             int red = 64 + (i * 191) / len;
-            component = component.append(Component.text(in.substring(i, i + 1)).color(TextColor.color(red, red / 2, 0)));
+            cb.append(Component.text(in.substring(i, i + 1), TextColor.color(red, red / 2, 0)));
         }
-        return component;
+        return cb.build();
     }
 
     abstract String getSerialized();
@@ -69,26 +63,6 @@ public abstract class DwarvenItem implements GearItem {
     public final ItemSet getItemSet() {
         if (dwarvenItemSet == null) dwarvenItemSet = new DwarvenItemSet();
         return dwarvenItemSet;
-    }
-
-    @Override
-    public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Slot slot) {
-        meta.displayName(displayName);
-        List<Component> lore = new ArrayList<>(baseLore);
-        ItemSet itemSet = getItemSet();
-        List<SetBonus> setBonuses = itemSet.getSetBonuses();
-        if (!setBonuses.isEmpty()) {
-            int count = equipment == null ? 0 : equipment.countSetItems(itemSet);
-            lore.add(Component.empty());
-            lore.add(fancify("Set Bonus [" + count + "]", slot != null));
-            for (SetBonus setBonus : itemSet.getSetBonuses()) {
-                int need = setBonus.getRequiredItemCount();
-                String description = "(" + need + ") " + setBonus.getDescription();
-                TextColor color = count >= need ? NamedTextColor.GOLD : NamedTextColor.DARK_GRAY;
-                lore.addAll(Text.wrapLore(description, c -> c.color(color)));
-            }
-        }
-        meta.lore(lore);
     }
 
     @Override

@@ -3,9 +3,9 @@ package com.cavetale.mytems.item.acula;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.session.Session;
-import com.cavetale.mytems.util.Text;
 import com.cavetale.worldmarker.entity.EntityMarker;
 import java.util.UUID;
+import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
@@ -21,17 +21,19 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import static org.bukkit.attribute.AttributeModifier.Operation.*;
+import static org.bukkit.inventory.EquipmentSlot.*;
 
+@Getter
 public final class DrAculaStaff extends AculaItem {
-    final int durationSeconds = 30;
-    final int cooldownSeconds = 60;
-    private String description = ""
+    private final int durationSeconds = 30;
+    private final int cooldownSeconds = 60;
+    private final String rawDisplayName = "Dr. Acula's Staff";
+    private final String description = ""
         + ChatColor.RED + "This staff was found among the mysterious doctor's belongings in the inn he stayed at, long after he had fled town."
         + "\n\n"
         + ChatColor.RED + "He was never seen again, but his legend never ceased."
@@ -47,10 +49,20 @@ public final class DrAculaStaff extends AculaItem {
     }
 
     @Override
-    public void enable() {
-        displayName = creepify("Dr. Acula's Staff", false);
-        baseLore = Text.wrapLore(description);
-        prototype = create();
+    protected ItemStack getRawItemStack() {
+        ItemStack item = new ItemStack(Material.NETHERITE_SWORD);
+        item.editMeta(meta -> {
+                meta.setUnbreakable(true);
+                meta.displayName(displayName);
+                Repairable repairable = (Repairable) meta;
+                repairable.setRepairCost(9999);
+                AttributeModifier attr;
+                attr = new AttributeModifier(UUID.randomUUID(), key.id, 12.0, ADD_NUMBER, HAND);
+                meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, attr);
+                attr = new AttributeModifier(UUID.randomUUID(), key.id, 1.6, ADD_NUMBER, HAND);
+                meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, attr);
+            });
+        return item;
     }
 
     @Override
@@ -63,7 +75,7 @@ public final class DrAculaStaff extends AculaItem {
         use(player, item);
     }
 
-    public void use(Player player, ItemStack item) {
+    protected void use(Player player, ItemStack item) {
         Session session = MytemsPlugin.getInstance().getSessions().of(player);
         long cooldown = session.getCooldownInTicks(key.id);
         if (cooldown > 0) {
@@ -99,22 +111,5 @@ public final class DrAculaStaff extends AculaItem {
         }
         base.getWorld().playSound(base, Sound.ENTITY_BAT_LOOP, SoundCategory.MASTER, 0.5f, 2.0f);
         base.getWorld().spawnParticle(Particle.SMOKE_LARGE, base, 16, 0.5, 0.7, 0.5, 0.05);
-    }
-
-    public ItemStack create() {
-        ItemStack item = new ItemStack(Material.NETHERITE_SWORD);
-        ItemMeta meta = item.getItemMeta();
-        meta.setUnbreakable(true);
-        meta.displayName(displayName);
-        Repairable repairable = (Repairable) meta;
-        repairable.setRepairCost(9999);
-        AttributeModifier attr;
-        attr = new AttributeModifier(UUID.randomUUID(), key.id, 12.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, attr);
-        attr = new AttributeModifier(UUID.randomUUID(), key.id, 1.6, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HAND);
-        meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, attr);
-        key.markItemMeta(meta);
-        item.setItemMeta(meta);
-        return item;
     }
 }

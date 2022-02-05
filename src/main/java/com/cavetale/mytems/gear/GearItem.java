@@ -1,11 +1,13 @@
 package com.cavetale.mytems.gear;
 
 import com.cavetale.mytems.Mytem;
+import java.util.ArrayList;
+import java.util.List;
 import javax.annotation.Nullable;
+import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * A special category of mytems which provide buffs and set bonuses and
@@ -16,17 +18,28 @@ public interface GearItem extends Mytem {
        return null;
     }
 
-    /**
-     * Update an item in an inventory.
-     * @param meta the item meta
-     * @param the player owning the item or null
-     * @param the player equipment holding the item or null
-     * @param the valid slot the item is in, or null
-     */
-    void updateItemLore(ItemMeta meta, @Nullable Player player, @Nullable Equipment equipment, @Nullable Slot slot);
+    default List<Component> getBaseLore() {
+        return List.of();
+    }
 
-    default void updateItemLore(ItemMeta meta) {
-        updateItemLore(meta, null, null, null);
+    /**
+     * Create a tooltip for the item with the given equipment, which
+     * may be null.
+     */
+    default List<Component> createTooltip(@Nullable Equipment equipment, @Nullable Equipped equipped) {
+        List<Component> tooltip = new ArrayList<>();
+        tooltip.add(getDisplayName());
+        tooltip.addAll(getBaseLore());
+        ItemSet itemSet = getItemSet();
+        if (itemSet != null) {
+            tooltip.add(Component.empty());
+            tooltip.addAll(itemSet.createTooltip(equipment));
+        }
+        return tooltip;
+    }
+
+    default List<Component> createTooltip() {
+        return createTooltip(null, null);
     }
 
     /**

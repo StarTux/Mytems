@@ -1,7 +1,8 @@
 package com.cavetale.mytems;
 
 import com.cavetale.core.util.Json;
-import com.cavetale.mytems.item.music.*;
+import com.cavetale.mytems.item.music.Melody;
+import com.cavetale.mytems.item.music.Semitone;
 import java.util.HashSet;
 import java.util.Set;
 import org.bukkit.Instrument;
@@ -18,24 +19,24 @@ public final class MytemsTest {
         final Set<Integer> customModelDataSet = new HashSet<>();
         final Set<Character> characterSet = new HashSet<>();
         for (Mytems mytems : Mytems.values()) {
+            if (mytems.material == null) {
+                throw new IllegalStateException(mytems + ": material is null!");
+            }
             if (mytems.customModelData != null) {
-                if (mytems.material == null) {
-                    throw new IllegalStateException(mytems + ": material is null!");
-                }
                 if (!MytemsTag.POCKET_MOB.isTagged(mytems)) {
                     if (customModelDataSet.contains(mytems.customModelData)) {
                         throw new IllegalStateException(mytems + ": duplicate custom model data: " + mytems.customModelData);
                     }
                     customModelDataSet.add(mytems.customModelData);
                 }
-                if (mytems.character != (char) 0) {
-                    if (characterSet.contains(mytems.character)) {
-                        throw new IllegalStateException(mytems + ": duplicate character: " + Integer.toHexString((int) mytems.character));
-                    }
-                    characterSet.add(mytems.character);
-                }
             } else {
                 System.out.println("No custom model data: " + mytems);
+            }
+            if (mytems.character != (char) 0) {
+                if (characterSet.contains(mytems.character)) {
+                    throw new IllegalStateException(mytems + ": duplicate character: " + Integer.toHexString((int) mytems.character));
+                }
+                characterSet.add(mytems.character);
             }
         }
     }

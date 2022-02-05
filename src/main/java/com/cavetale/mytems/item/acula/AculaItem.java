@@ -1,23 +1,18 @@
 package com.cavetale.mytems.item.acula;
 
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
-import com.cavetale.mytems.gear.SetBonus;
-import com.cavetale.mytems.gear.Slot;
+import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.Repairable;
 
 /**
  * Implementors must set displayName, baseLore, and prototype within
@@ -28,28 +23,29 @@ import org.bukkit.inventory.meta.ItemMeta;
 abstract class AculaItem implements GearItem {
     @Getter protected final Mytems key;
     @Getter protected Component displayName;
-    protected List<Component> baseLore;
+    @Getter protected List<Component> baseLore;
     protected ItemStack prototype;
 
     @Override
-    public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Slot slot) {
-        meta.displayName(displayName);
-        List<Component> lore = new ArrayList<>(baseLore);
-        ItemSet itemSet = getItemSet();
-        List<SetBonus> setBonuses = itemSet.getSetBonuses();
-        if (!setBonuses.isEmpty()) {
-            int count = equipment == null ? 0 : equipment.countSetItems(itemSet);
-            lore.add(Component.empty());
-            lore.add(creepify("Set Bonus [" + count + "]", slot != null));
-            for (SetBonus setBonus : itemSet.getSetBonuses()) {
-                int need = setBonus.getRequiredItemCount();
-                String description = "(" + need + ") " + setBonus.getDescription();
-                TextColor color = count >= need ? NamedTextColor.RED : NamedTextColor.DARK_GRAY;
-                lore.addAll(Text.wrapLore(description, c -> c.color(color)));
-            }
-        }
-        meta.lore(lore);
+    public final void enable() {
+        displayName = creepify(getRawDisplayName(), false);
+        prototype = getRawItemStack();
+        baseLore = Text.wrapLore("\n\n" + getDescription());
+        prototype.editMeta(meta -> {
+                Items.text(meta, createTooltip());
+                if (meta instanceof Repairable repairable) {
+                    repairable.setRepairCost(9999);
+                    meta.setUnbreakable(true);
+                }
+                key.markItemMeta(meta);
+            });
     }
+
+    protected abstract String getDescription();
+
+    protected abstract String getRawDisplayName();
+
+    protected abstract ItemStack getRawItemStack();
 
     @Override
     public ItemSet getItemSet() {
@@ -68,10 +64,6 @@ abstract class AculaItem implements GearItem {
 
     @Override
     public ItemStack createItemStack() {
-        ItemStack itemStack = prototype.clone();
-        ItemMeta meta = itemStack.getItemMeta();
-        updateItemLore(meta);
-        itemStack.setItemMeta(meta);
-        return itemStack;
+        return prototype.clone();
     }
 }

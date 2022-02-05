@@ -1,9 +1,9 @@
 package com.cavetale.mytems.item.acula;
 
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Text;
 import java.util.ArrayList;
 import java.util.List;
+import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -16,16 +16,17 @@ import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.util.Vector;
 
+@Getter
 public final class Stompers extends AculaItem {
-    double damageFactor = 2.0;
-    String damageFactorStr = "2";
-    double radius = 3.0;
-    String radiusStr = "3";
-    String description = "\n\n"
+    private final String rawDisplayName = "Stompers";
+    private final double damageFactor = 2.0;
+    private final String damageFactorStr = "2";
+    private final double radius = 3.0;
+    private final String radiusStr = "3";
+    private final String description = "\n\n"
         + ChatColor.RED + "When first discovered, my clumsy assistant managed to drop these shoes to the ground."
         + "\n\n"
         + ChatColor.RED + "The resulting damage sustained by my prizeless collection of glassware has yet to be evaluated."
@@ -43,22 +44,14 @@ public final class Stompers extends AculaItem {
     }
 
     @Override
-    public void enable() {
-        displayName = creepify("Stompers", false);
-        baseLore = Text.wrapLore(description);
-        prototype = create();
-    }
-
-    public ItemStack create() {
+    protected ItemStack getRawItemStack() {
         ItemStack item = new ItemStack(Material.NETHERITE_BOOTS);
-        ItemMeta meta = item.getItemMeta();
-        meta.setUnbreakable(true);
-        meta.displayName(displayName);
-        meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
-        meta.addEnchant(Enchantment.PROTECTION_FALL, 4, true);
-        ((Repairable) meta).setRepairCost(9999);
-        key.markItemMeta(meta);
-        item.setItemMeta(meta);
+        item.editMeta(meta -> {
+                meta.setUnbreakable(true);
+                meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
+                meta.addEnchant(Enchantment.PROTECTION_FALL, 4, true);
+                ((Repairable) meta).setRepairCost(9999);
+            });
         return item;
     }
 

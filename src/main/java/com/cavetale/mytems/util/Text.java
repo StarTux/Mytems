@@ -8,7 +8,6 @@ import java.util.stream.Stream;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.ChatColor;
 
 /**
@@ -72,7 +71,7 @@ public final class Text {
     public static List<Component> toComponents(List<String> in) {
         List<Component> out = new ArrayList<>(in.size());
         for (String ins : in) {
-            out.add(Component.text(ins).decoration(TextDecoration.ITALIC, false));
+            out.add(Component.text(ins));
         }
         return out;
     }
@@ -80,7 +79,7 @@ public final class Text {
     public static List<Component> toComponents(List<String> in, Function<Component, Component> lineCallback) {
         List<Component> result = new ArrayList<>(in.size());
         for (String line : in) {
-            Component component = Component.text(line).decoration(TextDecoration.ITALIC, false);
+            Component component = Component.text(line);
             component = lineCallback.apply(component);
             result.add(component);
         }

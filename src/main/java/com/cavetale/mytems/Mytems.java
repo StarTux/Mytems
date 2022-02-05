@@ -590,22 +590,6 @@ public enum Mytems {
         this.category = category;
     }
 
-    Mytems(final Function<Mytems, Mytem> ctor, final Material material, final Integer customModelData, final char character) {
-        this(ctor, material, customModelData, character, Category.UNKNOWN);
-    }
-
-    Mytems(final Function<Mytems, Mytem> ctor, final Material material, final Integer customModelData) {
-        this(ctor, material, customModelData, (char) 0, Category.UNKNOWN);
-    }
-
-    Mytems(final Function<Mytems, Mytem> ctor, final Category category) {
-        this(ctor, (Material) null, (Integer) null, (char) 0, category);
-    }
-
-    Mytems(final Function<Mytems, Mytem> ctor) {
-        this(ctor, (Material) null, (Integer) null, (char) 0, Category.UNKNOWN);
-    }
-
     public static Mytems forId(String in) {
         return ID_MAP.get(in);
     }

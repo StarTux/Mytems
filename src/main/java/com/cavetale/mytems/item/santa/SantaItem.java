@@ -1,21 +1,17 @@
 package com.cavetale.mytems.item.santa;
 
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
-import com.cavetale.mytems.gear.SetBonus;
-import com.cavetale.mytems.gear.Slot;
 import com.cavetale.mytems.util.Attr;
+import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Skull;
 import com.cavetale.mytems.util.Text;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
@@ -23,7 +19,6 @@ import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -46,11 +41,11 @@ abstract class SantaItem implements GearItem {
     public void enable() {
         displayName = xmasify(getRawDisplayName(), false);
         prototype = getBaseItemStack();
-        ItemMeta meta = prototype.getItemMeta();
         baseLore = Text.wrapLore(Text.colorize("\n\n" + getDescription()));
-        updateItemLore(meta);
-        getKey().markItemMeta(meta);
-        prototype.setItemMeta(meta);
+        prototype.editMeta(meta -> {
+                Items.text(meta, createTooltip());
+                getKey().markItemMeta(meta);
+            });
     }
 
     abstract String getRawDisplayName();
@@ -58,26 +53,6 @@ abstract class SantaItem implements GearItem {
     abstract String getDescription();
 
     abstract ItemStack getBaseItemStack();
-
-    @Override
-    public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Slot slot) {
-        meta.displayName(displayName);
-        List<Component> lore = new ArrayList<>(baseLore);
-        ItemSet itemSet = getItemSet();
-        List<SetBonus> setBonuses = itemSet.getSetBonuses();
-        if (!setBonuses.isEmpty()) {
-            int count = equipment == null ? 0 : equipment.countSetItems(itemSet);
-            lore.add(Component.empty());
-            lore.add(xmasify("Set Bonus [" + count + "]", slot != null));
-            for (SetBonus setBonus : itemSet.getSetBonuses()) {
-                int need = setBonus.getRequiredItemCount();
-                String description = "(" + need + ") " + setBonus.getDescription();
-                TextColor color = count >= need ? NamedTextColor.BLUE : NamedTextColor.DARK_GRAY;
-                lore.addAll(Text.wrapLore(description));
-            }
-        }
-        meta.lore(lore);
-    }
 
     @Override
     public ItemSet getItemSet() {

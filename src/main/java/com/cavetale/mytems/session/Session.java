@@ -6,6 +6,7 @@ import com.cavetale.mytems.gear.Equipped;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.gear.Slot;
+import com.cavetale.mytems.util.Items;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -14,7 +15,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.ItemMeta;
 
 @Getter
 public final class Session {
@@ -101,9 +101,7 @@ public final class Session {
         Player player = getPlayer();
         if (!equipment.isEmpty()) {
             for (Equipped equipped : equipment.getItems()) {
-                ItemMeta meta = equipped.itemStack.getItemMeta();
-                equipped.gearItem.updateItemLore(meta, player, equipment, equipped.slot);
-                equipped.itemStack.setItemMeta(meta);
+                Items.text(equipped.itemStack, equipped.gearItem.createTooltip(equipment, equipped));
             }
         }
         PlayerInventory inventory = player.getInventory();
@@ -125,9 +123,7 @@ public final class Session {
         Player player = getPlayer();
         GearItem gearItem = plugin.getGearItem(itemStack);
         if (gearItem == null) return;
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        gearItem.updateItemLore(itemMeta, player, equipment, null);
-        itemStack.setItemMeta(itemMeta);
+        Items.text(itemStack, gearItem.createTooltip());
     }
 
     public void equipmentDidChange() {

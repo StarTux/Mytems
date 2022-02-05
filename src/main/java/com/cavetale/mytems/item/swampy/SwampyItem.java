@@ -1,28 +1,23 @@
 package com.cavetale.mytems.item.swampy;
 
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
-import com.cavetale.mytems.gear.Slot;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.potion.PotionEffect;
@@ -38,31 +33,30 @@ public abstract class SwampyItem implements GearItem {
 
     @Override
     public final void enable() {
-        displayName = fancify(getRawDisplayName(), false);
+        displayName = fancify(getRawDisplayName());
         prototype = Items.deserialize(getSerialized());
-        ItemMeta meta = prototype.getItemMeta();
         baseLore = Text.wrapLore("\n\n" + getDescription(), c -> c.color(NamedTextColor.DARK_GREEN));
-        updateItemLore(meta);
-        if (meta instanceof Repairable) {
-            ((Repairable) meta).setRepairCost(9999);
-            meta.setUnbreakable(true);
-        }
-        if (meta instanceof LeatherArmorMeta) {
-            meta.addItemFlags(ItemFlag.HIDE_DYE);
-        }
-        key.markItemMeta(meta);
-        prototype.setItemMeta(meta);
+        prototype.editMeta(meta -> {
+                Items.text(meta, createTooltip());
+                if (meta instanceof Repairable repairable) {
+                    repairable.setRepairCost(9999);
+                    meta.setUnbreakable(true);
+                }
+                if (meta instanceof LeatherArmorMeta) {
+                    meta.addItemFlags(ItemFlag.HIDE_DYE);
+                }
+                key.markItemMeta(meta);
+            });
     }
 
-    protected final Component fancify(String in, boolean bold) {
+    protected final Component fancify(String in) {
         int len = in.length();
-        Component component = Component.empty().decoration(TextDecoration.ITALIC, false);
-        if (bold) component = component.decorate(TextDecoration.BOLD);
+        TextComponent.Builder cb = Component.text();
         for (int i = 0; i < len; i += 1) {
             int green = 64 + (i * 64) / len;
-            component = component.append(Component.text(in.substring(i, i + 1)).color(TextColor.color(0, green, 0)));
+            cb.append(Component.text(in.substring(i, i + 1), TextColor.color(0, green, 0)));
         }
-        return component;
+        return cb.build();
     }
 
     abstract String getSerialized();
@@ -75,26 +69,6 @@ public abstract class SwampyItem implements GearItem {
     public final ItemSet getItemSet() {
         if (swampyItemSet == null) swampyItemSet = new SwampyItemSet();
         return swampyItemSet;
-    }
-
-    @Override
-    public final void updateItemLore(ItemMeta meta, Player player, Equipment equipment, Slot slot) {
-        meta.displayName(displayName);
-        List<Component> lore = new ArrayList<>(baseLore);
-        ItemSet itemSet = getItemSet();
-        List<SetBonus> setBonuses = itemSet.getSetBonuses();
-        if (!setBonuses.isEmpty()) {
-            int count = equipment == null ? 0 : equipment.countSetItems(itemSet);
-            lore.add(Component.empty());
-            lore.add(fancify("Set Bonus [" + count + "]", slot != null));
-            for (SetBonus setBonus : itemSet.getSetBonuses()) {
-                int need = setBonus.getRequiredItemCount();
-                String description = "(" + need + ") " + setBonus.getDescription();
-                TextColor color = count >= need ? NamedTextColor.DARK_GREEN : NamedTextColor.DARK_GRAY;
-                lore.addAll(Text.wrapLore(description, c -> c.color(color)));
-            }
-        }
-        meta.lore(lore);
     }
 
     @Override
@@ -155,7 +129,7 @@ public abstract class SwampyItem implements GearItem {
     @Getter
     public static final class SwampyItemSet implements ItemSet {
         private final String name = "Swampy";
-        private final List<SetBonus> setBonuses = Arrays.asList(new PotionDuration(2), new DolphinGrace(4));
+        private final List<SetBonus> setBonuses = List.of(new PotionDuration(2), new DolphinGrace(4));
 
         @Getter @RequiredArgsConstructor
         public static final class PotionDuration implements SetBonus {

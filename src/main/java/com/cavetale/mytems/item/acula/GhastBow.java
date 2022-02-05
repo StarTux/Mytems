@@ -1,7 +1,7 @@
 package com.cavetale.mytems.item.acula;
 
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Text;
+import lombok.Getter;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -15,11 +15,12 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.entity.SmallFireball;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 
+@Getter
 public final class GhastBow extends AculaItem {
-    private String description = "\n\n"
+    private final String rawDisplayName = "Ghast Bow";
+    private final String description = "\n\n"
         + ChatColor.RED + "Legend has it the bowstring of this unique item was soaked in ghast tears."
         + " They say it's the only weapon which may lower a vampire's guard..."
         + "\n\n"
@@ -32,22 +33,14 @@ public final class GhastBow extends AculaItem {
     }
 
     @Override
-    public void enable() {
-        displayName = creepify("Ghast Bow", false);
-        baseLore = Text.wrapLore(description);
-        prototype = create();
-    }
-
-    public ItemStack create() {
+    protected ItemStack getRawItemStack() {
         ItemStack item = new ItemStack(Material.BOW);
-        ItemMeta meta = item.getItemMeta();
-        meta.setUnbreakable(true);
-        meta.displayName(displayName);
-        meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
-        meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
-        ((Repairable) meta).setRepairCost(9999);
-        key.markItemMeta(meta);
-        item.setItemMeta(meta);
+        item.editMeta(meta -> {
+                meta.setUnbreakable(true);
+                meta.addEnchant(Enchantment.ARROW_FIRE, 1, true);
+                meta.addEnchant(Enchantment.ARROW_INFINITE, 1, true);
+                ((Repairable) meta).setRepairCost(9999);
+            });
         return item;
     }
 
