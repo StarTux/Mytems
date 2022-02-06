@@ -13,6 +13,7 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
+import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -79,6 +80,8 @@ public interface Mytem {
     default void onPlayerArmorRemove(PlayerArmorChangeEvent event, Player player, ItemStack item) { }
 
     default void onPlayerArmorEquip(PlayerArmorChangeEvent event, Player player, ItemStack item) { }
+
+    default void onPlayerAttemptPickupItem(PlayerAttemptPickupItemEvent event) { }
 
     /**
      * These can be overridden entirely.

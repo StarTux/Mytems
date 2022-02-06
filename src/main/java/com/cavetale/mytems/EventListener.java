@@ -34,6 +34,7 @@ import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
+import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -386,5 +387,12 @@ public final class EventListener implements Listener {
                     plugin.fixEntity(entity);
                 }
             });
+    }
+
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+    protected void onPlayerAttemptPickupItem(PlayerAttemptPickupItemEvent event) {
+        Mytems mytems = Mytems.forItem(event.getItem().getItemStack());
+        if (mytems == null) return;
+        mytems.getMytem().onPlayerAttemptPickupItem(event);
     }
 }

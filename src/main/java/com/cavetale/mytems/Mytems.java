@@ -24,6 +24,7 @@ import com.cavetale.mytems.item.acula.GhastBow;
 import com.cavetale.mytems.item.acula.Stompers;
 import com.cavetale.mytems.item.captain.Blunderbuss;
 import com.cavetale.mytems.item.captain.CaptainsCutlass;
+import com.cavetale.mytems.item.coin.Coin;
 import com.cavetale.mytems.item.dune.DuneItem;
 import com.cavetale.mytems.item.dwarven.DwarvenItem;
 import com.cavetale.mytems.item.easter.EasterEgg;
@@ -470,9 +471,9 @@ public enum Mytems {
     SILVER_KEYHOLE(DummyMytem::new, Material.IRON_BLOCK, 181, (char) 181, Category.KEYHOLE),
     GOLDEN_KEYHOLE(DummyMytem::new, Material.GOLD_BLOCK, 182, (char) 182, Category.KEYHOLE),
     // Coins
-    COPPER_COIN(DummyMytem::new, Material.COPPER_INGOT, 183, (char) 183, Category.COIN),
-    SILVER_COIN(DummyMytem::new, Material.IRON_INGOT, 184, (char) 184, Category.COIN),
-    GOLDEN_COIN(DummyMytem::new, Material.GOLD_INGOT, 185, (char) 185, Category.COIN),
+    COPPER_COIN(Coin::new, Material.COPPER_INGOT, 183, (char) 183, Category.COIN),
+    SILVER_COIN(Coin::new, Material.IRON_INGOT, 184, (char) 184, Category.COIN),
+    GOLDEN_COIN(Coin::new, Material.GOLD_INGOT, 185, (char) 185, Category.COIN),
     // Paintbrush
     BLACK_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 186, (char) 186, Category.PAINTBRUSH),
     RED_PAINTBRUSH(Paintbrush::new, Material.WOODEN_SHOVEL, 187, (char) 187, Category.PAINTBRUSH),
