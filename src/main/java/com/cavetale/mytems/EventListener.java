@@ -437,7 +437,7 @@ public final class EventListener implements Listener {
         trident2.setDamage(trident.getDamage());
         trident2.setKnockbackStrength(trident.getKnockbackStrength());
         trident2.setPierceLevel(trident.getPierceLevel());
-        player.setCooldown(itemStack.getType(), Math.max(0, (4 - loy) * 40));
+        player.setCooldown(itemStack.getType(), Math.max(0, (4 - loy) * 20));
         player.playSound(player.getLocation(), Sound.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0f, 1.0f);
     }
 
@@ -447,6 +447,7 @@ public final class EventListener implements Listener {
      * - Player in survival or adventure mode.
      * - Not sneaking
      * - Not facing interactable block
+     * - Uses main hand
      */
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
     protected void onPlayerClickShulkerBox(PlayerInteractEvent event) {
@@ -455,6 +456,7 @@ public final class EventListener implements Listener {
         case RIGHT_CLICK_AIR: break;
         default: return;
         }
+        if (event.getHand() != EquipmentSlot.HAND) return;
         Player player = event.getPlayer();
         if (player.isSneaking()) return;
         if (player.getGameMode() != GameMode.SURVIVAL && player.getGameMode() != GameMode.ADVENTURE) {
