@@ -423,7 +423,6 @@ public final class EventListener implements Listener {
         if (onPlayerLaunchTridentRecursiveLock) return;
         if (!(event.getEntity() instanceof Trident trident)) return;
         ItemStack itemStack = trident.getItemStack();
-        if (Mytems.forItem(itemStack) != null) return;
         final int loy = itemStack.getEnchantmentLevel(Enchantment.LOYALTY);
         if (loy <= 0) return;
         if (!(trident.getShooter() instanceof Player player)) return;
