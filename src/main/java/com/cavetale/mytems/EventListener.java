@@ -462,7 +462,9 @@ public final class EventListener implements Listener {
             return;
         }
         if (event.hasBlock() && event.getClickedBlock().getType().isInteractable()) return;
+        if (!event.hasItem()) return;
         final ItemStack itemStack = event.getItem();
+        if (itemStack == null) return;
         if (!Tag.SHULKER_BOXES.isTagged(itemStack.getType())) return;
         if (!(itemStack.getItemMeta() instanceof BlockStateMeta meta)) return;
         if (!(meta.getBlockState() instanceof ShulkerBox shulkerBox)) return;
