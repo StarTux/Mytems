@@ -12,11 +12,15 @@ import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentOffer;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Trident;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -31,6 +35,7 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
+import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
@@ -193,8 +198,7 @@ public final class EventListener implements Listener {
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.LOW)
     void onEntityShootBow(EntityShootBowEvent event) {
-        if (!(event.getEntity() instanceof Player)) return;
-        Player player = (Player) event.getEntity();
+        if (!(event.getEntity() instanceof Player player)) return;
         ItemStack item = event.getBow();
         if (item == null) return;
         String id = ItemMarker.getId(item);
@@ -394,5 +398,38 @@ public final class EventListener implements Listener {
         Mytems mytems = Mytems.forItem(event.getItem().getItemStack());
         if (mytems == null) return;
         mytems.getMytem().onPlayerAttemptPickupItem(event);
+    }
+
+    protected boolean onPlayerLaunchTridentRecursiveLock;
+
+    /**
+     * Return elytra with loytalty instantly.  We do this by
+     * cancelling the event, launching another elytra, and putting the
+     * item on a longer cooldown.
+     *
+     * Sadly, removing the enchant from the projectile, which would be
+     * the ideal solution, is not possible.
+     */
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    protected void onPlayerLaunchTrident(ProjectileLaunchEvent event) {
+        if (onPlayerLaunchTridentRecursiveLock) return;
+        if (!(event.getEntity() instanceof Trident trident)) return;
+        ItemStack itemStack = trident.getItemStack();
+        if (Mytems.forItem(itemStack) != null) return;
+        final int loy = itemStack.getEnchantmentLevel(Enchantment.LOYALTY);
+        if (loy <= 0) return;
+        if (!(trident.getShooter() instanceof Player player)) return;
+        onPlayerLaunchTridentRecursiveLock = true;
+        Trident trident2 = player.launchProjectile(Trident.class, trident.getVelocity());
+        onPlayerLaunchTridentRecursiveLock = false;
+        if (trident2 == null) return;
+        event.setCancelled(true);
+        trident2.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
+        trident2.setCritical(trident.isCritical());
+        trident2.setDamage(trident.getDamage());
+        trident2.setKnockbackStrength(trident.getKnockbackStrength());
+        trident2.setPierceLevel(trident.getPierceLevel());
+        player.setCooldown(itemStack.getType(), Math.max(0, (4 - loy) * 40));
+        player.playSound(player.getLocation(), Sound.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0f, 1.0f);
     }
 }
