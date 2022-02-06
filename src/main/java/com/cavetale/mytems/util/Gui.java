@@ -14,6 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -26,6 +27,7 @@ import org.bukkit.inventory.ItemStack;
 
 public final class Gui implements InventoryHolder {
     public static final int OUTSIDE = -999;
+    public static final int OFF_HAND = 40;
     private Inventory inventory;
     private Map<Integer, Slot> slots = new HashMap<>();
     private Consumer<InventoryCloseEvent> onClose = null;
@@ -33,7 +35,8 @@ public final class Gui implements InventoryHolder {
     @Getter @Setter private boolean editable = false;
     @Getter private int size = 3 * 9;
     @Getter private Component title = Component.empty();
-    boolean locked = false;
+    protected boolean locked = false;
+    @Getter @Setter protected int lockedSlot = -1;
 
     @RequiredArgsConstructor @AllArgsConstructor
     private static final class Slot {
@@ -141,19 +144,35 @@ public final class Gui implements InventoryHolder {
 
     void onInventoryClose(InventoryCloseEvent event) {
         if (onClose != null) {
-            Bukkit.getScheduler().runTask(MytemsPlugin.getInstance(), () -> onClose.accept(event));
+            onClose.accept(event);
         }
     }
 
     void onInventoryClick(InventoryClickEvent event) {
         if (!editable) {
             event.setCancelled(true);
+        } else if (lockedSlot >= 0) {
+            if (event.getView().getBottomInventory().equals(event.getView().getInventory(event.getRawSlot()))) {
+                if (event.getSlot() == lockedSlot) {
+                    event.setCancelled(true);
+                }
+            }
+            if (event.getClick() == ClickType.NUMBER_KEY) {
+                if (lockedSlot == event.getHotbarButton()) {
+                    event.setCancelled(true);
+                }
+            } else if (event.getClick() == ClickType.SWAP_OFFHAND) {
+                Bukkit.getScheduler().runTaskLater(MytemsPlugin.getInstance(), () -> ((Player) event.getWhoClicked()).updateInventory(), 10L);
+                if (lockedSlot == OFF_HAND) {
+                    event.setCancelled(true);
+                }
+            }
+            return;
         }
         if (locked) return;
         if (!(event.getWhoClicked() instanceof Player)) return;
         Player player = (Player) event.getWhoClicked();
-        if (event.getClickedInventory() != null
-            && !inventory.equals(event.getClickedInventory())) {
+        if (event.getClickedInventory() != null && !inventory.equals(event.getClickedInventory())) {
             return;
         }
         Slot slot = slots.get(event.getSlot());
@@ -169,6 +188,16 @@ public final class Gui implements InventoryHolder {
     void onInventoryDrag(InventoryDragEvent event) {
         if (!editable) {
             event.setCancelled(true);
+        } else if (lockedSlot >= 0) {
+            for (int raw : event.getRawSlots()) {
+
+                if (event.getView().getBottomInventory().equals(event.getView().getInventory(raw))) {
+                    if (lockedSlot == event.getView().convertSlot(raw)) {
+                        event.setCancelled(true);
+                    }
+                }
+            }
+            return;
         }
     }
 

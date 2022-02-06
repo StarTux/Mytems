@@ -1,6 +1,7 @@
 package com.cavetale.mytems;
 
 import com.cavetale.mytems.gear.SetBonus;
+import com.cavetale.mytems.util.Gui;
 import com.cavetale.worldmarker.item.ItemMarker;
 import com.cavetale.worldmarker.util.Tags;
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
@@ -11,9 +12,12 @@ import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
+import org.bukkit.GameMode;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.Tag;
+import org.bukkit.block.ShulkerBox;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.entity.AbstractArrow;
@@ -52,10 +56,14 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.EntitiesLoadEvent;
 import org.bukkit.inventory.AnvilInventory;
+import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.java.JavaPlugin;
+import static net.kyori.adventure.text.Component.text;
 
 @RequiredArgsConstructor
 public final class EventListener implements Listener {
@@ -431,5 +439,58 @@ public final class EventListener implements Listener {
         trident2.setPierceLevel(trident.getPierceLevel());
         player.setCooldown(itemStack.getType(), Math.max(0, (4 - loy) * 40));
         player.playSound(player.getLocation(), Sound.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0f, 1.0f);
+    }
+
+    /**
+     * A shulker box in hand is opened when right clicking under the
+     * following conditions.
+     * - Player in survival or adventure mode.
+     * - Not sneaking
+     * - Not facing interactable block
+     */
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
+    protected void onPlayerClickShulkerBox(PlayerInteractEvent event) {
+        switch (event.getAction()) {
+        case RIGHT_CLICK_BLOCK:
+        case RIGHT_CLICK_AIR: break;
+        default: return;
+        }
+        Player player = event.getPlayer();
+        if (player.isSneaking()) return;
+        if (player.getGameMode() != GameMode.SURVIVAL && player.getGameMode() != GameMode.ADVENTURE) {
+            return;
+        }
+        if (event.hasBlock() && event.getClickedBlock().getType().isInteractable()) return;
+        final ItemStack itemStack = event.getItem();
+        if (Mytems.forItem(itemStack) != null) return;
+        if (!Tag.SHULKER_BOXES.isTagged(itemStack.getType())) return;
+        if (!(itemStack.getItemMeta() instanceof BlockStateMeta meta)) return;
+        if (!(meta.getBlockState() instanceof ShulkerBox shulkerBox)) return;
+        event.setCancelled(true);
+        Inventory inventory = shulkerBox.getInventory();
+        final int size = inventory.getSize();
+        Gui gui = new Gui()
+            .size(size)
+            .title(meta.hasDisplayName()
+                   ? meta.displayName()
+                   : text("Shulker Box"));
+        for (int i = 0; i < size; i += 1) {
+            gui.setItem(i, inventory.getItem(i));
+        }
+        gui.setEditable(true);
+        gui.setLockedSlot(event.getHand() == EquipmentSlot.OFF_HAND
+                          ? Gui.OFF_HAND
+                          : player.getInventory().getHeldItemSlot());
+        gui.onClose(evt -> {
+                for (int i = 0; i < size; i += 1) {
+                    inventory.setItem(i, gui.getInventory().getItem(i));
+                }
+                meta.setBlockState(shulkerBox);
+                itemStack.setItemMeta(meta);
+                player.playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_CLOSE, SoundCategory.BLOCKS, 1.0f, 1.0f);
+            });
+        gui.open(player);
+        player.sendActionBar(text("Sneak to Place Shulker Box"));
+        player.playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, SoundCategory.BLOCKS, 1.0f, 1.0f);
     }
 }
