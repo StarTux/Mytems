@@ -19,6 +19,7 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
 import org.bukkit.event.inventory.InventoryOpenEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -35,6 +36,7 @@ public final class Gui implements InventoryHolder {
     @Getter @Setter private boolean editable = false;
     @Getter private int size = 3 * 9;
     @Getter private Component title = Component.empty();
+    @Getter @Setter private InventoryType inventoryType = null;
     protected boolean locked = false;
     @Getter @Setter protected int lockedSlot = -1;
 
@@ -54,7 +56,19 @@ public final class Gui implements InventoryHolder {
         if (newSize <= 0 || newSize % 9 != 0) {
             throw new IllegalArgumentException("newSize=" + newSize);
         }
+        if (inventoryType != null && newSize != inventoryType.getDefaultSize()) {
+            throw new IllegalArgumentException("newSize: " + newSize + "!=" + inventoryType.getDefaultSize());
+        }
         size = newSize;
+        return this;
+    }
+
+    public Gui type(InventoryType newType) {
+        if (!newType.isCreatable()) {
+            throw new IllegalArgumentException("newType=" + newType);
+        }
+        this.inventoryType = newType;
+        this.size = inventoryType.getDefaultSize();
         return this;
     }
 
@@ -66,7 +80,9 @@ public final class Gui implements InventoryHolder {
 
     public Inventory getInventory() {
         if (inventory == null) {
-            inventory = Bukkit.getServer().createInventory(this, size, title);
+            inventory = inventoryType == null
+                ? Bukkit.getServer().createInventory(this, size, title)
+                : Bukkit.getServer().createInventory(this, inventoryType, title);
             for (int i = 0; i < size; i += 1) {
                 Slot slot = slots.get(i);
                 if (slot != null) {

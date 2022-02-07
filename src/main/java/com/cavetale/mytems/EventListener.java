@@ -42,6 +42,7 @@ import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
@@ -472,6 +473,7 @@ public final class EventListener implements Listener {
         Inventory inventory = shulkerBox.getInventory();
         final int size = inventory.getSize();
         Gui gui = new Gui()
+            .type(InventoryType.SHULKER_BOX)
             .size(size)
             .title(meta.hasDisplayName()
                    ? meta.displayName()
