@@ -1,5 +1,7 @@
 package com.cavetale.mytems;
 
+import com.cavetale.mytems.event.combat.DamageCalculation;
+import com.cavetale.mytems.event.combat.DamageCalculationEvent;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.util.Gui;
 import com.cavetale.worldmarker.item.ItemMarker;
@@ -496,5 +498,19 @@ public final class EventListener implements Listener {
         gui.open(player);
         player.sendActionBar(text("Sneak to Place Shulker Box"));
         player.playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, SoundCategory.BLOCKS, 1.0f, 1.0f);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    protected void onEntityDamage(EntityDamageEvent event) {
+        DamageCalculation calc = new DamageCalculation(event);
+        if (!calc.isValid()) return;
+        DamageCalculationEvent cevent = new DamageCalculationEvent(calc);
+        cevent.callEvent();
+        if (cevent.isHandled()) {
+            cevent.getCalculation().apply();
+        }
+        if (cevent.isShouldPrintDebug()) {
+            cevent.getCalculation().debugPrint();
+        }
     }
 }
