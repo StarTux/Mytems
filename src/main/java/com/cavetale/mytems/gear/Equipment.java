@@ -16,14 +16,22 @@ import org.bukkit.inventory.ItemStack;
 
 @Getter
 public final class Equipment {
-    private final MytemsPlugin plugin;
     private final Map<Slot, Equipped> equipped = new EnumMap<>(Slot.class);
     private final Map<ItemSet, Integer> itemSets = new IdentityHashMap<>();
     private final List<SetBonus> setBonuses = new ArrayList<>();
     private final List<EntityAttribute> entityAttributes = new ArrayList<>();
 
-    public Equipment(final MytemsPlugin plugin) {
-        this.plugin = plugin;
+    /**
+     * Fetch a cached version if possible.  If not, create a new
+     * temporary instance.
+     */
+    public static Equipment of(LivingEntity living) {
+        if (living instanceof Player player) {
+            return MytemsPlugin.getInstance().getSessions().of(player).getEquipment();
+        }
+        Equipment result = new Equipment();
+        result.loadLivingEntity(living);
+        return result;
     }
 
     public void clear() {
@@ -44,7 +52,7 @@ public final class Equipment {
             if (!slot.guess(item)) continue;
             Mytems mytems = Mytems.forItem(item); // may yield null
             if (mytems == null) continue;
-            Mytem mytem = plugin.getMytem(mytems);
+            Mytem mytem = mytems.getMytem();
             if (!(mytem instanceof GearItem)) continue;
             GearItem gearItem = (GearItem) mytem;
             equipped.put(slot, new Equipped(slot, item, gearItem));
@@ -71,8 +79,7 @@ public final class Equipment {
     }
 
     public int countSetItems(ItemSet itemSet) {
-        Integer val = itemSets.get(itemSet);
-        return val == null ? 0 : val;
+        return itemSets.getOrDefault(itemSet, 0);
     }
 
     public boolean hasSetBonus(SetBonus setBonus) {

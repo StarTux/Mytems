@@ -1,13 +1,20 @@
 package com.cavetale.mytems.item.scarlet;
 
 import com.cavetale.mytems.Mytems;
+import com.cavetale.mytems.event.combat.DamageCalculationEvent;
+import com.cavetale.mytems.event.combat.DamageFactor;
+import com.cavetale.mytems.gear.EntityAttribute;
+import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Skull;
+import com.cavetale.mytems.util.Text;
 import java.util.List;
+import java.util.Random;
 import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
@@ -16,12 +23,15 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Banner;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
-import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -29,19 +39,22 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.util.Vector;
 
 @RequiredArgsConstructor @Getter
 public abstract class ScarletItem implements GearItem {
     protected static final TextColor TEXT_COLOR = TextColor.color(0xFF2400);
     protected static final Color LEATHER_COLOR = Color.fromRGB(0x8c2924);
     protected final Mytems key;
+    protected List<Component> baseLore;
     // Set by ctor of subclasses:
     protected Component displayName;
-    protected List<Component> baseLore;
+    protected String description;
     protected ItemStack prototype;
 
     @Override
     public final void enable() {
+        baseLore = Text.wrapLore(description, c -> c.color(NamedTextColor.GRAY));
         prototype.editMeta(meta -> {
                 Items.text(meta, createTooltip());
                 if (meta instanceof Repairable) {
@@ -49,12 +62,19 @@ public abstract class ScarletItem implements GearItem {
                     meta.setUnbreakable(true);
                 }
                 key.markItemMeta(meta);
+                meta.setUnbreakable(true);
+                meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
             });
     }
 
     @Override
     public final ItemStack createItemStack() {
         return prototype.clone();
+    }
+
+    @Override
+    public final ItemSet getItemSet() {
+        return ScarletItemSet.getInstance();
     }
 
     public static final class Helmet extends ScarletItem {
@@ -67,38 +87,11 @@ public abstract class ScarletItem implements GearItem {
         public Helmet(final Mytems key) {
             super(key);
             displayName = Component.text("Scarlet Helmet", TEXT_COLOR);
-            baseLore = List.of(new Component[] {
-                    displayName,
-                    Component.empty(),
-                    Component.text("A sturdy helmet that", NamedTextColor.GRAY),
-                    Component.text("a noble warrior can", NamedTextColor.GRAY),
-                    Component.text("trust with their life.", NamedTextColor.GRAY),
-                });
+            description = "A sturdy helmet that a noble warrior can trust with their life.";
             prototype = new ItemStack(Material.PLAYER_HEAD);
             prototype.editMeta(meta -> {
                     SKULL.apply((SkullMeta) meta);
-                    meta.addEnchant(Enchantment.PROTECTION_PROJECTILE, 3, true);
-                    meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
-                    meta.addEnchant(Enchantment.THORNS, 3, true);
-                    meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS,
-                                              new AttributeModifier(UUID.fromString("fffe2558-0000-6d6c-0002-d63fffff2528"),
-                                                                    "generic.armor_toughness",
-                                                                    3.0,
-                                                                    AttributeModifier.Operation.ADD_NUMBER,
-                                                                    EquipmentSlot.HEAD));
-                    meta.addAttributeModifier(Attribute.GENERIC_ARMOR,
-                                              new AttributeModifier(UUID.fromString("fffe2558-0000-6dd0-0002-d63fffff2460"),
-                                                                    "generic.armor",
-                                                                    3.0,
-                                                                    AttributeModifier.Operation.ADD_NUMBER,
-                                                                    EquipmentSlot.HEAD));
-                    meta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE,
-                                              new AttributeModifier(UUID.fromString("fffe2558-0000-6e34-0002-d63fffff2398"),
-                                                                    "generic.knockback_resistance",
-                                                                    0.1,
-                                                                    AttributeModifier.Operation.ADD_NUMBER,
-                                                                    EquipmentSlot.HEAD));
-                    meta.setUnbreakable(true);
+                    meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                 });
         }
     }
@@ -107,40 +100,11 @@ public abstract class ScarletItem implements GearItem {
         public Chestplate(final Mytems key) {
             super(key);
             displayName = Component.text("Scarlet Chestplate", TEXT_COLOR);
-            baseLore = List.of(new Component[] {
-                    displayName,
-                    Component.empty(),
-                    Component.text("Clad with the color", NamedTextColor.GRAY),
-                    Component.text("of scarlet, your body", NamedTextColor.GRAY),
-                    Component.text("represents the strength", NamedTextColor.GRAY),
-                    Component.text("of the kingdom.", NamedTextColor.GRAY),
-                });
+            description = "Clad with the color of scarlet, your body represents the strength of the kingdom.";
             prototype = new ItemStack(Material.LEATHER_CHESTPLATE);
             prototype.editMeta(meta -> {
                     ((LeatherArmorMeta) meta).setColor(LEATHER_COLOR);
-                    meta.addItemFlags(ItemFlag.HIDE_DYE);
-                    meta.addEnchant(Enchantment.PROTECTION_EXPLOSIONS, 3, true);
-                    meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
-                    meta.addEnchant(Enchantment.THORNS, 3, true);
-                    meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS,
-                                              new AttributeModifier(UUID.fromString("fffe2558-0000-83b0-0002-d63ffffef8a0"),
-                                                                    "generic.armor_toughness",
-                                                                    3.0,
-                                                                    AttributeModifier.Operation.ADD_NUMBER,
-                                                                    EquipmentSlot.CHEST));
-                    meta.addAttributeModifier(Attribute.GENERIC_ARMOR,
-                                              new AttributeModifier(UUID.fromString("fffe2558-0000-8414-0002-d63ffffef7d8"),
-                                                                    "generic.armor",
-                                                                    8.0,
-                                                                    AttributeModifier.Operation.ADD_NUMBER,
-                                                                    EquipmentSlot.CHEST));
-                    meta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE,
-                                              new AttributeModifier(UUID.fromString("fffe2558-0000-8478-0002-d63ffffef710"),
-                                                                    "generic.knockback_resistance",
-                                                                    0.1,
-                                                                    AttributeModifier.Operation.ADD_NUMBER,
-                                                                    EquipmentSlot.CHEST));
-                    meta.setUnbreakable(true);
+                    meta.addItemFlags(ItemFlag.HIDE_DYE, ItemFlag.HIDE_ATTRIBUTES);
                 });
         }
     }
@@ -149,39 +113,11 @@ public abstract class ScarletItem implements GearItem {
         public Leggings(final Mytems key) {
             super(key);
             displayName = Component.text("Scarlet Leggings", TEXT_COLOR);
-            baseLore = List.of(new Component[] {
-                    displayName,
-                    Component.empty(),
-                    Component.text("Overlapping metal plates", NamedTextColor.GRAY),
-                    Component.text("cover the flexible leather", NamedTextColor.GRAY),
-                    Component.text("interior.", NamedTextColor.GRAY),
-                });
+            description = "Overlapping metal plates cover the flexible leather interior.";
             prototype = new ItemStack(Material.LEATHER_LEGGINGS);
             prototype.editMeta(meta -> {
                     ((LeatherArmorMeta) meta).setColor(LEATHER_COLOR);
-                    meta.addItemFlags(ItemFlag.HIDE_DYE);
-                    meta.addEnchant(Enchantment.PROTECTION_FIRE, 3, true);
-                    meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
-                    meta.addEnchant(Enchantment.THORNS, 3, true);
-                    meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS,
-                                              new AttributeModifier(UUID.fromString("fffe2558-0000-cfdc-0002-d63ffffe6048"),
-                                                                    "generic.armor_toughness",
-                                                                    3.0,
-                                                                    AttributeModifier.Operation.ADD_NUMBER,
-                                                                    EquipmentSlot.LEGS));
-                    meta.addAttributeModifier(Attribute.GENERIC_ARMOR,
-                                              new AttributeModifier(UUID.fromString("fffe2558-0000-d040-0002-d63ffffe5f80"),
-                                                                    "generic.armor",
-                                                                    6.0,
-                                                                    AttributeModifier.Operation.ADD_NUMBER,
-                                                                    EquipmentSlot.LEGS));
-                    meta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE,
-                                              new AttributeModifier(UUID.fromString("fffe2558-0000-d0a4-0002-d63ffffe5eb8"),
-                                                                    "generic.knockback_resistance",
-                                                                    0.1,
-                                                                    AttributeModifier.Operation.ADD_NUMBER,
-                                                                    EquipmentSlot.LEGS));
-                    meta.setUnbreakable(true);
+                    meta.addItemFlags(ItemFlag.HIDE_DYE, ItemFlag.HIDE_ATTRIBUTES);
                 });
         }
     }
@@ -190,39 +126,11 @@ public abstract class ScarletItem implements GearItem {
         public Boots(final Mytems key) {
             super(key);
             displayName = Component.text("Scarlet Boots", TEXT_COLOR);
-            baseLore = List.of(new Component[] {
-                    displayName,
-                    Component.empty(),
-                    Component.text("A pair of armored boots", NamedTextColor.GRAY),
-                    Component.text("that will support you", NamedTextColor.GRAY),
-                    Component.text("through any battle.", NamedTextColor.GRAY),
-                });
+            description = "A pair of armored boots that will support you through any battle.";
             prototype = new ItemStack(Material.LEATHER_BOOTS);
             prototype.editMeta(meta -> {
                     ((LeatherArmorMeta) meta).setColor(LEATHER_COLOR);
-                    meta.addItemFlags(ItemFlag.HIDE_DYE);
-                    meta.addEnchant(Enchantment.PROTECTION_FALL, 3, true);
-                    meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 5, true);
-                    meta.addEnchant(Enchantment.THORNS, 3, true);
-                    meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS,
-                                              new AttributeModifier(UUID.fromString("fffe2558-0000-b4e8-0002-d63ffffe9630"),
-                                                                    "generic.armor_toughness",
-                                                                    3.0,
-                                                                    AttributeModifier.Operation.ADD_NUMBER,
-                                                                    EquipmentSlot.FEET));
-                    meta.addAttributeModifier(Attribute.GENERIC_ARMOR,
-                                              new AttributeModifier(UUID.fromString("fffe2558-0000-b54c-0002-d63ffffe9568"),
-                                                                    "generic.armor",
-                                                                    3.0,
-                                                                    AttributeModifier.Operation.ADD_NUMBER,
-                                                                    EquipmentSlot.FEET));
-                    meta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE,
-                                              new AttributeModifier(UUID.fromString("fffe2558-0000-b5b0-0002-d63ffffe94a0"),
-                                                                    "generic.knockback_resistance",
-                                                                    0.1,
-                                                                    AttributeModifier.Operation.ADD_NUMBER,
-                                                                    EquipmentSlot.FEET));
-                    meta.setUnbreakable(true);
+                    meta.addItemFlags(ItemFlag.HIDE_DYE, ItemFlag.HIDE_ATTRIBUTES);
                 });
         }
     }
@@ -231,29 +139,14 @@ public abstract class ScarletItem implements GearItem {
         public Sword(final Mytems key) {
             super(key);
             displayName = Component.text("Scarlet Broadsword", TEXT_COLOR);
-            baseLore = List.of(new Component[] {
-                    displayName,
-                    Component.empty(),
-                    Component.text("A heavy and unwieldy", NamedTextColor.GRAY),
-                    Component.text("sword that swings slowly,", NamedTextColor.GRAY),
-                    Component.text("but packs a large punch.", NamedTextColor.GRAY),
-                });
+            description = "A heavy and unwieldy sword that swings slowly, but packs a large punch.";
             prototype = new ItemStack(Material.NETHERITE_SWORD);
             prototype.editMeta(meta -> {
-                    meta.addEnchant(Enchantment.KNOCKBACK, 3, true);
-                    meta.addEnchant(Enchantment.DAMAGE_ALL, 6, true);
-                    meta.addEnchant(Enchantment.SWEEPING_EDGE, 4, true);
                     meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
                                               new AttributeModifier(UUID.fromString("fffe2549-0000-85b7-0001-6ab4fffef492"),
                                                                     "generic.attack_damage",
-                                                                    20.0,
+                                                                    20.0 + 3.5,
                                                                     AttributeModifier.Operation.ADD_NUMBER,
-                                                                    EquipmentSlot.HAND));
-                    meta.addAttributeModifier(Attribute.GENERIC_MOVEMENT_SPEED,
-                                              new AttributeModifier(UUID.fromString("fffe2549-0000-861b-0001-6ab4fffef3ca"),
-                                                                    "generic.movement_speed",
-                                                                    -0.1,
-                                                                    AttributeModifier.Operation.ADD_SCALAR,
                                                                     EquipmentSlot.HAND));
                     meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
                                               new AttributeModifier(UUID.fromString("fffe2549-0000-867f-0001-6ab4fffef302"),
@@ -261,8 +154,54 @@ public abstract class ScarletItem implements GearItem {
                                                                     -3.5,
                                                                     AttributeModifier.Operation.ADD_NUMBER,
                                                                     EquipmentSlot.HAND));
-                    meta.setUnbreakable(true);
                 });
+        }
+
+        /**
+         * The regular attack damage formula for sweep attacks is:
+         *
+         * > 1 + AttackDamage * (SweepingEdge / (SweepingEdge + 1))
+         *
+         * So, attack damage for Sweeping Edge levels:
+         * - lvl 0 => 1 dmg
+         * - lvl 1 => 1 + AttackDamage * 1/2
+         * - lvl 2 => 1 + AttackDamage * 2/3
+         * - lvl 3 => 1 + AttackDamage * 4/5
+         * - lvl 4 => 1 + AttackDamage * 4/5
+         *
+         * Damage is approaching 1 + AttackDamage, but is capped at AttackDamage.
+         * Let's try setting it to the regular attack damage.
+         */
+        @Override
+        public void onAttackingDamageCalculation(DamageCalculationEvent event, ItemStack itemStack, EquipmentSlot slot) {
+            if (slot != EquipmentSlot.HAND) return;
+            boolean isSweepAttack = event.getEntityDamageEvent().getCause() == DamageCause.ENTITY_SWEEP_ATTACK;
+            if (isSweepAttack) {
+                double dmg = event.getAttacker().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue();
+                event.getCalculation().setBaseDamage(dmg);
+                event.setHandled(true);
+            }
+            boolean isEntityAttack = event.getEntityDamageEvent().getCause() == DamageCause.ENTITY_ATTACK;
+            if (isEntityAttack && event.attackerIsPlayer()) {
+                Player player = event.getAttackerPlayer();
+                double value = player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).getValue();
+                double speed = 20.0 / value;
+                player.setCooldown(key.material, (int) Math.round(speed));
+            }
+            // Emulate Knockback
+            LivingEntity target = event.getTarget();
+            if (target != null && (isEntityAttack || isSweepAttack)) {
+                event.addPostDamageAction(true, () -> {
+                        if (target.isDead()) return;
+                        double resist = target.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).getValue();
+                        if (resist >= 1.0) return;
+                        Vector v = target.getEyeLocation().subtract(event.getAttacker().getLocation()).toVector();
+                        if (v.length() == 0.0) return;
+                        double str = event.getAttacker() instanceof Player player && player.isSprinting() ? 1.3 : 0.6;
+                        v = v.normalize().multiply(str * (1.0 - resist));
+                        target.setVelocity(v);
+                    });
+            }
         }
     }
 
@@ -270,13 +209,7 @@ public abstract class ScarletItem implements GearItem {
         public Shield(final Mytems key) {
             super(key);
             displayName = Component.text("Scarlet Shield", TEXT_COLOR);
-            baseLore = List.of(new Component[] {
-                    displayName,
-                    Component.empty(),
-                    Component.text("An ornate shield", NamedTextColor.GRAY),
-                    Component.text("with a fancy red", NamedTextColor.GRAY),
-                    Component.text("shatter pattern.", NamedTextColor.GRAY),
-                });
+            description = "An ornate shield with a fancy red shatter pattern.";
             prototype = new ItemStack(Material.SHIELD);
             prototype.editMeta(meta -> {
                     BlockStateMeta blockStateMeta = (BlockStateMeta) meta;
@@ -287,19 +220,6 @@ public abstract class ScarletItem implements GearItem {
                                                new Pattern(DyeColor.LIGHT_GRAY, PatternType.STRAIGHT_CROSS),
                                                new Pattern(DyeColor.RED, PatternType.RHOMBUS_MIDDLE)));
                     blockStateMeta.setBlockState(banner);
-                    meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS,
-                                              new AttributeModifier(UUID.fromString("fffe2558-0000-df25-0000-48c4fffe41b6"),
-                                                                    "generic.armor_toughness",
-                                                                    3.0,
-                                                                    AttributeModifier.Operation.ADD_NUMBER,
-                                                                    EquipmentSlot.HAND));
-                    meta.addAttributeModifier(Attribute.GENERIC_KNOCKBACK_RESISTANCE,
-                                              new AttributeModifier(UUID.fromString("fffe2558-0000-df89-0000-48c4fffe40ee"),
-                                                                    "generic.knockback_resistance",
-                                                                    0.1,
-                                                                    AttributeModifier.Operation.ADD_NUMBER,
-                                                                    EquipmentSlot.HAND));
-                    meta.setUnbreakable(true);
                 });
         }
     }
@@ -308,13 +228,124 @@ public abstract class ScarletItem implements GearItem {
     public static final class ScarletItemSet implements ItemSet {
         protected static ScarletItemSet instance;
         protected final String name = "Scarlet";
-        protected final List<SetBonus> setBonuses = List.of();
+        protected final List<SetBonus> setBonuses = List.of(new SetBonus[] {
+                new Spikes(3),
+                new HeavyArmor(4),
+                new FullArmor(5),
+                new FullProtection(6),
+            });
 
         static ItemSet getInstance() {
             if (instance == null) {
                 instance = new ScarletItemSet();
             }
             return instance;
+        }
+
+        @Getter @RequiredArgsConstructor
+        public static final class Spikes implements SetBonus {
+            protected final int requiredItemCount;
+            protected final String name = "Spikes";
+            protected final String description = "Return some Damage";
+
+            @Override
+            public String getName(int has) {
+                int lvl = Math.max(0, has - 2);
+                return lvl > 0 ? name + " " + Text.roman(lvl) : name;
+            }
+
+            @Override
+            public String getDescription(int has) {
+                int lvl = Math.max(0, has - 2);
+                return "Return Damage as with " + lvl + "xThorns III";
+            }
+
+            /**
+             * Emulate thorns.
+             * - Thorns is rolled for each item.
+             * - Each thorns level increases the chance of thorns damage by 15%
+             * - On a successful roll, damage is increased by 1, 2, 3, or 4, with equal propability.
+             * - Total damage is capped at 4.
+             * - An unspecified of knockback is applied.
+             */
+            @Override
+            public void onDefendingDamageCalculation(DamageCalculationEvent event) {
+                LivingEntity target = event.getTarget();
+                LivingEntity attacker = event.getAttacker();
+                if (target == null || attacker == null) return;
+                int has = Equipment.of(target).countSetItems(ScarletItemSet.instance);
+                if (has < requiredItemCount) return;
+                int lvl = Math.max(0, has - 2);
+                if (lvl <= 0) return;
+                int totalDamage = 0;
+                Random random = ThreadLocalRandom.current();
+                for (int i = 0; i < lvl; i += 1) {
+                    if (random.nextDouble() < 0.45) {
+                        totalDamage += 1 + random.nextInt(4);
+                    }
+                }
+                if (totalDamage <= 0) return;
+                final double damage = Math.min(4.0, (double) totalDamage);
+                event.addPostDamageAction(true, () -> {
+                        if (attacker.isDead()) return;
+                        attacker.damage(damage);
+                        if (attacker instanceof Player attackerPlayer) {
+                            attackerPlayer.playSound(attackerPlayer.getLocation(), Sound.ENCHANT_THORNS_HIT, 1.0f, 1.0f);
+                        }
+                        // Knockback
+                        double resist = attacker.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).getValue();
+                        if (resist >= 1.0) return;
+                        Vector v = attacker.getEyeLocation().subtract(target.getLocation()).toVector();
+                        if (v.length() == 0.0) return;
+                        v = v.normalize().multiply(0.25 * (1.0 - resist));
+                        attacker.setVelocity(v);
+                    });
+            }
+        }
+
+        @Getter @RequiredArgsConstructor
+        public static final class HeavyArmor implements SetBonus {
+            protected final int requiredItemCount;
+            protected final String name = "Heavy Armor";
+            protected final String description = "Increased Knockback Resistance but Reduced Movement Speed";
+
+            @Override
+            public List<EntityAttribute> getEntityAttributes() {
+                return List.of(new EntityAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE,
+                                                   UUID.fromString("fffe2558-0000-6e34-0002-d63fffff2398"),
+                                                   "scarlet_knockback_resist",
+                                                   0.5,
+                                                   AttributeModifier.Operation.ADD_NUMBER),
+                               new EntityAttribute(Attribute.GENERIC_MOVEMENT_SPEED,
+                                                   UUID.fromString("fffe2549-0000-861b-0001-6ab4fffef3ca"),
+                                                   "scarlet_speed_reduction",
+                                                   -0.1,
+                                                   AttributeModifier.Operation.ADD_SCALAR));
+            }
+        }
+
+        @Getter @RequiredArgsConstructor
+        public static final class FullArmor implements SetBonus {
+            protected final int requiredItemCount;
+            protected final String name = "Armor \u221E";
+            protected final String description = "Maximum Armor and Toughness";
+
+            @Override
+            public void onDefendingDamageCalculation(DamageCalculationEvent event) {
+                event.setIfApplicable(DamageFactor.ARMOR, 0.2);
+            }
+        }
+
+        @Getter @RequiredArgsConstructor
+        public static final class FullProtection implements SetBonus {
+            protected final int requiredItemCount;
+            protected final String name = "Protection \u221E";
+            protected final String description = "Maximum Protection Enchantment Effect";
+
+            @Override
+            public void onDefendingDamageCalculation(DamageCalculationEvent event) {
+                event.setIfApplicable(DamageFactor.PROTECTION, 0.2);
+            }
         }
     }
 }

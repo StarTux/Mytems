@@ -1,10 +1,10 @@
 package com.cavetale.mytems.gear;
 
+import com.cavetale.mytems.event.combat.DamageCalculationEvent;
 import com.cavetale.mytems.util.Text;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Nullable;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.entity.Entity;
@@ -26,22 +26,34 @@ public interface SetBonus {
 
     String getName();
 
-    String getDescription();
-
-    @Nullable
-    default List<EntityAttribute> getEntityAttributes() {
-        return null;
+    default String getName(int has) {
+        return getName();
     }
 
-    @Nullable
+    String getDescription();
+
+    default String getDescription(int has) {
+        return getDescription();
+    }
+
+    default boolean isHidden() {
+        return false;
+    }
+
+    default List<EntityAttribute> getEntityAttributes() {
+        return List.of();
+    }
+
     default List<EntityAttribute> getEntityAttributes(LivingEntity living) {
         return getEntityAttributes();
     }
 
-    default List<Component> createTooltip(boolean active) {
+    default List<Component> createTooltip(int has) {
         List<Component> tooltip = new ArrayList<>();
-        tooltip.add(text("(" + getRequiredItemCount() + ") " + getName(), active ? GRAY : DARK_DARK_GRAY));
-        for (String line : Text.wrapLine(getDescription(), Text.ITEM_LORE_WIDTH)) {
+        int req = getRequiredItemCount();
+        boolean active = has >= req;
+        tooltip.add(text((req > 1 ? "(" + getRequiredItemCount() + ") " : "") + getName(has), active ? GRAY : DARK_DARK_GRAY));
+        for (String line : Text.wrapLine(getDescription(has), Text.ITEM_LORE_WIDTH)) {
             tooltip.add(text(line, active ? DARK_GRAY : DARK_DARK_GRAY));
         }
         return tooltip;
@@ -56,6 +68,10 @@ public interface SetBonus {
     default void onPlayerPotionEffect(EntityPotionEffectEvent event, Player player) { }
 
     default void onPlayerJump(PlayerJumpEvent event, Player player) { }
+
+    default void onDefendingDamageCalculation(DamageCalculationEvent event) { }
+
+    default void onAttackingDamageCalculation(DamageCalculationEvent event) { }
 
     default void tick(LivingEntity living) { }
 }

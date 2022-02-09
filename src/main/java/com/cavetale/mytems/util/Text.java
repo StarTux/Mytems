@@ -14,7 +14,7 @@ import org.bukkit.ChatColor;
  * Convenience functions to format text. Primarily for item tooltips.
  */
 public final class Text {
-    public static final int ITEM_LORE_WIDTH = 30;
+    public static final int ITEM_LORE_WIDTH = 26;
 
     private Text() { }
 
@@ -151,5 +151,21 @@ public final class Text {
             comps.append(Component.text(d, color));
         }
         return comps.build();
+    }
+
+    public static String roman(int value) {
+        switch (value) {
+        case 1: return "I";
+        case 2: return "II";
+        case 3: return "III";
+        case 4: return "IV";
+        case 5: return "V";
+        case 6: return "VI";
+        case 7: return "VII";
+        case 8: return "VIII";
+        case 9: return "IX";
+        case 10: return "X";
+        default: return "" + value;
+        }
     }
 }

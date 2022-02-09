@@ -11,6 +11,7 @@ import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Gui;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.PlayerPlacedBlocks;
+import com.cavetale.mytems.util.Text;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -186,22 +187,6 @@ public final class TreeChopper implements Mytem {
         openUpgradeGui(player, itemStack, tag);
     }
 
-    private static String roman(int value) {
-        switch (value) {
-        case 1: return "I";
-        case 2: return "II";
-        case 3: return "III";
-        case 4: return "IV";
-        case 5: return "V";
-        case 6: return "VI";
-        case 7: return "VII";
-        case 8: return "VIII";
-        case 9: return "IX";
-        case 10: return "X";
-        default: return "" + value;
-        }
-    }
-
     protected List<Component> makeItemTooltip(TreeChopperTag tag) {
         List<Component> result = new ArrayList<>();
         int level = tag.getLevel();
@@ -232,7 +217,7 @@ public final class TreeChopper implements Mytem {
             if (stat.type != TreeChopperStat.Type.UPGRADE) continue;
             int value = tag.getStat(stat);
             if (value > 0) {
-                result.add(text(stat.displayName + " " + roman(value), GRAY));
+                result.add(text(stat.displayName + " " + Text.roman(value), GRAY));
             }
             if (value > 0 || stat == TreeChopperStat.CHOP) {
                 result.addAll(getStatDescription(stat, value));
@@ -254,7 +239,7 @@ public final class TreeChopper implements Mytem {
                            text("attached leaves", DARK_GRAY));
         }
         case FORTUNE: {
-            String n = roman(value);
+            String n = Text.roman(value);
             return List.of(text("Bonus drops from", DARK_GRAY),
                            text("chopped leaves", DARK_GRAY));
         }
@@ -345,12 +330,12 @@ public final class TreeChopper implements Mytem {
                 || conflicts;
             List<Component> tooltip = new ArrayList<>();
             int level = Math.min(stat.maxLevel, tag.getStat(stat) + 1);
-            tooltip.add(text(stat.displayName + " " + roman(level), locked ? ALLRED : ALLGREEN));
-            tooltip.add(text("Max Level " + roman(stat.maxLevel),
+            tooltip.add(text(stat.displayName + " " + Text.roman(level), locked ? ALLRED : ALLGREEN));
+            tooltip.add(text("Max Level " + Text.roman(stat.maxLevel),
                              maxLevelExceeded ? GOLD : GRAY, ITALIC));
             for (Map.Entry<TreeChopperStat, Integer> requirement : stat.requirements.entrySet()) {
                 tooltip.add(text("Requires " + requirement.getKey().displayName
-                                 + " " + roman(requirement.getValue()),
+                                 + " " + Text.roman(requirement.getValue()),
                                  doesMeetRequirements ? GRAY : ALLRED, ITALIC));
             }
             for (TreeChopperStat conflict : stat.conflicts) {

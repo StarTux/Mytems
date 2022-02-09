@@ -30,7 +30,8 @@ public interface ItemSet {
                     text(" [" + setItemCount + "]"),
                 }).color(GRAY));
         for (SetBonus setBonus : getSetBonuses()) {
-            tooltip.addAll(setBonus.createTooltip(setItemCount >= setBonus.getRequiredItemCount()));
+            if (setBonus.isHidden()) continue;
+            tooltip.addAll(setBonus.createTooltip(setItemCount));
         }
         return tooltip;
     }

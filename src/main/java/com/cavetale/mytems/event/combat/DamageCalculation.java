@@ -2,12 +2,9 @@ package com.cavetale.mytems.event.combat;
 
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Text;
-import java.util.function.BiConsumer;
-import java.util.function.Function;
 import java.util.logging.Logger;
 import lombok.Data;
 import lombok.NonNull;
-import lombok.RequiredArgsConstructor;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -22,29 +19,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
  */
 @Data @SuppressWarnings("deprecation")
 public final class DamageCalculation {
-    @RequiredArgsConstructor
-    public enum Factor {
-        HARD_HAT(DamageModifier.HARD_HAT,
-                 DamageCalculation::setHardHatFactor,
-                 DamageCalculation::getHardHatFactor),
-        BLOCKING(DamageModifier.BLOCKING,
-                 DamageCalculation::setBlockingFactor,
-                 DamageCalculation::getBlockingFactor),
-        ARMOR(DamageModifier.ARMOR,
-              DamageCalculation::setArmorFactor,
-              DamageCalculation::getArmorFactor),
-        RESISTANCE(DamageModifier.RESISTANCE,
-                   DamageCalculation::setResistanceFactor,
-                   DamageCalculation::getResistanceFactor),
-        MAGIC(DamageModifier.MAGIC,
-              DamageCalculation::setMagicFactor,
-              DamageCalculation::getMagicFactor);
-
-        public final DamageModifier damageModifier;
-        public final BiConsumer<DamageCalculation, Double> setter;
-        public final Function<DamageCalculation, Double> getter;
-    }
-
     @NonNull private final EntityDamageEvent event;
     private final LivingEntity attacker;
     private final LivingEntity target;
@@ -83,19 +57,19 @@ public final class DamageCalculation {
         }
     }
 
-    public double get(Factor factor) {
+    public double get(DamageFactor factor) {
         return factor.getter.apply(this);
     }
 
-    public double getReduction(Factor factor) {
+    public double getReduction(DamageFactor factor) {
         return 1.0 - get(factor);
     }
 
-    public void set(Factor factor, double value) {
+    public void set(DamageFactor factor, double value) {
         factor.setter.accept(this, value);
     }
 
-    public boolean isApplicable(Factor factor) {
+    public boolean isApplicable(DamageFactor factor) {
         return event.isApplicable(factor.damageModifier);
     }
 
@@ -117,7 +91,7 @@ public final class DamageCalculation {
     public void calculate() {
         double currentDamage = event.getDamage(DamageModifier.BASE);
         this.baseDamage = currentDamage;
-        for (Factor it : Factor.values()) {
+        for (DamageFactor it : DamageFactor.values()) {
             if (!event.isApplicable(it.damageModifier)) {
                 set(it, 1.0);
                 continue;
@@ -135,20 +109,20 @@ public final class DamageCalculation {
     public void apply() {
         event.setDamage(DamageModifier.BASE, baseDamage);
         double currentDamage = baseDamage;
-        for (Factor it : Factor.values()) {
+        for (DamageFactor it : DamageFactor.values()) {
             if (!event.isApplicable(it.damageModifier)) continue;
             double factor = get(it);
             double reduction = (1.0 - factor) * currentDamage;
             currentDamage *= factor;
-            event.setDamage(it.damageModifier, reduction);
+            event.setDamage(it.damageModifier, -reduction);
         }
         this.absorption = target == null ? 0.0 : Math.min(currentDamage, target.getAbsorptionAmount());
         event.setDamage(DamageModifier.ABSORPTION, -absorption);
     }
 
-    public double getFlatDamage(Factor until) {
+    public double getFlatDamage(DamageFactor until) {
         double currentDamage = baseDamage;
-        for (Factor it : Factor.values()) {
+        for (DamageFactor it : DamageFactor.values()) {
             currentDamage *= get(it);
             if (it == until) break;
         }
@@ -159,9 +133,9 @@ public final class DamageCalculation {
      * This should equal EntityDamageEvent.get(by.damageModifier),
      * negative!
      */
-    public double getFlatDamageReduction(Factor by) {
+    public double getFlatDamageReduction(DamageFactor by) {
         double currentDamage = baseDamage;
-        for (Factor it : Factor.values()) {
+        for (DamageFactor it : DamageFactor.values()) {
             double factor = get(it);
             if (by == it) return (1.0 - factor) * currentDamage;
             currentDamage *= factor;
@@ -193,6 +167,14 @@ public final class DamageCalculation {
         return target instanceof Player;
     }
 
+    public Player getTargetPlayer() {
+        return target instanceof Player player ? player : null;
+    }
+
+    public Player getAttackerPlayer() {
+        return attacker instanceof Player player ? player : null;
+    }
+
     public boolean isPvE() {
         return isCombat() && attackerIsPlayer() && !targetIsPlayer();
     }
@@ -213,6 +195,12 @@ public final class DamageCalculation {
         return blockingFactor == 0.0;
     }
 
+    public boolean setIfApplicable(DamageFactor factor, double value) {
+        if (!isApplicable(factor)) return false;
+        set(factor, value);
+        return true;
+    }
+
     private static String fmt(double in) {
         return String.format("%.2f", in);
     }
@@ -224,7 +212,7 @@ public final class DamageCalculation {
                     + (target != null ? Text.toCamelCase(target.getType(), "") : "?")
                     + " " + Text.toCamelCase(event.getCause(), ""));
         logger.info("Base " + fmt(baseDamage));
-        for (Factor it : Factor.values()) {
+        for (DamageFactor it : DamageFactor.values()) {
             if (!event.isApplicable(it.damageModifier)) continue;
             // if (get(it) == 1.0 && event.getDamage(it.damageModifier) == 0.0) continue;
             double my = getFlatDamageReduction(it);

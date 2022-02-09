@@ -512,5 +512,40 @@ public final class EventListener implements Listener {
         if (cevent.isShouldPrintDebug()) {
             cevent.getCalculation().debugPrint();
         }
+        cevent.schedulePostDamageActions();
+    }
+
+    @EventHandler(priority = EventPriority.NORMAL)
+    protected void onDamageCalculation(DamageCalculationEvent event) {
+        // Defender
+        if (event.targetIsPlayer()) {
+            Player target = event.getTargetPlayer();
+            for (SetBonus setBonus : plugin.sessions.of(target).getEquipment().getSetBonuses()) {
+                setBonus.onDefendingDamageCalculation(event);
+            }
+        }
+        if (event.getTarget() != null) {
+            for (EquipmentSlot slot : EquipmentSlot.values()) {
+                ItemStack itemStack = event.getTarget().getEquipment().getItem(slot);
+                Mytems mytems = Mytems.forItem(itemStack);
+                if (mytems == null) continue;
+                mytems.getMytem().onDefendingDamageCalculation(event, itemStack, slot);
+            }
+        }
+        // Attacker
+        if (event.attackerIsPlayer()) {
+            Player attacker = event.getAttackerPlayer();
+            for (SetBonus setBonus : plugin.sessions.of(attacker).getEquipment().getSetBonuses()) {
+                setBonus.onAttackingDamageCalculation(event);
+            }
+        }
+        if (event.getAttacker() != null) {
+            for (EquipmentSlot slot : EquipmentSlot.values()) {
+                ItemStack itemStack = event.getAttacker().getEquipment().getItem(slot);
+                Mytems mytems = Mytems.forItem(itemStack);
+                if (mytems == null) continue;
+                mytems.getMytem().onAttackingDamageCalculation(event, itemStack, slot);
+            }
+        }
     }
 }

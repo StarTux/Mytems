@@ -1,5 +1,6 @@
 package com.cavetale.mytems.session;
 
+import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.Equipped;
@@ -24,7 +25,7 @@ public final class Session {
     protected Map<String, Long> cooldowns = new HashMap<>();
     public static final long MILLIS_PER_TICK = 50L;
     private int equipmentUpdateTicks = 0;
-    protected Equipment equipment; // Updated every tick
+    protected final Equipment equipment = new Equipment(); // Updated every tick
     protected Flying flying = new Flying(this);
     protected Attributes attributes = new Attributes(this);
     protected final Favorites favorites = new Favorites();
@@ -33,7 +34,6 @@ public final class Session {
         this.plugin = plugin;
         this.uuid = player.getUniqueId();
         this.name = player.getName();
-        equipment = new Equipment(plugin);
     }
 
     public Player getPlayer() {
@@ -120,9 +120,9 @@ public final class Session {
     }
 
     private void updateLooseItem(ItemStack itemStack) {
-        Player player = getPlayer();
-        GearItem gearItem = plugin.getGearItem(itemStack);
-        if (gearItem == null) return;
+        Mytems mytems = Mytems.forItem(itemStack);
+        if (mytems == null) return;
+        if (!(mytems.getMytem() instanceof GearItem gearItem)) return;
         Items.text(itemStack, gearItem.createTooltip());
     }
 

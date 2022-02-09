@@ -1,5 +1,6 @@
 package com.cavetale.mytems;
 
+import com.cavetale.mytems.event.combat.DamageCalculationEvent;
 import com.cavetale.mytems.util.Json;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import net.kyori.adventure.text.Component;
@@ -19,6 +20,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 public interface Mytem {
@@ -82,6 +84,10 @@ public interface Mytem {
     default void onPlayerArmorEquip(PlayerArmorChangeEvent event, Player player, ItemStack item) { }
 
     default void onPlayerAttemptPickupItem(PlayerAttemptPickupItemEvent event) { }
+
+    default void onDefendingDamageCalculation(DamageCalculationEvent event, ItemStack item, EquipmentSlot slot) { }
+
+    default void onAttackingDamageCalculation(DamageCalculationEvent event, ItemStack item, EquipmentSlot slot) { }
 
     /**
      * These can be overridden entirely.

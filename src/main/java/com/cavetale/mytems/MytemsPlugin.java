@@ -2,8 +2,6 @@ package com.cavetale.mytems;
 
 import com.cavetale.core.font.Emoji;
 import com.cavetale.core.font.GlyphPolicy;
-import com.cavetale.mytems.gear.Equipment;
-import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.session.Sessions;
 import com.cavetale.mytems.util.Gui;
 import java.util.ArrayList;
@@ -105,30 +103,6 @@ public final class MytemsPlugin extends JavaPlugin {
         Mytems key = Mytems.forItem(itemStack);
         if (key == null) return null;
         return getMytem(key);
-    }
-
-    public GearItem getGearItem(Mytems key) {
-        Mytem mytem = mytems.get(key);
-        return mytem instanceof GearItem ? (GearItem) mytem : null;
-    }
-
-    public GearItem getGearItem(ItemStack itemStack) {
-        if (itemStack == null) return null;
-        Mytems key = Mytems.forItem(itemStack);
-        if (key == null) return null;
-        return getGearItem(key);
-    }
-
-    public Equipment getEquipment(Entity entity) {
-        if (entity instanceof Player) {
-            return sessions.of((Player) entity).getEquipment();
-        } else if (entity instanceof LivingEntity) {
-            Equipment equipment = new Equipment(this);
-            equipment.loadLivingEntity((LivingEntity) entity);
-            return equipment;
-        } else {
-            return null;
-        }
     }
 
     public void fixAllPlayerInventoriesLater() {
