@@ -6,12 +6,19 @@ import java.util.logging.Logger;
 import lombok.Data;
 import lombok.NonNull;
 import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
+import org.bukkit.entity.AbstractArrow;
+import org.bukkit.entity.Explosive;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.TNTPrimed;
+import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.event.entity.EntityDamageEvent;
+import static org.bukkit.event.entity.EntityDamageEvent.DamageCause.*;
 
 /**
  * Turn the cheeseburger that is Minecraft damage back into the cow
@@ -23,6 +30,8 @@ public final class DamageCalculation {
     private final LivingEntity attacker;
     private final LivingEntity target;
     private final Projectile projectile;
+    private Block damagerBlock;
+    private Explosive explosive;
     private double baseDamage;
     // All factors are the amount that passes through!
     private double hardHatFactor;
@@ -41,6 +50,9 @@ public final class DamageCalculation {
         this.event = event;
         this.target = event.getEntity() instanceof LivingEntity living ? living : null;
         if (event instanceof EntityDamageByEntityEvent event2) {
+            if (event2.getDamager() instanceof Explosive it) {
+                this.explosive = it;
+            }
             if (event2.getDamager() instanceof LivingEntity living) {
                 this.attacker = living;
                 this.projectile = null;
@@ -51,6 +63,10 @@ public final class DamageCalculation {
                 this.attacker = null;
                 this.projectile = null;
             }
+        } else if (event instanceof EntityDamageByBlockEvent blockEvent) {
+            this.damagerBlock = blockEvent.getDamager();
+            this.projectile = null;
+            this.attacker = null;
         } else {
             this.projectile = null;
             this.attacker = null;
@@ -69,8 +85,76 @@ public final class DamageCalculation {
         factor.setter.accept(this, value);
     }
 
+    /**
+     * We must here manually rule out several damage causes because
+     * the definition of EntityDamageEvent::isApplicable is rather
+     * generous.  A handful of damage causes can be ruled out in
+     * general.  Monst of the factors are pretty starightforward.
+     * Only the ARMOR type is specific.
+     */
     public boolean isApplicable(DamageFactor factor) {
-        return event.isApplicable(factor.damageModifier);
+        if (!event.isApplicable(factor.damageModifier)) return false;
+        DamageCause cause = event.getCause();
+        switch (cause) {
+        case CUSTOM:
+        case STARVATION:
+        case SUFFOCATION:
+        case SUICIDE:
+        case VOID:
+            return false;
+        default: break;
+        }
+        switch (factor) {
+        case HELMET:
+            return cause == FALLING_BLOCK;
+        case SHIELD:
+            if (cause == ENTITY_ATTACK) return true;
+            if (cause == ENTITY_SWEEP_ATTACK) return true;
+            if (cause == PROJECTILE) {
+                if (projectile instanceof AbstractArrow arrow && arrow.getPierceLevel() > 0) {
+                    return false;
+                }
+                return true;
+            }
+            if (cause == ENTITY_EXPLOSION) {
+                if (explosive instanceof TNTPrimed tnt
+                    && (tnt.getSource() == null || tnt.getSource() == target)) {
+                    return false;
+                }
+                return true;
+            }
+            return false;
+        case ARMOR:
+            switch (cause) {
+            case BLOCK_EXPLOSION:
+            case CONTACT:
+            case ENTITY_ATTACK:
+            case ENTITY_EXPLOSION:
+            case ENTITY_SWEEP_ATTACK:
+            case FALLING_BLOCK:
+            case LAVA:
+            case LIGHTNING:
+            case PROJECTILE:
+            case THORNS:
+                return true;
+            case CRAMMING:
+            case DRAGON_BREATH:
+            case FALL:
+            case FLY_INTO_WALL:
+            case MAGIC:
+            case POISON:
+            case SUFFOCATION:
+            case VOID:
+            case WITHER:
+            default:
+                return false;
+            }
+        case RESISTANCE:
+            return true;
+        case PROTECTION:
+            return true;
+        default: return true;
+        }
     }
 
     public double getTotalFactor() {
