@@ -55,7 +55,8 @@ public enum MytemsTag {
              Mytems.Category.CAT_EARS, Mytems.Category.SUNGLASSES),
     ITEM_SETS(Mytems.Category.ACULA, Mytems.Category.SANTA,
               Mytems.Category.DUNE, Mytems.Category.SWAMPY,
-              Mytems.Category.DWARVEN, Mytems.Category.EASTER),
+              Mytems.Category.DWARVEN, Mytems.Category.EASTER,
+              Mytems.Category.SCARLET),
     EQUIPMENT(MytemsTag.ITEM_SETS, MytemsTag.PIRATE),
     NEW;
 
