@@ -371,6 +371,7 @@ public enum Mytems {
     INVISIBLE_ITEM(DummyMytem::new, Material.LIGHT_GRAY_STAINED_GLASS_PANE, 65, '\uE281', Category.UI),
     PAINT_PALETTE(DummyMytem::new, Material.STICK, 202, (char) 202, Category.UI),
     MOON(DummyMytem::new, Material.YELLOW_DYE, 204, (char) 204, Category.UI),
+    LIGHTNING(DummyMytem::new, Material.LIGHTNING_ROD, 250, (char) 250, Category.UI),
     // Leters
     LETTER_A(GlyphItem::new, Material.PLAYER_HEAD, 68, '\uE284', Category.LETTER),
     LETTER_B(GlyphItem::new, Material.PLAYER_HEAD, 69, '\uE285', Category.LETTER),
@@ -499,7 +500,7 @@ public enum Mytems {
     BENT_PITCHFORK(ArmorPart::new, Material.LIGHTNING_ROD, 209, (char) 209, Category.ARMOR_PART),
     // Technical
     FARAWAY_MAP(FarawayMap::new, Material.PAPER, 249, (char) 249, Category.TECHNICAL);
-    // Next CustomModelData: 250
+    // Next CustomModelData: 251
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
