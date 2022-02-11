@@ -25,10 +25,13 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.plugin.Plugin;
 
+@RequiredArgsConstructor
 public final class Gui implements InventoryHolder {
     public static final int OUTSIDE = -999;
     public static final int OFF_HAND = 40;
+    private final Plugin plugin;
     private Inventory inventory;
     private Map<Integer, Slot> slots = new HashMap<>();
     private Consumer<InventoryCloseEvent> onClose = null;
@@ -45,6 +48,10 @@ public final class Gui implements InventoryHolder {
         final int index;
         ItemStack item;
         Consumer<InventoryClickEvent> onClick;
+    }
+
+    public Gui() {
+        this(MytemsPlugin.getInstance());
     }
 
     public Gui title(Component newTitle) {
@@ -154,7 +161,7 @@ public final class Gui implements InventoryHolder {
 
     void onInventoryOpen(InventoryOpenEvent event) {
         if (onOpen != null) {
-            Bukkit.getScheduler().runTask(MytemsPlugin.getInstance(), () -> onOpen.accept(event));
+            Bukkit.getScheduler().runTask(plugin, () -> onOpen.accept(event));
         }
     }
 
@@ -178,7 +185,7 @@ public final class Gui implements InventoryHolder {
                     event.setCancelled(true);
                 }
             } else if (event.getClick() == ClickType.SWAP_OFFHAND) {
-                Bukkit.getScheduler().runTaskLater(MytemsPlugin.getInstance(), () -> ((Player) event.getWhoClicked()).updateInventory(), 10L);
+                Bukkit.getScheduler().runTaskLater(plugin, () -> ((Player) event.getWhoClicked()).updateInventory(), 10L);
                 if (lockedSlot == OFF_HAND) {
                     event.setCancelled(true);
                 }
@@ -194,7 +201,7 @@ public final class Gui implements InventoryHolder {
         Slot slot = slots.get(event.getSlot());
         if (slot != null && slot.onClick != null) {
             locked = true;
-            Bukkit.getScheduler().runTask(MytemsPlugin.getInstance(), () -> {
+            Bukkit.getScheduler().runTask(plugin, () -> {
                     locked = false;
                     slot.onClick.accept(event);
                 });
@@ -249,6 +256,12 @@ public final class Gui implements InventoryHolder {
 
         @EventHandler
         void onPluginDisable(PluginDisableEvent event) {
+            for (Player player : Bukkit.getServer().getOnlinePlayers()) {
+                Gui gui = Gui.of(player);
+                if (gui != null && gui.plugin == event.getPlugin()) {
+                    player.closeInventory();
+                }
+            }
             if (event.getPlugin() == MytemsPlugin.getInstance()) {
                 Gui.disable();
             }
