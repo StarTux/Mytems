@@ -88,9 +88,8 @@ public final class DamageCalculation {
     /**
      * We must here manually rule out several damage causes because
      * the definition of EntityDamageEvent::isApplicable is rather
-     * generous.  A handful of damage causes can be ruled out in
-     * general.  Monst of the factors are pretty starightforward.
-     * Only the ARMOR type is specific.
+     * generous.  A handful of damage causes can be generally ruled
+     * out.
      */
     public boolean isApplicable(DamageFactor factor) {
         if (!event.isApplicable(factor.damageModifier)) return false;
@@ -263,7 +262,7 @@ public final class DamageCalculation {
         return isCombat() && attackerIsPlayer() && !targetIsPlayer();
     }
 
-    public boolean isEvE() {
+    public boolean isEvP() {
         return isCombat() && !attackerIsPlayer() && targetIsPlayer();
     }
 
