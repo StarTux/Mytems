@@ -59,6 +59,7 @@ public final class MytemsTag {
         for (MytemsCategory it : MytemsCategory.values()) {
             MytemsTag tag = new MytemsTag(it.name().toLowerCase(), it);
             VALUES.add(tag);
+            NAME_MAP.put(tag.name, tag);
             CATEGORY_MAP.put(it, tag);
         }
     }
