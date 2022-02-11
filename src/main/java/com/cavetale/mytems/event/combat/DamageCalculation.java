@@ -34,11 +34,11 @@ public final class DamageCalculation {
     private Explosive explosive;
     private double baseDamage;
     // All factors are the amount that passes through!
-    private double hardHatFactor;
-    private double blockingFactor;
+    private double helmetFactor;
+    private double shieldFactor;
     private double armorFactor;
     private double resistanceFactor;
-    private double magicFactor;
+    private double protectionFactor;
     /**
      * The absorption value is special because it is derived after all
      * other damage calculations are done, based on the absorption
@@ -157,11 +157,11 @@ public final class DamageCalculation {
     }
 
     public double getTotalFactor() {
-        return hardHatFactor
-            * blockingFactor
+        return helmetFactor
+            * shieldFactor
             * armorFactor
             * resistanceFactor
-            * magicFactor;
+            * protectionFactor;
     }
 
     public double getTotalDamage() {
@@ -275,7 +275,7 @@ public final class DamageCalculation {
     }
 
     public boolean isBlocking() {
-        return blockingFactor == 0.0;
+        return shieldFactor == 0.0;
     }
 
     public boolean setIfApplicable(DamageFactor factor, double value) {

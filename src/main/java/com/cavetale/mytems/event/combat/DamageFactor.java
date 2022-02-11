@@ -13,11 +13,11 @@ import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 @RequiredArgsConstructor @SuppressWarnings("deprecation")
 public enum DamageFactor {
     HELMET(DamageModifier.HARD_HAT,
-           DamageCalculation::setHardHatFactor,
-           DamageCalculation::getHardHatFactor),
+           DamageCalculation::setHelmetFactor,
+           DamageCalculation::getHelmetFactor),
     SHIELD(DamageModifier.BLOCKING,
-           DamageCalculation::setBlockingFactor,
-           DamageCalculation::getBlockingFactor),
+           DamageCalculation::setShieldFactor,
+           DamageCalculation::getShieldFactor),
     ARMOR(DamageModifier.ARMOR,
           DamageCalculation::setArmorFactor,
           DamageCalculation::getArmorFactor),
@@ -25,8 +25,8 @@ public enum DamageFactor {
                DamageCalculation::setResistanceFactor,
                DamageCalculation::getResistanceFactor),
     PROTECTION(DamageModifier.MAGIC,
-               DamageCalculation::setMagicFactor,
-               DamageCalculation::getMagicFactor);
+               DamageCalculation::setProtectionFactor,
+               DamageCalculation::getProtectionFactor);
 
     public final DamageModifier damageModifier;
     public final BiConsumer<DamageCalculation, Double> setter;
