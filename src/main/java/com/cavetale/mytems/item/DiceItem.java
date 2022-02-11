@@ -46,11 +46,11 @@ public final class DiceItem implements Mytem {
                 + "Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUv"
                 + "NWNmYWRhZWM3NzZlZWRlNDlhNDMzZTA5OTdmZTA0NDJm"
                 + "NzY1OTk4OTI0MTliYWFiODNkMjhlOGJhN2YxZjMifX19";
-            this.prototype = Skull.create("Dice",
+            this.prototype = Skull.create("Die",
                                           UUID.fromString("eb405652-f501-44b3-86f7-9fa2eebd5303"),
                                           texture,
                                           null);
-            this.displayName = text("Dice");
+            this.displayName = text("Die");
         } else {
             this.displayName = text(type == Type.DICE100 ? "d%" : "d" + type.sides, AQUA);
             this.prototype = new ItemStack(key.material);
@@ -130,7 +130,7 @@ public final class DiceItem implements Mytem {
         for (Player nearby : player.getLocation().getNearbyEntitiesByType(Player.class, 32.0, 32.0, 32.0)) {
             Component message = join(noSeparators(),
                                      player.displayName(),
-                                     text("'s dice rolls ", AQUA),
+                                     text("'s die rolls ", AQUA),
                                      text(numberString, WHITE));
             nearby.sendActionBar(message);
             nearby.sendMessage(message);
@@ -152,7 +152,7 @@ public final class DiceItem implements Mytem {
                                                     text(" [" + numberString + "]", WHITE))
                                                .decoration(ITALIC, false)));
         player.sendActionBar(join(noSeparators(),
-                                  text("Your dice rolls ", AQUA),
+                                  text("Your die rolls ", AQUA),
                                   text(numberString, WHITE)));
         player.playSound(player.getLocation(), Sound.BLOCK_DISPENSER_DISPENSE, SoundCategory.MASTER, 0.5f, 2.0f);
     }

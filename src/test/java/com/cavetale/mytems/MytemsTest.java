@@ -23,7 +23,7 @@ public final class MytemsTest {
                 throw new IllegalStateException(mytems + ": material is null!");
             }
             if (mytems.customModelData != null) {
-                if (!MytemsTag.POCKET_MOB.isTagged(mytems)) {
+                if (mytems.category != MytemsCategory.POCKET_MOB) {
                     if (customModelDataSet.contains(mytems.customModelData)) {
                         throw new IllegalStateException(mytems + ": duplicate custom model data: " + mytems.customModelData);
                     }

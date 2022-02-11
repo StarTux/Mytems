@@ -2,8 +2,8 @@ package com.cavetale.mytems.item.pocketmob;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
+import com.cavetale.mytems.MytemsCategory;
 import com.cavetale.mytems.MytemsPlugin;
-import com.cavetale.mytems.MytemsTag;
 import com.cavetale.mytems.util.Text;
 import com.destroystokyo.paper.event.entity.ThrownEggHatchEvent;
 import java.io.InputStream;
@@ -79,7 +79,7 @@ public final class MobCatcher implements Mytem, Listener {
         ItemStack itemStack = egg.getItem();
         Mytems mytems = Mytems.forItem(itemStack);
         if (mytems == null) return;
-        if (MytemsTag.MOB_CATCHER.isTagged(mytems) || MytemsTag.POCKET_MOB.isTagged(mytems)) {
+        if (mytems.category == MytemsCategory.MOB_CATCHERS || mytems.category == MytemsCategory.POCKET_MOB) {
             event.setHatching(false);
         }
     }

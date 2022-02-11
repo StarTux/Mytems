@@ -50,7 +50,7 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
     protected void onEnable() {
         rootNode.addChild("list").arguments("[tag]")
             .completableList(Stream.of(MytemsTag.values())
-                             .map(MytemsTag::name).map(String::toLowerCase)
+                             .map(MytemsTag::name)
                              .collect(Collectors.toList()))
             .description("Show some info on all mytems")
             .senderCaller(this::list);
@@ -103,11 +103,8 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         List<Component> lines = new ArrayList<>();
         MytemsTag tag = null;
         if (args.length >= 1) {
-            try {
-                tag = MytemsTag.valueOf(args[0].toUpperCase());
-            } catch (IllegalArgumentException iae) {
-                throw new CommandWarn("Unknown tag: " + args[0]);
-            }
+            tag = MytemsTag.of(args[0]);
+            if (tag == null) throw new CommandWarn("Unknown tag: " + args[0]);
         }
         for (Mytems mytems : Mytems.values()) {
             if (tag != null && !tag.isTagged(mytems)) continue;
@@ -133,7 +130,7 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         if (mytemArg.startsWith("#")) {
             MytemsTag tag = MytemsTag.of(mytemArg.substring(1));
             if (tag == null) throw new CommandWarn("Invalid Mytems tag: " + mytemArg);
-            mytemsList = tag.toList();
+            mytemsList = tag.getMytems();
         } else {
             Mytems mytems = Mytems.forId(mytemArg);
             if (mytems == null) throw new CommandWarn("Mytem not found: " + mytemArg);
@@ -378,7 +375,7 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         if (args.length > 2) return Collections.emptyList();
         String arg = args[args.length - 1];
         return Stream.concat(Stream.of(Mytems.values()).map(m -> m.id),
-                             Stream.of(MytemsTag.values()).map(t -> "#" + t.name().toLowerCase()))
+                             Stream.of(MytemsTag.values()).map(t -> "#" + t.name()))
             .filter(s -> s.contains(arg))
             .collect(Collectors.toList());
     }

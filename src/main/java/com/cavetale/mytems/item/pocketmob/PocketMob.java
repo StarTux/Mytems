@@ -2,8 +2,8 @@ package com.cavetale.mytems.item.pocketmob;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
+import com.cavetale.mytems.MytemsCategory;
 import com.cavetale.mytems.MytemsPlugin;
-import com.cavetale.mytems.MytemsTag;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Json;
 import com.cavetale.mytems.util.Text;
@@ -94,7 +94,7 @@ public final class PocketMob implements Mytem, Listener {
     void onBlockPreDispense(BlockPreDispenseEvent event) {
         ItemStack itemStack = event.getItemStack();
         Mytems mytems = Mytems.forItem(itemStack);
-        if (mytems == null || !MytemsTag.POCKET_MOB.isTagged(mytems)) return;
+        if (mytems == null || mytems.category != MytemsCategory.POCKET_MOB) return;
         event.setCancelled(true);
         if (delegate != null) delegate.onBlockPreDispense(this, event);
     }
