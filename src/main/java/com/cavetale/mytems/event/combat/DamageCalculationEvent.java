@@ -2,6 +2,7 @@ package com.cavetale.mytems.event.combat;
 
 import com.cavetale.mytems.MytemsPlugin;
 import java.util.ArrayList;
+import java.util.function.Function;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -61,6 +62,14 @@ public final class DamageCalculationEvent extends Event {
         return true;
     }
 
+    public boolean setIfApplicable(DamageFactor factor, Function<Double, Double> fun) {
+        if (!calc.isApplicable(factor)) return false;
+        double value = fun.apply(getCalculation().get(factor));
+        getCalculation().set(factor, value);
+        handled = true;
+        return true;
+    }
+
     public boolean hasPlayer() {
         return calc.hasPlayer();
     }
@@ -71,6 +80,10 @@ public final class DamageCalculationEvent extends Event {
 
     public boolean attackerIsPlayer() {
         return calc.attackerIsPlayer();
+    }
+
+    public boolean isBlocking() {
+        return calc.isBlocking();
     }
 
     public EntityDamageEvent getEntityDamageEvent() {

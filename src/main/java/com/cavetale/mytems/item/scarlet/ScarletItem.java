@@ -229,11 +229,15 @@ public abstract class ScarletItem implements GearItem {
         protected static ScarletItemSet instance;
         protected final String name = "Scarlet";
         protected final List<SetBonus> setBonuses = List.of(new SetBonus[] {
-                new Spikes(3),
-                new HeavyArmor(4),
-                new FullArmor(5),
-                new FullProtection(6),
+                new FullArmor(3),
+                new FullProtection(4),
+                new Spikes(5),
+                new HeavyArmor(6),
             });
+
+        protected static int lvl(int has) {
+            return Math.max(0, Math.min(4, has - 2));
+        }
 
         static ItemSet getInstance() {
             if (instance == null) {
@@ -245,19 +249,23 @@ public abstract class ScarletItem implements GearItem {
         @Getter @RequiredArgsConstructor
         public static final class Spikes implements SetBonus {
             protected final int requiredItemCount;
-            protected final String name = "Spikes";
+            protected final String name = "Scarlet Spikes";
             protected final String description = "Return some Damage";
 
             @Override
             public String getName(int has) {
-                int lvl = Math.max(0, has - 2);
-                return lvl > 0 ? name + " " + Text.roman(lvl) : name;
+                int lvl = lvl(has);
+                return lvl > 0
+                    ? name + " " + Text.roman(has)
+                    : name;
             }
 
             @Override
             public String getDescription(int has) {
-                int lvl = Math.max(0, has - 2);
-                return "Return Damage as with " + lvl + "xThorns III";
+                int lvl = lvl(has);
+                return lvl > 1
+                    ? "Return Damage " + lvl + " Times"
+                    : description;
             }
 
             /**
@@ -270,12 +278,13 @@ public abstract class ScarletItem implements GearItem {
              */
             @Override
             public void onDefendingDamageCalculation(DamageCalculationEvent event) {
+                if (event.isBlocking()) return;
                 LivingEntity target = event.getTarget();
                 LivingEntity attacker = event.getAttacker();
                 if (target == null || attacker == null) return;
                 int has = Equipment.of(target).countSetItems(ScarletItemSet.instance);
                 if (has < requiredItemCount) return;
-                int lvl = Math.max(0, has - 2);
+                int lvl = lvl(has);
                 if (lvl <= 0) return;
                 int totalDamage = 0;
                 Random random = ThreadLocalRandom.current();
@@ -297,7 +306,7 @@ public abstract class ScarletItem implements GearItem {
                         if (resist >= 1.0) return;
                         Vector v = attacker.getEyeLocation().subtract(target.getLocation()).toVector();
                         if (v.length() == 0.0) return;
-                        v = v.normalize().multiply(0.25 * (1.0 - resist));
+                        v = v.normalize().multiply(0.5 * (1.0 - resist));
                         attacker.setVelocity(v);
                     });
             }
@@ -319,7 +328,7 @@ public abstract class ScarletItem implements GearItem {
                                new EntityAttribute(Attribute.GENERIC_MOVEMENT_SPEED,
                                                    UUID.fromString("fffe2549-0000-861b-0001-6ab4fffef3ca"),
                                                    "scarlet_speed_reduction",
-                                                   -0.1,
+                                                   -0.2,
                                                    AttributeModifier.Operation.ADD_SCALAR));
             }
         }
@@ -327,24 +336,60 @@ public abstract class ScarletItem implements GearItem {
         @Getter @RequiredArgsConstructor
         public static final class FullArmor implements SetBonus {
             protected final int requiredItemCount;
-            protected final String name = "Armor \u221E";
-            protected final String description = "Maximum Armor and Toughness";
+            protected final String name = "Scarlet Armor";
+            protected final String description = "Armor and Toughness Increase";
+
+            @Override
+            public String getName(int has) {
+                int lvl = lvl(has);
+                return lvl > 0
+                    ? name + " " + Text.roman(has)
+                    : name;
+            }
+
+            @Override
+            public String getDescription(int has) {
+                int lvl = lvl(has);
+                return lvl > 1
+                    ? lvl + " Times " + description
+                    : description;
+            }
 
             @Override
             public void onDefendingDamageCalculation(DamageCalculationEvent event) {
-                event.setIfApplicable(DamageFactor.ARMOR, 0.2);
+                int has = Equipment.of(event.getTarget()).countSetItems(ScarletItemSet.instance);
+                double lvl = (double) lvl(has);
+                event.setIfApplicable(DamageFactor.ARMOR, val -> Math.min(val, 1.0 - lvl * 0.2));
             }
         }
 
         @Getter @RequiredArgsConstructor
         public static final class FullProtection implements SetBonus {
             protected final int requiredItemCount;
-            protected final String name = "Protection \u221E";
-            protected final String description = "Maximum Protection Enchantment Effect";
+            protected final String name = "Scarlet Protection";
+            protected final String description = "Allround Protection Enchant";
+
+            @Override
+            public String getName(int has) {
+                int lvl = lvl(has);
+                return lvl > 0
+                    ? name + " " + Text.roman(has)
+                    : name;
+            }
+
+            @Override
+            public String getDescription(int has) {
+                int lvl = lvl(has);
+                return lvl > 1
+                    ? lvl + " Times " + description
+                    : description;
+            }
 
             @Override
             public void onDefendingDamageCalculation(DamageCalculationEvent event) {
-                event.setIfApplicable(DamageFactor.PROTECTION, 0.2);
+                int has = Equipment.of(event.getTarget()).countSetItems(ScarletItemSet.instance);
+                double lvl = (double) lvl(has);
+                event.setIfApplicable(DamageFactor.PROTECTION, val -> Math.min(val, 1.0 - lvl * 0.2));
             }
         }
     }
