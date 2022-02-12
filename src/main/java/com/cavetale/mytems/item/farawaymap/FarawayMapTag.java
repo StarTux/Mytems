@@ -64,9 +64,13 @@ public final class FarawayMapTag extends MytemTag {
     public void loadMap(ItemStack itemStack) {
         super.load(itemStack); // amount
         if (itemStack.getItemMeta() instanceof MapMeta meta) {
-            MapView mapView = meta.getMapView();
+            if (meta.hasMapView()) {
+                MapView mapView = meta.getMapView();
+                this.mapId = mapView != null ? mapView.getId() : null;
+            } else {
+                this.mapId = null;
+            }
             this.server = Connect.getInstance().getServerName();
-            this.mapId = mapView != null ? mapView.getId() : null;
             this.color = meta.hasColor() ? meta.getColor().asRGB() : null;
         }
     }
