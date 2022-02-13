@@ -59,6 +59,14 @@ public final class TreeChop {
     protected boolean doReplant;
     protected int enchanter;
     protected int brokenBlocks;
+    protected static final BlockFace[] FACE6 = {
+        BlockFace.UP,
+        BlockFace.DOWN,
+        BlockFace.NORTH,
+        BlockFace.EAST,
+        BlockFace.SOUTH,
+        BlockFace.WEST,
+    };
 
     private List<Face> faces() {
         Collections.shuffle(FACES);
@@ -129,22 +137,31 @@ public final class TreeChop {
         LEAVES:
         for (int leafBlockIndex = 0; leafBlockIndex < leafBlocks.size(); leafBlockIndex += 1) {
             Block leafBlock = leafBlocks.get(leafBlockIndex);
+            NBORS:
             for (Face face : faces()) {
                 Block nbor = leafBlock.getRelative(face.x, face.y, face.z);
                 if (done.contains(nbor)) continue;
                 done.add(nbor);
                 if (CHOPPING.contains(nbor)) continue;
                 if (nbor.getY() < minHeight) continue;
-                // Do your voodoo to figure out if the leaf block is
-                // too far way.
                 if (PlayerPlacedBlocks.isPlayerPlaced(nbor)) continue;
                 if (Tag.LEAVES.isTagged(nbor.getType())) {
                     if (nbor.getBlockData() instanceof Leaves leaves && leaves.isPersistent()) continue;
+                    // If the leaf is attached to a log from a
+                    // different tree, we skip it.
+                    for (BlockFace blockFace : FACE6) {
+                        Block adj = nbor.getRelative(blockFace);
+                        if (Tag.LOGS.isTagged(adj.getType()) && !logBlocks.contains(adj)) {
+                            continue NBORS;
+                        }
+                    }
+                    // Approximate if the leaf is connected with one
+                    // of our logs.
                     boolean isConnected = false;
                     for (Block logBlock : logBlocks) {
                         int dx = Math.abs(logBlock.getX() - nbor.getX());
                         int dz = Math.abs(logBlock.getZ() - nbor.getZ());
-                        if (dx + dz <= 6) {
+                        if (dx + dz <= 4) {
                             isConnected = true;
                             break;
                         }
