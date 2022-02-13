@@ -1,11 +1,13 @@
 package com.cavetale.mytems.event.combat;
 
+import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Text;
 import java.util.logging.Logger;
 import lombok.Data;
 import lombok.NonNull;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Explosive;
@@ -18,6 +20,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.ItemStack;
 import static org.bukkit.event.entity.EntityDamageEvent.DamageCause.*;
 
 /**
@@ -189,7 +192,10 @@ public final class DamageCalculation {
         this.absorption = -event.getDamage(DamageModifier.ABSORPTION);
     }
 
-    public void apply() {
+    /**
+     * Apply the results to the event if possible.
+     */
+    public boolean apply() {
         event.setDamage(DamageModifier.BASE, baseDamage);
         double currentDamage = baseDamage;
         for (DamageFactor it : DamageFactor.values()) {
@@ -201,6 +207,15 @@ public final class DamageCalculation {
         }
         this.absorption = target == null ? 0.0 : Math.min(currentDamage, target.getAbsorptionAmount());
         event.setDamage(DamageModifier.ABSORPTION, -absorption);
+        if (event.getFinalDamage() < 0.0) {
+            for (DamageModifier mod : DamageModifier.values()) {
+                if (event.isApplicable(mod)) {
+                    event.setDamage(mod, 0.0);
+                }
+            }
+            return false;
+        }
+        return true;
     }
 
     public double getFlatDamage(DamageFactor until) {
@@ -290,7 +305,7 @@ public final class DamageCalculation {
 
     public void debugPrint() {
         Logger logger = MytemsPlugin.getInstance().getLogger();
-        logger.info("DMG " + (attacker != null ? Text.toCamelCase(attacker.getType(), "") : "?")
+        logger.info("DMG DEBUG " + (attacker != null ? Text.toCamelCase(attacker.getType(), "") : "?")
                     + (hasProjectile() ? "->" : "v")
                     + (target != null ? Text.toCamelCase(target.getType(), "") : "?")
                     + " " + Text.toCamelCase(event.getCause(), ""));
@@ -326,5 +341,51 @@ public final class DamageCalculation {
                     + " Final"
                     + " => " + fmt(getTotalDamage()) + "|" + fmt(event.getFinalDamage()));
         logger.info("========================================");
+    }
+
+    private static String printItem(ItemStack item) {
+        if (item == null || item.getType() == Material.AIR) {
+            return "";
+        }
+        Mytems mytems = Mytems.forItem(item);
+        if (mytems == null) {
+            return item.getType().name().toLowerCase();
+        }
+        return mytems.name().toLowerCase();
+    }
+
+    private static String printLivingEntity(LivingEntity living) {
+        return living.getType().name().toLowerCase()
+            + "(" + printItem(living.getEquipment().getItemInMainHand())
+            + "," + printItem(living.getEquipment().getItemInOffHand())
+            + "," + printItem(living.getEquipment().getHelmet())
+            + "," + printItem(living.getEquipment().getChestplate())
+            + "," + printItem(living.getEquipment().getBoots())
+            + ")";
+    }
+
+    public void errorPrint() {
+        Logger logger = MytemsPlugin.getInstance().getLogger();
+        logger.warning("DMG ERROR " + fmt(baseDamage) + " => " + fmt(getTotalDamage()));
+        if (attacker != null) {
+            logger.warning("ATK " + printLivingEntity(attacker));
+        }
+        if (target != null) {
+            logger.warning("DEF " + printLivingEntity(target));
+        }
+        if (projectile != null) {
+            logger.warning("PROJ " + projectile.getType().name().toLowerCase());
+        }
+        if (explosive != null) {
+            logger.warning("EXPL " + explosive.getType().name().toLowerCase());
+        }
+        if (damagerBlock != null) {
+            logger.warning("BLOCK " + damagerBlock.getType().name().toLowerCase());
+        }
+        for (DamageFactor it : DamageFactor.values()) {
+            double value = get(it);
+            logger.warning("MOD " + it.name().toLowerCase() + " " + fmt(value));
+        }
+        logger.warning("////////////////////////////////////////");
     }
 }

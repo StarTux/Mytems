@@ -10,7 +10,11 @@ import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
 import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
@@ -73,6 +77,7 @@ public final class EventListener implements Listener {
     private final MytemsPlugin plugin;
     private NamespacedKey fixBlocksKey;
     private long fixBlocksValue;
+    @Getter private Set<UUID> damageCalculationDebugPlayers = new HashSet<>();
 
     public void enable() {
         Bukkit.getPluginManager().registerEvents(this, plugin);
@@ -500,19 +505,41 @@ public final class EventListener implements Listener {
         player.playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, SoundCategory.BLOCKS, 1.0f, 1.0f);
     }
 
-    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
-    protected void onEntityDamage(EntityDamageEvent event) {
+    protected DamageCalculationEvent damageCalculationEvent;
+
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
+    protected void onEntityDamageCalculateLow(EntityDamageEvent event) {
         DamageCalculation calc = new DamageCalculation(event);
         if (!calc.isValid()) return;
-        DamageCalculationEvent cevent = new DamageCalculationEvent(calc);
-        cevent.callEvent();
-        if (cevent.isHandled()) {
-            cevent.getCalculation().apply();
+        damageCalculationEvent = new DamageCalculationEvent(calc);
+        damageCalculationEvent.callEvent();
+        if (calc.attackerIsPlayer() && damageCalculationDebugPlayers.contains(calc.getAttackerPlayer().getUniqueId())) {
+            damageCalculationEvent.setShouldPrintDebug(true);
         }
-        if (cevent.isShouldPrintDebug()) {
-            cevent.getCalculation().debugPrint();
+        if (calc.targetIsPlayer() && damageCalculationDebugPlayers.contains(calc.getTargetPlayer().getUniqueId())) {
+            damageCalculationEvent.setShouldPrintDebug(true);
         }
-        cevent.schedulePostDamageActions();
+        if (!damageCalculationEvent.isHandled() && !damageCalculationEvent.isShouldPrintDebug()) {
+            damageCalculationEvent = null;
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
+    protected void onEntityDamageCalculateHighest(EntityDamageEvent event) {
+        if (damageCalculationEvent == null) return;
+        if (damageCalculationEvent.getEntityDamageEvent() != event) {
+            damageCalculationEvent = null;
+        }
+        if (damageCalculationEvent.isHandled() && !event.isCancelled()) {
+            if (!damageCalculationEvent.getCalculation().apply()) {
+                damageCalculationEvent.getCalculation().errorPrint();
+            }
+        }
+        if (damageCalculationEvent.isShouldPrintDebug()) {
+            damageCalculationEvent.getCalculation().debugPrint();
+        }
+        damageCalculationEvent.schedulePostDamageActions();
+        damageCalculationEvent = null;
     }
 
     @EventHandler(priority = EventPriority.NORMAL)

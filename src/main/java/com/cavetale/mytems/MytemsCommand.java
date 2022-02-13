@@ -28,7 +28,6 @@ import java.util.stream.Stream;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.JoinConfiguration;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -38,6 +37,8 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
     @Getter protected CommandNode itemNode;
@@ -96,6 +97,12 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
             .senderCaller(this::serializeJava);
         itemNode = rootNode.addChild("item")
             .description("Item specific commands");
+        // Damage Calculation
+        CommandNode damageCalcNode = rootNode.addChild("damagecalc")
+            .description("Damage calculation commands");
+        damageCalcNode.addChild("toggledebug").denyTabCompletion()
+            .description("Toggle player debug spam")
+            .playerCaller(this::damageCalcToggleDebug);
     }
 
     protected boolean list(CommandSender sender, String[] args) {
@@ -109,11 +116,11 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         for (Mytems mytems : Mytems.values()) {
             if (tag != null && !tag.isTagged(mytems)) continue;
             lines.add(Component.join(JoinConfiguration.noSeparators(),
-                                     Component.text(mytems.ordinal() + ") ", NamedTextColor.GRAY),
+                                     text(mytems.ordinal() + ") ", GRAY),
                                      mytems.component.insertion(GsonComponentSerializer.gson().serialize(mytems.component)),
                                      mytems.getMytem().getDisplayName(),
                                      Component.space(),
-                                     Component.text(mytems.id, NamedTextColor.DARK_GRAY).insertion(mytems.id)));
+                                     text(mytems.id, DARK_GRAY).insertion(mytems.id)));
         }
         sender.sendMessage(Component.join(JoinConfiguration.separator(Component.newline()), lines));
         return true;
@@ -155,12 +162,12 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
             if (retain >= amount) {
                 throw new CommandWarn("Could not add item to inventory: " + mytems + ", " + target.getName());
             }
-            Component component = Component.empty().color(NamedTextColor.YELLOW)
-                .append(Component.text("" + (amount - retain)).color(NamedTextColor.WHITE))
-                .append(Component.text("x").color(NamedTextColor.DARK_GRAY))
+            Component component = Component.empty().color(YELLOW)
+                .append(text("" + (amount - retain)).color(WHITE))
+                .append(text("x").color(DARK_GRAY))
                 .append(mytems.component)
                 .append(mytems.getMytem().getDisplayName())
-                .append(Component.text(" given to " + target.getName()).color(NamedTextColor.YELLOW));
+                .append(text(" given to " + target.getName()).color(YELLOW));
             sender.sendMessage(component);
         }
         return true;
@@ -221,16 +228,16 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
                           : "" + c);
             preview.add(glyph != null
                         ? glyph.mytems.component
-                        : Component.text(c));
+                        : text(c));
         }
         String output = result.toString();
-        sender.sendMessage(Component.text("Preview ", NamedTextColor.YELLOW)
+        sender.sendMessage(text("Preview ", YELLOW)
                            .append(Component.join(JoinConfiguration.noSeparators(),
                                                   preview)
-                                   .color(NamedTextColor.WHITE)
+                                   .color(WHITE)
                                    .insertion(output)));
-        sender.sendMessage(Component.text("Raw ", NamedTextColor.YELLOW)
-                           .append(Component.text(output, NamedTextColor.WHITE).insertion(output)));
+        sender.sendMessage(text("Raw ", YELLOW)
+                           .append(text(output, WHITE).insertion(output)));
         return true;
     }
 
@@ -289,8 +296,8 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         }
         byte[] bytes = itemStack.serializeAsBytes();
         String string = Base64.getEncoder().encodeToString(bytes);
-        Component component = Component.text("Base64: ").color(NamedTextColor.GRAY).insertion(string)
-            .append(Component.text(string).color(NamedTextColor.WHITE));
+        Component component = text("Base64: ").color(GRAY).insertion(string)
+            .append(text(string).color(WHITE));
         player.sendMessage(component);
         plugin.getLogger().info("Serialize " + itemStack.getType() + ": " + string);
         plugin.getDataFolder().mkdirs();
@@ -337,7 +344,7 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         }
         List<String> lines = JavaItem.serializeToLines(itemStack);
         String string = String.join("\n", lines);
-        sender.sendMessage(Component.text(string, NamedTextColor.YELLOW));
+        sender.sendMessage(text(string, YELLOW));
         plugin.getLogger().info("Serialize " + itemStack.getType() + ": " + string);
         plugin.getDataFolder().mkdirs();
         File file = new File(plugin.getDataFolder(), "Item.java");
@@ -360,13 +367,25 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
             throw new CommandWarn("Invalid block face: " + args[1]);
         }
         Block block = player.getLocation().getBlock();
-        player.sendMessage(Component.text("Spawning ", NamedTextColor.YELLOW)
+        player.sendMessage(text("Spawning ", YELLOW)
                            .append(mytems.getMytem().getDisplayName())
-                           .append(Component.text(" as block at"
+                           .append(text(" as block at"
                                                   + " " + block.getX()
                                                   + " " + block.getY()
                                                   + " " + block.getZ())));
         Blocks.place(mytems, block, blockFace);
+        return true;
+    }
+
+    protected boolean damageCalcToggleDebug(Player player, String[] args) {
+        if (args.length != 0) return false;
+        if (plugin.getEventListener().getDamageCalculationDebugPlayers().contains(player.getUniqueId())) {
+            plugin.getEventListener().getDamageCalculationDebugPlayers().remove(player.getUniqueId());
+            player.sendMessage(text("Damage calculation debug spam disabled", YELLOW));
+        } else {
+            plugin.getEventListener().getDamageCalculationDebugPlayers().add(player.getUniqueId());
+            player.sendMessage(text("Damage calculation debug spam enabled", AQUA));
+        }
         return true;
     }
 
