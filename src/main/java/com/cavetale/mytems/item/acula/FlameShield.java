@@ -42,12 +42,12 @@ public final class FlameShield extends AculaItem {
                                            new Pattern(RED, GRADIENT_UP)));
                 blockStateMeta.setBlockState(banner);
                 meta.addAttributeModifier(GENERIC_ARMOR,
-                                          new AttributeModifier(UUID.randomUUID(), key.id, 4, ADD_NUMBER, HAND));
+                                          new AttributeModifier(UUID.randomUUID(), key.id, 4, ADD_NUMBER, OFF_HAND));
                 meta.addAttributeModifier(GENERIC_ARMOR_TOUGHNESS,
-                                          new AttributeModifier(UUID.randomUUID(), key.id, 1, ADD_NUMBER, HAND));
+                                          new AttributeModifier(UUID.randomUUID(), key.id, 1, ADD_NUMBER, OFF_HAND));
                 meta.addAttributeModifier(GENERIC_KNOCKBACK_RESISTANCE,
                                           new AttributeModifier(UUID.randomUUID(),
-                                                                key.id, 0.1, ADD_NUMBER, HAND));
+                                                                key.id, 0.1, ADD_NUMBER, OFF_HAND));
                 meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS); // hides banner patterns
             });
         return itemStack;
