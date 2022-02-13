@@ -8,6 +8,8 @@ import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
+import org.bukkit.entity.Player;
+import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
 @RequiredArgsConstructor @Getter
@@ -29,5 +31,10 @@ public final class DummyMytem implements Mytem {
     @Override
     public ItemStack createItemStack() {
         return prototype.clone();
+    }
+
+    @Override
+    public void onBlockPlace(BlockPlaceEvent event, Player player, ItemStack item) {
+        event.setCancelled(true);
     }
 }
