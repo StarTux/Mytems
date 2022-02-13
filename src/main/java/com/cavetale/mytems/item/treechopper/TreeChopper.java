@@ -309,6 +309,7 @@ public final class TreeChopper implements Mytem {
         List<TreeChopperStat> upgrades = new ArrayList<>();
         for (TreeChopperStat stat : TreeChopperStat.values()) {
             if (stat.type != TreeChopperStat.Type.UPGRADE) continue;
+            if (stat.conflictsWith(tag)) continue;
             upgrades.add(stat);
         }
         final int size = 4 * 9;
@@ -323,11 +324,9 @@ public final class TreeChopper implements Mytem {
         for (TreeChopperStat stat : upgrades) {
             boolean doesMeetRequirements = stat.doesMeetRequirements(tag);
             boolean maxLevelExceeded = tag.getStat(stat) >= stat.maxLevel;
-            boolean conflicts = stat.conflictsWith(tag);
             final boolean locked = !doesMeetRequirements
                 || tag.getStat(TreeChopperStat.XP) < tag.getUpgradeCost()
-                || maxLevelExceeded
-                || conflicts;
+                || maxLevelExceeded;
             List<Component> tooltip = new ArrayList<>();
             int level = Math.min(stat.maxLevel, tag.getStat(stat) + 1);
             tooltip.add(text(stat.displayName + " " + Text.roman(level), locked ? ALLRED : ALLGREEN));
@@ -339,8 +338,7 @@ public final class TreeChopper implements Mytem {
                                  doesMeetRequirements ? GRAY : ALLRED, ITALIC));
             }
             for (TreeChopperStat conflict : stat.conflicts) {
-                tooltip.add(text("Conflicts with " + conflict.displayName,
-                                 conflicts ? ALLRED : GRAY, ITALIC));
+                tooltip.add(text("Conflicts with " + conflict.displayName, GRAY, ITALIC));
             }
             tooltip.addAll(getStatDescription(stat, level));
             ItemStack icon = maxLevelExceeded
