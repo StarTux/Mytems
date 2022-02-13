@@ -96,7 +96,7 @@ public final class HyruleInstrument implements Mytem {
         LEFT(4, 1, Mytems.ARROW_LEFT, Note.Tone.B, 1),
         RIGHT(6, 1, Mytems.ARROW_RIGHT, Note.Tone.A, 1),
         DOWN(5, 2, Mytems.ARROW_DOWN, Note.Tone.F, 0),
-        A(3, 3, Mytems.OK, Note.Tone.D, 0);
+        A(3, 3, Mytems.OFF, Note.Tone.D, 0);
 
         public final int x;
         public final int y;
