@@ -531,9 +531,7 @@ public final class EventListener implements Listener {
             damageCalculationEvent = null;
         }
         if (damageCalculationEvent.isHandled() && !event.isCancelled()) {
-            if (!damageCalculationEvent.getCalculation().apply()) {
-                damageCalculationEvent.getCalculation().errorPrint();
-            }
+            damageCalculationEvent.getCalculation().apply();
         }
         if (damageCalculationEvent.isShouldPrintDebug()) {
             damageCalculationEvent.getCalculation().debugPrint();
