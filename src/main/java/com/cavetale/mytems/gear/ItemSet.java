@@ -12,7 +12,17 @@ import static net.kyori.adventure.text.format.TextDecoration.*;
 
 public interface ItemSet {
     String getName();
+
     List<SetBonus> getSetBonuses();
+
+    default int getMaxItemCount() {
+        int max = 0;
+        for (SetBonus setBonus : getSetBonuses()) {
+            int req = setBonus.getRequiredItemCount();
+            if (req > max) max = req;
+        }
+        return max;
+    };
 
     default List<Component> createTooltip() {
         return createTooltip(0);
@@ -27,7 +37,7 @@ public interface ItemSet {
         List<Component> tooltip = new ArrayList<>();
         tooltip.add(join(noSeparators(), new Component[] {
                     text(getName()),
-                    text(" [" + setItemCount + "]"),
+                    text(" [" + setItemCount + "/" + getMaxItemCount() + "]"),
                 }).color(GRAY));
         for (SetBonus setBonus : getSetBonuses()) {
             if (setBonus.isHidden()) continue;

@@ -83,7 +83,11 @@ public final class Session {
         flying.tick(player);
         attributes.tick(player);
         for (SetBonus setBonus : equipment.getSetBonuses()) {
-            setBonus.tick(player);
+            int has = equipment.countSetItems(setBonus.getItemSet());
+            setBonus.tick(player, has);
+            for (var it : setBonus.getPotionEffects(has)) {
+                player.addPotionEffect(it);
+            }
         }
     }
 

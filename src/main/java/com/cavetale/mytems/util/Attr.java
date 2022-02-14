@@ -17,4 +17,8 @@ public final class Attr {
     public static void addNumber(ItemMeta meta, Attribute attribute, UUID uuid, String name, double value, EquipmentSlot slot) {
         add(meta, attribute, uuid, name, value, Operation.ADD_NUMBER, slot);
     }
+
+    public static AttributeModifier of(final UUID uuid, final String name, final double value, final Operation operation, final EquipmentSlot slot) {
+        return new AttributeModifier(uuid, name, value, operation, slot);
+    }
 }

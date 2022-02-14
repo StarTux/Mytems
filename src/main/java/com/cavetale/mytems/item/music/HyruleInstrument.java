@@ -9,7 +9,6 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Gui;
 import com.cavetale.mytems.util.Text;
-import java.util.Arrays;
 import java.util.EnumMap;
 import java.util.List;
 import java.util.Map;
@@ -72,10 +71,10 @@ public final class HyruleInstrument implements Mytem {
         Objects.requireNonNull(type, "type=null");
         displayName = Component.text().content(Text.toCamelCase(key, " ")).color(GOLD)
             .decoration(TextDecoration.ITALIC, false).build();
-        lore = Arrays.asList(Component.text()
-                             .append(Component.text("Right-click", NamedTextColor.GREEN))
-                             .append(Component.text(" to play the " + type.name().toLowerCase() + "!", NamedTextColor.GRAY))
-                             .build());
+        lore = List.of(Component.text()
+                       .append(Component.text("Right-click", NamedTextColor.GREEN))
+                       .append(Component.text(" to play the " + type.name().toLowerCase() + "!", NamedTextColor.GRAY))
+                       .build());
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
                 meta.displayName(displayName);
@@ -165,7 +164,7 @@ public final class HyruleInstrument implements Mytem {
                    .build());
         for (Button button : Button.values()) {
             ItemStack icon = button.mytems.createItemStack();
-            List<Component> tooltip = Arrays.asList(new Component[] {
+            List<Component> tooltip = List.of(new Component[] {
                     Component.text()
                     .append(Component.text(toString(button.natural().flattened()), GOLD))
                     .append(Component.text(" Shift", NamedTextColor.GRAY))

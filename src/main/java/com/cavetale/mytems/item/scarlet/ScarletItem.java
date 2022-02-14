@@ -3,7 +3,6 @@ package com.cavetale.mytems.item.scarlet;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.event.combat.DamageCalculationEvent;
 import com.cavetale.mytems.event.combat.DamageFactor;
-import com.cavetale.mytems.gear.EntityAttribute;
 import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
@@ -25,6 +24,7 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Banner;
 import org.bukkit.block.banner.Pattern;
@@ -39,12 +39,21 @@ import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+import static com.cavetale.mytems.util.Attr.of;
+import static org.bukkit.attribute.Attribute.*;
+import static org.bukkit.attribute.AttributeModifier.Operation.*;
 
 @RequiredArgsConstructor @Getter
 public abstract class ScarletItem implements GearItem {
     protected static final TextColor TEXT_COLOR = TextColor.color(0xFF2400);
     protected static final Color LEATHER_COLOR = Color.fromRGB(0x8c2924);
+    protected static final Operation MOVEMENT_OP = ADD_SCALAR;
+    protected static final double MOVEMENT_MOD = -0.035;
+    protected static final double KNOCKBACK_MOD = 0.1;
+    protected static final double TOUGHNESS_MOD = 3.0;
     protected final Mytems key;
     protected List<Component> baseLore;
     // Set by ctor of subclasses:
@@ -60,10 +69,9 @@ public abstract class ScarletItem implements GearItem {
                 if (meta instanceof Repairable) {
                     ((Repairable) meta).setRepairCost(9999);
                     meta.setUnbreakable(true);
+                    meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
                 }
                 key.markItemMeta(meta);
-                meta.setUnbreakable(true);
-                meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
             });
     }
 
@@ -79,10 +87,11 @@ public abstract class ScarletItem implements GearItem {
 
     public static final class Helmet extends ScarletItem {
         @SuppressWarnings("LineLength")
-        static final Skull SKULL = new Skull("Scarlet Helmet",
-                                             UUID.fromString("d460ea5d-bb08-4796-8e11-bd3e8fcda0a1"),
-                                             "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2Q0Njc5M2JkYmNlNWNhZDVmMzdiMTI0ZWFmMWUzNjg5YmJhMThkNTlhODA2ODU2N2M3NGY0ZmYxYTE4In19fQ==",
-                                             null);
+        static final Skull SKULL = new
+            Skull("Scarlet Helmet",
+                  UUID.fromString("d460ea5d-bb08-4796-8e11-bd3e8fcda0a1"),
+                  "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2Q0Njc5M2JkYmNlNWNhZDVmMzdiMTI0ZWFmMWUzNjg5YmJhMThkNTlhODA2ODU2N2M3NGY0ZmYxYTE4In19fQ==",
+                  null);
 
         public Helmet(final Mytems key) {
             super(key);
@@ -91,7 +100,19 @@ public abstract class ScarletItem implements GearItem {
             prototype = new ItemStack(Material.PLAYER_HEAD);
             prototype.editMeta(meta -> {
                     SKULL.apply((SkullMeta) meta);
-                    meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
+                    final EquipmentSlot slot = EquipmentSlot.HEAD;
+                    meta.addAttributeModifier(GENERIC_ARMOR,
+                                              of(UUID.fromString("0cdd4db6-93e7-470f-aa3d-c45ca209e3ab"),
+                                                 "generic.armor", 3.0, ADD_NUMBER, slot));
+                    meta.addAttributeModifier(GENERIC_ARMOR_TOUGHNESS,
+                                              of(UUID.fromString("be66aad5-f8f5-48fa-b87e-4ac0c9a8a7ce"),
+                                                 "generic.armor_toughness", TOUGHNESS_MOD, ADD_NUMBER, slot));
+                    meta.addAttributeModifier(GENERIC_KNOCKBACK_RESISTANCE,
+                                              of(UUID.fromString("fbe109a3-85c4-464c-b520-5fb4b175b0e6"),
+                                                 "generic.knockback_resistance", KNOCKBACK_MOD, ADD_NUMBER, slot));
+                    meta.addAttributeModifier(GENERIC_MOVEMENT_SPEED,
+                                              of(UUID.fromString("b5d50d8a-ccb7-48e7-9742-9f3142e23e85"),
+                                                 "generic.movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot));
                 });
         }
     }
@@ -104,7 +125,20 @@ public abstract class ScarletItem implements GearItem {
             prototype = new ItemStack(Material.LEATHER_CHESTPLATE);
             prototype.editMeta(meta -> {
                     ((LeatherArmorMeta) meta).setColor(LEATHER_COLOR);
-                    meta.addItemFlags(ItemFlag.HIDE_DYE, ItemFlag.HIDE_ATTRIBUTES);
+                    meta.addItemFlags(ItemFlag.HIDE_DYE);
+                    final EquipmentSlot slot = EquipmentSlot.CHEST;
+                    meta.addAttributeModifier(GENERIC_ARMOR,
+                                              of(UUID.fromString("e744e0d7-4cb4-48f6-b1df-56bdfa05c8bb"),
+                                                 "generic.armor", 8.0, ADD_NUMBER, slot));
+                    meta.addAttributeModifier(GENERIC_ARMOR_TOUGHNESS,
+                                              of(UUID.fromString("e6f80206-0760-41bd-805d-7c32fdbec9d2"),
+                                                 "generic.armor_toughness", TOUGHNESS_MOD, ADD_NUMBER, slot));
+                    meta.addAttributeModifier(GENERIC_KNOCKBACK_RESISTANCE,
+                                              of(UUID.fromString("efceab5d-66bd-40f4-a582-6c2573cd7dc8"),
+                                                 "generic.knockback_resistance", KNOCKBACK_MOD, ADD_NUMBER, slot));
+                    meta.addAttributeModifier(GENERIC_MOVEMENT_SPEED,
+                                              of(UUID.fromString("01e96728-8fd0-4ea2-9880-643efec212e2"),
+                                                 "generic.movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot));
                 });
         }
     }
@@ -117,7 +151,20 @@ public abstract class ScarletItem implements GearItem {
             prototype = new ItemStack(Material.LEATHER_LEGGINGS);
             prototype.editMeta(meta -> {
                     ((LeatherArmorMeta) meta).setColor(LEATHER_COLOR);
-                    meta.addItemFlags(ItemFlag.HIDE_DYE, ItemFlag.HIDE_ATTRIBUTES);
+                    meta.addItemFlags(ItemFlag.HIDE_DYE);
+                    final EquipmentSlot slot = EquipmentSlot.LEGS;
+                    meta.addAttributeModifier(GENERIC_ARMOR,
+                                              of(UUID.fromString("4e167552-23db-498b-8e31-d6c9c5f74313"),
+                                                 "generic.armor", 6.0, ADD_NUMBER, slot));
+                    meta.addAttributeModifier(GENERIC_ARMOR_TOUGHNESS,
+                                              of(UUID.fromString("bdc1a19d-751b-47f8-9a55-465f63042c8e"),
+                                                 "generic.armor_toughness", TOUGHNESS_MOD, ADD_NUMBER, slot));
+                    meta.addAttributeModifier(GENERIC_KNOCKBACK_RESISTANCE,
+                                              of(UUID.fromString("6bbe1b5d-a6a6-4c3d-ae08-612a30a74e35"),
+                                                 "generic.knockback_resistance", KNOCKBACK_MOD, ADD_NUMBER, slot));
+                    meta.addAttributeModifier(GENERIC_MOVEMENT_SPEED,
+                                              of(UUID.fromString("9ebae243-331a-4127-9f12-6066cf827986"),
+                                                 "generic.movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot));
                 });
         }
     }
@@ -130,7 +177,53 @@ public abstract class ScarletItem implements GearItem {
             prototype = new ItemStack(Material.LEATHER_BOOTS);
             prototype.editMeta(meta -> {
                     ((LeatherArmorMeta) meta).setColor(LEATHER_COLOR);
-                    meta.addItemFlags(ItemFlag.HIDE_DYE, ItemFlag.HIDE_ATTRIBUTES);
+                    meta.addItemFlags(ItemFlag.HIDE_DYE);
+                    final EquipmentSlot slot = EquipmentSlot.FEET;
+                    meta.addAttributeModifier(GENERIC_ARMOR,
+                                              of(UUID.fromString("7a6a6d02-5b5c-45c3-a555-a4af22565ab6"),
+                                                 "generic.armor", 3.0, ADD_NUMBER, slot));
+                    meta.addAttributeModifier(GENERIC_ARMOR_TOUGHNESS,
+                                              of(UUID.fromString("6d2e31ea-1cf6-4245-8344-4f326fda8ebe"),
+                                                 "generic.armor_toughness", TOUGHNESS_MOD, ADD_NUMBER, slot));
+                    meta.addAttributeModifier(GENERIC_KNOCKBACK_RESISTANCE,
+                                              of(UUID.fromString("79644f72-d0b3-487e-9ef5-9d9714275b1a"),
+                                                 "generic.knockback_resistance", KNOCKBACK_MOD, ADD_NUMBER, slot));
+                    meta.addAttributeModifier(GENERIC_MOVEMENT_SPEED,
+                                              of(UUID.fromString("86cda9a4-f109-4450-84c8-52cbd41a3db8"),
+                                                 "generic.movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot));
+                });
+        }
+    }
+
+    public static final class Shield extends ScarletItem {
+        public Shield(final Mytems key) {
+            super(key);
+            displayName = Component.text("Scarlet Shield", TEXT_COLOR);
+            description = "An ornate shield with a fancy red shatter pattern.";
+            prototype = new ItemStack(Material.SHIELD);
+            prototype.editMeta(meta -> {
+                    BlockStateMeta blockStateMeta = (BlockStateMeta) meta;
+                    Banner banner = (Banner) blockStateMeta.getBlockState();
+                    banner.setBaseColor(DyeColor.RED);
+                    banner.setPatterns(List.of(new Pattern(DyeColor.LIGHT_GRAY, PatternType.STRIPE_DOWNLEFT),
+                                               new Pattern(DyeColor.LIGHT_GRAY, PatternType.STRIPE_DOWNRIGHT),
+                                               new Pattern(DyeColor.LIGHT_GRAY, PatternType.STRAIGHT_CROSS),
+                                               new Pattern(DyeColor.RED, PatternType.RHOMBUS_MIDDLE)));
+                    blockStateMeta.setBlockState(banner);
+                    meta.addItemFlags(ItemFlag.HIDE_POTION_EFFECTS); // hides banner patterns
+                    final EquipmentSlot slot = EquipmentSlot.OFF_HAND;
+                    meta.addAttributeModifier(GENERIC_ARMOR,
+                                              of(UUID.fromString("1c9bd86b-7235-4881-a6d5-1fa9410998a7"),
+                                                 "generic.armor", 6.0, ADD_NUMBER, slot));
+                    meta.addAttributeModifier(GENERIC_ARMOR_TOUGHNESS,
+                                              of(UUID.fromString("6b774835-9140-402e-a98d-24b6abcceded"),
+                                                 "generic.armor_toughness", TOUGHNESS_MOD, ADD_NUMBER, slot));
+                    meta.addAttributeModifier(GENERIC_KNOCKBACK_RESISTANCE,
+                                              of(UUID.fromString("c499f056-309d-4c1b-92b7-45c797ab2879"),
+                                                 "generic.knockback_resistance", KNOCKBACK_MOD, ADD_NUMBER, slot));
+                    meta.addAttributeModifier(GENERIC_MOVEMENT_SPEED,
+                                              of(UUID.fromString("463072b0-6ab9-476b-9526-96bfe79fe9b1"),
+                                                 "generic.movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot));
                 });
         }
     }
@@ -139,21 +232,23 @@ public abstract class ScarletItem implements GearItem {
         public Sword(final Mytems key) {
             super(key);
             displayName = Component.text("Scarlet Broadsword", TEXT_COLOR);
-            description = "A heavy and unwieldy sword that swings slowly, but packs a large punch.";
+            description = "A heavy and unwieldy sword that swings slowly, but packs a large punch."
+                + "\n\nSweep Attacks deal full Attack Damage.";
             prototype = new ItemStack(Material.NETHERITE_SWORD);
             prototype.editMeta(meta -> {
+                    final EquipmentSlot slot = EquipmentSlot.HAND;
                     meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
-                                              new AttributeModifier(UUID.fromString("fffe2549-0000-85b7-0001-6ab4fffef492"),
-                                                                    "generic.attack_damage",
-                                                                    20.0 + 3.5,
-                                                                    AttributeModifier.Operation.ADD_NUMBER,
-                                                                    EquipmentSlot.HAND));
+                                              of(UUID.fromString("fffe2549-0000-85b7-0001-6ab4fffef492"),
+                                                 "generic.attack_damage", 20.0 + 4.0, AttributeModifier.Operation.ADD_NUMBER, slot));
                     meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
-                                              new AttributeModifier(UUID.fromString("fffe2549-0000-867f-0001-6ab4fffef302"),
-                                                                    "generic.attack_speed",
-                                                                    -3.5,
-                                                                    AttributeModifier.Operation.ADD_NUMBER,
-                                                                    EquipmentSlot.HAND));
+                                              of(UUID.fromString("fffe2549-0000-867f-0001-6ab4fffef302"),
+                                                 "generic.attack_speed", -0.67, AttributeModifier.Operation.ADD_SCALAR, slot));
+                    meta.addAttributeModifier(GENERIC_KNOCKBACK_RESISTANCE,
+                                              of(UUID.fromString("ec8d0225-d616-4386-999e-88b463b714f0"),
+                                                 "generic.knockback_resistance", KNOCKBACK_MOD, ADD_NUMBER, slot));
+                    meta.addAttributeModifier(GENERIC_MOVEMENT_SPEED,
+                                              of(UUID.fromString("d823d982-1129-4df9-ae99-bd65392029e2"),
+                                                 "generic.movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot));
                 });
         }
 
@@ -205,39 +300,17 @@ public abstract class ScarletItem implements GearItem {
         }
     }
 
-    public static final class Shield extends ScarletItem {
-        public Shield(final Mytems key) {
-            super(key);
-            displayName = Component.text("Scarlet Shield", TEXT_COLOR);
-            description = "An ornate shield with a fancy red shatter pattern.";
-            prototype = new ItemStack(Material.SHIELD);
-            prototype.editMeta(meta -> {
-                    BlockStateMeta blockStateMeta = (BlockStateMeta) meta;
-                    Banner banner = (Banner) blockStateMeta.getBlockState();
-                    banner.setBaseColor(DyeColor.RED);
-                    banner.setPatterns(List.of(new Pattern(DyeColor.LIGHT_GRAY, PatternType.STRIPE_DOWNLEFT),
-                                               new Pattern(DyeColor.LIGHT_GRAY, PatternType.STRIPE_DOWNRIGHT),
-                                               new Pattern(DyeColor.LIGHT_GRAY, PatternType.STRAIGHT_CROSS),
-                                               new Pattern(DyeColor.RED, PatternType.RHOMBUS_MIDDLE)));
-                    blockStateMeta.setBlockState(banner);
-                });
-        }
-    }
-
     @Getter
     public static final class ScarletItemSet implements ItemSet {
         protected static ScarletItemSet instance;
         protected final String name = "Scarlet";
         protected final List<SetBonus> setBonuses = List.of(new SetBonus[] {
-                new FullArmor(3),
-                new FullProtection(4),
-                new Spikes(5),
-                new HeavyArmor(6),
+                new ScarletProtection(this, 1),
+                new ScarletSpikes(this, 2),
+                new ScarletResistance(this, 4),
+                new ScarletStrength(this, 6),
             });
-
-        protected static int lvl(int has) {
-            return Math.max(0, Math.min(4, has - 2));
-        }
+        protected final int maxItemCount = 6;
 
         static ItemSet getInstance() {
             if (instance == null) {
@@ -247,24 +320,23 @@ public abstract class ScarletItem implements GearItem {
         }
 
         @Getter @RequiredArgsConstructor
-        public static final class Spikes implements SetBonus {
+        public static final class ScarletSpikes implements SetBonus {
+            protected final ScarletItemSet itemSet;
             protected final int requiredItemCount;
             protected final String name = "Scarlet Spikes";
             protected final String description = "Return some Damage";
 
             @Override
             public String getName(int has) {
-                int lvl = lvl(has);
-                return lvl > 0
+                return has > 0
                     ? name + " " + Text.roman(has)
                     : name;
             }
 
             @Override
             public String getDescription(int has) {
-                int lvl = lvl(has);
-                return lvl > 1
-                    ? "Return Damage " + lvl + " Times"
+                return has > 1
+                    ? "Return Damage \u00D7" + has
                     : description;
             }
 
@@ -284,11 +356,10 @@ public abstract class ScarletItem implements GearItem {
                 if (target == null || attacker == null) return;
                 int has = Equipment.of(target).countSetItems(ScarletItemSet.instance);
                 if (has < requiredItemCount) return;
-                int lvl = lvl(has);
-                if (lvl <= 0) return;
+                if (has <= 0) return;
                 int totalDamage = 0;
                 Random random = ThreadLocalRandom.current();
-                for (int i = 0; i < lvl; i += 1) {
+                for (int i = 0; i < has; i += 1) {
                     if (random.nextDouble() < 0.45) {
                         totalDamage += 1 + random.nextInt(4);
                     }
@@ -313,84 +384,56 @@ public abstract class ScarletItem implements GearItem {
         }
 
         @Getter @RequiredArgsConstructor
-        public static final class HeavyArmor implements SetBonus {
-            protected final int requiredItemCount;
-            protected final String name = "Heavy Armor";
-            protected final String description = "Increased Knockback Resistance but Reduced Movement Speed";
-
-            @Override
-            public List<EntityAttribute> getEntityAttributes() {
-                return List.of(new EntityAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE,
-                                                   UUID.fromString("fffe2558-0000-6e34-0002-d63fffff2398"),
-                                                   "scarlet_knockback_resist",
-                                                   0.5,
-                                                   AttributeModifier.Operation.ADD_NUMBER),
-                               new EntityAttribute(Attribute.GENERIC_MOVEMENT_SPEED,
-                                                   UUID.fromString("fffe2549-0000-861b-0001-6ab4fffef3ca"),
-                                                   "scarlet_speed_reduction",
-                                                   -0.2,
-                                                   AttributeModifier.Operation.ADD_SCALAR));
-            }
-        }
-
-        @Getter @RequiredArgsConstructor
-        public static final class FullArmor implements SetBonus {
-            protected final int requiredItemCount;
-            protected final String name = "Scarlet Armor";
-            protected final String description = "Armor and Toughness Increase";
-
-            @Override
-            public String getName(int has) {
-                int lvl = lvl(has);
-                return lvl > 0
-                    ? name + " " + Text.roman(has)
-                    : name;
-            }
-
-            @Override
-            public String getDescription(int has) {
-                int lvl = lvl(has);
-                return lvl > 1
-                    ? lvl + " Times " + description
-                    : description;
-            }
-
-            @Override
-            public void onDefendingDamageCalculation(DamageCalculationEvent event) {
-                int has = Equipment.of(event.getTarget()).countSetItems(ScarletItemSet.instance);
-                double lvl = (double) lvl(has);
-                event.setIfApplicable(DamageFactor.ARMOR, val -> Math.min(val, 1.0 - lvl * 0.2));
-            }
-        }
-
-        @Getter @RequiredArgsConstructor
-        public static final class FullProtection implements SetBonus {
+        public static final class ScarletProtection implements SetBonus {
+            protected final ScarletItemSet itemSet;
             protected final int requiredItemCount;
             protected final String name = "Scarlet Protection";
-            protected final String description = "Allround Protection Enchant";
+            protected final String description = "Allround Protection";
 
             @Override
             public String getName(int has) {
-                int lvl = lvl(has);
-                return lvl > 0
+                return has > 0
                     ? name + " " + Text.roman(has)
                     : name;
             }
 
             @Override
             public String getDescription(int has) {
-                int lvl = lvl(has);
-                return lvl > 1
-                    ? lvl + " Times " + description
+                return has > 1
+                    ? has + "\u00D7 " + description
                     : description;
             }
 
             @Override
             public void onDefendingDamageCalculation(DamageCalculationEvent event) {
                 int has = Equipment.of(event.getTarget()).countSetItems(ScarletItemSet.instance);
-                double lvl = (double) lvl(has);
-                event.setIfApplicable(DamageFactor.PROTECTION, val -> Math.min(val, 1.0 - lvl * 0.2));
+                if (has <= 0) return;
+                int epf = has * 5;
+                double newValue = 1.0 - (((double) Math.min(20, epf)) / 25.0);
+                event.setIfApplicable(DamageFactor.PROTECTION, val -> Math.min(val, newValue));
             }
+        }
+
+        @Getter @RequiredArgsConstructor
+        public static final class ScarletResistance implements SetBonus {
+            protected final ScarletItemSet itemSet;
+            protected final int requiredItemCount;
+            protected final String name = "Resistance I";
+            protected final String description = "";
+            protected final List<PotionEffect> potionEffects = List.of(new PotionEffect[] {
+                    new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 39, 0, true, false, true),
+                });
+        }
+
+        @Getter @RequiredArgsConstructor
+        public static final class ScarletStrength implements SetBonus {
+            protected final ScarletItemSet itemSet;
+            protected final int requiredItemCount;
+            protected final String name = "Strength I";
+            protected final String description = "";
+            protected final List<PotionEffect> potionEffects = List.of(new PotionEffect[] {
+                    new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 39, 0, true, false, true),
+                });
         }
     }
 }

@@ -41,6 +41,7 @@ public abstract class SwampyItem implements GearItem {
                 if (meta instanceof Repairable repairable) {
                     repairable.setRepairCost(9999);
                     meta.setUnbreakable(true);
+                    meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
                 }
                 if (meta instanceof LeatherArmorMeta) {
                     meta.addItemFlags(ItemFlag.HIDE_DYE);
@@ -129,10 +130,12 @@ public abstract class SwampyItem implements GearItem {
     @Getter
     public static final class SwampyItemSet implements ItemSet {
         private final String name = "Swampy";
-        private final List<SetBonus> setBonuses = List.of(new PotionDuration(2), new DolphinGrace(4));
+        private final List<SetBonus> setBonuses = List.of(new PotionDuration(this, 2),
+                                                          new DolphinGrace(this, 4));
 
         @Getter @RequiredArgsConstructor
         public static final class PotionDuration implements SetBonus {
+            private final SwampyItemSet itemSet;
             private final int requiredItemCount;
             private final String name = "Potion Duration";
             private final String description = "Consumed potions last twice as long";
@@ -158,12 +161,13 @@ public abstract class SwampyItem implements GearItem {
 
         @Getter @RequiredArgsConstructor
         public static final class DolphinGrace implements SetBonus {
+            private final SwampyItemSet itemSet;
             private final int requiredItemCount;
             private final String name = "Dolphin's Grace";
             private final String description = "Get the Dolphin's Grace effect";
 
             @Override
-            public void tick(LivingEntity living) {
+            public void tick(LivingEntity living, int has) {
                 if (!(living instanceof Player)) return;
                 Player player = (Player) living;
                 int duration = 20 + 19;

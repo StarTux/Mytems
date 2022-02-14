@@ -92,6 +92,7 @@ abstract class SantaItem implements GearItem {
         meta.addEnchant(Enchantment.PROTECTION_FIRE, 4, false);
         meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, false);
         meta.setUnbreakable(true);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
         EquipmentSlot slot = EquipmentSlot.FEET;
         Attr.add(meta, Attribute.GENERIC_MAX_HEALTH,
                  UUID.fromString("25582a55-5d0d-45cf-beda-4257bb5a12bd"),
@@ -113,6 +114,7 @@ abstract class SantaItem implements GearItem {
         ItemMeta meta = item.getItemMeta();
         meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, false);
         meta.setUnbreakable(true);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
         EquipmentSlot slot = EquipmentSlot.LEGS;
         Attr.add(meta, Attribute.GENERIC_MAX_HEALTH,
                  UUID.fromString("5329e871-483e-4574-8555-c9ce4850f1d9"),
@@ -134,6 +136,7 @@ abstract class SantaItem implements GearItem {
         ItemMeta meta = item.getItemMeta();
         meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, false);
         meta.setUnbreakable(true);
+        meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
         EquipmentSlot slot = EquipmentSlot.CHEST;
         Attr.add(meta, Attribute.GENERIC_MAX_HEALTH,
                  UUID.fromString("9afaf033-baa1-4037-93c4-6ceaad54946e"),

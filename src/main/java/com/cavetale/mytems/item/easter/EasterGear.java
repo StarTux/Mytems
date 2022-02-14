@@ -10,7 +10,6 @@ import com.cavetale.mytems.util.Attr;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
@@ -64,6 +63,7 @@ public abstract class EasterGear implements GearItem {
                 if (meta instanceof Repairable) {
                     ((Repairable) meta).setRepairCost(9999);
                     meta.setUnbreakable(true);
+                    meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
                 }
                 if (meta instanceof LeatherArmorMeta) {
                     ((LeatherArmorMeta) meta).setColor(PINK_COLOR);
@@ -177,16 +177,18 @@ public abstract class EasterGear implements GearItem {
     @Getter
     public static final class EasterItemSet implements ItemSet {
         private final String name = "Easter";
-        private final List<SetBonus> setBonuses = Arrays.asList(new JumpBoost(2), new BunnyHop(4));
+        private final List<SetBonus> setBonuses = List.of(new JumpBoost(this, 2),
+                                                          new BunnyHop(this, 4));
 
         @Getter @RequiredArgsConstructor
         public static final class JumpBoost implements SetBonus {
+            private final EasterItemSet itemSet;
             private final int requiredItemCount;
             private final String name = "Jump Boost";
             private final String description = "Get Jump Boost and take no fall damage";
 
             @Override
-            public void tick(LivingEntity living) {
+            public void tick(LivingEntity living, int has) {
                 if (!(living instanceof Player)) return;
                 Player player = (Player) living;
                 int duration = 20 + 19;
@@ -214,6 +216,7 @@ public abstract class EasterGear implements GearItem {
         @Getter @RequiredArgsConstructor
         public static final class BunnyHop implements SetBonus {
             static final int COOLDOWN = 3;
+            private final EasterItemSet itemSet;
             private final int requiredItemCount;
             private final String name = "Bunny Hop";
             private final String description = "Run and jump like the Easter Bunny! (" + COOLDOWN + "s cooldown)";

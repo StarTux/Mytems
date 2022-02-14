@@ -6,7 +6,6 @@ import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
-import java.util.Arrays;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +14,7 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.potion.PotionEffect;
@@ -38,6 +38,7 @@ public abstract class DwarvenItem implements GearItem {
                 if (meta instanceof Repairable) {
                     ((Repairable) meta).setRepairCost(9999);
                     meta.setUnbreakable(true);
+                    meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
                 }
                 key.markItemMeta(meta);
             });
@@ -128,16 +129,18 @@ public abstract class DwarvenItem implements GearItem {
     @Getter
     public static final class DwarvenItemSet implements ItemSet {
         private final String name = "Dwarven";
-        private final List<SetBonus> setBonuses = Arrays.asList(new NightVision(2), new MiningSpeed(4));
+        private final List<SetBonus> setBonuses = List.of(new NightVision(this, 2),
+                                                          new MiningSpeed(this, 4));
 
         @Getter @RequiredArgsConstructor
         public static final class MiningSpeed implements SetBonus {
+            private final DwarvenItemSet itemSet;
             private final int requiredItemCount;
             private final String name = "Mining Speed";
             private final String description = "Get the Haste effect";
 
             @Override
-            public void tick(LivingEntity living) {
+            public void tick(LivingEntity living, int has) {
                 if (!(living instanceof Player)) return;
                 Player player = (Player) living;
                 int duration = 20 + 19;
@@ -155,12 +158,13 @@ public abstract class DwarvenItem implements GearItem {
 
         @Getter @RequiredArgsConstructor
         public static final class NightVision implements SetBonus {
+            private final DwarvenItemSet itemSet;
             private final int requiredItemCount;
             private final String name = "Night Vision";
             private final String description = "See in the dark";
 
             @Override
-            public void tick(LivingEntity living) {
+            public void tick(LivingEntity living, int has) {
                 if (!(living instanceof Player)) return;
                 Player player = (Player) living;
                 int duration = 200 + 19;

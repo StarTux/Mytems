@@ -4,10 +4,10 @@ import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.gear.EntityAttribute;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -25,8 +25,9 @@ public final class SantaItemSet implements ItemSet {
     private final String name = "Santa Set";
     List<SetBonus> setBonuses;
 
-    @Getter
+    @Getter @RequiredArgsConstructor
     public static final class CookieBonus implements SetBonus {
+        protected final SantaItemSet itemSet;
         protected final int requiredItemCount = 2;
         protected final String name = "Cookie Bonus";
         protected final String description = "Eating cookies gives extra health";
@@ -39,8 +40,9 @@ public final class SantaItemSet implements ItemSet {
         }
     }
 
-    @Getter
+    @Getter @RequiredArgsConstructor
     public static final class MilkBonus implements SetBonus {
+        protected final SantaItemSet itemSet;
         protected final int requiredItemCount = 3;
         protected final String name = "Milk Bonus";
         protected final String description = "Drinking milk gives absorption";
@@ -55,17 +57,18 @@ public final class SantaItemSet implements ItemSet {
         }
     }
 
-    @Getter
+    @Getter @RequiredArgsConstructor
     public static final class BonusHealth implements SetBonus {
+        protected final SantaItemSet itemSet;
         protected final int requiredItemCount = 4;
         protected final String name = "Bonus Health";
         protected final String description = "Get 10% more health";
-        protected final List<EntityAttribute> entityAttributes = Arrays
-            .asList(new EntityAttribute(Attribute.GENERIC_MAX_HEALTH,
-                                        UUID.fromString("60fbcfa6-eea5-4953-91a6-1e50905c9665"),
-                                        "SantaHealth",
-                                        0.1,
-                                        Operation.ADD_SCALAR));
+        protected final List<EntityAttribute> entityAttributes = List
+            .of(new EntityAttribute(Attribute.GENERIC_MAX_HEALTH,
+                                    UUID.fromString("60fbcfa6-eea5-4953-91a6-1e50905c9665"),
+                                    "SantaHealth",
+                                    0.1,
+                                    Operation.ADD_SCALAR));
 
         @Override
         public List<EntityAttribute> getEntityAttributes(LivingEntity living) {
@@ -79,6 +82,8 @@ public final class SantaItemSet implements ItemSet {
     }
 
     private SantaItemSet() {
-        setBonuses = Arrays.asList(new CookieBonus(), new MilkBonus(), new BonusHealth());
+        setBonuses = List.of(new CookieBonus(this),
+                             new MilkBonus(this),
+                             new BonusHealth(this));
     }
 }

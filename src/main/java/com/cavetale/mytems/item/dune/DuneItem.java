@@ -9,7 +9,6 @@ import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
-import java.util.Arrays;
 import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -29,6 +28,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Repairable;
 
@@ -50,6 +50,7 @@ public abstract class DuneItem implements GearItem {
                 if (meta instanceof Repairable repairable) {
                     repairable.setRepairCost(9999);
                     meta.setUnbreakable(true);
+                    meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
                 }
                 key.markItemMeta(meta);
             });
@@ -140,18 +141,20 @@ public abstract class DuneItem implements GearItem {
     @Getter
     public static final class DuneItemSet implements ItemSet {
         private final String name = "Dune";
-        private final List<SetBonus> setBonuses = Arrays.asList(new FlameThorns(2), new SandSpeed(4));
+        private final List<SetBonus> setBonuses = List.of(new FlameThorns(this, 2),
+                                                          new SandSpeed(this, 4));
 
         @Getter @RequiredArgsConstructor
         public static final class SandSpeed implements SetBonus {
+            private final DuneItemSet itemSet;
             private final int requiredItemCount;
             private final String name = "Sand Speed";
             private final String description = "Gain extra speed while walking on sand";
-            private final List<EntityAttribute> entityAttributes = Arrays
-                .asList(new EntityAttribute(Attribute.GENERIC_MOVEMENT_SPEED,
-                                            UUID.fromString("51f94678-9053-4e51-a916-306925f592a6"),
-                                            "duneSandSpeed",
-                                            0.5, Operation.ADD_SCALAR));
+            private final List<EntityAttribute> entityAttributes = List
+                .of(new EntityAttribute(Attribute.GENERIC_MOVEMENT_SPEED,
+                                        UUID.fromString("51f94678-9053-4e51-a916-306925f592a6"),
+                                        "duneSandSpeed",
+                                        0.5, Operation.ADD_SCALAR));
 
             /**
              * Stored in Session.favorites.
@@ -162,7 +165,8 @@ public abstract class DuneItem implements GearItem {
                 int ticks;
             }
 
-            @Override public List<EntityAttribute> getEntityAttributes(LivingEntity living) {
+            @Override
+            public List<EntityAttribute> getEntityAttributes(LivingEntity living) {
                 if (!(living instanceof Player)) return null;
                 Player player = (Player) living;
                 final boolean onSand;
@@ -180,7 +184,8 @@ public abstract class DuneItem implements GearItem {
                 return onSand ? entityAttributes : null;
             }
 
-            @Override public void tick(LivingEntity living) {
+            @Override
+            public void tick(LivingEntity living, int has) {
                 if (!(living instanceof Player)) return;
                 Player player = (Player) living;
                 Favorite favorite = MytemsPlugin.getInstance().getSessions().of(player).getFavorites().getOrSet(Favorite.class, Favorite::new);
@@ -192,6 +197,7 @@ public abstract class DuneItem implements GearItem {
 
         @Getter @RequiredArgsConstructor
         public static final class FlameThorns implements SetBonus {
+            private final DuneItemSet itemSet;
             private final int requiredItemCount;
             private final String name = "Flame Thorns";
             private final String description = "40% chance to set attackers on fire";
