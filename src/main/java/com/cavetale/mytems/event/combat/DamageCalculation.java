@@ -303,6 +303,10 @@ public final class DamageCalculation {
         return String.format("%.2f", in);
     }
 
+    private static String fmt2(double in) {
+        return String.format("%.4f", in);
+    }
+
     public void debugPrint() {
         Logger logger = MytemsPlugin.getInstance().getLogger();
         logger.info("DMG DEBUG " + (attacker != null ? Text.toCamelCase(attacker.getType(), "") : "?")
@@ -339,7 +343,7 @@ public final class DamageCalculation {
                     + " " + fmt(absorption) + "|" + fmt(event.getDamage(DamageModifier.ABSORPTION)));
         logger.info((Math.abs(getTotalDamage() - event.getFinalDamage()) < 0.001 ? "OK" : "WRONG")
                     + " Final"
-                    + " => " + fmt(getTotalDamage()) + "|" + fmt(event.getFinalDamage()));
+                    + " => " + fmt2(getTotalDamage()) + "|" + fmt2(event.getFinalDamage()));
         logger.info("========================================");
     }
 
@@ -366,7 +370,9 @@ public final class DamageCalculation {
 
     public void errorPrint() {
         Logger logger = MytemsPlugin.getInstance().getLogger();
-        logger.warning("DMG ERROR " + fmt(baseDamage) + " => " + fmt(getTotalDamage()));
+        logger.warning("DMG ERROR"
+                       + " " + fmt2(baseDamage) + " => " + fmt2(getTotalDamage())
+                       + ", " + fmt2(event.getDamage()) + " => " + fmt2(event.getFinalDamage()));
         if (attacker != null) {
             logger.warning("ATK " + printLivingEntity(attacker));
         }
