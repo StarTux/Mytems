@@ -1,21 +1,12 @@
 package com.cavetale.mytems;
 
-import com.cavetale.core.util.Json;
-import com.cavetale.mytems.item.music.Melody;
-import com.cavetale.mytems.item.music.Semitone;
 import java.util.HashSet;
 import java.util.Set;
-import org.bukkit.Instrument;
-import org.bukkit.Note;
 import org.junit.Test;
 
 public final class MytemsTest {
     @Test
     public void test() {
-        testDuplicates();
-    }
-
-    public void testDuplicates() {
         final Set<Integer> customModelDataSet = new HashSet<>();
         final Set<Character> characterSet = new HashSet<>();
         for (Mytems mytems : Mytems.values()) {
@@ -39,22 +30,5 @@ public final class MytemsTest {
                 characterSet.add(mytems.character);
             }
         }
-    }
-
-    public void testMusic() {
-        Melody melody = Melody.builder(Instrument.PIANO, 50L)
-            .key(Note.Tone.A, Semitone.SHARP)
-            .beat(20, Note.Tone.A, 1)
-            .extra(extra -> {
-                    extra.instrument(Instrument.PLING)
-                        .beat(20, Note.Tone.B, 1);
-                })
-            .build();
-        String serial = Json.serialize(melody);
-        Melody melody2 = Json.deserialize(serial, Melody.class);
-        String serial2 = Json.serialize(melody2);
-        System.out.println(melody.equals(melody2));
-        System.out.println(serial.equals(serial2));
-        System.out.println(Json.prettyPrint(melody));
     }
 }

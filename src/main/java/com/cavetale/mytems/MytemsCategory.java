@@ -40,6 +40,7 @@ public enum MytemsCategory {
     SWAMPY,
     TECHNICAL,
     TREASURE,
+    TREE_SEED,
     UI,
     UTILITY,
     VOTE,

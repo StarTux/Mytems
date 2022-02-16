@@ -20,6 +20,7 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -61,7 +62,7 @@ public final class DrAculaStaff extends AculaItem {
             Block block = event.getClickedBlock();
             if (block.getType().isInteractable()) return;
         }
-        event.setCancelled(true);
+        event.setUseItemInHand(Event.Result.DENY);
         use(player, item);
     }
 

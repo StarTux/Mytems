@@ -47,6 +47,7 @@ import com.cavetale.mytems.item.santa.SantaJacket;
 import com.cavetale.mytems.item.santa.SantaPants;
 import com.cavetale.mytems.item.scarlet.ScarletItem;
 import com.cavetale.mytems.item.swampy.SwampyItem;
+import com.cavetale.mytems.item.tree.TreeSeed;
 import com.cavetale.mytems.item.treechopper.TreeChopper;
 import com.cavetale.mytems.item.vote.VoteCandy;
 import com.cavetale.mytems.item.vote.VoteFirework;
@@ -501,8 +502,15 @@ public enum Mytems {
     FLOTSAM_CAN(ArmorPart::new, FLOWER_POT, 208, (char) 208, ARMOR_PART),
     BENT_PITCHFORK(ArmorPart::new, LIGHTNING_ROD, 209, (char) 209, ARMOR_PART),
     // Technical
-    FARAWAY_MAP(FarawayMap::new, PAPER, 249, (char) 249, TECHNICAL);
-    // Next CustomModelData: 251
+    FARAWAY_MAP(FarawayMap::new, PAPER, 249, (char) 249, TECHNICAL),
+    // Tree
+    OAK_SEED(TreeSeed::new, BEETROOT_SEEDS, 251, TREE_SEED),
+    BIRCH_SEED(TreeSeed::new, BEETROOT_SEEDS, 252, TREE_SEED),
+    SPRUCE_SEED(TreeSeed::new, BEETROOT_SEEDS, 253, TREE_SEED),
+    JUNGLE_SEED(TreeSeed::new, BEETROOT_SEEDS, 254, TREE_SEED),
+    ACACIA_SEED(TreeSeed::new, BEETROOT_SEEDS, 255, TREE_SEED),
+    DARK_OAK_SEED(TreeSeed::new, BEETROOT_SEEDS, 256, TREE_SEED);
+    // Next CustomModelData: 257
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
@@ -542,6 +550,10 @@ public enum Mytems {
                       .color(NamedTextColor.WHITE)))
             : Component.empty();
         this.category = category;
+    }
+
+    Mytems(final Function<Mytems, Mytem> ctor, final Material material, final int customModelData, final MytemsCategory category) {
+        this(ctor, material, customModelData, (char) customModelData, category);
     }
 
     public static Mytems forId(String in) {

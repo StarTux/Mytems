@@ -20,8 +20,8 @@ public final class Text {
 
     public static List<String> wrapLine(String what, int maxLineLength) {
         String[] words = what.split("\\s+");
+        if (words.length == 0) return List.of();
         List<String> lines = new ArrayList<>();
-        if (words.length == 0) return lines;
         StringBuilder line = new StringBuilder(words[0]);
         int lineLength = ChatColor.stripColor(words[0]).length();
         String lastColors = "";
