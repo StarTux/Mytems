@@ -2,6 +2,7 @@ package com.cavetale.mytems.item.tree;
 
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsCategory;
+import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
 
 public final class TreeTest {
@@ -9,7 +10,7 @@ public final class TreeTest {
     public void test() {
         for (Mytems it : Mytems.values()) {
             if (it.category == MytemsCategory.TREE_SEED) {
-                CustomTreeType.ofSeed(it);
+                assertNotNull(CustomTreeType.ofSeed(it));
             }
         }
     }

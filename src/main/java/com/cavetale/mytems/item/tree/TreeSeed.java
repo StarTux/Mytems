@@ -32,7 +32,7 @@ public final class TreeSeed implements Mytem {
 
     public TreeSeed(final Mytems mytems) {
         this.key = mytems;
-        this.customTreeType = CustomTreeType.ofSeed(mytems); // throws
+        this.customTreeType = CustomTreeType.ofSeed(mytems);
     }
 
     @Override
