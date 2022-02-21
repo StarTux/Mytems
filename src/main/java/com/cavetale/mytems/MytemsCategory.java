@@ -31,6 +31,7 @@ public enum MytemsCategory {
     PICTURE,
     PIRATE,
     POCKET_MOB,
+    POTIONS,
     PUNCTUATION,
     REACTION,
     RESOURCE,

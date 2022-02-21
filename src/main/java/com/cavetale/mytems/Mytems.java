@@ -41,6 +41,7 @@ import com.cavetale.mytems.item.music.HyruleInstrument;
 import com.cavetale.mytems.item.music.MusicalInstrument;
 import com.cavetale.mytems.item.pocketmob.MobCatcher;
 import com.cavetale.mytems.item.pocketmob.PocketMob;
+import com.cavetale.mytems.item.potion.PotionFlask;
 import com.cavetale.mytems.item.santa.SantaBoots;
 import com.cavetale.mytems.item.santa.SantaHat;
 import com.cavetale.mytems.item.santa.SantaJacket;
@@ -509,8 +510,11 @@ public enum Mytems {
     SPRUCE_SEED(TreeSeed::new, BEETROOT_SEEDS, 253, TREE_SEED),
     JUNGLE_SEED(TreeSeed::new, BEETROOT_SEEDS, 254, TREE_SEED),
     ACACIA_SEED(TreeSeed::new, BEETROOT_SEEDS, 255, TREE_SEED),
-    DARK_OAK_SEED(TreeSeed::new, BEETROOT_SEEDS, 256, TREE_SEED);
-    // Next CustomModelData: 257
+    DARK_OAK_SEED(TreeSeed::new, BEETROOT_SEEDS, 256, TREE_SEED),
+    // Potions
+    EMPTY_FLASK(DummyMytem::new, GLASS_BOTTLE, 257, POTIONS),
+    POTION_FLASK(PotionFlask::new, POTION, 258, POTIONS);
+    // Next CustomModelData: 259
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
