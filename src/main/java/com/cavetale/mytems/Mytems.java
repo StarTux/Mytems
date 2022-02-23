@@ -502,6 +502,7 @@ public enum Mytems {
     SOOTY_STOVE_PIPE(ArmorPart::new, BARREL, 206, ARMOR_PART),
     FLOTSAM_CAN(ArmorPart::new, FLOWER_POT, 208, ARMOR_PART),
     BENT_PITCHFORK(ArmorPart::new, LIGHTNING_ROD, 209, ARMOR_PART),
+    TRASH_CAN_LID(ArmorPart::new, NETHERITE_SCRAP, 259, ARMOR_PART),
     // Technical
     FARAWAY_MAP(FarawayMap::new, PAPER, 249, TECHNICAL),
     // Tree
@@ -514,7 +515,7 @@ public enum Mytems {
     // Potions
     EMPTY_FLASK(DummyMytem::new, GLASS_BOTTLE, 257, POTIONS),
     POTION_FLASK(PotionFlask::new, POTION, 258, POTIONS);
-    // Next CustomModelData: 259
+    // Next CustomModelData: 260
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
