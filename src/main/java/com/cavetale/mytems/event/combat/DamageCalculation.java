@@ -208,8 +208,10 @@ public final class DamageCalculation {
         this.absorption = target == null ? 0.0 : Math.min(currentDamage, target.getAbsorptionAmount());
         event.setDamage(DamageModifier.ABSORPTION, -absorption);
         if (event.getFinalDamage() < 0.0) {
-            errorPrint();
-            debugPrint();
+            if (event.getFinalDamage() <= -0.01) {
+                errorPrint();
+                debugPrint();
+            }
             for (DamageModifier mod : DamageModifier.values()) {
                 if (event.isApplicable(mod)) {
                     event.setDamage(mod, 0.0);
