@@ -173,7 +173,7 @@ public final class Paintbrush implements Mytem {
             new PlayerChangeBlockEvent(player, targetBlock, newBlockData).callEvent();
             targetBlock.setBlockData(newBlockData);
         } else {
-            final int maxDist = targetBlock.getWorld().getNoTickViewDistance();
+            final int maxDist = targetBlock.getWorld().getViewDistance();
             final int chunkX = targetBlock.getX() >> 4;
             final int chunkZ = targetBlock.getZ() >> 4;
             for (Player nearby : targetBlock.getWorld().getPlayers()) {
