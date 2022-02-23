@@ -26,6 +26,15 @@ public enum Slot {
         if (MaterialTags.CHEST_EQUIPPABLE.isTagged(mat)) return this == CHESTPLATE;
         if (MaterialTags.LEGGINGS.isTagged(mat)) return this == LEGGINGS;
         if (MaterialTags.BOOTS.isTagged(mat)) return this == BOOTS;
+        if (MaterialTags.SWORDS.isTagged(mat)
+            || MaterialTags.AXES.isTagged(mat)
+            || MaterialTags.SHOVELS.isTagged(mat)
+            || MaterialTags.HOES.isTagged(mat)
+            || MaterialTags.PICKAXES.isTagged(mat)
+            || MaterialTags.SHOVELS.isTagged(mat)) {
+            return this == MAIN_HAND;
+        }
+        if (Material.SHIELD == mat) return this == OFF_HAND;
         return this == MAIN_HAND || this == OFF_HAND;
     }
 }
