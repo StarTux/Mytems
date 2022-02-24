@@ -1,10 +1,10 @@
 package com.cavetale.mytems.item.farawaymap;
 
+import com.cavetale.core.connect.Connect;
 import com.cavetale.core.util.Json;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Items;
-import com.winthier.connect.Connect;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -55,7 +55,7 @@ public final class FarawayMap implements Mytem {
     public ItemStack deserializeTag(String serialized) {
         FarawayMapTag tag = Json.deserialize(serialized, FarawayMapTag.class);
         if (tag == null) return createItemStack();
-        if (Connect.getInstance().getServerName().equals(tag.server)) {
+        if (Connect.get().getServerName().equals(tag.server)) {
             ItemStack itemStack = new ItemStack(Material.FILLED_MAP);
             tag.storeMap(itemStack);
             return itemStack;

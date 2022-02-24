@@ -1,6 +1,6 @@
 package com.cavetale.mytems.item.farawaymap;
 
-import com.winthier.connect.Connect;
+import com.cavetale.core.connect.Connect;
 import com.cavetale.mytems.MytemTag;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.worldmarker.util.Tags;
@@ -70,7 +70,7 @@ public final class FarawayMapTag extends MytemTag {
             } else {
                 this.mapId = null;
             }
-            this.server = Connect.getInstance().getServerName();
+            this.server = Connect.get().getServerName();
             this.color = meta.hasColor() ? meta.getColor().asRGB() : null;
         }
     }

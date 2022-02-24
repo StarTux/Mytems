@@ -1,5 +1,6 @@
 package com.cavetale.mytems.item.coin;
 
+import com.cavetale.core.connect.ServerCategory;
 import com.cavetale.money.Money;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
@@ -7,7 +8,6 @@ import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import com.cavetale.worldmarker.util.Tags;
-import com.winthier.connect.Connect;
 import java.util.List;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -65,9 +65,7 @@ public final class Coin implements Mytem {
         if (player.getGameMode() != GameMode.SURVIVAL && player.getGameMode() != GameMode.ADVENTURE) {
             return;
         }
-        if (Connect.getInstance().getServerName().equals("creative")) {
-            return;
-        }
+        if (!ServerCategory.current().isSurvival()) return;
         Item item = event.getItem();
         if (item.isDead()) return;
         event.setCancelled(true);
