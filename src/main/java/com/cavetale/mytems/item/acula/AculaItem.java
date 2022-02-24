@@ -1,10 +1,12 @@
 package com.cavetale.mytems.item.acula;
 
+import com.cavetale.core.font.Unicode;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -24,14 +26,18 @@ import org.bukkit.inventory.meta.Repairable;
 abstract class AculaItem implements GearItem {
     @Getter protected final Mytems key;
     @Getter protected Component displayName;
-    @Getter protected List<Component> baseLore;
+    @Getter protected final List<Component> baseLore = new ArrayList<>();
     protected ItemStack prototype;
 
     @Override
     public final void enable() {
         displayName = creepify(getRawDisplayName());
         prototype = getRawItemStack();
-        baseLore = Text.wrapLore(getDescription());
+        baseLore.addAll(Text.wrapLore(Unicode.tiny(getDescription().toLowerCase())));
+        if (!getUsage().isEmpty()) {
+            baseLore.add(Component.empty());
+            baseLore.addAll(Text.wrapLore(getUsage()));
+        }
         prototype.editMeta(meta -> {
                 Items.text(meta, createTooltip());
                 meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
@@ -44,6 +50,10 @@ abstract class AculaItem implements GearItem {
     }
 
     protected abstract String getDescription();
+
+    protected String getUsage() {
+        return "";
+    }
 
     protected abstract String getRawDisplayName();
 

@@ -21,9 +21,11 @@ public final class GhastBow extends AculaItem {
     private final String rawDisplayName = "Ghast Bow";
     private final String description = ""
         + ChatColor.RED + "Legend has it the bowstring of this unique item was soaked in ghast tears."
-        + " They say it's the only weapon which may lower a vampire's guard..."
-        + "\n\n"
-        + ChatColor.RED + "shoot " + ChatColor.GRAY + "Launch fireball for 1 exp level";
+        + " They say it's the only weapon which may lower a vampire's guard...";
+    private final String usage = ""
+        + ChatColor.RED + "Shoot"
+        + ChatColor.DARK_GRAY + "\u2013"
+        + ChatColor.GRAY + "Launch fireball";
 
     public GhastBow(final Mytems key) {
         super(key);
@@ -44,19 +46,17 @@ public final class GhastBow extends AculaItem {
             // Normal arrow, not tipped. The interface TippedArrow is deprecated.
             arrow.setFireTicks(200);
         }
-        if (player.getLevel() < 1) return;
         Projectile projectile;
         float force = event.getForce();
-        if (force < 1.0f) {
-            projectile = player.launchProjectile(SmallFireball.class);
-        } else {
-            projectile = player.launchProjectile(LargeFireball.class);
-        }
+        boolean fullForce = event.getForce() >= 1.0f;
+        projectile = player.launchProjectile(fullForce ? LargeFireball.class : SmallFireball.class);
         if (projectile == null) return;
         event.setConsumeItem(false);
         event.setProjectile(projectile);
-        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GHAST_SHOOT, SoundCategory.PLAYERS, 0.5f, 1.25f);
+        player.getWorld().playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, SoundCategory.PLAYERS, 0.5f, 1.25f);
+        if (fullForce) {
+            player.getWorld().playSound(player.getLocation(), Sound.ENTITY_GHAST_WARN, SoundCategory.PLAYERS, 0.5f, 1.125f);
+        }
         player.getWorld().spawnParticle(Particle.FLAME, player.getEyeLocation(), 8, 0.25, 0.25, 0.25, 0.0);
-        player.setLevel(player.getLevel() - 1);
     }
 }

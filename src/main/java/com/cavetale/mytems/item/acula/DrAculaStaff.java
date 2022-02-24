@@ -34,9 +34,10 @@ public final class DrAculaStaff extends AculaItem {
     private final int cooldownSeconds = 60;
     private final String rawDisplayName = "Dr. Acula's Staff";
     private final String description = ""
-        + ChatColor.RED + "This staff was found among the mysterious doctor's belongings in the inn he stayed at, long after he had fled town."
-        + "\n\n"
-        + ChatColor.RED + "right-click "
+        + ChatColor.RED + "This staff was found among the mysterious doctor's belongings in the inn he stayed at, long after he had fled town.";
+    private final String usage = ""
+        + ChatColor.RED + "Right click"
+        + ChatColor.DARK_GRAY + "\u2013"
         + ChatColor.GRAY + "Disappear for " + durationSeconds + "s";
 
     public DrAculaStaff(final Mytems key) {

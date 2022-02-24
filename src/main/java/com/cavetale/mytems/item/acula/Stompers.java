@@ -26,9 +26,10 @@ public final class Stompers extends AculaItem {
     private final double radius = 3.0;
     private final String radiusStr = "3";
     private final String description = "\n\n"
-        + ChatColor.RED + "When first discovered, my clumsy assistant managed to drop these shoes to the ground."
-        + "\n\n"
-        + ChatColor.RED + "fall damage " + ChatColor.GRAY
+        + ChatColor.RED + "When first discovered, my clumsy assistant managed to drop these shoes to the ground.";
+    private final String usage = ""
+        + ChatColor.RED + "Stomp"
+        + ChatColor.DARK_GRAY + "\u2013"
         + ChatColor.GRAY + "Deal " + damageFactorStr + "x base damage to enemies within " + radiusStr + " blocks";
 
     public Stompers(final Mytems key) {
