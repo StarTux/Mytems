@@ -20,7 +20,6 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.type.Leaves;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -120,7 +119,6 @@ public final class TreeChop {
                         saplingBlocks.add(nbor);
                     }
                 } else if (Tag.LEAVES.isTagged(nbor.getType())) {
-                    if (nbor.getBlockData() instanceof Leaves leaves && leaves.isPersistent()) continue;
                     if (leafBlocks.size() >= tag.getMaxLeafBlocks()) continue;
                     if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, nbor)) continue;
                     leafBlocks.add(nbor);
@@ -146,7 +144,6 @@ public final class TreeChop {
                 if (nbor.getY() < minHeight) continue;
                 if (PlayerPlacedBlocks.isPlayerPlaced(nbor)) continue;
                 if (Tag.LEAVES.isTagged(nbor.getType())) {
-                    if (nbor.getBlockData() instanceof Leaves leaves && leaves.isPersistent()) continue;
                     // If the leaf is attached to a log from a
                     // different tree, we skip it.
                     for (BlockFace blockFace : FACE6) {
