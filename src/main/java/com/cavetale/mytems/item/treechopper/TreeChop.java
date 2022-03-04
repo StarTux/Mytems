@@ -57,6 +57,7 @@ public final class TreeChop {
     protected boolean doVines;
     protected boolean doReplant;
     protected int enchanter;
+    protected int pickup;
     protected int brokenBlocks;
     protected static final BlockFace[] FACE6 = {
         BlockFace.UP,
@@ -85,6 +86,7 @@ public final class TreeChop {
         doVines = tag.getStat(TreeChopperStat.SILK) >= 2;
         doReplant = tag.getStat(TreeChopperStat.REPLANT) >= 1;
         enchanter = tag.getStat(TreeChopperStat.ENCH);
+        pickup = tag.getStat(TreeChopperStat.PICKUP);
         // Log blocks is initialized with the original block!
         logBlocks.add(brokenBlock);
         // Blocks already searched, good or not
@@ -158,7 +160,7 @@ public final class TreeChop {
                     for (Block logBlock : logBlocks) {
                         int dx = Math.abs(logBlock.getX() - nbor.getX());
                         int dz = Math.abs(logBlock.getZ() - nbor.getZ());
-                        if (dx + dz <= 4) {
+                        if (dx + dz <= 6) {
                             isConnected = true;
                             break;
                         }
@@ -216,7 +218,9 @@ public final class TreeChop {
                         if (vineBlock.getType() != Material.VINE) continue;
                         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, vineBlock)) continue;
                         PlayerBreakBlockEvent.call(player, vineBlock);
+                        if (pickup > 0) TreeChopListener.target = player.getLocation();
                         vineBlock.breakNaturally(shears, true);
+                        TreeChopListener.target = null;
                     }
                 }
                 int blocksBrokenNow = 0;
@@ -226,7 +230,9 @@ public final class TreeChop {
                         if (!Tag.LOGS.isTagged(logBlock.getType())) continue;
                         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, logBlock)) continue;
                         PlayerBreakBlockEvent.call(player, logBlock);
+                        if (pickup > 0) TreeChopListener.target = player.getLocation();
                         logBlock.breakNaturally(axeItem, true);
+                        TreeChopListener.target = null;
                         brokenBlocks += 1;
                         if (player.isOnline()) {
                             if (player.getSaturation() >= 0.01f) {
@@ -249,7 +255,9 @@ public final class TreeChop {
                         if (!Tag.LEAVES.isTagged(leafBlock.getType())) continue;
                         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, leafBlock)) continue;
                         PlayerBreakBlockEvent.call(player, leafBlock);
+                        if (pickup > 0) TreeChopListener.target = player.getLocation();
                         leafBlock.breakNaturally(axeItem, true);
+                        TreeChopListener.target = null;
                         brokenBlocks += 1;
                         if (enchanter > 0 && ThreadLocalRandom.current().nextInt(200) < enchanter && player.isOnline()) {
                             player.giveExp(1, true);

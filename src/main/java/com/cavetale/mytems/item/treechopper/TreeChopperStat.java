@@ -11,12 +11,14 @@ import org.bukkit.inventory.ItemStack;
 
 public enum TreeChopperStat {
     XP(Type.BASE, Integer.MAX_VALUE, "Experience", () -> null),
-    CHOP(Type.UPGRADE, 5, "Chopping", () -> new ItemStack(Material.OAK_LOG)),
+    CHOP(Type.UPGRADE, 6, "Chopping", () -> new ItemStack(Material.OAK_LOG)),
     LEAF(Type.UPGRADE, 4, "Leaf Blower", () -> new ItemStack(Material.OAK_LEAVES)),
     FORTUNE(Type.UPGRADE, 3, "Fortune", () -> Mytems.DICE.createIcon()),
     SILK(Type.UPGRADE, 2, "Shears", () -> new ItemStack(Material.SHEARS)),
     REPLANT(Type.UPGRADE, 1, "Replant", () -> new ItemStack(Material.OAK_SAPLING)),
+    PICKUP(Type.UPGRADE, 1, "Magnet", () -> new ItemStack(Material.HOPPER_MINECART)),
     SPEED(Type.UPGRADE, 5, "Speed", () -> new ItemStack(Material.SUGAR)),
+    PUNCH(Type.UPGRADE, 1, "Punching", () -> new ItemStack(Material.GUNPOWDER)),
     ENCH(Type.UPGRADE, 10, "Enchanter", () -> new ItemStack(Material.EXPERIENCE_BOTTLE));
 
     public enum Type {

@@ -20,6 +20,8 @@ import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.title.Title;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.Tag;
@@ -69,9 +71,13 @@ public final class TreeChopper implements Mytem {
                 .completers(CommandArgCompleter.integer(i -> true))
                 .playerCaller((player, args) -> statCommand(stat, player, args));
         }
+        commandNode.addChild("max").denyTabCompletion()
+            .description("Max out your chopper")
+            .playerCaller(this::maxCommand);
         commandNode.addChild("debug").denyTabCompletion()
             .description("Dump debug information")
             .senderCaller(this::debug);
+        Bukkit.getPluginManager().registerEvents(new TreeChopListener(), MytemsPlugin.getInstance());
     }
 
     @Override
@@ -94,10 +100,20 @@ public final class TreeChopper implements Mytem {
         if (!Tag.LOGS.isTagged(block.getType())) return;
         if (PlayerPlacedBlocks.isPlayerPlaced(block)) return;
         TreeChopperTag tag = serializeTag(itemStack);
-        if (event instanceof BlockDamageEvent && tag.getStat(TreeChopperStat.SPEED) == 0) {
-            return;
-        }
-        if (event instanceof BlockBreakEvent && tag.getStat(TreeChopperStat.SPEED) != 0) {
+        switch (player.getGameMode()) {
+        case CREATIVE:
+            if (event instanceof BlockDamageEvent && tag.getStat(TreeChopperStat.PUNCH) == 0) {
+                return;
+            }
+            if (event instanceof BlockBreakEvent && tag.getStat(TreeChopperStat.PUNCH) != 0) {
+                return;
+            }
+            break;
+        case SURVIVAL:
+        case ADVENTURE:
+            break;
+        case SPECTATOR:
+        default:
             return;
         }
         if (player.getFoodLevel() < 2) {
@@ -180,10 +196,15 @@ public final class TreeChopper implements Mytem {
     @Override
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack itemStack) {
         if (event.getHand() != EquipmentSlot.HAND) return;
+        if (!player.isSneaking() && event.hasBlock()) {
+            Block block = event.getClickedBlock();
+            Material mat = block.getType();
+            if (mat.isInteractable()) return;
+            if (Tag.LOGS.isTagged(mat) && !mat.name().startsWith("STRIPPED")) return;
+        }
         event.setUseInteractedBlock(Event.Result.DENY);
         TreeChopperTag tag = serializeTag(itemStack);
         int xp = tag.getStat(TreeChopperStat.XP);
-        int upgradeCost = tag.getUpgradeCost();
         openUpgradeGui(player, itemStack, tag);
     }
 
@@ -254,10 +275,16 @@ public final class TreeChopper implements Mytem {
         case REPLANT:
             return List.of(text("Chopped trees are", DARK_GRAY),
                            text("instantly replanted", DARK_GRAY));
+        case PICKUP:
+            return List.of(text("Pick up broken blocks", DARK_GRAY));
         case SPEED: {
             int n = TreeChopperTag.getChoppingSpeed(value);
             return List.of(text("Chop trees " + n + " times", DARK_GRAY),
                            text("as fast", DARK_GRAY));
+        }
+        case PUNCH: {
+            return List.of(text("Hit the root block", DARK_GRAY),
+                           text("to start chopping", DARK_GRAY));
         }
         case ENCH: {
             return List.of(text("Chopped logs and", DARK_GRAY),
@@ -305,11 +332,28 @@ public final class TreeChopper implements Mytem {
         return true;
     }
 
+    protected boolean maxCommand(Player player, String[] args) {
+        if (args.length != 0) return false;
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        if (!key.isItem(itemStack)) {
+            throw new CommandWarn("Hold the Tree Chopper in your main hand!");
+        }
+        TreeChopperTag tag = serializeTag(itemStack);
+        for (TreeChopperStat stat : TreeChopperStat.values()) {
+            if (stat.type != TreeChopperStat.Type.UPGRADE) continue;
+            tag.setStat(stat, stat.maxLevel);
+        }
+        tag.store(itemStack);
+        Items.text(itemStack, makeItemTooltip(tag));
+        player.sendMessage(text("Your Tree Chopper was maxed out", YELLOW));
+        return true;
+    }
+
     protected boolean openUpgradeGui(Player player, ItemStack itemStack, TreeChopperTag tag) {
         List<TreeChopperStat> upgrades = new ArrayList<>();
         for (TreeChopperStat stat : TreeChopperStat.values()) {
             if (stat.type != TreeChopperStat.Type.UPGRADE) continue;
-            if (stat.conflictsWith(tag)) continue;
+            if (tag.getStat(stat) <= 0 && stat.conflictsWith(tag)) continue;
             upgrades.add(stat);
         }
         final int size = 4 * 9;
@@ -327,6 +371,7 @@ public final class TreeChopper implements Mytem {
             final boolean locked = !doesMeetRequirements
                 || tag.getStat(TreeChopperStat.XP) < tag.getUpgradeCost()
                 || maxLevelExceeded;
+            final boolean conflicts = stat.conflictsWith(tag); // happens with maxed axes
             List<Component> tooltip = new ArrayList<>();
             int level = Math.min(stat.maxLevel, tag.getStat(stat) + 1);
             tooltip.add(text(stat.displayName + " " + Text.roman(level), locked ? ALLRED : ALLGREEN));
@@ -348,7 +393,7 @@ public final class TreeChopper implements Mytem {
             int itemIndex = i++;
             gui.setItem(itemIndex, icon, click -> {
                     if (!click.isLeftClick()) return;
-                    if (locked) {
+                    if (locked || conflicts) {
                         player.playSound(player.getLocation(),
                                          Sound.UI_BUTTON_CLICK, SoundCategory.MASTER,
                                          0.5f, 0.5f);
