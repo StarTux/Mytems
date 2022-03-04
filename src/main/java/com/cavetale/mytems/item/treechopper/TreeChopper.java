@@ -101,7 +101,8 @@ public final class TreeChopper implements Mytem {
         if (PlayerPlacedBlocks.isPlayerPlaced(block)) return;
         TreeChopperTag tag = serializeTag(itemStack);
         switch (player.getGameMode()) {
-        case CREATIVE:
+        case SURVIVAL:
+        case ADVENTURE:
             if (event instanceof BlockDamageEvent && tag.getStat(TreeChopperStat.PUNCH) == 0) {
                 return;
             }
@@ -109,10 +110,9 @@ public final class TreeChopper implements Mytem {
                 return;
             }
             break;
-        case SURVIVAL:
-        case ADVENTURE:
+        case CREATIVE: // always allow
             break;
-        case SPECTATOR:
+        case SPECTATOR: // always deny
         default:
             return;
         }
