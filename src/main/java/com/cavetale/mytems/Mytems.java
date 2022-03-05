@@ -506,16 +506,22 @@ public enum Mytems {
     // Technical
     FARAWAY_MAP(FarawayMap::new, PAPER, 249, TECHNICAL),
     // Tree
-    OAK_SEED(TreeSeed::new, BEETROOT_SEEDS, 251, TREE_SEED),
+    OAKNUT(TreeSeed::new, BEETROOT_SEEDS, 251, TREE_SEED),
     BIRCH_SEED(TreeSeed::new, BEETROOT_SEEDS, 252, TREE_SEED),
-    SPRUCE_SEED(TreeSeed::new, BEETROOT_SEEDS, 253, TREE_SEED),
+    SPRUCE_CONE(TreeSeed::new, BEETROOT_SEEDS, 253, TREE_SEED),
     JUNGLE_SEED(TreeSeed::new, BEETROOT_SEEDS, 254, TREE_SEED),
     ACACIA_SEED(TreeSeed::new, BEETROOT_SEEDS, 255, TREE_SEED),
     DARK_OAK_SEED(TreeSeed::new, BEETROOT_SEEDS, 256, TREE_SEED),
+    AZALEA_SEED(TreeSeed::new, BEETROOT_SEEDS, 260, TREE_SEED),
+    SCOTCH_PINE_CONE(TreeSeed::new, BEETROOT_SEEDS, 261, TREE_SEED),
+    FIR_CONE(TreeSeed::new, BEETROOT_SEEDS, 262, TREE_SEED),
+    FANCY_OAK_SEED(TreeSeed::new, BEETROOT_SEEDS, 263, TREE_SEED),
+    FANCY_BIRCH_SEED(TreeSeed::new, BEETROOT_SEEDS, 264, TREE_SEED),
+    FANCY_SPRUCE_CONE(TreeSeed::new, BEETROOT_SEEDS, 265, TREE_SEED),
     // Potions
     EMPTY_FLASK(DummyMytem::new, GLASS_BOTTLE, 257, POTIONS),
     POTION_FLASK(PotionFlask::new, POTION, 258, POTIONS);
-    // Next CustomModelData: 260
+    // Next CustomModelData: 266
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();

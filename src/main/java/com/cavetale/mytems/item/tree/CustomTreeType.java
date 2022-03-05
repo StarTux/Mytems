@@ -7,12 +7,18 @@ import org.bukkit.Material;
 
 @Getter @RequiredArgsConstructor
 public enum CustomTreeType {
-    OAK(Mytems.OAK_SEED, Material.OAK_SAPLING),
+    OAK(Mytems.OAKNUT, Material.OAK_SAPLING),
     BIRCH(Mytems.BIRCH_SEED, Material.BIRCH_SAPLING),
-    SPRUCE(Mytems.SPRUCE_SEED, Material.SPRUCE_SAPLING),
+    SPRUCE(Mytems.SPRUCE_CONE, Material.SPRUCE_SAPLING),
     JUNGLE(Mytems.JUNGLE_SEED, Material.JUNGLE_SAPLING),
     ACACIA(Mytems.ACACIA_SEED, Material.ACACIA_SAPLING),
-    DARK_OAK(Mytems.DARK_OAK_SEED, Material.DARK_OAK_SAPLING);
+    DARK_OAK(Mytems.DARK_OAK_SEED, Material.DARK_OAK_SAPLING),
+    AZALEA(Mytems.AZALEA_SEED, Material.AZALEA),
+    SCOTCH_PINE(Mytems.SCOTCH_PINE_CONE, Material.SPRUCE_SAPLING),
+    FIR(Mytems.FIR_CONE, Material.SPRUCE_SAPLING),
+    FANCY_OAK(Mytems.FANCY_OAK_SEED, Material.OAK_SAPLING),
+    FANCY_BIRCH(Mytems.FANCY_BIRCH_SEED, Material.BIRCH_SAPLING),
+    FANCY_SPRUCE(Mytems.FANCY_SPRUCE_CONE, Material.SPRUCE_SAPLING);
 
     public final Mytems seedMytems;
     public final Material saplingMaterial;
