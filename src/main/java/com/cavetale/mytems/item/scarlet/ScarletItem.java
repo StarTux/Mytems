@@ -231,7 +231,7 @@ public abstract class ScarletItem implements GearItem {
     public static final class Sword extends ScarletItem {
         public Sword(final Mytems key) {
             super(key);
-            displayName = Component.text("Scarlet Broadsword", TEXT_COLOR);
+            displayName = Component.text("Scarlet Sword", TEXT_COLOR);
             description = "A heavy and unwieldy sword that swings slowly, but packs a large punch."
                 + "\n\nSweep Attacks deal full Attack Damage.";
             prototype = new ItemStack(Material.NETHERITE_SWORD);
