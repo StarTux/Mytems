@@ -53,6 +53,7 @@ public enum TreeChopperStat {
         FORTUNE.requirements.put(LEAF, 1);
         REPLANT.requirements.put(LEAF, 1);
         SPEED.requirements.put(CHOP, 1);
+        PUNCH.requirements.put(SPEED, 2);
     }
 
     private static void addConflict(TreeChopperStat a, TreeChopperStat b) {
