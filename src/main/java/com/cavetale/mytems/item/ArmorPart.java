@@ -10,14 +10,15 @@ import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerBucketFillEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 @RequiredArgsConstructor @Getter
 public final class ArmorPart implements Mytem {
-    protected static final TextColor RUST = TextColor.color(0xb7410e);
     protected static final TextColor COPPER = TextColor.color(0xe77c56);
+    protected static final TextColor RUST = TextColor.color(0x6b3017);
     private final Mytems key;
     private ItemStack prototype;
     private Component displayName;
@@ -27,9 +28,9 @@ public final class ArmorPart implements Mytem {
     public void enable() {
         this.displayName = Component.text(Text.toCamelCase(key, " "), COPPER);
         this.text = List.of(displayName,
-                            Component.text("Armor Part", RUST),
-                            Component.text("Acquired by", COPPER),
-                            Component.text("completing raids", COPPER));
+                            Component.text("Armor Scrap acquired", RUST),
+                            Component.text("by completing Raids on", RUST),
+                            Component.text("/raid.", RUST));
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
                 Items.text(meta, text);
@@ -48,7 +49,7 @@ public final class ArmorPart implements Mytem {
     }
 
     @Override
-    public void onBucketFill(PlayerBucketFillEvent event, Player player, ItemStack item) {
-        event.setCancelled(true);
+    public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
+        event.setUseItemInHand(Event.Result.DENY);
     }
 }
