@@ -42,7 +42,7 @@ public final class TreeSeed implements Mytem {
         List<Component> text = new ArrayList<>();
         text.add(displayName);
         String treeName = Text.toCamelCase(customTreeType, " ");
-        String description = "Plant on a patch of moist farmland"
+        String description = "Plant on a patch of tilled soil"
             + " to grow into a magnificent "
             + ChatColor.GREEN + treeName + ChatColor.RESET
             + " tree.";

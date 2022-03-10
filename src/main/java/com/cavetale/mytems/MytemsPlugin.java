@@ -1,7 +1,9 @@
 package com.cavetale.mytems;
 
+import com.cavetale.core.connect.ServerCategory;
 import com.cavetale.core.font.Emoji;
 import com.cavetale.core.font.GlyphPolicy;
+import com.cavetale.mytems.loot.LootTableListener;
 import com.cavetale.mytems.session.Sessions;
 import com.cavetale.mytems.util.Gui;
 import java.util.ArrayList;
@@ -70,6 +72,9 @@ public final class MytemsPlugin extends JavaPlugin {
             for (Chunk chunk : world.getLoadedChunks()) {
                 fixChunkBlocks(chunk);
             }
+        }
+        if (ServerCategory.current().isSurvival()) {
+            Bukkit.getPluginManager().registerEvents(new LootTableListener(this), this);
         }
     }
 
