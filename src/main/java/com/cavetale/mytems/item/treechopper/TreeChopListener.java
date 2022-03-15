@@ -11,6 +11,7 @@ public final class TreeChopListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     protected void onItemSpawn(ItemSpawnEvent event) {
         if (target == null) return;
+        if (!target.getWorld().equals(event.getLocation().getWorld())) return;
         event.getEntity().teleport(target);
         event.getEntity().setPickupDelay(0);
     }
