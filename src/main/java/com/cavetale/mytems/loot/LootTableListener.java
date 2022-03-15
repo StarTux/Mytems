@@ -18,6 +18,7 @@ import org.bukkit.event.world.LootGenerateEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MerchantRecipe;
 import org.bukkit.loot.LootTable;
+import org.bukkit.loot.LootTables;
 
 @RequiredArgsConstructor
 public final class LootTableListener implements Listener {
@@ -27,6 +28,7 @@ public final class LootTableListener implements Listener {
     @EventHandler(ignoreCancelled = true)
     private void onLootGenerate(LootGenerateEvent event) {
         if (event.getLootTable().getKey().getKey().startsWith("chests/")) {
+            if (event.getLootTable().getKey().equals(LootTables.JUNGLE_TEMPLE_DISPENSER.getKey())) return;
             onChestGenerate(event.getLootTable(), event.getLoot());
         }
     }
