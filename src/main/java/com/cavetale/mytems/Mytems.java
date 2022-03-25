@@ -376,6 +376,15 @@ public enum Mytems {
     PAINT_PALETTE(DummyMytem::new, STICK, 202, UI),
     MOON(DummyMytem::new, YELLOW_DYE, 204, UI),
     LIGHTNING(DummyMytem::new, LIGHTNING_ROD, 250, UI),
+    PLUS_BUTTON(DummyMytem::new, EGG, 266, UI),
+    MINUS_BUTTON(DummyMytem::new, SNOWBALL, 267, UI),
+    FLOPPY_DISK(DummyMytem::new, MUSIC_DISC_CAT, 268, UI),
+    FOLDER(DummyMytem::new, CHEST, 269, UI),
+    MAGNET(DummyMytem::new, IRON_NUGGET, 270, UI),
+    DATA_INTEGER(DummyMytem::new, REPEATER, 271, UI),
+    DATA_STRING(DummyMytem::new, CHAIN, 272, UI),
+    DATA_FLOAT(DummyMytem::new, REPEATER, 273, UI),
+    BOMB(DummyMytem::new, CHAIN, 274, UI),
     // Leters
     LETTER_A(GlyphItem::new, PLAYER_HEAD, 68, (char) 0xE284, LETTER),
     LETTER_B(GlyphItem::new, PLAYER_HEAD, 69, (char) 0xE285, LETTER),
@@ -521,7 +530,7 @@ public enum Mytems {
     // Potions
     EMPTY_FLASK(DummyMytem::new, GLASS_BOTTLE, 257, POTIONS),
     POTION_FLASK(PotionFlask::new, POTION, 258, POTIONS);
-    // Next CustomModelData: 266
+    // Next CustomModelData: 275
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();

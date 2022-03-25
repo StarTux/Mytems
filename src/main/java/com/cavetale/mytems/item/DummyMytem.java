@@ -9,7 +9,9 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 
 @RequiredArgsConstructor @Getter
@@ -36,5 +38,10 @@ public final class DummyMytem implements Mytem {
     @Override
     public void onBlockPlace(BlockPlaceEvent event, Player player, ItemStack item) {
         event.setCancelled(true);
+    }
+
+    @Override
+    public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
+        event.setUseItemInHand(Event.Result.DENY);
     }
 }
