@@ -360,10 +360,12 @@ public enum Mytems {
     HEART(DummyMytem::new, HEART_OF_THE_SEA, 9, (char) 0xE241, UI),
     HALF_HEART(DummyMytem::new, NAUTILUS_SHELL, 10, (char) 0xE242, UI),
     EMPTY_HEART(DummyMytem::new, NAUTILUS_SHELL, 13, (char) 0xE246, UI),
-    ARROW_RIGHT(DummyMytem::new, ARROW, 11, (char) 0xE244, UI),
-    ARROW_LEFT(DummyMytem::new, ARROW, 12, (char) 0xE245, UI),
-    ARROW_UP(DummyMytem::new, ARROW, 37, (char) 0xE265, UI),
-    ARROW_DOWN(DummyMytem::new, ARROW, 38, (char) 0xE266, UI),
+    ARROW_RIGHT(DummyMytem::new, ARROW, 11, (char) 0xE244, ARROWS),
+    ARROW_LEFT(DummyMytem::new, ARROW, 12, (char) 0xE245, ARROWS),
+    ARROW_UP(DummyMytem::new, ARROW, 37, (char) 0xE265, ARROWS),
+    ARROW_DOWN(DummyMytem::new, ARROW, 38, (char) 0xE266, ARROWS),
+    TURN_LEFT(DummyMytem::new, ARROW, 283, ARROWS),
+    TURN_RIGHT(DummyMytem::new, ARROW, 284, ARROWS),
     CHECKBOX(DummyMytem::new, WHITE_CONCRETE, 14, (char) 0xE247, UI),
     CHECKED_CHECKBOX(DummyMytem::new, GREEN_CONCRETE, 15, (char) 0xE248, UI),
     CROSSED_CHECKBOX(DummyMytem::new, BARRIER, 16, (char) 0xE249, UI),
@@ -529,8 +531,17 @@ public enum Mytems {
     FANCY_SPRUCE_CONE(TreeSeed::new, BEETROOT_SEEDS, 265, TREE_SEED),
     // Potions
     EMPTY_FLASK(DummyMytem::new, GLASS_BOTTLE, 257, POTIONS),
-    POTION_FLASK(PotionFlask::new, POTION, 258, POTIONS);
-    // Next CustomModelData: 275
+    POTION_FLASK(PotionFlask::new, POTION, 258, POTIONS),
+    // Tetris
+    TETRIS_I(DummyMytem::new, SAND, 276, TETRIS),
+    TETRIS_O(DummyMytem::new, SAND, 277, TETRIS),
+    TETRIS_T(DummyMytem::new, SAND, 278, TETRIS),
+    TETRIS_L(DummyMytem::new, SAND, 279, TETRIS),
+    TETRIS_J(DummyMytem::new, SAND, 280, TETRIS),
+    TETRIS_S(DummyMytem::new, SAND, 281, TETRIS),
+    TETRIS_Z(DummyMytem::new, SAND, 282, TETRIS),
+    ;
+    // Next CustomModelData: 285
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();

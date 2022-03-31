@@ -3,6 +3,7 @@ package com.cavetale.mytems;
 public enum MytemsCategory {
     ACULA,
     ARMOR_PART,
+    ARROWS,
     CAT_EARS,
     CHRISTMAS,
     CLOUD_CITY,
@@ -40,6 +41,7 @@ public enum MytemsCategory {
     SUNGLASSES,
     SWAMPY,
     TECHNICAL,
+    TETRIS,
     TREASURE,
     TREE_SEED,
     UI,
