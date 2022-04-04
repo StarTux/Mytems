@@ -31,6 +31,7 @@ import com.cavetale.mytems.item.easter.EasterEgg;
 import com.cavetale.mytems.item.easter.EasterGear;
 import com.cavetale.mytems.item.easter.EasterToken;
 import com.cavetale.mytems.item.farawaymap.FarawayMap;
+import com.cavetale.mytems.item.fertilizer.Fertilizer;
 import com.cavetale.mytems.item.font.GlyphItem;
 import com.cavetale.mytems.item.halloween.HalloweenCandy;
 import com.cavetale.mytems.item.halloween.HalloweenToken2;
@@ -150,6 +151,7 @@ public enum Mytems {
     HASTY_PICKAXE(DummyMytem::new, GOLDEN_PICKAXE, 223, UTILITY),
     TREE_CHOPPER(TreeChopper::new, GOLDEN_AXE, 242, UTILITY),
     ARMOR_STAND_EDITOR(ArmorStandEditor::new, FLINT, 241, UTILITY),
+    FERTILIZER(Fertilizer::new, BONE_MEAL, 285, UTILITY),
     // Wardrobe
     WHITE_BUNNY_EARS(WardrobeItem::new, IRON_BOOTS, 3919001, (char) 0, WARDROBE_HAT), // EPIC
     RED_LIGHTSABER(WardrobeItem::new, END_ROD, 3919002, (char) 0, WARDROBE_HANDHELD),
@@ -541,7 +543,7 @@ public enum Mytems {
     TETRIS_S(DummyMytem::new, SAND, 281, TETRIS),
     TETRIS_Z(DummyMytem::new, SAND, 282, TETRIS),
     ;
-    // Next CustomModelData: 285
+    // Next CustomModelData: 286
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
