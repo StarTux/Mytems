@@ -108,6 +108,7 @@ public final class Fertilizer implements Mytem {
     }
 
     private boolean fertilize(Player player, Block clickedBlock) {
+        if (clickedBlock.getType() != Material.GRASS_BLOCK) return false;
         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, clickedBlock)) return false;
         PlayerData playerData = playerData(player);
         List<FertilizerGrowth> selectedGrowList = new ArrayList<>(growList.size());
@@ -123,7 +124,7 @@ public final class Fertilizer implements Mytem {
             for (int dz = -radius; dz <= radius; dz += 1) {
                 for (int dx = -radius; dx <= radius; dx += 1) {
                     if (dx * dx + dy * dy + dz * dz > radius2) continue;
-                    if (ThreadLocalRandom.current().nextBoolean()) continue;
+                    if (ThreadLocalRandom.current().nextInt(4) != 0) continue;
                     Block block = clickedBlock.getRelative(dx, dy, dz);
                     FertilizerGrowth growth = selectedGrowList.get(growIndex);
                     if (growth.canGrow(player, block)) {
