@@ -76,7 +76,6 @@ public final class Fertilizer implements Mytem {
     @Override
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
         event.setCancelled(true);
-        if (event.getHand() != Equipment.HAND) return;
         if (player.isSneaking() || !event.hasBlock()) {
             openGui(player);
         } else {
