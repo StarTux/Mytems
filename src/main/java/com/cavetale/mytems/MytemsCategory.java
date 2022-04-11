@@ -13,6 +13,7 @@ public enum MytemsCategory {
     DUNE,
     DWARVEN,
     EASTER,
+    EASTER_BASKETS,
     EASTER_EGGS,
     ENEMY,
     FRIENDS,

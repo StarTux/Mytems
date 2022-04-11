@@ -27,6 +27,7 @@ import com.cavetale.mytems.item.captain.CaptainsCutlass;
 import com.cavetale.mytems.item.coin.Coin;
 import com.cavetale.mytems.item.dune.DuneItem;
 import com.cavetale.mytems.item.dwarven.DwarvenItem;
+import com.cavetale.mytems.item.easter.EasterBasket;
 import com.cavetale.mytems.item.easter.EasterEgg;
 import com.cavetale.mytems.item.easter.EasterGear;
 import com.cavetale.mytems.item.easter.EasterToken;
@@ -118,14 +119,23 @@ public enum Mytems {
     DWARVEN_LEGGINGS(DwarvenItem.Leggings::new, IRON_LEGGINGS, 7413403, (char) 0xE231, DWARVEN),
     DWARVEN_BOOTS(DwarvenItem.Boots::new, IRON_BOOTS, 7413404, (char) 0xE232, DWARVEN),
     DWARVEN_AXE(DwarvenItem.Weapon::new, IRON_AXE, 7413405, (char) 0xE233, DWARVEN),
-    // Easter 2021
+    // Easter
     EASTER_TOKEN(EasterToken::new, PLAYER_HEAD, 345700, (char) 0xE211, CURRENCY),
+    // Easter Eggs
     BLUE_EASTER_EGG(EasterEgg::new, PLAYER_HEAD, 345701, (char) 0xE212, EASTER_EGGS),
     GREEN_EASTER_EGG(EasterEgg::new, PLAYER_HEAD, 345702, (char) 0xE213, EASTER_EGGS),
     ORANGE_EASTER_EGG(EasterEgg::new, PLAYER_HEAD, 345703, (char) 0xE214, EASTER_EGGS),
     PINK_EASTER_EGG(EasterEgg::new, PLAYER_HEAD, 345704, (char) 0xE215, EASTER_EGGS),
     PURPLE_EASTER_EGG(EasterEgg::new, PLAYER_HEAD, 345705, (char) 0xE216, EASTER_EGGS),
     YELLOW_EASTER_EGG(EasterEgg::new, PLAYER_HEAD, 345706, (char) 0xE217, EASTER_EGGS),
+    // Easter Baskets
+    BLUE_EASTER_BASKET(EasterBasket::new, PLAYER_HEAD, 286, (char) 0, EASTER_BASKETS),
+    GREEN_EASTER_BASKET(EasterBasket::new, PLAYER_HEAD, 287, (char) 0, EASTER_BASKETS),
+    ORANGE_EASTER_BASKET(EasterBasket::new, PLAYER_HEAD, 288, (char) 0, EASTER_BASKETS),
+    PINK_EASTER_BASKET(EasterBasket::new, PLAYER_HEAD, 289, (char) 0, EASTER_BASKETS),
+    PURPLE_EASTER_BASKET(EasterBasket::new, PLAYER_HEAD, 290, (char) 0, EASTER_BASKETS),
+    YELLOW_EASTER_BASKET(EasterBasket::new, PLAYER_HEAD, 291, (char) 0, EASTER_BASKETS),
+    // Easter Gear
     EASTER_HELMET(EasterGear.Helmet::new, PLAYER_HEAD, 345711, (char) 0xE218, EASTER),
     EASTER_CHESTPLATE(EasterGear.Chestplate::new, LEATHER_CHESTPLATE, 345712, (char) 0xE219, EASTER),
     EASTER_LEGGINGS(EasterGear.Leggings::new, LEATHER_LEGGINGS, 345713, (char) 0xE21A, EASTER),
@@ -543,7 +553,7 @@ public enum Mytems {
     TETRIS_S(DummyMytem::new, SAND, 281, TETRIS),
     TETRIS_Z(DummyMytem::new, SAND, 282, TETRIS),
     ;
-    // Next CustomModelData: 286
+    // Next CustomModelData: 292
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
