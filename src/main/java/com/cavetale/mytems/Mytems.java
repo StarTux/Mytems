@@ -52,6 +52,7 @@ import com.cavetale.mytems.item.scarlet.ScarletItem;
 import com.cavetale.mytems.item.swampy.SwampyItem;
 import com.cavetale.mytems.item.tree.TreeSeed;
 import com.cavetale.mytems.item.treechopper.TreeChopper;
+import com.cavetale.mytems.item.trophy.Trophy;
 import com.cavetale.mytems.item.vote.VoteCandy;
 import com.cavetale.mytems.item.vote.VoteFirework;
 import com.cavetale.mytems.util.Items;
@@ -481,7 +482,6 @@ public enum Mytems {
     CHOCOLATE_BAR(HalloweenCandy::new, PUMPKIN_PIE, 52, (char) 0xE274, HALLOWEEN),
     LOLLIPOP(HalloweenCandy::new, COOKIE, 53, (char) 0xE275, HALLOWEEN),
     ORANGE_CANDY(HalloweenCandy::new, COOKIE, 54, (char) 0xE276, HALLOWEEN),
-    GOLDEN_CUP(DummyMytem::new, GOLD_NUGGET, 108, (char) 0xE2AB, TREASURE),
     HALLOWEEN_TOKEN(HalloweenToken::new, PUMPKIN, 109, (char) 0xE2AC, HALLOWEEN),
     HALLOWEEN_TOKEN_2(HalloweenToken2::new, JACK_O_LANTERN, 110, (char) 0xE2AD, HALLOWEEN),
     // Scarlet
@@ -552,8 +552,15 @@ public enum Mytems {
     TETRIS_J(DummyMytem::new, SAND, 280, TETRIS),
     TETRIS_S(DummyMytem::new, SAND, 281, TETRIS),
     TETRIS_Z(DummyMytem::new, SAND, 282, TETRIS),
+    // Trophy
+    GOLDEN_CUP(Trophy::new, GOLD_INGOT, 108, (char) 0xE2AB, TROPHY),
+    SILVER_CUP(Trophy::new, IRON_INGOT, 292, TROPHY),
+    BRONZE_CUP(Trophy::new, COPPER_INGOT, 293, TROPHY),
+    GOLD_MEDAL(Trophy::new, GOLD_NUGGET, 294, TROPHY),
+    SILVER_MEDAL(Trophy::new, IRON_NUGGET, 295, TROPHY),
+    BRONZE_MEDAL(Trophy::new, COPPER_INGOT, 296, TROPHY),
     ;
-    // Next CustomModelData: 292
+    // Next CustomModelData: 297
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();

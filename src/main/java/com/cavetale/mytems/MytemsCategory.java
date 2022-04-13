@@ -45,6 +45,7 @@ public enum MytemsCategory {
     TETRIS,
     TREASURE,
     TREE_SEED,
+    TROPHY,
     UI,
     UTILITY,
     VOTE,
