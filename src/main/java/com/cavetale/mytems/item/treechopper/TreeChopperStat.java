@@ -16,7 +16,7 @@ public enum TreeChopperStat {
     FORTUNE(Type.UPGRADE, 3, "Fortune", () -> Mytems.DICE.createIcon()),
     SILK(Type.UPGRADE, 2, "Shears", () -> new ItemStack(Material.SHEARS)),
     REPLANT(Type.UPGRADE, 1, "Replant", () -> new ItemStack(Material.OAK_SAPLING)),
-    PICKUP(Type.UPGRADE, 1, "Magnet", () -> new ItemStack(Material.HOPPER_MINECART)),
+    PICKUP(Type.UPGRADE, 1, "Magnet", Mytems.MAGNET::createIcon),
     SPEED(Type.UPGRADE, 5, "Speed", () -> new ItemStack(Material.SUGAR)),
     PUNCH(Type.UPGRADE, 1, "Punching", () -> new ItemStack(Material.GUNPOWDER)),
     ENCH(Type.UPGRADE, 10, "Enchanter", () -> new ItemStack(Material.EXPERIENCE_BOTTLE));
