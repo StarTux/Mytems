@@ -163,6 +163,7 @@ public enum Mytems {
     TREE_CHOPPER(TreeChopper::new, GOLDEN_AXE, 242, UTILITY),
     ARMOR_STAND_EDITOR(ArmorStandEditor::new, FLINT, 241, UTILITY),
     FERTILIZER(Fertilizer::new, BONE_MEAL, 285, UTILITY),
+    WATERING_CAN(DummyMytem::new, STICK, 297, UTILITY),
     // Wardrobe
     WHITE_BUNNY_EARS(WardrobeItem::new, IRON_BOOTS, 3919001, (char) 0, WARDROBE_HAT), // EPIC
     RED_LIGHTSABER(WardrobeItem::new, END_ROD, 3919002, (char) 0, WARDROBE_HANDHELD),
@@ -560,7 +561,7 @@ public enum Mytems {
     SILVER_MEDAL(Trophy::new, IRON_NUGGET, 295, TROPHY),
     BRONZE_MEDAL(Trophy::new, COPPER_INGOT, 296, TROPHY),
     ;
-    // Next CustomModelData: 297
+    // Next CustomModelData: 298
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
