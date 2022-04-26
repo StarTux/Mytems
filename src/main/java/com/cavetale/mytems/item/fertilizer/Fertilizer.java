@@ -76,9 +76,9 @@ public final class Fertilizer implements Mytem {
     @Override
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
         event.setCancelled(true);
-        if (player.isSneaking() || !event.hasBlock()) {
+        if (player.isSneaking()) {
             openGui(player);
-        } else {
+        } else if (event.hasBlock()) {
             if (fertilize(player, event.getClickedBlock()) && player.getGameMode() != GameMode.CREATIVE) {
                 item.subtract(1);
             }
