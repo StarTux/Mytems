@@ -40,10 +40,9 @@ public final class Session {
         return Bukkit.getPlayer(uuid);
     }
 
-    public Session enable() {
+    public Session enable(Player player) {
         attributes.enable();
-        loadEquipment();
-        equipmentDidChange();
+        updateEquipment(player);
         return this;
     }
 
@@ -73,11 +72,10 @@ public final class Session {
     }
 
     public void tick(Player player) {
-        loadEquipment();
         if (equipmentUpdateTicks > 0) {
             equipmentUpdateTicks -= 1;
             if (equipmentUpdateTicks == 0) {
-                updateEquipment();
+                updateEquipment(player);
             }
         }
         flying.tick(player);
@@ -91,18 +89,13 @@ public final class Session {
         }
     }
 
-    public void loadEquipment() {
-        Player player = getPlayer();
-        equipment.clear();
-        equipment.loadPlayer(player);
-    }
-
     /**
      * Update all GearItems in the player's inventory and apply or
      * remove effects as needed.
      */
-    private void updateEquipment() {
-        Player player = getPlayer();
+    private void updateEquipment(Player player) {
+        equipment.clear();
+        equipment.loadPlayer(player);
         if (!equipment.isEmpty()) {
             for (Equipped equipped : equipment.getItems()) {
                 Items.text(equipped.itemStack, equipped.gearItem.createTooltip(equipment, equipped));
@@ -131,6 +124,6 @@ public final class Session {
     }
 
     public void equipmentDidChange() {
-        equipmentUpdateTicks = 6;
+        equipmentUpdateTicks = 1;
     }
 }

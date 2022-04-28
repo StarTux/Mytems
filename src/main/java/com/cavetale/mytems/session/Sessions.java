@@ -46,7 +46,7 @@ public final class Sessions implements Listener {
         if (session == null) {
             session = new Session(plugin, player);
             sessions.put(player.getUniqueId(), session);
-            session.enable();
+            session.enable(player);
         }
         return session;
     }
