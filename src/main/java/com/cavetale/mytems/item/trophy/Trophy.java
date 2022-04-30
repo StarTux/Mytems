@@ -8,6 +8,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -57,6 +58,7 @@ public final class Trophy implements Mytem {
 
     @Override
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player, ItemStack item) {
+        if (player.getGameMode() == GameMode.CREATIVE) return;
         event.setCancelled(true);
     }
 }
