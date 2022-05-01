@@ -8,7 +8,8 @@ import lombok.RequiredArgsConstructor;
 public enum TrophyQuality {
     GOLD(color(0xFFD700)),
     SILVER(color(0xC0C0C0)),
-    BRONZE(color(0xCD7F32));
+    BRONZE(color(0xCD7F32)),
+    PARTICIPATION(color(0x6e6eff));
 
     public final TextColor textColor;
 }

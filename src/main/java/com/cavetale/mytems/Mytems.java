@@ -557,11 +557,17 @@ public enum Mytems {
     GOLDEN_CUP(Trophy::new, GOLD_INGOT, 108, (char) 0xE2AB, TROPHY),
     SILVER_CUP(Trophy::new, IRON_INGOT, 292, TROPHY),
     BRONZE_CUP(Trophy::new, COPPER_INGOT, 293, TROPHY),
+    PARTICIPATION_CUP(Trophy::new, BLUE_CONCRETE, 298, TROPHY),
     GOLD_MEDAL(Trophy::new, GOLD_NUGGET, 294, TROPHY),
     SILVER_MEDAL(Trophy::new, IRON_NUGGET, 295, TROPHY),
     BRONZE_MEDAL(Trophy::new, COPPER_INGOT, 296, TROPHY),
+    PARTICIPATION_MEDAL(Trophy::new, BLUE_WOOL, 299, TROPHY),
+    GOLD_EASTER_TROPHY(Trophy::new, EGG, 300, TROPHY),
+    SILVER_EASTER_TROPHY(Trophy::new, EGG, 301, TROPHY),
+    BRONZE_EASTER_TROPHY(Trophy::new, EGG, 302, TROPHY),
+    PARTICIPATION_EASTER_TROPHY(Trophy::new, EGG, 303, TROPHY),
     ;
-    // Next CustomModelData: 298
+    // Next CustomModelData: 304
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
