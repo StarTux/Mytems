@@ -6,6 +6,7 @@ import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Items;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.Getter;
@@ -14,8 +15,11 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Bee;
+import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Monster;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Tameable;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -27,6 +31,8 @@ import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
+import static org.bukkit.Sound.*;
+import static org.bukkit.SoundCategory.*;
 import static org.bukkit.attribute.Attribute.*;
 
 @RequiredArgsConstructor @Getter
@@ -71,9 +77,14 @@ public final class Beestick implements Mytem {
     private void spawnBee(Player player) {
         Location location = player.getEyeLocation();
         Block block = location.getBlock();
-        if (!PlayerBlockAbilityQuery.Action.SPAWN_MOB.query(player, block)) return;
+        if (!PlayerBlockAbilityQuery.Action.SPAWN_MOB.query(player, block)) {
+            player.sendActionBar(text("Cannot spawn bees here", RED));
+            player.playSound(player.getLocation(), ENTITY_BEE_DEATH, MASTER, 1.0f, 0.8f);
+            return;
+        }
         if (player.getFoodLevel() < hunger) {
             player.sendActionBar(text("Not enough food", RED));
+            player.playSound(player.getLocation(), ENTITY_BEE_DEATH, MASTER, 1.0f, 0.8f);
             return;
         }
         location = location.add(location.getDirection());
@@ -85,17 +96,39 @@ public final class Beestick implements Mytem {
                 e.setHealth(0.1);
                 e.setAnger(9999);
             });
-        if (bee == null || bee.isDead()) return;
+        if (bee == null || bee.isDead()) {
+            player.sendActionBar(text("Cannot spawn bees here", RED));
+            player.playSound(player.getLocation(), ENTITY_BEE_DEATH, MASTER, 1.0f, 0.8f);
+            return;
+        }
         player.setFoodLevel(player.getFoodLevel() - hunger);
-        List<Monster> enemies = List.copyOf(location.getNearbyEntitiesByType(Monster.class, 16.0, 16.0, 16.0, m -> {
-                    return !bee.equals(m)
-                        && PlayerEntityAbilityQuery.Action.DAMAGE.query(player, m)
-                        && bee.hasLineOfSight(m);
-                }));
+        Collection<LivingEntity> targets = location.getNearbyEntitiesByType(LivingEntity.class, 16.0, 16.0, 16.0, e -> {
+                return !player.equals(e) && !bee.equals(e)
+                    && PlayerEntityAbilityQuery.Action.DAMAGE.query(player, e)
+                    && !(e instanceof Tameable tameable && tameable.isTamed())
+                    && bee.hasLineOfSight(e);
+            });
+        List<LivingEntity> monsters = new ArrayList<>();
+        List<LivingEntity> players = new ArrayList<>();
+        List<LivingEntity> mobs = new ArrayList<>();
+        for (LivingEntity target : targets) {
+            if (target instanceof Player) {
+                players.add(target);
+            } else if (target instanceof Monster) {
+                monsters.add(target);
+            } else if (target instanceof Mob) {
+                mobs.add(target);
+            }
+        }
+        List<LivingEntity> enemies = !monsters.isEmpty()
+            ? monsters
+            : (!players.isEmpty()
+               ? players
+               : mobs);
         if (enemies.isEmpty()) {
             bee.setTarget(player);
         } else {
-            Monster enemy = enemies.get(ThreadLocalRandom.current().nextInt(enemies.size()));
+            LivingEntity enemy = enemies.get(ThreadLocalRandom.current().nextInt(enemies.size()));
             bee.setTarget(enemy);
         }
     }
