@@ -22,6 +22,7 @@ public enum MytemsCategory {
     KEY,
     KEYHOLE,
     LETTER,
+    MAY,
     MAYPOLE,
     MOB_CATCHERS,
     MUSIC,

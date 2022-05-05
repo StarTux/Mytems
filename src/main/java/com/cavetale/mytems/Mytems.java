@@ -22,6 +22,7 @@ import com.cavetale.mytems.item.acula.DrAculaStaff;
 import com.cavetale.mytems.item.acula.FlameShield;
 import com.cavetale.mytems.item.acula.GhastBow;
 import com.cavetale.mytems.item.acula.Stompers;
+import com.cavetale.mytems.item.beestick.Beestick;
 import com.cavetale.mytems.item.captain.Blunderbuss;
 import com.cavetale.mytems.item.captain.CaptainsCutlass;
 import com.cavetale.mytems.item.coin.Coin;
@@ -227,7 +228,7 @@ public enum Mytems {
     // Vote
     VOTE_CANDY(VoteCandy::new, COOKIE, 9073001, (char) 0xE21E, VOTE), // VOTE
     VOTE_FIREWORK(VoteFirework::new, FIREWORK_ROCKET, 9073002, (char) 0xE21F, VOTE),
-    // Maypole
+    // Maypole Ingredients
     LUCID_LILY(Ingredient::new, AZURE_BLUET, 849001, (char) 0xE201, MAYPOLE),
     PINE_CONE(Ingredient::new, SPRUCE_SAPLING, 849002, (char) 0xE202, MAYPOLE),
     ORANGE_ONION(Ingredient::new, ORANGE_TULIP, 849003, (char) 0xE203, MAYPOLE),
@@ -244,6 +245,9 @@ public enum Mytems {
     FROZEN_AMBER(Ingredient::new, EMERALD, 849014, (char) 0xE20E, MAYPOLE),
     CLUMP_OF_MOSS(Ingredient::new, VINE, 849015, (char) 0xE20F, MAYPOLE),
     FIRE_AMANITA(Ingredient::new, CRIMSON_FUNGUS, 849016, (char) 0xE210, MAYPOLE),
+    // May
+    BOOK_OF_MAY(DummyMytem::new, BOOK, 304, MAY),
+    BEESTICK(Beestick::new, BLAZE_ROD, 305, MAY),
     // Enderball
     ENDERBALL(Enderball::new, DRAGON_EGG, (Integer) null, (char) 0, UTILITY),
     // PocketMob
@@ -567,7 +571,7 @@ public enum Mytems {
     BRONZE_EASTER_TROPHY(Trophy::new, EGG, 302, TROPHY),
     PARTICIPATION_EASTER_TROPHY(Trophy::new, EGG, 303, TROPHY),
     ;
-    // Next CustomModelData: 304
+    // Next CustomModelData: 306
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
