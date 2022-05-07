@@ -6,7 +6,6 @@ import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
-import com.destroystokyo.paper.block.BlockSoundGroup;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -15,14 +14,13 @@ import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.GameMode;
 import org.bukkit.GameRule;
 import org.bukkit.Material;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
+import org.bukkit.SoundGroup;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import static org.bukkit.Particle.*;
 
 @RequiredArgsConstructor @Getter
 public final class SnowShovel implements Mytem {
@@ -71,15 +69,10 @@ public final class SnowShovel implements Mytem {
         if (block.getType() != Material.SNOW) return;
         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return;
         PlayerBreakBlockEvent.call(player, block);
-        BlockSoundGroup soundGroup = block.getSoundGroup();
+        SoundGroup snd = block.getBlockSoundGroup();
+        block.getWorld().playSound(block.getLocation(), snd.getBreakSound(), snd.getVolume(), snd.getPitch());
         block.breakNaturally(itemStack, true);
-        if (soundGroup != null) {
-            Sound sound = soundGroup.getBreakSound();
-            if (sound != null) {
-                block.getWorld().playSound(block.getLocation(), sound, SoundCategory.BLOCKS, 1.0f, 1.0f);
-            }
-        }
-        block.getWorld().spawnParticle(Particle.SWEEP_ATTACK, block.getLocation().add(0.5, 0.5, 0.5), 1, 0.0, 0.0, 0.0, 0.0);
+        block.getWorld().spawnParticle(SWEEP_ATTACK, block.getLocation().add(0.5, 0.5, 0.5), 1, 0.0, 0.0, 0.0, 0.0);
         // Block#breakNaturally doesn't drop snowballs, so we do it!
         if (block.getWorld().getGameRuleValue(GameRule.DO_TILE_DROPS)
             && player.getGameMode() != GameMode.CREATIVE) {

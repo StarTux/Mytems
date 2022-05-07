@@ -6,15 +6,12 @@ import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
-import com.destroystokyo.paper.block.BlockSoundGroup;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.Particle;
-import org.bukkit.Sound;
-import org.bukkit.SoundCategory;
+import org.bukkit.SoundGroup;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
@@ -24,6 +21,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import static org.bukkit.Particle.*;
 
 @RequiredArgsConstructor @Getter
 public final class GoldenScythe implements Mytem {
@@ -76,14 +74,9 @@ public final class GoldenScythe implements Mytem {
         if (ageable.getAge() != ageable.getMaximumAge()) return;
         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return;
         PlayerBreakBlockEvent.call(player, block);
-        BlockSoundGroup soundGroup = block.getSoundGroup();
+        SoundGroup snd = block.getBlockSoundGroup();
+        block.getWorld().playSound(block.getLocation(), snd.getBreakSound(), snd.getVolume(), snd.getPitch());
         block.breakNaturally();
-        if (soundGroup != null) {
-            Sound sound = soundGroup.getBreakSound();
-            if (sound != null) {
-                block.getWorld().playSound(block.getLocation(), sound, SoundCategory.BLOCKS, 1.0f, 1.0f);
-            }
-        }
-        block.getWorld().spawnParticle(Particle.SWEEP_ATTACK, block.getLocation().add(0.5, 0.5, 0.5), 1, 0.0, 0.0, 0.0, 0.0);
+        block.getWorld().spawnParticle(SWEEP_ATTACK, block.getLocation().add(0.5, 0.5, 0.5), 1, 0.0, 0.0, 0.0, 0.0);
     }
 }
