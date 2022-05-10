@@ -65,4 +65,9 @@ public final class FarawayMap implements Mytem {
             return itemStack;
         }
     }
+
+    @Override
+    public boolean isMassStorable() {
+        return false;
+    }
 }

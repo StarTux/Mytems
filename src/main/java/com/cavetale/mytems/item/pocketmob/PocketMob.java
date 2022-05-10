@@ -98,4 +98,9 @@ public final class PocketMob implements Mytem, Listener {
         event.setCancelled(true);
         if (delegate != null) delegate.onBlockPreDispense(this, event);
     }
+
+    @Override
+    public boolean isMassStorable() {
+        return false;
+    }
 }

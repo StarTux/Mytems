@@ -8,6 +8,7 @@ public enum MytemsCategory {
     CHRISTMAS,
     CLOUD_CITY,
     COIN,
+    COLLECTIBLES,
     CURRENCY,
     DIE,
     DUNE,

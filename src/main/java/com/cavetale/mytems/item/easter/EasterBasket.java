@@ -38,4 +38,14 @@ public final class EasterBasket implements Mytem {
     public ItemStack createItemStack() {
         return prototype.clone();
     }
+
+    @Override
+    public boolean isAvailableToPlayers() {
+        return false;
+    }
+
+    @Override
+    public boolean isMassStorable() {
+        return false;
+    }
 }

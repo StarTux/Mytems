@@ -32,4 +32,9 @@ public final class GlyphItem implements Mytem {
     public ItemStack createItemStack() {
         return prototype.clone();
     }
+
+    @Override
+    public boolean isMassStorable() {
+        return false;
+    }
 }

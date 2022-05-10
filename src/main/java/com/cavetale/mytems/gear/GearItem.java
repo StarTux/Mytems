@@ -53,4 +53,9 @@ public interface GearItem extends Mytem {
             event.setCancelled(true);
         }
     }
+
+    @Override
+    default int getMaxStackSize() {
+        return 1;
+    }
 }

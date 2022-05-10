@@ -111,4 +111,24 @@ public interface Mytem {
         }
         return itemStack;
     }
+
+    default int getMaxStackSize() {
+        return getKey().material.getMaxStackSize();
+    }
+
+    /**
+     * Return whether this item is expected to end up in player's hands.
+     */
+    default boolean isAvailableToPlayers() {
+        return true;
+    }
+
+    /**
+     * Return whether this item can be placed in Mass Storage.
+     * Typically, an item does not belong in MS if they regularly come
+     * with extra data which are not dismissable.
+     */
+    default boolean isMassStorable() {
+        return true;
+    }
 }

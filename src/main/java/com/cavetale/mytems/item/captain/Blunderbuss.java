@@ -147,4 +147,9 @@ public final class Blunderbuss implements Mytem {
                                         Material.OAK_PLANKS.createBlockData());
         return true;
     }
+
+    @Override
+    public int getMaxStackSize() {
+        return 1;
+    }
 }

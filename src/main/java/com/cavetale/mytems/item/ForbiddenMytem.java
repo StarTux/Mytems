@@ -8,15 +8,11 @@ import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
-import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import static net.kyori.adventure.text.Component.text;
 
 @RequiredArgsConstructor @Getter
-public final class DummyMytem implements Mytem {
+public final class ForbiddenMytem implements Mytem {
     private final Mytems key;
     private ItemStack prototype;
     private Component displayName;
@@ -37,12 +33,12 @@ public final class DummyMytem implements Mytem {
     }
 
     @Override
-    public void onBlockPlace(BlockPlaceEvent event, Player player, ItemStack item) {
-        event.setCancelled(true);
+    public boolean isAvailableToPlayers() {
+        return false;
     }
 
     @Override
-    public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
-        event.setUseItemInHand(Event.Result.DENY);
+    public boolean isMassStorable() {
+        return false;
     }
 }
