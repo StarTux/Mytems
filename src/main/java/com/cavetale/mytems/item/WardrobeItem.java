@@ -80,4 +80,9 @@ public final class WardrobeItem implements Mytem {
         event.setCancelled(true);
         event.getItem().remove();
     }
+
+    @Override
+    public boolean isMassStorable() {
+        return false;
+    }
 }
