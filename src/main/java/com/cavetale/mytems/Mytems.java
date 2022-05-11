@@ -58,6 +58,7 @@ import com.cavetale.mytems.item.trophy.Trophy;
 import com.cavetale.mytems.item.vote.VoteCandy;
 import com.cavetale.mytems.item.vote.VoteFirework;
 import com.cavetale.mytems.util.Items;
+import com.cavetale.mytems.util.Skull;
 import com.cavetale.worldmarker.item.ItemMarker;
 import java.util.HashMap;
 import java.util.List;
@@ -123,7 +124,7 @@ public enum Mytems {
     DWARVEN_BOOTS(DwarvenItem.Boots::new, IRON_BOOTS, 7413404, (char) 0xE232, DWARVEN),
     DWARVEN_AXE(DwarvenItem.Weapon::new, IRON_AXE, 7413405, (char) 0xE233, DWARVEN),
     // Easter
-    EASTER_TOKEN(EasterToken::new, PLAYER_HEAD, 345700, (char) 0xE211, CURRENCY),
+    EASTER_TOKEN(EasterToken::new, PLAYER_HEAD, 345700, (char) 0xE211, EASTER_TOKENS),
     // Easter Eggs
     BLUE_EASTER_EGG(EasterEgg::new, PLAYER_HEAD, 345701, (char) 0xE212, EASTER_EGGS),
     GREEN_EASTER_EGG(EasterEgg::new, PLAYER_HEAD, 345702, (char) 0xE213, EASTER_EGGS),
@@ -727,8 +728,7 @@ public enum Mytems {
     public ItemStack createIcon() {
         final ItemStack item;
         if (material == PLAYER_HEAD) {
-            item = Items.text(createItemStack(), List.of());
-            ItemMarker.resetId(item);
+            item = Skull.of(createItemStack()).create();
         } else {
             item = new ItemStack(material);
         }
