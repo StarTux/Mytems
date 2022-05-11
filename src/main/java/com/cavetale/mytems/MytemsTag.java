@@ -13,6 +13,7 @@ import java.util.Map;
  * Use of() to get an instance by name or via Category.
  */
 public final class MytemsTag {
+    public static final MytemsTag EMPTY = new MytemsTag("empty");
     public static final MytemsTag DICE = new MytemsTag("dice", MytemsCategory.DIE);
     public static final MytemsTag FONT = new MytemsTag("font", new MytemsCategory[] {
             MytemsCategory.LETTER, MytemsCategory.NUMBER, MytemsCategory.MUSICAL
@@ -98,7 +99,7 @@ public final class MytemsTag {
     }
 
     public static MytemsTag of(String in) {
-        return NAME_MAP.get(in.toLowerCase());
+        return NAME_MAP.getOrDefault(in.toLowerCase(), EMPTY);
     }
 
     public static MytemsTag of(MytemsCategory cat) {
@@ -111,6 +112,10 @@ public final class MytemsTag {
 
     public String name() {
         return name;
+    }
+
+    public Set<Mytems> getValues() {
+        return set;
     }
 
     public static MytemsTag[] values() {
