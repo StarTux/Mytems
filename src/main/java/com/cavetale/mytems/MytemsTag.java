@@ -22,8 +22,6 @@ public final class MytemsTag {
     public static final MytemsTag MUSIC_ALL = new MytemsTag("music_all", new MytemsCategory[] {
             MytemsCategory.MUSIC, MytemsCategory.MUSIC_HYRULE,
         });
-    public static final MytemsTag RESOURCE = new MytemsTag("resource",
-                                                           MytemsCategory.MAYPOLE);
     public static final MytemsTag WARDROBE_HAT = new MytemsTag("wardtobe_hat", new MytemsCategory[] {
             MytemsCategory.WITCH_HAT, MytemsCategory.SUNGLASSES,
         });
@@ -42,8 +40,13 @@ public final class MytemsTag {
             MytemsCategory.EASTER,
             MytemsCategory.SCARLET,
         });
-    public static final MytemsTag EQUIPMENT = new MytemsTag("equipment", MytemsTag.ITEM_SETS, MytemsCategory.PIRATE);
-    public static final MytemsTag NEW = new MytemsTag("new");
+    public static final MytemsTag HOLIDAYS = new MytemsTag("holidays", new MytemsCategory[] {
+            MytemsCategory.CHRISTMAS,
+            MytemsCategory.EASTER_EGGS,
+            MytemsCategory.EASTER_TOKENS,
+            MytemsCategory.HALLOWEEN,
+            MytemsCategory.MAY,
+        });
 
     public final String name;
     private final EnumSet<Mytems> set;
@@ -90,7 +93,10 @@ public final class MytemsTag {
                 throw new IllegalArgumentException("Invlid enum: " + e.getClass().getName() + "." + e.name());
             }
         }
-        set = theSet;
+        this.set = theSet;
+        if (set.isEmpty() && !name.equals("empty")) {
+            MytemsPlugin.getInstance().getLogger().warning("Empty tag: " + name);
+        }
         if (tmpList == null) tmpList = new ArrayList<>();
         tmpList.add(this);
     }

@@ -87,8 +87,8 @@ public enum Mytems {
     GHAST_BOW(GhastBow::new, BOW, 741305, (char) 0xE236, ACULA),
     BAT_MASK(BatMask::new, PLAYER_HEAD, 741306, (char) 0xE237, ACULA),
     // Cloud City
-    UNICORN_HORN(UnicornHorn::new, END_ROD, 7413003, (char) 0, CLOUD_CITY),
-    MAGIC_CAPE(MagicCape::new, ELYTRA, 7413006, (char) 0xE238, CLOUD_CITY),
+    UNICORN_HORN(UnicornHorn::new, END_ROD, 7413003, (char) 0, UTILITY),
+    MAGIC_CAPE(MagicCape::new, ELYTRA, 7413006, (char) 0xE238, UTILITY),
     // Generic
     KITTY_COIN(KittyCoin::new, PLAYER_HEAD, 7413001, (char) 0xE200, CURRENCY),
     RAINBOW_KITTY_COIN(KittyCoin::new, PLAYER_HEAD, 7413007, (char) 0xE243, CURRENCY),
@@ -104,7 +104,7 @@ public enum Mytems {
     PINK_CHRISTMAS_BALL(DummyMytem::new, PINK_STAINED_GLASS, 217, CHRISTMAS),
     PURPLE_CHRISTMAS_BALL(DummyMytem::new, PURPLE_STAINED_GLASS, 218, CHRISTMAS),
     YELLOW_CHRISTMAS_BALL(DummyMytem::new, YELLOW_STAINED_GLASS, 219, CHRISTMAS),
-    KNITTED_BEANIE(DummyMytem::new, LEATHER_HELMET, 222, CHRISTMAS),
+    KNITTED_BEANIE(ForbiddenMytem::new, LEATHER_HELMET, 222, CHRISTMAS),
     // Dune set
     DUNE_HELMET(DuneItem.Helmet::new, PLAYER_HEAD, 7413201, (char) 0xE225, DUNE),
     DUNE_CHESTPLATE(DuneItem.Chestplate::new, GOLDEN_CHESTPLATE, 7413202, (char) 0xE226, DUNE),
@@ -249,7 +249,7 @@ public enum Mytems {
     FIRE_AMANITA(Ingredient::new, CRIMSON_FUNGUS, 849016, (char) 0xE210, MAYPOLE),
     // May
     BOOK_OF_MAY(DummyMytem::new, BOOK, 304, MAY),
-    BEESTICK(Beestick::new, BLAZE_ROD, 305, MAY),
+    BEESTICK(Beestick::new, BLAZE_ROD, 305, UTILITY),
     // Enderball
     ENDERBALL(Enderball::new, DRAGON_EGG, (Integer) null, (char) 0, UTILITY),
     // PocketMob
@@ -334,8 +334,8 @@ public enum Mytems {
     FISH_CATCHER(MobCatcher::new, EGG, 908306, (char) 0xE252, MOB_CATCHERS),
     PET_CATCHER(MobCatcher::new, EGG, 908307, (char) 0xE253, MOB_CATCHERS),
     // Pirate
-    CAPTAINS_CUTLASS(CaptainsCutlass::new, WOODEN_SWORD, 2, (char) 0xE239, PIRATE),
-    BLUNDERBUSS(Blunderbuss::new, IRON_INGOT, 3, (char) 0xE23A, PIRATE),
+    CAPTAINS_CUTLASS(CaptainsCutlass::new, WOODEN_SWORD, 2, (char) 0xE239, UTILITY),
+    BLUNDERBUSS(Blunderbuss::new, IRON_INGOT, 3, (char) 0xE23A, UTILITY),
     GOLDEN_SCYTHE(GoldenScythe::new, GOLDEN_HOE, 4, (char) 0xE23B, UTILITY),
     WITCH_BROOM(WitchBroom::new, WOODEN_SHOVEL, 51, (char) 0xE273, UTILITY),
     // Musical Instruments
@@ -363,7 +363,7 @@ public enum Mytems {
     // Enemy
     KOBOLD_HEAD(ForbiddenMytem::new, GREEN_CONCRETE, 1, (char) 0, ENEMY),
     // Random
-    RUBY(DummyMytem::new, EMERALD, 6, (char) 0xE23E, RESOURCE),
+    RUBY(DummyMytem::new, EMERALD, 6, (char) 0xE23E, CURRENCY),
     // UI
     OK(ForbiddenMytem::new, BLUE_CONCRETE, 7, (char) 0xE23F, UI),
     NO(ForbiddenMytem::new, RED_CONCRETE, 8, (char) 0xE240, UI),
