@@ -48,4 +48,9 @@ public final class ArmorStandEditor implements Mytem {
     public ItemStack createItemStack() {
         return prototype.clone();
     }
+
+    @Override
+    public int getMaxStackSize() {
+        return 1;
+    }
 }
