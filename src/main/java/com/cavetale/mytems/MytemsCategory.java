@@ -31,6 +31,7 @@ public enum MytemsCategory {
     MUSIC_HYRULE,
     NUMBER,
     PAINTBRUSH,
+    PHOTOS,
     PICTURE,
     POCKET_MOB,
     POTIONS,

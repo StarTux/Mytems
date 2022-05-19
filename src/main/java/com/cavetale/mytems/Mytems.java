@@ -43,6 +43,7 @@ import com.cavetale.mytems.item.medieval.GoldenScythe;
 import com.cavetale.mytems.item.medieval.WitchBroom;
 import com.cavetale.mytems.item.music.HyruleInstrument;
 import com.cavetale.mytems.item.music.MusicalInstrument;
+import com.cavetale.mytems.item.photo.Photo;
 import com.cavetale.mytems.item.pocketmob.MobCatcher;
 import com.cavetale.mytems.item.pocketmob.PocketMob;
 import com.cavetale.mytems.item.potion.PotionFlask;
@@ -574,8 +575,10 @@ public enum Mytems {
     SILVER_EASTER_TROPHY(Trophy::new, EGG, 301, TROPHY),
     BRONZE_EASTER_TROPHY(Trophy::new, EGG, 302, TROPHY),
     PARTICIPATION_EASTER_TROPHY(Trophy::new, EGG, 303, TROPHY),
+    // Photo
+    PHOTO(Photo::new, FILLED_MAP, 306, PHOTOS),
     ;
-    // Next CustomModelData: 306
+    // Next CustomModelData: 307
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
