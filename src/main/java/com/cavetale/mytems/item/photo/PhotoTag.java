@@ -30,7 +30,8 @@ public final class PhotoTag extends MytemTag {
 
     @Override
     public boolean isEmpty() {
-        return false;
+        return super.isEmpty()
+            && photoId == null;
     }
 
     @Override
@@ -47,6 +48,10 @@ public final class PhotoTag extends MytemTag {
     public void store(ItemStack itemStack) {
         super.store(itemStack);
         itemStack.editMeta(m -> {
+                if (photoId != null) {
+                    PersistentDataContainer tag = m.getPersistentDataContainer();
+                    Tags.set(tag, MytemsPlugin.namespacedKey(PHOTO_ID), photoId);
+                }
                 if (!(m instanceof MapMeta meta)) return;
                 PhotoData data = photoId != null
                     ? Photo.getPhotoData(photoId)
