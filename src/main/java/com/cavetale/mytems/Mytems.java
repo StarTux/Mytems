@@ -58,6 +58,7 @@ import com.cavetale.mytems.item.treechopper.TreeChopper;
 import com.cavetale.mytems.item.trophy.Trophy;
 import com.cavetale.mytems.item.vote.VoteCandy;
 import com.cavetale.mytems.item.vote.VoteFirework;
+import com.cavetale.mytems.item.wateringcan.WateringCan;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Skull;
 import com.cavetale.worldmarker.item.ItemMarker;
@@ -167,7 +168,8 @@ public enum Mytems {
     TREE_CHOPPER(TreeChopper::new, GOLDEN_AXE, 242, UTILITY),
     ARMOR_STAND_EDITOR(ArmorStandEditor::new, FLINT, 241, UTILITY),
     FERTILIZER(Fertilizer::new, BONE_MEAL, 285, UTILITY),
-    WATERING_CAN(ForbiddenMytem::new, STICK, 297, UTILITY),
+    WATERING_CAN(WateringCan::new, STONE_HOE, 297, UTILITY),
+    GOLDEN_WATERING_CAN(WateringCan::new, GOLDEN_HOE, 307, UTILITY),
     // Wardrobe
     WHITE_BUNNY_EARS(WardrobeItem::new, IRON_BOOTS, 3919001, (char) 0, WARDROBE_HAT), // EPIC
     RED_LIGHTSABER(WardrobeItem::new, END_ROD, 3919002, (char) 0, WARDROBE_HANDHELD),
@@ -578,7 +580,7 @@ public enum Mytems {
     // Photo
     PHOTO(Photo::new, FILLED_MAP, 306, PHOTOS),
     ;
-    // Next CustomModelData: 307
+    // Next CustomModelData: 308
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
