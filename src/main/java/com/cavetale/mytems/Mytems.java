@@ -386,7 +386,7 @@ public enum Mytems {
     CROSSED_CHECKBOX(ForbiddenMytem::new, BARRIER, 16, (char) 0xE249, UI),
     EAGLE(ForbiddenMytem::new, FEATHER, 19, (char) 0xE24C, UI),
     EARTH(ForbiddenMytem::new, ENDER_PEARL, 5, (char) 0xE23D, UI),
-    EASTER_EGG(ForbiddenMytem::new, EGG, 345715, (char) 0xE23C, UI),
+    EASTER_EGG(DummyMytem::new, EGG, 345715, (char) 0xE23C, UI),
     TRAFFIC_LIGHT(ForbiddenMytem::new, YELLOW_DYE, 57, (char) 0xE279, UI),
     INVISIBLE_ITEM(ForbiddenMytem::new, LIGHT_GRAY_STAINED_GLASS_PANE, 65, (char) 0xE281, UI),
     PAINT_PALETTE(ForbiddenMytem::new, STICK, 202, UI),
@@ -400,7 +400,7 @@ public enum Mytems {
     DATA_FLOAT(ForbiddenMytem::new, REPEATER, 273, UI),
     BOMB(ForbiddenMytem::new, CHAIN, 274, UI),
     // Collectibles
-    HEART(ForbiddenMytem::new, HEART_OF_THE_SEA, 9, (char) 0xE241, COLLECTIBLES),
+    HEART(DummyMytem::new, HEART_OF_THE_SEA, 9, (char) 0xE241, COLLECTIBLES),
     STAR(DummyMytem::new, NETHER_STAR, 18, (char) 0xE24B, COLLECTIBLES),
     MOON(DummyMytem::new, YELLOW_DYE, 204, COLLECTIBLES),
     LIGHTNING(DummyMytem::new, LIGHTNING_ROD, 250, COLLECTIBLES),
