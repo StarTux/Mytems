@@ -11,6 +11,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.MapMeta;
+import org.bukkit.map.MapView;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.TextColor.color;
 
@@ -24,6 +26,7 @@ public final class Photo implements Mytem {
      * Let the Photos plugin set this.
      */
     @Setter private static Function<Integer, PhotoData> photoDataGetter = null;
+    @Setter private static Function<Integer, Integer> photoIdGetter = null;
 
     @Override
     public void enable() {
@@ -61,8 +64,41 @@ public final class Photo implements Mytem {
     }
 
     protected static PhotoData getPhotoData(int photoId) {
-        return photoDataGetter != null
+        if (photoDataGetter == null) return PhotoData.ZERO;
+        PhotoData result = photoDataGetter.apply(photoId);
+        return result != null
             ? photoDataGetter.apply(photoId)
-            : new PhotoData(null, 0, SEPIA, "Photo");
+            : PhotoData.ZERO;
+    }
+
+    public static ItemStack createItemStack(int photoId) {
+        PhotoTag tag = new PhotoTag();
+        tag.photoId = photoId;
+        ItemStack itemStack = Mytems.PHOTO.createItemStack();
+        tag.store(itemStack);
+        return itemStack;
+    }
+
+    public static int getPhotoId(ItemStack itemStack) {
+        PhotoTag tag = new PhotoTag();
+        tag.load(itemStack);
+        if (tag.photoId == null) {
+            return 0;
+        }
+        return tag.photoId;
+    }
+
+    public static ItemStack fixLegacyPhoto(ItemStack itemStack) {
+        if (photoIdGetter == null) return null;
+        if (!itemStack.hasItemMeta()) return null;
+        MapMeta meta = (MapMeta) itemStack.getItemMeta();
+        if (!meta.hasMapView()) return null;
+        MapView mapView = meta.getMapView();
+        if (mapView == null) return null;
+        int mapId = mapView.getId();
+        int photoId = photoIdGetter.apply(mapId);
+        return photoId <= 0
+            ? null
+            : createItemStack(photoId);
     }
 }

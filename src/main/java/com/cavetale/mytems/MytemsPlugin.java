@@ -3,6 +3,7 @@ package com.cavetale.mytems;
 import com.cavetale.core.connect.ServerCategory;
 import com.cavetale.core.font.Emoji;
 import com.cavetale.core.font.GlyphPolicy;
+import com.cavetale.mytems.item.photo.Photo;
 import com.cavetale.mytems.loot.LootTableListener;
 import com.cavetale.mytems.session.Sessions;
 import com.cavetale.mytems.util.Gui;
@@ -214,6 +215,9 @@ public final class MytemsPlugin extends JavaPlugin {
             meta.setBlockState(shulkerBox);
             oldItemStack.setItemMeta(meta);
             return oldItemStack;
+        }
+        if (oldItemStack.getType() == Material.FILLED_MAP) {
+            return Photo.fixLegacyPhoto(oldItemStack);
         }
         return null;
     }
