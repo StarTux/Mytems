@@ -61,9 +61,4 @@ public final class Trophy implements Mytem {
         if (player.getGameMode() == GameMode.CREATIVE) return;
         event.setCancelled(true);
     }
-
-    @Override
-    public boolean isMassStorable() {
-        return false;
-    }
 }
