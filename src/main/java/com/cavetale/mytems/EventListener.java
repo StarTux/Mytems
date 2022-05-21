@@ -62,7 +62,6 @@ import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.EntitiesLoadEvent;
-import org.bukkit.inventory.AnvilInventory;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -123,30 +122,14 @@ public final class EventListener implements Listener {
     }
 
     /**
-     * Mytems cannot be used on a grindstone, enchanted (with books)
-     * or renamed, depending on their mytem persistence flags.
+     * Mytems cannot be crafted on any workstation.
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     void onPrepareResult(PrepareResultEvent event) {
         ItemStack item = event.getResult();
         Mytems mytems = Mytems.forItem(item);
         if (mytems == null) return;
-        switch (event.getView().getType()) {
-        case GRINDSTONE:
-            event.setResult(null);
-            break;
-        case ANVIL: {
-            AnvilInventory inv = (AnvilInventory) event.getInventory();
-            if (inv.getRenameText() != null) {
-                event.setResult(null);
-            } else {
-                event.setResult(null);
-            }
-            break;
-        }
-        default:
-            break;
-        }
+        event.setResult(null);
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
