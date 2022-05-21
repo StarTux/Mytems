@@ -8,7 +8,10 @@ import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import com.cavetale.worldmarker.util.Tags;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.util.List;
+import java.util.Locale;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
@@ -17,8 +20,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
 import static net.kyori.adventure.text.Component.join;
+import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
+import static net.kyori.adventure.text.JoinConfiguration.separator;
+import static net.kyori.adventure.text.event.ClickEvent.runCommand;
+import static net.kyori.adventure.text.event.HoverEvent.showText;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 @Getter
@@ -85,5 +92,28 @@ public final class Coin implements Mytem {
                    (double) value,
                    MytemsPlugin.getInstance(),
                    message);
+    }
+
+    private static final DecimalFormat MONEY_FORMAT = new DecimalFormat("#,###.00", new DecimalFormatSymbols(Locale.US));
+
+    static {
+        MONEY_FORMAT.setParseBigDecimal(true);
+    }
+
+    public static Component format(double amount) {
+        String format = MONEY_FORMAT.format(amount);
+        if (format.endsWith(".00")) format = format.substring(0, format.length() - 3);
+        if (format.isEmpty()) format = "0";
+        Denomination denomination = Denomination.COPPER;
+        for (Denomination deno : Denomination.values()) {
+            if ((double) deno.value <= amount) {
+                denomination = deno;
+            }
+        }
+        return join(noSeparators(), denomination.mytems.component, text(format, denomination.color))
+            .hoverEvent(showText(join(separator(newline()),
+                                      text(format + " Coins", denomination.color),
+                                      text("/money", GRAY))))
+            .clickEvent(runCommand("/money"));
     }
 }
