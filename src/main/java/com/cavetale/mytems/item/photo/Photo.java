@@ -18,7 +18,7 @@ import static net.kyori.adventure.text.format.TextColor.color;
 
 @RequiredArgsConstructor @Getter
 public final class Photo implements Mytem {
-    public static final int SEPIA = 0x9E5B40;
+    public static final int SEPIA = 0xEA8B57;
     private final Mytems key;
     private ItemStack prototype;
     private Component displayName;
