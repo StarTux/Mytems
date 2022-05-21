@@ -97,8 +97,9 @@ public final class Photo implements Mytem {
         if (mapView == null) return null;
         int mapId = mapView.getId();
         int photoId = photoIdGetter.apply(mapId);
-        return photoId <= 0
-            ? null
-            : createItemStack(photoId);
+        if (photoId <= 0) return null;
+        ItemStack result = createItemStack(photoId);
+        result.setAmount(itemStack.getAmount());
+        return result;
     }
 }
