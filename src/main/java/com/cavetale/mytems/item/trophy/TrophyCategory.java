@@ -4,5 +4,7 @@ public enum TrophyCategory {
     CUP,
     MEDAL,
     TETRIS,
-    EASTER;
+    EASTER,
+    VERTIGO,
+    ;
 }

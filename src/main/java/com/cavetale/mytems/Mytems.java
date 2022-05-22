@@ -577,10 +577,14 @@ public enum Mytems {
     SILVER_EASTER_TROPHY(Trophy::new, EGG, 301, TROPHY),
     BRONZE_EASTER_TROPHY(Trophy::new, EGG, 302, TROPHY),
     PARTICIPATION_EASTER_TROPHY(Trophy::new, EGG, 303, TROPHY),
+    GOLD_VERTIGO_TROPHY(Trophy::new, LAVA_BUCKET, 308, TROPHY),
+    SILVER_VERTIGO_TROPHY(Trophy::new, BUCKET, 309, TROPHY),
+    BRONZE_VERTIGO_TROPHY(Trophy::new, WATER_BUCKET, 310, TROPHY),
+    PARTICIPATION_VERTIGO_TROPHY(Trophy::new, BUCKET, 311, TROPHY),
     // Photo
     PHOTO(Photo::new, FILLED_MAP, 306, PHOTOS),
     ;
-    // Next CustomModelData: 308
+    // Next CustomModelData: 312
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
