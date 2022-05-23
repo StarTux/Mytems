@@ -581,10 +581,18 @@ public enum Mytems {
     SILVER_VERTIGO_TROPHY(Trophy::new, BUCKET, 309, TROPHY),
     BRONZE_VERTIGO_TROPHY(Trophy::new, WATER_BUCKET, 310, TROPHY),
     PARTICIPATION_VERTIGO_TROPHY(Trophy::new, BUCKET, 311, TROPHY),
+    GOLD_LADDER_TROPHY(Trophy::new, LADDER, 312, TROPHY),
+    SILVER_LADDER_TROPHY(Trophy::new, LADDER, 313, TROPHY),
+    BRONZE_LADDER_TROPHY(Trophy::new, LADDER, 314, TROPHY),
+    PARTICIPATION_LADDER_TROPHY(Trophy::new, LADDER, 315, TROPHY),
+    GOLD_CAVEPAINT_TROPHY(Trophy::new, PAINTING, 317, TROPHY),
+    SILVER_CAVEPAINT_TROPHY(Trophy::new, PAINTING, 318, TROPHY),
+    BRONZE_CAVEPAINT_TROPHY(Trophy::new, PAINTING, 319, TROPHY),
+    PARTICIPATION_CAVEPAINT_TROPHY(Trophy::new, PAINTING, 320, TROPHY),
     // Photo
     PHOTO(Photo::new, FILLED_MAP, 306, PHOTOS),
     ;
-    // Next CustomModelData: 312
+    // Next CustomModelData: 321
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();

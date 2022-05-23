@@ -6,5 +6,8 @@ public enum TrophyCategory {
     TETRIS,
     EASTER,
     VERTIGO,
+    LADDER,
+    CAVEPAINT,
+    MAYPOLE,
     ;
 }
