@@ -1,7 +1,7 @@
 package com.cavetale.mytems.item.coin;
 
 import com.cavetale.core.connect.ServerCategory;
-import com.cavetale.money.Money;
+import com.cavetale.core.money.Money;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
@@ -88,10 +88,10 @@ public final class Coin implements Mytem {
                 ? "Pick up " + rawDisplayName
                 : "Pick up " + amount + " " + rawDisplayName + "s";
         }
-        Money.give(player.getUniqueId(),
-                   (double) value,
-                   MytemsPlugin.getInstance(),
-                   message);
+        Money.get().give(player.getUniqueId(),
+                         (double) value,
+                         MytemsPlugin.getInstance(),
+                         message);
     }
 
     private static final DecimalFormat MONEY_FORMAT = new DecimalFormat("#,###.00", new DecimalFormatSymbols(Locale.US));
