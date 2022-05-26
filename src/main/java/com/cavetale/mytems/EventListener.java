@@ -4,6 +4,7 @@ import com.cavetale.mytems.event.combat.DamageCalculation;
 import com.cavetale.mytems.event.combat.DamageCalculationEvent;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.util.Gui;
+import com.cavetale.worldmarker.entity.EntityMarker;
 import com.cavetale.worldmarker.item.ItemMarker;
 import com.cavetale.worldmarker.util.Tags;
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
@@ -45,6 +46,7 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
@@ -422,13 +424,28 @@ public final class EventListener implements Listener {
         onPlayerLaunchTridentRecursiveLock = false;
         if (trident2 == null) return;
         event.setCancelled(true);
+        trident2.setPersistent(false);
+        trident2.setItem(itemStack.clone());
         trident2.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
         trident2.setCritical(trident.isCritical());
         trident2.setDamage(trident.getDamage());
         trident2.setKnockbackStrength(trident.getKnockbackStrength());
         trident2.setPierceLevel(trident.getPierceLevel());
+        trident2.setLoyaltyLevel(0);
+        EntityMarker.setId(trident2, "mytems:trident");
+        final int chan = itemStack.getEnchantmentLevel(Enchantment.CHANNELING);
+        if (chan > 0) {
+            trident2.setGlint(true);
+        }
         player.setCooldown(itemStack.getType(), Math.max(0, (4 - loy) * 20));
         player.playSound(player.getLocation(), Sound.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0f, 1.0f);
+    }
+
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    private void onTridentHit(ProjectileHitEvent event) {
+        if (!(event.getEntity() instanceof Trident trident)) return;
+        if (!EntityMarker.hasId(trident, "mytems:trident")) return;
+        trident.remove();
     }
 
     /**
