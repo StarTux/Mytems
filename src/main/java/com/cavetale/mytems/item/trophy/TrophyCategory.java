@@ -9,5 +9,6 @@ public enum TrophyCategory {
     LADDER,
     CAVEPAINT,
     MAYPOLE,
+    RED_GREEN_LIGHT,
     ;
 }

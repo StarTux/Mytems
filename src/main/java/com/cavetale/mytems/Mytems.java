@@ -564,35 +564,45 @@ public enum Mytems {
     TETRIS_J(DummyMytem::new, SAND, 280, TETRIS),
     TETRIS_S(DummyMytem::new, SAND, 281, TETRIS),
     TETRIS_Z(DummyMytem::new, SAND, 282, TETRIS),
-    // Trophy
+    // Cup Trophy
     GOLDEN_CUP(Trophy::new, GOLD_INGOT, 108, (char) 0xE2AB, TROPHY),
     SILVER_CUP(Trophy::new, IRON_INGOT, 292, TROPHY),
     BRONZE_CUP(Trophy::new, COPPER_INGOT, 293, TROPHY),
     PARTICIPATION_CUP(Trophy::new, BLUE_CONCRETE, 298, TROPHY),
+    // Medal Trophy
     GOLD_MEDAL(Trophy::new, GOLD_NUGGET, 294, TROPHY),
     SILVER_MEDAL(Trophy::new, IRON_NUGGET, 295, TROPHY),
     BRONZE_MEDAL(Trophy::new, COPPER_INGOT, 296, TROPHY),
     PARTICIPATION_MEDAL(Trophy::new, BLUE_WOOL, 299, TROPHY),
+    // Easter Trophy
     GOLD_EASTER_TROPHY(Trophy::new, EGG, 300, TROPHY),
     SILVER_EASTER_TROPHY(Trophy::new, EGG, 301, TROPHY),
     BRONZE_EASTER_TROPHY(Trophy::new, EGG, 302, TROPHY),
     PARTICIPATION_EASTER_TROPHY(Trophy::new, EGG, 303, TROPHY),
+    // Vertigo Trophy
     GOLD_VERTIGO_TROPHY(Trophy::new, LAVA_BUCKET, 308, TROPHY),
     SILVER_VERTIGO_TROPHY(Trophy::new, BUCKET, 309, TROPHY),
     BRONZE_VERTIGO_TROPHY(Trophy::new, WATER_BUCKET, 310, TROPHY),
     PARTICIPATION_VERTIGO_TROPHY(Trophy::new, BUCKET, 311, TROPHY),
+    // Ladder Trophy
     GOLD_LADDER_TROPHY(Trophy::new, LADDER, 312, TROPHY),
     SILVER_LADDER_TROPHY(Trophy::new, LADDER, 313, TROPHY),
     BRONZE_LADDER_TROPHY(Trophy::new, LADDER, 314, TROPHY),
     PARTICIPATION_LADDER_TROPHY(Trophy::new, LADDER, 315, TROPHY),
+    // Cavepaint Trophy
     GOLD_CAVEPAINT_TROPHY(Trophy::new, PAINTING, 317, TROPHY),
     SILVER_CAVEPAINT_TROPHY(Trophy::new, PAINTING, 318, TROPHY),
     BRONZE_CAVEPAINT_TROPHY(Trophy::new, PAINTING, 319, TROPHY),
     PARTICIPATION_CAVEPAINT_TROPHY(Trophy::new, PAINTING, 320, TROPHY),
+    // Red Light Green Light Trophy
+    GOLD_RED_GREEN_LIGHT_TROPHY(Trophy::new, GOLD_INGOT, 321, TROPHY),
+    SILVER_RED_GREEN_LIGHT_TROPHY(Trophy::new, IRON_INGOT, 322, TROPHY),
+    BRONZE_RED_GREEN_LIGHT_TROPHY(Trophy::new, COPPER_INGOT, 323, TROPHY),
+    PART_RED_GREEN_LIGHT_TROPHY(Trophy::new, BLUE_CONCRETE, 324, TROPHY),
     // Photo
     PHOTO(Photo::new, FILLED_MAP, 306, PHOTOS),
     ;
-    // Next CustomModelData: 321
+    // Next CustomModelData: 325
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
