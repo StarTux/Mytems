@@ -7,14 +7,15 @@ import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.session.Session;
+import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
-import java.awt.Color;
+import java.util.ArrayList;
+import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -27,8 +28,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
+import static java.awt.Color.HSBtoRGB;
+import static net.kyori.adventure.text.Component.join;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
+import static net.kyori.adventure.text.format.NamedTextColor.*;
+import static net.kyori.adventure.text.format.TextDecoration.*;
 
 @RequiredArgsConstructor
 public final class MagicCape implements Mytem, Listener {
@@ -47,30 +53,33 @@ public final class MagicCape implements Mytem, Listener {
     private ItemStack prototype;
 
     protected static Component rainbowify(String in) {
-        Component component = Component.empty().decoration(TextDecoration.ITALIC, false);
+        List<Component> list = new ArrayList<>(in.length());
         int len = in.length();
         for (int i = 0; i < len; i += 1) {
             float pos = (float) i / (float) len;
-            int rgb = 0xFFFFFF & Color.HSBtoRGB(pos, 0.66f, 1.0f);
-            component = component.append(Component.text(in.substring(i, i + 1)).color(TextColor.color(rgb)));
+            int rgb = 0xFFFFFF & HSBtoRGB(pos, 0.66f, 1.0f);
+            list.add(text(in.substring(i, i + 1)).color(TextColor.color(rgb)));
         }
-        return component;
+        return join(noSeparators(), list);
     }
 
     @Override
     public void enable() {
         displayName = rainbowify("Magic Cape");
+        List<Component> tooltip = new ArrayList<>();
+        tooltip.add(displayName);
+        tooltip.addAll(Text.wrapLore(description));
         prototype = new ItemStack(Material.ELYTRA).ensureServerConversions();
-        ItemMeta meta = prototype.getItemMeta();
-        if (meta instanceof Repairable) {
-            Repairable repairable = (Repairable) meta;
-            repairable.setRepairCost(9999);
-        }
-        meta.setUnbreakable(true);
-        meta.displayName(displayName);
-        meta.lore(Text.wrapLore(description));
-        key.markItemMeta(meta);
-        prototype.setItemMeta(meta);
+        prototype.editMeta(meta -> {
+                if (meta instanceof Repairable) {
+                    Repairable repairable = (Repairable) meta;
+                    repairable.setRepairCost(9999);
+                }
+                meta.setUnbreakable(true);
+                meta.displayName(displayName);
+                Items.text(meta, tooltip);
+                key.markItemMeta(meta);
+            });
         Bukkit.getPluginManager().registerEvents(this, MytemsPlugin.getInstance());
     }
 
@@ -96,6 +105,7 @@ public final class MagicCape implements Mytem, Listener {
         if (session.getFlying().isFlying()) return;
         if (!PlayerBlockAbilityQuery.Action.FLY.query(player, player.getLocation().getBlock())) {
             fail(player);
+            player.sendMessage(text("You cannot fly here", RED));
             return;
         }
         long cooldown = session.getCooldownInTicks(key.id);
@@ -106,10 +116,7 @@ public final class MagicCape implements Mytem, Listener {
             return;
         }
         session.setCooldown(key.id, COOLDOWN_SECONDS * 20);
-        if (!PluginPlayerEvent.Name.START_FLYING.cancellable(MytemsPlugin.getInstance(), player).call()) {
-            fail(player);
-            return;
-        }
+        PluginPlayerEvent.Name.START_FLYING.call(MytemsPlugin.getInstance(), player);
         session.getFlying().setFlying(player, key, FLY_SPEED, this::onTickFlight, this::onEndFlight);
         Location location = player.getLocation();
         session.getFavorites().set(new MagicCapeFlight(location.getWorld().getName(),

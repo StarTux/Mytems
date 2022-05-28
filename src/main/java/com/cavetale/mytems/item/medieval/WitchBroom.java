@@ -14,7 +14,6 @@ import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
@@ -33,6 +32,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 @RequiredArgsConstructor @Getter
 public final class WitchBroom implements Mytem, Listener {
@@ -44,10 +45,10 @@ public final class WitchBroom implements Mytem, Listener {
 
     @Override
     public void enable() {
-        displayName = Component.text("Witch Broom", NamedTextColor.LIGHT_PURPLE);
+        displayName = text("Witch Broom", LIGHT_PURPLE);
         List<Component> text = List.of(displayName,
-                                       Component.text("Right-click", NamedTextColor.GREEN)
-                                       .append(Component.text(" to lift off!", NamedTextColor.GRAY)));
+                                       text("Right-click", GREEN)
+                                       .append(text(" to lift off!", GRAY)));
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
                 Items.unbreakable(meta);
@@ -82,12 +83,10 @@ public final class WitchBroom implements Mytem, Listener {
         if (player.isGliding() || player.isFlying() || !((Entity) player).isOnGround()) return;
         if (!PlayerBlockAbilityQuery.Action.FLY.query(player, player.getLocation().getBlock())) {
             player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 0.5f);
+            player.sendActionBar(text("You cannot fly here", RED));
             return;
         }
-        if (!PluginPlayerEvent.Name.START_FLYING.cancellable(MytemsPlugin.getInstance(), player).call()) {
-            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1.0f, 0.5f);
-            return;
-        }
+        PluginPlayerEvent.Name.START_FLYING.call(MytemsPlugin.getInstance(), player);
         final ArmorStand armorStand = player.getWorld().spawn(player.getLocation(), ArmorStand.class, e -> {
                 e.setPersistent(false);
                 e.setVisible(false);
@@ -130,14 +129,14 @@ public final class WitchBroom implements Mytem, Listener {
                     armorStand.remove();
                     cancel();
                     player.setFallDistance(0);
-                    player.sendMessage(Component.text("You exit the Witch Broom", NamedTextColor.GRAY));
+                    player.sendMessage(text("You exit the Witch Broom", GRAY));
                     return;
                 }
                 armorStand.setVelocity(lookAt.normalize().multiply(0.6));
                 player.getWorld().spawnParticle(Particle.WAX_ON, location, 1, 0.0, 0.0, 0.0, 0.0);
             }
         }.runTaskTimer(MytemsPlugin.getInstance(), 0L, 0L);
-        player.sendMessage(Component.text("You mount the Witch Broom!", NamedTextColor.GRAY));
+        player.sendMessage(text("You mount the Witch Broom!", GRAY));
         player.playSound(player.getLocation(), Sound.ENTITY_PIG_SADDLE, SoundCategory.MASTER, 1.0f, 1.0f);
     }
 
