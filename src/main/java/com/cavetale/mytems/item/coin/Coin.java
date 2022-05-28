@@ -1,6 +1,7 @@
 package com.cavetale.mytems.item.coin;
 
 import com.cavetale.core.connect.ServerCategory;
+import com.cavetale.core.event.item.PlayerAbsorbItemEvent;
 import com.cavetale.core.money.Money;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
@@ -78,7 +79,8 @@ public final class Coin implements Mytem {
         event.setCancelled(true);
         ItemStack itemStack = item.getItemStack();
         if (itemStack.getAmount() < 1) return;
-        event.getItem().remove();
+        new PlayerAbsorbItemEvent(player, item, itemStack.getAmount()).callEvent();
+        item.remove();
         int amount = itemStack.getAmount();
         int value = denomination.value * amount;
         String message = Tags.getString(itemStack.getItemMeta().getPersistentDataContainer(),
