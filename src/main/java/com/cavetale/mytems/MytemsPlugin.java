@@ -172,7 +172,7 @@ public final class MytemsPlugin extends JavaPlugin {
         if (entity instanceof ItemFrame itemFrame) {
             ItemStack itemStack = fixItemStack(itemFrame.getItem());
             if (itemStack != null) {
-                itemFrame.setItem(itemStack);
+                itemFrame.setItem(itemStack, false); // playSound
             }
         }
         if (entity instanceof LivingEntity livingEntity) {
