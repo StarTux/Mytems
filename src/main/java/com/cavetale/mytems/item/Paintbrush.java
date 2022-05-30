@@ -162,9 +162,6 @@ public final class Paintbrush implements Mytem {
         Material newMaterial = brush.blockColor.getMaterial(suffix);
         String oldBlockData = targetBlock.getBlockData().getAsString();
         int brackIndex = oldBlockData.indexOf("[");
-        if (brackIndex > 0) {
-            System.out.println(oldBlockData.substring(brackIndex));
-        }
         BlockData newBlockData = brackIndex > 0
             ? Bukkit.createBlockData(newMaterial, oldBlockData.substring(brackIndex))
             : newMaterial.createBlockData();
