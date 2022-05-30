@@ -20,6 +20,7 @@ import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Chunk;
 import org.bukkit.GameMode;
+import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -69,6 +70,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.BlockStateMeta;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.java.JavaPlugin;
 import static net.kyori.adventure.text.Component.text;
@@ -439,6 +441,25 @@ public final class EventListener implements Listener {
         }
         player.setCooldown(itemStack.getType(), Math.max(0, (4 - loy) * 20));
         player.playSound(player.getLocation(), Sound.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0f, 1.0f);
+        if (player.getGameMode() != GameMode.CREATIVE) {
+            final int unbreaking = itemStack.getEnchantmentLevel(Enchantment.DURABILITY);
+            if (unbreaking > 0) {
+                float chance = 1.0f / (float) (unbreaking + 1);
+                float roll = (float) ThreadLocalRandom.current().nextDouble();
+                if (roll >= chance) return;
+            }
+            ItemStack hand = player.getInventory().getItemInMainHand();
+            if (hand == null || hand.getType() != Material.TRIDENT) {
+                hand = player.getInventory().getItemInOffHand();
+            }
+            if (hand != null && hand.getType() == Material.TRIDENT) {
+                hand.editMeta(meta -> {
+                        if (!meta.isUnbreakable() && meta instanceof Damageable dmg) {
+                            dmg.setDamage(dmg.getDamage() + 1);
+                        }
+                    });
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
