@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.JoinConfiguration;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -37,7 +36,10 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
+import static net.kyori.adventure.text.JoinConfiguration.separator;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
@@ -82,6 +84,9 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         serializeNode.addChild("test").denyTabCompletion()
             .description("Test serialization on hand")
             .playerCaller(this::serializeTest);
+        serializeNode.addChild("minecraft").denyTabCompletion()
+            .description("Serialize to Minecraft JSON")
+            .playerCaller(this::serializeMinecraft);
         serializeNode.addChild("mytems").denyTabCompletion()
             .description("Serialize hand via mytems")
             .playerCaller(this::serializeMytems);
@@ -115,14 +120,14 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         }
         for (Mytems mytems : Mytems.values()) {
             if (tag != null && !tag.isTagged(mytems)) continue;
-            lines.add(Component.join(JoinConfiguration.noSeparators(),
-                                     text(mytems.ordinal() + ") ", GRAY),
-                                     mytems.component.insertion(GsonComponentSerializer.gson().serialize(mytems.component)),
-                                     mytems.getMytem().getDisplayName(),
-                                     Component.space(),
-                                     text(mytems.id, DARK_GRAY).insertion(mytems.id)));
+            lines.add(join(noSeparators(),
+                           text(mytems.ordinal() + ") ", GRAY),
+                           mytems.component.insertion(GsonComponentSerializer.gson().serialize(mytems.component)),
+                           mytems.getMytem().getDisplayName(),
+                           Component.space(),
+                           text(mytems.id, DARK_GRAY).insertion(mytems.id)));
         }
-        sender.sendMessage(Component.join(JoinConfiguration.separator(Component.newline()), lines));
+        sender.sendMessage(join(separator(Component.newline()), lines));
         return true;
     }
 
@@ -232,8 +237,8 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         }
         String output = result.toString();
         sender.sendMessage(text("Preview ", YELLOW)
-                           .append(Component.join(JoinConfiguration.noSeparators(),
-                                                  preview)
+                           .append(join(noSeparators(),
+                                        preview)
                                    .color(WHITE)
                                    .insertion(output)));
         sender.sendMessage(text("Raw ", YELLOW)
@@ -273,6 +278,22 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         return true;
     }
 
+    protected boolean serializeMinecraft(Player player, String[] args) {
+        if (args.length != 0) return false;
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        if (itemStack == null || itemStack.getType() == Material.AIR) {
+            throw new CommandWarn("No item in your hand!");
+        }
+        String serialized = itemStack.getType().getKey()
+            + (itemStack.hasItemMeta()
+               ? itemStack.getItemMeta().getAsString()
+               : "");
+        player.sendMessage(join(noSeparators(),
+                                text("Serialized item: ", YELLOW),
+                                text(serialized).insertion(serialized)));
+        return true;
+    }
+
     protected boolean serializeMytems(Player player, String[] args) {
         if (args.length != 0) return false;
         ItemStack itemStack = player.getInventory().getItemInMainHand();
@@ -285,6 +306,7 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         }
         String serialized = mytems.serializeItem(itemStack);
         player.sendMessage(ChatColor.YELLOW + "Serialized item in hand: " + ChatColor.RESET + serialized);
+        plugin.getLogger().info(serialized);
         return true;
     }
 
@@ -370,9 +392,9 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         player.sendMessage(text("Spawning ", YELLOW)
                            .append(mytems.getMytem().getDisplayName())
                            .append(text(" as block at"
-                                                  + " " + block.getX()
-                                                  + " " + block.getY()
-                                                  + " " + block.getZ())));
+                                        + " " + block.getX()
+                                        + " " + block.getY()
+                                        + " " + block.getZ())));
         Blocks.place(mytems, block, blockFace);
         return true;
     }

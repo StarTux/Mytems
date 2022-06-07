@@ -1,5 +1,6 @@
 package com.cavetale.mytems;
 
+import com.cavetale.core.item.ItemKind;
 import com.cavetale.core.util.Json;
 import com.cavetale.mytems.item.ArmorPart;
 import com.cavetale.mytems.item.ArmorStandEditor;
@@ -73,18 +74,21 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
+import org.bukkit.Keyed;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import static com.cavetale.mytems.MytemsCategory.*;
+import static net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText;
 import static org.bukkit.Material.*;
 
 /**
  * List of all known Mytems.
  * Unicode characters start at 0xE200.
  */
-public enum Mytems implements ComponentLike {
+public enum Mytems implements ComponentLike, Keyed, ItemKind {
     // Halloween 2020
     DR_ACULA_STAFF(DrAculaStaff::new, NETHERITE_SWORD, 741302, (char) 0xE220, ACULA),
     FLAME_SHIELD(FlameShield::new, SHIELD, 741303, (char) 0xE234, ACULA),
@@ -810,5 +814,30 @@ public enum Mytems implements ComponentLike {
     @Override
     public Component asComponent() {
         return component;
+    }
+
+    @Override
+    public NamespacedKey getKey() {
+        return new NamespacedKey(MytemsPlugin.getInstance(), id);
+    }
+
+    @Override
+    public String name(ItemStack item) {
+        return plainText().serialize(getMytem().getDisplayName(item));
+    }
+
+    @Override
+    public Component displayName(ItemStack item) {
+        return getMytem().getDisplayName(item);
+    }
+
+    @Override
+    public Component icon(ItemStack item) {
+        return component;
+    }
+
+    @Override
+    public ItemStack create(String tag) {
+        return getMytem().deserializeTag(tag);
     }
 }

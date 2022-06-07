@@ -3,6 +3,7 @@ package com.cavetale.mytems;
 import com.cavetale.core.connect.ServerCategory;
 import com.cavetale.core.font.Emoji;
 import com.cavetale.core.font.GlyphPolicy;
+import com.cavetale.core.item.ItemFinder;
 import com.cavetale.mytems.item.photo.Photo;
 import com.cavetale.mytems.loot.LootTableListener;
 import com.cavetale.mytems.session.Sessions;
@@ -38,7 +39,7 @@ import org.bukkit.loot.Lootable;
 import org.bukkit.plugin.java.JavaPlugin;
 
 @Getter
-public final class MytemsPlugin extends JavaPlugin {
+public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
     @Getter private static MytemsPlugin instance;
     final MytemsCommand mytemsCommand = new MytemsCommand(this);
     final EventListener eventListener = new EventListener(this);
@@ -46,6 +47,11 @@ public final class MytemsPlugin extends JavaPlugin {
     private Map<Mytems, Mytem> mytems = new EnumMap<>(Mytems.class);
     private List<CustomMytemSlot> customMytemSlots = new ArrayList<>();
     private boolean fixAllPlayerInventoriesScheduled = false;
+
+    @Override
+    public void onLoad() {
+        ItemFinder.super.register();
+    }
 
     @Override
     public void onEnable() {
@@ -90,6 +96,7 @@ public final class MytemsPlugin extends JavaPlugin {
             }
         }
         mytems.clear();
+        ItemFinder.super.unregister();
     }
 
     public void enableItems() {
@@ -267,5 +274,16 @@ public final class MytemsPlugin extends JavaPlugin {
 
     public static NamespacedKey namespacedKey(String value) {
         return new NamespacedKey(instance, value);
+    }
+
+    @Override
+    public Mytems findItem(ItemStack item) {
+        return Mytems.forItem(item);
+    }
+
+    @Override
+    public Mytems findItem(NamespacedKey key) {
+        if (!key.namespace().equals("mytems")) return null;
+        return Mytems.forId(key.getKey());
     }
 }
