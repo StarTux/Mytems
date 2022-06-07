@@ -26,8 +26,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
-import net.kyori.adventure.text.JoinConfiguration;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Instrument;
@@ -49,6 +47,13 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.scheduler.BukkitTask;
+import static net.kyori.adventure.text.Component.empty;
+import static net.kyori.adventure.text.Component.join;
+import static net.kyori.adventure.text.Component.space;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
+import static net.kyori.adventure.text.JoinConfiguration.separator;
+import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 @RequiredArgsConstructor
 public final class MusicalInstrument implements Mytem {
@@ -60,7 +65,7 @@ public final class MusicalInstrument implements Mytem {
     @Getter private final Mytems key;
     private String displayNameString;
     @Getter private Component displayName;
-    private List<Component> baseText;
+    private List<Component> tooltip;
     private ItemStack prototype;
     private Instrument instrument;
     private static final TextColor COLOR = TextColor.color(0xFFAA88);
@@ -87,13 +92,14 @@ public final class MusicalInstrument implements Mytem {
         }
         Objects.requireNonNull(type, "type=null");
         this.displayNameString = Text.toCamelCase(key, " ");
-        this.displayName = Component.text(displayNameString, COLOR);
-        baseText = List.of(displayName,
-                           Component.text("Right-click", NamedTextColor.GREEN)
-                           .append(Component.text(" to play", NamedTextColor.GRAY)));
+        this.displayName = text(displayNameString, COLOR);
+        tooltip = List.of(displayName,
+                          join(noSeparators(),
+                               Mytems.MOUSE_RIGHT,
+                               text(" Play the " + Text.toCamelCase(type, " ") + "!", GRAY)));
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.text(meta, baseText);
+                Items.text(meta, tooltip);
                 key.markItemMeta(meta);
             });
     }
@@ -271,10 +277,10 @@ public final class MusicalInstrument implements Mytem {
             }
         }
         final int size = (openEvent.isHeroMode() ? 6 : 4) * 9;
-        Component guiDisplayName = Component.text()
+        Component guiDisplayName = text()
             .append(key.component)
             .append(displayName)
-            .append(Component.text(NOTE1 + NOTE2, NamedTextColor.GRAY))
+            .append(text(NOTE1 + NOTE2, GRAY))
             .build();
         Gui gui = new Gui()
             .size(size)
@@ -342,7 +348,7 @@ public final class MusicalInstrument implements Mytem {
                 privateData.hero.gridCount += 1;
                 beat = beat.cooked(privateData.hero.melody);
                 gui.setItem(HERO_OFFSET + i * 3,
-                            TONE_MYTEMS_MAP.get(beat.tone).createIcon(List.of(Component.text(beat.toString()))));
+                            TONE_MYTEMS_MAP.get(beat.tone).createIcon(List.of(text(beat.toString()))));
                 gui.setItem(HERO_OFFSET + i * 3 + 1,
                             beat.semitone != null && beat.semitone != Semitone.NATURAL
                             ? beat.semitone.mytems.createIcon()
@@ -370,30 +376,36 @@ public final class MusicalInstrument implements Mytem {
         if (privateData.hero != null) {
             // Shorten this in hero mode!
             return Items.text(TONE_MYTEMS_MAP.get(button.tone).createIcon(),
-                              List.of(Component.text(touch.toString(), COLOR)));
+                              List.of(text(touch.toString(), COLOR)));
         }
         List<Component> text = new ArrayList<>();
-        text.add(Component.text(touch.toString(), COLOR));
+        text.add(join(noSeparators(),
+                      text(touch.toString(), COLOR),
+                      space(), Mytems.MOUSE_LEFT));
         if (button.flat != null) {
             if (privateData.semitones.get(button.tone) == Semitone.FLAT) {
-                text.add(Component.text(button.tone.name() + Semitone.NATURAL.symbol, COLOR)
-                         .append(Component.text(" Shift", NamedTextColor.GRAY)));
+                text.add(join(noSeparators(),
+                              text(button.tone.name() + Semitone.NATURAL.symbol, COLOR),
+                              empty(), Mytems.SHIFT_KEY, Mytems.MOUSE_LEFT));
             } else {
-                text.add(Component.text(button.tone.name() + Semitone.FLAT.symbol, COLOR)
-                         .append(Component.text(" Shift", NamedTextColor.GRAY)));
+                text.add(join(noSeparators(),
+                              text(button.tone.name() + Semitone.FLAT.symbol, COLOR),
+                              empty(), Mytems.SHIFT_KEY, Mytems.MOUSE_LEFT));
             }
         }
         if (button.sharp != null) {
             if (privateData.semitones.get(button.tone) == Semitone.SHARP) {
-                text.add(Component.text(button.tone.name() + Semitone.NATURAL.symbol, COLOR)
-                         .append(Component.text(" Right", NamedTextColor.GRAY)));
+                text.add(join(noSeparators(),
+                              text(button.tone.name() + Semitone.NATURAL.symbol, COLOR),
+                              space(), Mytems.MOUSE_RIGHT));
             } else {
-                text.add(Component.text(button.tone.name() + Semitone.SHARP.symbol, COLOR)
-                         .append(Component.text(" Right", NamedTextColor.GRAY)));
+                text.add(join(noSeparators(),
+                              text(button.tone.name() + Semitone.SHARP.symbol, COLOR),
+                              space(), Mytems.MOUSE_RIGHT));
             }
         }
-        text.add(Component.text("Keyboard", COLOR)
-                 .append(Component.text(" 1-9", NamedTextColor.GRAY)));
+        text.add(text("Keyboard", COLOR)
+                 .append(text(" 1...9", GRAY)));
         return Items.text(TONE_MYTEMS_MAP.get(button.tone).createIcon(), text);
     }
 
@@ -401,11 +413,13 @@ public final class MusicalInstrument implements Mytem {
         Semitone semitone = privateData.semitoneOf(button.tone);
         List<Component> text = new ArrayList<>();
         Touch touch = privateData.touchOf(button.tone, button.octave);
-        text.add(Component.text(touch.toString(), COLOR));
-        text.add(Component.text("Sharpen", COLOR)
-                 .append(Component.text(" Left", NamedTextColor.GRAY)));
-        text.add(Component.text("Flatten", COLOR)
-                 .append(Component.text(" Right", NamedTextColor.GRAY)));
+        text.add(text(touch.toString(), COLOR));
+        text.add(join(noSeparators(),
+                      text("Sharpen ", COLOR),
+                      Mytems.MOUSE_LEFT));
+        text.add(join(noSeparators(),
+                      text("Flatten", COLOR),
+                      Mytems.MOUSE_RIGHT));
         ItemStack icon = Items.text(semitone.mytems.createIcon(), text);
         return icon;
     }
@@ -438,10 +452,10 @@ public final class MusicalInstrument implements Mytem {
             touch = null;
         }
         if (touch == null) return;
-        ComponentLike actionBar = Component.text()
+        ComponentLike actionBar = text()
             .append(key.component)
             .append(TONE_MYTEMS_MAP.get(touch.tone).component)
-            .append(touch.semitone != Semitone.NATURAL ? touch.semitone.mytems.component : Component.empty());
+            .append(touch.semitone != Semitone.NATURAL ? touch.semitone.mytems.component : empty());
         player.sendActionBar(actionBar);
         player.getWorld().playSound(player.getLocation(), Sounds.of(type.instrument).sound, SoundCategory.PLAYERS,
                                     1.0f, Notes.of(touch.bukkitNote).pitch);
@@ -525,9 +539,9 @@ public final class MusicalInstrument implements Mytem {
             for (int i = 0; i < sharp.length(); i += 1) {
                 try {
                     Tone tone = Tone.valueOf(sharp.substring(i, i + 1));
-                    line.add(Component.join(JoinConfiguration.noSeparators(),
-                                            TONE_MYTEMS_MAP.get(tone).component,
-                                            Semitone.SHARP.mytems.component));
+                    line.add(join(noSeparators(),
+                                  TONE_MYTEMS_MAP.get(tone).component,
+                                  Semitone.SHARP.mytems.component));
                 } catch (IllegalArgumentException iae) { }
             }
         }
@@ -535,15 +549,15 @@ public final class MusicalInstrument implements Mytem {
             for (int i = 0; i < flat.length(); i += 1) {
                 try {
                     Tone tone = Tone.valueOf(flat.substring(i, i + 1));
-                    line.add(Component.join(JoinConfiguration.noSeparators(),
-                                            TONE_MYTEMS_MAP.get(tone).component,
-                                            Semitone.FLAT.mytems.component));
+                    line.add(join(noSeparators(),
+                                  TONE_MYTEMS_MAP.get(tone).component,
+                                  Semitone.FLAT.mytems.component));
                 } catch (IllegalArgumentException iae) { }
             }
         }
-        List<Component> text = new ArrayList<>(baseText);
+        List<Component> text = new ArrayList<>(tooltip);
         if (!line.isEmpty()) {
-            text.add(Component.join(JoinConfiguration.separator(Component.space()), line));
+            text.add(join(separator(space()), line));
         }
         Items.text(meta, text);
     }

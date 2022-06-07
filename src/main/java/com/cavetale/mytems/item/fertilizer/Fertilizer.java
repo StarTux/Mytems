@@ -2,7 +2,6 @@ package com.cavetale.mytems.item.fertilizer;
 
 import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.font.GuiOverlay;
-import com.cavetale.core.font.Unicode;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
@@ -45,10 +44,11 @@ public final class Fertilizer implements Mytem {
                 Items.text(meta, List.of(new Component[] {
                             displayName,
                             join(noSeparators(),
-                                 text(Unicode.tiny("sneak click"), GREEN),
+                                 Mytems.SHIFT_KEY.component,
+                                 Mytems.MOUSE_RIGHT.component,
                                  text(" Open menu", GRAY)),
                             join(noSeparators(),
-                                 text(Unicode.tiny("click block"), GREEN),
+                                 Mytems.MOUSE_RIGHT.component,
                                  text(" Fertilize", GRAY)),
                         }));
                 key.markItemMeta(meta);

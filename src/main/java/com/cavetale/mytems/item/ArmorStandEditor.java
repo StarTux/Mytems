@@ -1,5 +1,6 @@
 package com.cavetale.mytems.item;
 
+import com.cavetale.core.font.VanillaItems;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Items;
@@ -31,10 +32,11 @@ public final class ArmorStandEditor implements Mytem {
                 text("armor stands!", GRAY),
                 empty(),
                 join(noSeparators(),
-                     text("right-click", GREEN),
+                     Mytems.MOUSE_RIGHT.component,
                      text(" open menu", GRAY)),
                 join(noSeparators(),
-                     text("click armor stand", GREEN),
+                     Mytems.MOUSE_RIGHT.component,
+                     VanillaItems.ARMOR_STAND.component,
                      text(" edit", GRAY)),
             });
         prototype = new ItemStack(key.material);

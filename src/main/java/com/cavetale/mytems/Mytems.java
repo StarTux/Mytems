@@ -56,8 +56,10 @@ import com.cavetale.mytems.item.swampy.SwampyItem;
 import com.cavetale.mytems.item.tree.TreeSeed;
 import com.cavetale.mytems.item.treechopper.TreeChopper;
 import com.cavetale.mytems.item.trophy.Trophy;
+import com.cavetale.mytems.item.util.Sneakers;
 import com.cavetale.mytems.item.vote.VoteCandy;
 import com.cavetale.mytems.item.vote.VoteFirework;
+import com.cavetale.mytems.item.wateringcan.EmptyWateringCan;
 import com.cavetale.mytems.item.wateringcan.WateringCan;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Skull;
@@ -68,6 +70,7 @@ import java.util.Map;
 import java.util.function.Function;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
 import org.bukkit.Material;
@@ -81,7 +84,7 @@ import static org.bukkit.Material.*;
  * List of all known Mytems.
  * Unicode characters start at 0xE200.
  */
-public enum Mytems {
+public enum Mytems implements ComponentLike {
     // Halloween 2020
     DR_ACULA_STAFF(DrAculaStaff::new, NETHERITE_SWORD, 741302, (char) 0xE220, ACULA),
     FLAME_SHIELD(FlameShield::new, SHIELD, 741303, (char) 0xE234, ACULA),
@@ -91,6 +94,7 @@ public enum Mytems {
     // Cloud City
     UNICORN_HORN(UnicornHorn::new, END_ROD, 7413003, (char) 0, UTILITY),
     MAGIC_CAPE(MagicCape::new, ELYTRA, 7413006, (char) 0xE238, UTILITY),
+    SNEAKERS(Sneakers::new, LEATHER_BOOTS, 333, UTILITY),
     // Generic
     KITTY_COIN(KittyCoin::new, PLAYER_HEAD, 7413001, (char) 0xE200, CURRENCY),
     RAINBOW_KITTY_COIN(KittyCoin::new, PLAYER_HEAD, 7413007, (char) 0xE243, CURRENCY),
@@ -169,7 +173,9 @@ public enum Mytems {
     ARMOR_STAND_EDITOR(ArmorStandEditor::new, FLINT, 241, UTILITY),
     FERTILIZER(Fertilizer::new, BONE_MEAL, 285, UTILITY),
     WATERING_CAN(WateringCan::new, STONE_HOE, 297, UTILITY),
+    EMPTY_WATERING_CAN(EmptyWateringCan::new, STONE_HOE, 334, UTILITY),
     GOLDEN_WATERING_CAN(WateringCan::new, GOLDEN_HOE, 307, UTILITY),
+    EMPTY_GOLDEN_WATERING_CAN(EmptyWateringCan::new, STONE_HOE, 335, UTILITY),
     // Wardrobe
     WHITE_BUNNY_EARS(WardrobeItem::new, IRON_BOOTS, 3919001, (char) 0, WARDROBE_HAT), // EPIC
     RED_LIGHTSABER(WardrobeItem::new, END_ROD, 3919002, (char) 0, WARDROBE_HANDHELD),
@@ -386,7 +392,7 @@ public enum Mytems {
     CROSSED_CHECKBOX(ForbiddenMytem::new, BARRIER, 16, (char) 0xE249, UI),
     EAGLE(ForbiddenMytem::new, FEATHER, 19, (char) 0xE24C, UI),
     EARTH(ForbiddenMytem::new, ENDER_PEARL, 5, (char) 0xE23D, UI),
-    EASTER_EGG(DummyMytem::new, EGG, 345715, (char) 0xE23C, UI),
+    EASTER_EGG(DummyMytem::new, EGG, 345715, (char) 0xE23C, COLLECTIBLES),
     TRAFFIC_LIGHT(ForbiddenMytem::new, YELLOW_DYE, 57, (char) 0xE279, UI),
     INVISIBLE_ITEM(ForbiddenMytem::new, LIGHT_GRAY_STAINED_GLASS_PANE, 65, (char) 0xE281, UI),
     PAINT_PALETTE(ForbiddenMytem::new, STICK, 202, UI),
@@ -399,6 +405,10 @@ public enum Mytems {
     DATA_STRING(ForbiddenMytem::new, CHAIN, 272, UI),
     DATA_FLOAT(ForbiddenMytem::new, REPEATER, 273, UI),
     BOMB(ForbiddenMytem::new, CHAIN, 274, UI),
+    MOUSE(ForbiddenMytem::new, WHITE_CONCRETE, 336, UI),
+    MOUSE_LEFT(ForbiddenMytem::new, LIGHT_BLUE_CONCRETE, 337, UI),
+    MOUSE_RIGHT(ForbiddenMytem::new, RED_CONCRETE, 338, UI),
+    SHIFT_KEY(ForbiddenMytem::new, LIGHT_GRAY_CONCRETE, 339, UI),
     // Collectibles
     HEART(DummyMytem::new, HEART_OF_THE_SEA, 9, (char) 0xE241, COLLECTIBLES),
     STAR(DummyMytem::new, NETHER_STAR, 18, (char) 0xE24B, COLLECTIBLES),
@@ -599,10 +609,20 @@ public enum Mytems {
     SILVER_RED_GREEN_LIGHT_TROPHY(Trophy::new, IRON_INGOT, 322, TROPHY),
     BRONZE_RED_GREEN_LIGHT_TROPHY(Trophy::new, COPPER_INGOT, 323, TROPHY),
     PART_RED_GREEN_LIGHT_TROPHY(Trophy::new, BLUE_CONCRETE, 324, TROPHY),
+    // Hide and Seek Trophy
+    GOLD_HIDE_AND_SEEK_TROPHY(Trophy::new, GOLD_INGOT, 325, TROPHY),
+    SILVER_HIDE_AND_SEEK_TROPHY(Trophy::new, IRON_INGOT, 326, TROPHY),
+    BRONZE_HIDE_AND_SEEK_TROPHY(Trophy::new, COPPER_INGOT, 327, TROPHY),
+    PART_HIDE_AND_SEEK_TROPHY(Trophy::new, BLUE_CONCRETE, 328, TROPHY),
+    // Vote Trophy
+    GOLD_VOTE_TROPHY(Trophy::new, GOLD_INGOT, 329, TROPHY),
+    SILVER_VOTE_TROPHY(Trophy::new, IRON_INGOT, 330, TROPHY),
+    BRONZE_VOTE_TROPHY(Trophy::new, COPPER_INGOT, 331, TROPHY),
+    PART_VOTE_TROPHY(Trophy::new, BLUE_CONCRETE, 332, TROPHY),
     // Photo
     PHOTO(Photo::new, FILLED_MAP, 306, PHOTOS),
     ;
-    // Next CustomModelData: 325
+    // Next CustomModelData: 340
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
@@ -780,5 +800,15 @@ public enum Mytems {
             if (mytems == it) return true;
         }
         return false;
+    }
+
+    public void setItem(ItemStack item) {
+        item.setType(material);
+        item.setItemMeta(createItemStack().getItemMeta());
+    }
+
+    @Override
+    public Component asComponent() {
+        return component;
     }
 }

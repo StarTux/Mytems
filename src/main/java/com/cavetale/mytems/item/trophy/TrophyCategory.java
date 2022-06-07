@@ -10,5 +10,7 @@ public enum TrophyCategory {
     CAVEPAINT,
     MAYPOLE,
     RED_GREEN_LIGHT,
+    HIDE_AND_SEEK,
+    VOTE,
     ;
 }

@@ -17,6 +17,11 @@ import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 import static net.kyori.adventure.text.format.TextDecoration.*;
 
+/**
+ * The water level is reversed: 0 means full, while
+ * WateringCanType.maxLevel is empty.  Thus, a full can may be stored
+ * in MS.
+ */
 public final class WateringCanTag extends MytemTag {
     public static final String WATER = "water";
     protected int water;
@@ -47,8 +52,9 @@ public final class WateringCanTag extends MytemTag {
                 Tags.set(tag, MytemsPlugin.namespacedKey(WATER), water);
                 List<Component> tooltip = new ArrayList<>();
                 tooltip.addAll(wateringCan.tooltip);
-                if (water > 0) {
-                    tooltip.add(join(noSeparators(), text(tiny("water "), GRAY), text(water, BLUE)));
+                int waterLeft = wateringCan.type.maxWater - water;
+                if (waterLeft > 0) {
+                    tooltip.add(join(noSeparators(), text(tiny("water "), GRAY), text(waterLeft, BLUE)));
                 }
                 text(meta, tooltip);
             });

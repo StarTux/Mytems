@@ -32,7 +32,9 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 @RequiredArgsConstructor @Getter
@@ -47,8 +49,9 @@ public final class WitchBroom implements Mytem, Listener {
     public void enable() {
         displayName = text("Witch Broom", LIGHT_PURPLE);
         List<Component> text = List.of(displayName,
-                                       text("Right-click", GREEN)
-                                       .append(text(" to lift off!", GRAY)));
+                                       join(noSeparators(),
+                                            Mytems.MOUSE_RIGHT.component,
+                                            text(" Lift off!", GRAY)));
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
                 Items.unbreakable(meta);

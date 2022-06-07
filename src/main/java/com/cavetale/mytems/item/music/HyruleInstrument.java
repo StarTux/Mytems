@@ -8,6 +8,7 @@ import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Gui;
+import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.util.EnumMap;
 import java.util.List;
@@ -16,9 +17,7 @@ import java.util.Objects;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.Instrument;
 import org.bukkit.Location;
@@ -40,12 +39,17 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import static com.cavetale.core.font.Unicode.tiny;
+import static net.kyori.adventure.text.Component.join;
+import static net.kyori.adventure.text.Component.space;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
+import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 @RequiredArgsConstructor
 public final class HyruleInstrument implements Mytem {
     @Getter private final Mytems key;
     @Getter private Component displayName;
-    private List<Component> lore;
     private ItemStack prototype;
     private Instrument instrument;
     private static final TextColor GOLD = TextColor.color(0xFFD700);
@@ -69,16 +73,14 @@ public final class HyruleInstrument implements Mytem {
             }
         }
         Objects.requireNonNull(type, "type=null");
-        displayName = Component.text().content(Text.toCamelCase(key, " ")).color(GOLD)
-            .decoration(TextDecoration.ITALIC, false).build();
-        lore = List.of(Component.text()
-                       .append(Component.text("Right-click", NamedTextColor.GREEN))
-                       .append(Component.text(" to play the " + type.name().toLowerCase() + "!", NamedTextColor.GRAY))
-                       .build());
+        this.displayName = text(Text.toCamelCase(key, " "), GOLD);
+        final List<Component> tooltip = List.of(displayName,
+                                                join(noSeparators(),
+                                                     Mytems.MOUSE_RIGHT,
+                                                     text(" Play the " + Text.toCamelCase(type, " ") + "!", GRAY)));
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                meta.displayName(displayName);
-                meta.lore(lore);
+                Items.text(meta, tooltip);
                 meta.addItemFlags(ItemFlag.values());
                 key.markItemMeta(meta);
             });
@@ -141,7 +143,7 @@ public final class HyruleInstrument implements Mytem {
     }
 
     static String toString(Note note) {
-        return note.getTone().toString()
+        return tiny(note.getTone().toString().toLowerCase())
             + (note.isSharped() ? "#" : "");
     }
 
@@ -157,31 +159,30 @@ public final class HyruleInstrument implements Mytem {
         final int size = 5 * 9;
         Gui gui = new Gui()
             .size(size)
-            .title(Component.text()
+            .title(text()
                    .append(DefaultFont.guiBlankOverlay(size, GOLD))
-                   .append(key.component)
+                   .append(key)
                    .append(displayName)
                    .build());
         for (Button button : Button.values()) {
             ItemStack icon = button.mytems.createItemStack();
-            List<Component> tooltip = List.of(new Component[] {
-                    Component.text()
-                    .append(Component.text(toString(button.natural().flattened()), GOLD))
-                    .append(Component.text(" Shift", NamedTextColor.GRAY))
-                    .build(),
-                    Component.text()
-                    .append(Component.text(toString(button.natural().sharped()), GOLD))
-                    .append(Component.text(" Right-click", NamedTextColor.GRAY))
-                    .build(),
-                    Component.text()
-                    .append(Component.text(toString(button.natural().sharped().sharped()), GOLD))
-                    .append(Component.text(" Shift+Right-click", NamedTextColor.GRAY))
-                    .build(),
-                });
-            icon.editMeta(meta -> {
-                    meta.displayName(Component.text(button.tone.name(), GOLD));
-                    meta.lore(tooltip);
-                });
+            Items.text(icon, List.of(join(noSeparators(),
+                                          text(button.tone.name(), GOLD),
+                                          Mytems.MOUSE_LEFT),
+                                     join(noSeparators(),
+                                          text(toString(button.natural().flattened()), GOLD),
+                                          space(),
+                                          Mytems.SHIFT_KEY,
+                                          Mytems.MOUSE_LEFT),
+                                     join(noSeparators(),
+                                          text(toString(button.natural().sharped()), GOLD),
+                                          space(),
+                                          Mytems.MOUSE_RIGHT),
+                                     join(noSeparators(),
+                                          text(toString(button.natural().sharped().sharped()), GOLD),
+                                          space(),
+                                          Mytems.SHIFT_KEY,
+                                          Mytems.MOUSE_RIGHT)));
             gui.setItem(button.x, button.y, icon, click -> {
                     Note note;
                     boolean isMelody = true;

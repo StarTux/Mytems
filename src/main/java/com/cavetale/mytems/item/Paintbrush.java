@@ -14,8 +14,6 @@ import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.JoinConfiguration;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -32,6 +30,12 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.RayTraceResult;
+import static com.cavetale.core.font.Unicode.tiny;
+import static net.kyori.adventure.text.Component.empty;
+import static net.kyori.adventure.text.Component.join;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
+import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 /**
  * Paintbrush in 16 colors.  It can change the color of any colored
@@ -91,21 +95,22 @@ public final class Paintbrush implements Mytem {
     @Override
     public void enable() {
         this.brush = Brush.of(key);
-        this.displayName = Component.text(Text.toCamelCase(key, " "), brush.blockColor.textColor);
+        this.displayName = text(Text.toCamelCase(key, " "), brush.blockColor.textColor);
         this.text = List.of(displayName,
-                            Component.text("Turn the block you're", NamedTextColor.GRAY),
-                            (Component.text("looking at ", NamedTextColor.GRAY)
-                             .append(Component.text(brush.blockColor.niceName, brush.blockColor.textColor))
-                             .append(Component.text(".", NamedTextColor.GRAY))),
-                            Component.text("The effect is not", NamedTextColor.GRAY),
-                            Component.text("permanent!", NamedTextColor.GRAY),
-                            Component.empty(),
-                            Component.join(JoinConfiguration.noSeparators(),
-                                           Component.text("Left ", NamedTextColor.GREEN),
-                                           Component.text("Pick Color", NamedTextColor.GRAY)),
-                            Component.join(JoinConfiguration.noSeparators(),
-                                           Component.text("Right ", NamedTextColor.GREEN),
-                                           Component.text("Paint", NamedTextColor.GRAY)));
+                            text(tiny("Paint the block in"), GRAY),
+                            (text(tiny("front of you "), GRAY)
+                             .append(text(tiny(brush.blockColor.niceName), brush.blockColor.textColor))
+                             .append(text(".", GRAY))),
+                            empty(),
+                            text(tiny("The effect is not"), GRAY),
+                            text(tiny("permanent!"), GRAY),
+                            empty(),
+                            join(noSeparators(),
+                                 Mytems.MOUSE_LEFT,
+                                 text(" Pick Color", GRAY)),
+                            join(noSeparators(),
+                                 Mytems.MOUSE_RIGHT,
+                                 text(" Paint", GRAY)));
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
                 Items.text(meta, text);
@@ -125,7 +130,7 @@ public final class Paintbrush implements Mytem {
         event.setUseItemInHand(Event.Result.DENY);
         if (event.getHand() != EquipmentSlot.HAND) return;
         if (event.hasBlock()) {
-            player.sendActionBar(Component.text("Too close! Get some distance.", NamedTextColor.RED));
+            player.sendActionBar(text("Too close! Get some distance.", RED));
             return;
         }
         Session session = MytemsPlugin.getInstance().getSessions().of(player);
