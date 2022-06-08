@@ -37,6 +37,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.loot.Lootable;
 import org.bukkit.plugin.java.JavaPlugin;
+import static com.cavetale.core.util.CamelCase.toCamelCase;
 
 @Getter
 public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
@@ -67,7 +68,7 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
             if (it.component.equals(Component.empty())) continue;
             String name = it.name().toLowerCase();
             Emoji.addEmoji(name, it.component, it.getMytem().getDisplayName(),
-                           GlyphPolicy.PUBLIC, it);
+                           GlyphPolicy.PUBLIC, it, toCamelCase(" ", it.category));
         }
         for (Player player : Bukkit.getOnlinePlayers()) {
             fixPlayerInventory(player);
