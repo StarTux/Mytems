@@ -48,4 +48,14 @@ public class MytemTag {
     public boolean isDismissable() {
         return isEmpty();
     }
+
+    /**
+     * Check if this MytemTag can be merged with another.  This will
+     * disregard isDismissable() as well as getMaxItemCount().
+     * Essentially, compare everything besides the item amount.
+     * Subclasses should alway call super!
+     */
+    public boolean isSimilar(MytemTag other) {
+        return other != null;
+    }
 }

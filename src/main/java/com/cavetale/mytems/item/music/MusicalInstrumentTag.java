@@ -2,6 +2,7 @@ package com.cavetale.mytems.item.music;
 
 import com.cavetale.mytems.MytemTag;
 import com.cavetale.worldmarker.util.Tags;
+import java.util.Objects;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 
@@ -44,5 +45,13 @@ public final class MusicalInstrumentTag extends MytemTag {
     @Override
     public boolean isDismissable() {
         return super.isEmpty();
+    }
+
+    @Override
+    public boolean isSimilar(MytemTag other) {
+        return super.isSimilar(other)
+            && other instanceof MusicalInstrumentTag that
+            && Objects.equals(this.flat, that.flat)
+            && Objects.equals(this.sharp, that.sharp);
     }
 }

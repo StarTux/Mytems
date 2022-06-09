@@ -12,6 +12,7 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.kyori.adventure.text.Component;
@@ -279,5 +280,13 @@ public final class PocketMobTag extends MytemTag {
     @Override
     public boolean isDismissable() {
         return false;
+    }
+
+    @Override
+    public boolean isSimilar(MytemTag other) {
+        return super.isSimilar(other)
+            && other instanceof PocketMobTag that
+            && Objects.equals(this.mobTag, that.mobTag)
+            && Objects.equals(this.mob, that.mob);
     }
 }

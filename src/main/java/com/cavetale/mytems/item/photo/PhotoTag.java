@@ -7,6 +7,7 @@ import com.cavetale.worldmarker.util.Tags;
 import com.winthier.playercache.PlayerCache;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -80,5 +81,12 @@ public final class PhotoTag extends MytemTag {
     @Override
     public boolean isDismissable() {
         return isEmpty();
+    }
+
+    @Override
+    public boolean isSimilar(MytemTag other) {
+        return super.isSimilar(other)
+            && other instanceof PhotoTag that
+            && Objects.equals(this.photoId, that.photoId);
     }
 }

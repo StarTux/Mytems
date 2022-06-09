@@ -4,6 +4,7 @@ import com.cavetale.core.connect.Connect;
 import com.cavetale.mytems.MytemTag;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.worldmarker.util.Tags;
+import java.util.Objects;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bukkit.Bukkit;
@@ -88,5 +89,14 @@ public final class FarawayMapTag extends MytemTag {
                     meta.setColor(Color.fromRGB(color));
                 }
             });
+    }
+
+    @Override
+    public boolean isSimilar(MytemTag other) {
+        return super.isSimilar(other)
+            && other instanceof FarawayMapTag that
+            && Objects.equals(this.server, that.server)
+            && Objects.equals(this.mapId, that.mapId)
+            && Objects.equals(this.color, that.color);
     }
 }

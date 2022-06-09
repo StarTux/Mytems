@@ -5,6 +5,7 @@ import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.worldmarker.util.Tags;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -63,5 +64,12 @@ public final class WateringCanTag extends MytemTag {
     @Override
     public boolean isDismissable() {
         return isEmpty();
+    }
+
+    @Override
+    public boolean isSimilar(MytemTag other) {
+        return super.isSimilar(other)
+            && other instanceof WateringCanTag that
+            && Objects.equals(this.water, that.water);
     }
 }

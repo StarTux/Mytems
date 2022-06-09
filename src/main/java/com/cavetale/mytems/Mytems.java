@@ -840,4 +840,22 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     public ItemStack create(String tag) {
         return getMytem().deserializeTag(tag);
     }
+
+    @Override
+    public int getMaxStackSize(ItemStack item) {
+        return getMytem().getMaxStackSize();
+    }
+
+    @Override
+    public boolean isSimilar(ItemStack a, ItemStack b) {
+        if (forItem(a) != this || forItem(b) != this) return false;
+        MytemTag tagA = getMytem().serializeTag(a);
+        MytemTag tagB = getMytem().serializeTag(b);
+        if (tagA != null && tagA.isDismissable()) tagA = null;
+        if (tagB != null && tagB.isDismissable()) tagB = null;
+        if (tagA == null && tagB == null) return true;
+        return tagA != null
+            ? tagA.isSimilar(tagB)
+            : tagB.isSimilar(tagA);
+    }
 }

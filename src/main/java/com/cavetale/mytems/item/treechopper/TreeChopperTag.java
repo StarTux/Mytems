@@ -5,6 +5,7 @@ import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.worldmarker.util.Tags;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bukkit.inventory.ItemStack;
@@ -106,5 +107,12 @@ public final class TreeChopperTag extends MytemTag {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public boolean isSimilar(MytemTag other) {
+        return super.isSimilar(other)
+            && other instanceof TreeChopperTag that
+            && Objects.equals(this.stats, that.stats);
     }
 }
