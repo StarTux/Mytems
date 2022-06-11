@@ -112,7 +112,8 @@ public final class Coin implements Mytem {
                 denomination = deno;
             }
         }
-        return join(noSeparators(), denomination.mytems.component, text(format, denomination.color))
+        return join(noSeparators(), denomination.mytems.component, text(format))
+            .color(denomination.color)
             .hoverEvent(showText(join(separator(newline()),
                                       text(format + " Coins", denomination.color),
                                       text("/money", GRAY))))
