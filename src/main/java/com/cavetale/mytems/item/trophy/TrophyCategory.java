@@ -12,5 +12,10 @@ public enum TrophyCategory {
     RED_GREEN_LIGHT,
     HIDE_AND_SEEK,
     VOTE,
+    SHOVEL,
+    SWORD,
+    PICKAXE,
+    AXE,
+    HOE,
     ;
 }

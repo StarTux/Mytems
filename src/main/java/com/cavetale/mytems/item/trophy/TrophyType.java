@@ -4,6 +4,9 @@ import com.cavetale.mytems.Mytems;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.Material;
+import org.bukkit.inventory.ItemFlag;
+import org.bukkit.inventory.ItemStack;
 import static com.cavetale.mytems.item.trophy.TrophyCategory.*;
 import static com.cavetale.mytems.item.trophy.TrophyQuality.*;
 
@@ -64,11 +67,54 @@ public enum TrophyType {
     SILVER_VOTE_TROPHY(Mytems.SILVER_VOTE_TROPHY, VOTE, SILVER),
     BRONZE_VOTE_TROPHY(Mytems.BRONZE_VOTE_TROPHY, VOTE, BRONZE),
     PART_VOTE_TROPHY(Mytems.PART_VOTE_TROPHY, VOTE, PARTICIPATION),
+    // Shovel
+    GOLDEN_SHOVEL(Material.GOLDEN_SHOVEL, SHOVEL, GOLD),
+    SILVER_SHOVEL(Material.IRON_SHOVEL, SHOVEL, SILVER),
+    BRONZE_SHOVEL(Material.STONE_SHOVEL, SHOVEL, BRONZE),
+    PART_SHOVEL(Material.WOODEN_SHOVEL, SHOVEL, PARTICIPATION),
+    // Sword
+    GOLDEN_SWORD(Material.GOLDEN_SWORD, SWORD, GOLD),
+    SILVER_SWORD(Material.IRON_SWORD, SWORD, SILVER),
+    BRONZE_SWORD(Material.STONE_SWORD, SWORD, BRONZE),
+    PART_SWORD(Material.WOODEN_SWORD, SWORD, PARTICIPATION),
+    // Pickaxe
+    GOLDEN_PICKAXE(Material.GOLDEN_PICKAXE, PICKAXE, GOLD),
+    SILVER_PICKAXE(Material.IRON_PICKAXE, PICKAXE, SILVER),
+    BRONZE_PICKAXE(Material.STONE_PICKAXE, PICKAXE, BRONZE),
+    PART_PICKAXE(Material.WOODEN_PICKAXE, PICKAXE, PARTICIPATION),
+    // Pickaxe
+    GOLDEN_AXE(Material.GOLDEN_AXE, AXE, GOLD),
+    SILVER_AXE(Material.IRON_AXE, AXE, SILVER),
+    BRONZE_AXE(Material.STONE_AXE, AXE, BRONZE),
+    PART_AXE(Material.WOODEN_AXE, AXE, PARTICIPATION),
+    // Hoe
+    GOLDEN_HOE(Material.GOLDEN_HOE, HOE, GOLD),
+    SILVER_HOE(Material.IRON_HOE, HOE, SILVER),
+    BRONZE_HOE(Material.STONE_HOE, HOE, BRONZE),
+    PART_HOE(Material.WOODEN_HOE, HOE, PARTICIPATION),
     ;
 
-    public final Mytems mytems;
+    private final Mytems mytems;
+    private final Material material;
     public final TrophyCategory category;
     public final TrophyQuality quality;
+
+    TrophyType(final Mytems mytems, final TrophyCategory category, final TrophyQuality quality) {
+        this(mytems, null, category, quality);
+    }
+
+    TrophyType(final Material material, final TrophyCategory category, final TrophyQuality quality) {
+        this(null, material, category, quality);
+    }
+
+    public ItemStack createItemStack() {
+        if (mytems != null) {
+            return mytems.createItemStack();
+        }
+        ItemStack item = new ItemStack(material);
+        item.editMeta(m -> m.addItemFlags(ItemFlag.values()));
+        return item;
+    }
 
     public static TrophyType of(Mytems mytems) {
         for (TrophyType it : values()) {
