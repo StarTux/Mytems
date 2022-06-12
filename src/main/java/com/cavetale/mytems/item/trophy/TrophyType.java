@@ -1,9 +1,12 @@
 package com.cavetale.mytems.item.trophy;
 
+import com.cavetale.core.font.VanillaItems;
 import com.cavetale.mytems.Mytems;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.ComponentLike;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -11,7 +14,7 @@ import static com.cavetale.mytems.item.trophy.TrophyCategory.*;
 import static com.cavetale.mytems.item.trophy.TrophyQuality.*;
 
 @RequiredArgsConstructor
-public enum TrophyType {
+public enum TrophyType implements ComponentLike {
     // CUP
     GOLDEN_CUP(Mytems.GOLDEN_CUP, CUP, GOLD),
     SILVER_CUP(Mytems.SILVER_CUP, CUP, SILVER),
@@ -114,6 +117,17 @@ public enum TrophyType {
         ItemStack item = new ItemStack(material);
         item.editMeta(m -> m.addItemFlags(ItemFlag.values()));
         return item;
+    }
+
+    public Component getComponent() {
+        return mytems != null
+            ? mytems.component
+            : VanillaItems.componentOf(material);
+    }
+
+    @Override
+    public Component asComponent() {
+        return getComponent();
     }
 
     public static TrophyType of(Mytems mytems) {
