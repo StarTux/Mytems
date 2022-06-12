@@ -624,10 +624,15 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     SILVER_VOTE_TROPHY(Trophy::new, IRON_INGOT, 330, TROPHY),
     BRONZE_VOTE_TROPHY(Trophy::new, COPPER_INGOT, 331, TROPHY),
     PART_VOTE_TROPHY(Trophy::new, BLUE_CONCRETE, 332, TROPHY),
+    // Spleef Trophy
+    GOLDEN_SPLEEF_SHOVEL(Trophy::new, GOLDEN_SHOVEL, 341, TROPHY),
+    SILVER_SPLEEF_SHOVEL(Trophy::new, IRON_SHOVEL, 342, TROPHY),
+    BRONZE_SPLEEF_SHOVEL(Trophy::new, STONE_SHOVEL, 343, TROPHY),
+    BLUE_SPLEEF_SHOVEL(Trophy::new, WOODEN_SHOVEL, 344, TROPHY),
     // Photo
     PHOTO(Photo::new, FILLED_MAP, 306, PHOTOS),
     ;
-    // Next CustomModelData: 341
+    // Next CustomModelData: 345
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
