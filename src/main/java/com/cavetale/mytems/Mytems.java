@@ -413,6 +413,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     MOUSE_LEFT(ForbiddenMytem::new, LIGHT_BLUE_CONCRETE, 337, UI),
     MOUSE_RIGHT(ForbiddenMytem::new, RED_CONCRETE, 338, UI),
     SHIFT_KEY(ForbiddenMytem::new, LIGHT_GRAY_CONCRETE, 339, UI),
+    THUMBS_UP(ForbiddenMytem::new, GREEN_CONCRETE, 340, UI),
     // Collectibles
     HEART(DummyMytem::new, HEART_OF_THE_SEA, 9, (char) 0xE241, COLLECTIBLES),
     STAR(DummyMytem::new, NETHER_STAR, 18, (char) 0xE24B, COLLECTIBLES),
@@ -626,7 +627,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     // Photo
     PHOTO(Photo::new, FILLED_MAP, 306, PHOTOS),
     ;
-    // Next CustomModelData: 340
+    // Next CustomModelData: 341
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
