@@ -31,6 +31,7 @@ import org.bukkit.entity.Cat;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fox;
+import org.bukkit.entity.Frog;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Mob;
@@ -168,6 +169,8 @@ public final class PocketMobTag extends MytemTag {
                 text.add(prop("Collar", BlockColor.of(cat.getCollarColor())));
             } else if (entity instanceof Parrot parrot) {
                 nameComponents.add(Text.toCamelCase(parrot.getVariant()));
+            } else if (entity instanceof Frog frog) {
+                nameComponents.add(Text.toCamelCase(frog.getVariant()));
             } else if (entity instanceof Wolf wolf) {
                 if (wolf.isAngry()) {
                     nameComponents.add(0, "Angry");

@@ -266,6 +266,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     // Enderball
     ENDERBALL(Enderball::new, DRAGON_EGG, (Integer) null, (char) 0, UTILITY),
     // PocketMob
+    POCKET_ALLAY(PocketMob::new, ALLAY_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_AXOLOTL(PocketMob::new, AXOLOTL_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_BAT(PocketMob::new, BAT_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_BEE(PocketMob::new, BEE_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
@@ -285,6 +286,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     POCKET_ENDER_DRAGON(PocketMob::new, ENDERMAN_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_EVOKER(PocketMob::new, EVOKER_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_FOX(PocketMob::new, FOX_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
+    POCKET_FROG(PocketMob::new, FROG_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_GHAST(PocketMob::new, GHAST_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_GIANT(PocketMob::new, ZOMBIE_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_GLOW_SQUID(PocketMob::new, GLOW_SQUID_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
@@ -323,6 +325,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     POCKET_SQUID(PocketMob::new, SQUID_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_STRAY(PocketMob::new, STRAY_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_STRIDER(PocketMob::new, STRIDER_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
+    POCKET_TADPOLE(PocketMob::new, TADPOLE_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_TRADER_LLAMA(PocketMob::new, TRADER_LLAMA_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_TROPICAL_FISH(PocketMob::new, TROPICAL_FISH_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_TURTLE(PocketMob::new, TURTLE_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
@@ -330,6 +333,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     POCKET_VILLAGER(PocketMob::new, VILLAGER_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_VINDICATOR(PocketMob::new, VINDICATOR_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_WANDERING_TRADER(PocketMob::new, WANDERING_TRADER_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
+    POCKET_WARDEN(PocketMob::new, WARDEN_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_WITCH(PocketMob::new, WITCH_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_WITHER(PocketMob::new, WITHER_SKELETON_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_WITHER_SKELETON(PocketMob::new, WITHER_SKELETON_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),

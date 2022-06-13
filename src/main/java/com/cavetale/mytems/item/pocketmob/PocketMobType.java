@@ -8,6 +8,7 @@ import org.bukkit.entity.EntityType;
 
 @RequiredArgsConstructor
 public enum PocketMobType {
+    ALLAY(Mytems.POCKET_ALLAY, EntityType.ALLAY),
     AXOLOTL(Mytems.POCKET_AXOLOTL, EntityType.AXOLOTL),
     BAT(Mytems.POCKET_BAT, EntityType.BAT),
     BEE(Mytems.POCKET_BEE, EntityType.BEE),
@@ -27,6 +28,7 @@ public enum PocketMobType {
     ENDER_DRAGON(Mytems.POCKET_ENDER_DRAGON, EntityType.ENDER_DRAGON),
     EVOKER(Mytems.POCKET_EVOKER, EntityType.EVOKER),
     FOX(Mytems.POCKET_FOX, EntityType.FOX),
+    FROG(Mytems.POCKET_FROG, EntityType.FROG),
     GHAST(Mytems.POCKET_GHAST, EntityType.GHAST),
     GIANT(Mytems.POCKET_GIANT, EntityType.GIANT),
     GLOW_SQUID(Mytems.POCKET_GLOW_SQUID, EntityType.GLOW_SQUID),
@@ -65,6 +67,7 @@ public enum PocketMobType {
     SQUID(Mytems.POCKET_SQUID, EntityType.SQUID),
     STRAY(Mytems.POCKET_STRAY, EntityType.STRAY),
     STRIDER(Mytems.POCKET_STRIDER, EntityType.STRIDER),
+    TADPOLE(Mytems.POCKET_TADPOLE, EntityType.TADPOLE),
     TRADER_LLAMA(Mytems.POCKET_TRADER_LLAMA, EntityType.TRADER_LLAMA),
     TROPICAL_FISH(Mytems.POCKET_TROPICAL_FISH, EntityType.TROPICAL_FISH),
     TURTLE(Mytems.POCKET_TURTLE, EntityType.TURTLE),
@@ -72,6 +75,7 @@ public enum PocketMobType {
     VILLAGER(Mytems.POCKET_VILLAGER, EntityType.VILLAGER),
     VINDICATOR(Mytems.POCKET_VINDICATOR, EntityType.VINDICATOR),
     WANDERING_TRADER(Mytems.POCKET_WANDERING_TRADER, EntityType.WANDERING_TRADER),
+    WARDEN(Mytems.POCKET_WARDEN, EntityType.WARDEN),
     WITCH(Mytems.POCKET_WITCH, EntityType.WITCH),
     WITHER(Mytems.POCKET_WITHER, EntityType.WITHER),
     WITHER_SKELETON(Mytems.POCKET_WITHER_SKELETON, EntityType.WITHER_SKELETON),
