@@ -4,7 +4,6 @@ import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsCategory;
 import com.cavetale.mytems.MytemsPlugin;
-import com.cavetale.mytems.util.Text;
 import com.destroystokyo.paper.event.entity.ThrownEggHatchEvent;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -26,6 +25,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import static com.cavetale.core.util.CamelCase.toCamelCase;
 
 @Getter @RequiredArgsConstructor
 public final class MobCatcher implements Mytem, Listener {
@@ -47,7 +47,10 @@ public final class MobCatcher implements Mytem, Listener {
             InputStreamReader reader = new InputStreamReader(in);
             config = YamlConfiguration.loadConfiguration(reader);
         }
-        displayName = Component.text(Text.toCamelCase(key, " "), PocketMobTag.COLOR_FG).decoration(TextDecoration.ITALIC, false);
+        String name = key == Mytems.FISH_CATCHER
+            ? "Aquatic Catcher"
+            : toCamelCase(" ", key);
+        displayName = Component.text(name, PocketMobTag.COLOR_FG).decoration(TextDecoration.ITALIC, false);
         prototype = new ItemStack(key.material).ensureServerConversions();
         ItemMeta meta = prototype.getItemMeta();
         meta.displayName(displayName);

@@ -35,6 +35,6 @@ pet_catcher: |-
   area.
 
 fish_catcher: |-
-  This catcher will catch all fish
-  within range. More secure than a
-  fishing rod!
+  This catcher will catch all
+  water mobs within range. More
+  secure than a fishing rod!
