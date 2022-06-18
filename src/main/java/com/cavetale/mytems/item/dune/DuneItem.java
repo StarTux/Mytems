@@ -2,7 +2,6 @@ package com.cavetale.mytems.item.dune;
 
 import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.gear.EntityAttribute;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
@@ -19,10 +18,11 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier.Operation;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -150,48 +150,32 @@ public abstract class DuneItem implements GearItem {
             private final int requiredItemCount;
             private final String name = "Sand Speed";
             private final String description = "Gain extra speed while walking on sand";
-            private final List<EntityAttribute> entityAttributes = List
-                .of(new EntityAttribute(Attribute.GENERIC_MOVEMENT_SPEED,
-                                        UUID.fromString("51f94678-9053-4e51-a916-306925f592a6"),
-                                        "duneSandSpeed",
-                                        0.5, Operation.ADD_SCALAR));
+            private final EntityAttribute speedAttribute = new EntityAttribute(Attribute.GENERIC_MOVEMENT_SPEED,
+                                                                               UUID.fromString("51f94678-9053-4e51-a916-306925f592a6"),
+                                                                               "duneSandSpeed",
+                                                                               0.5, Operation.ADD_SCALAR);
+            private final List<EntityAttribute> entityAttributes = List.of(speedAttribute);
 
-            /**
-             * Stored in Session.favorites.
-             */
-            static final class Favorite {
-                long onSandUntil = 0;
-                boolean onSand;
-                int ticks;
-            }
-
-            @Override
-            public List<EntityAttribute> getEntityAttributes(LivingEntity living) {
-                if (!(living instanceof Player)) return null;
-                Player player = (Player) living;
-                final boolean onSand;
-                long now = System.currentTimeMillis();
-                Favorite favorite = MytemsPlugin.getInstance().getSessions().of(player).getFavorites().getOrSet(Favorite.class, Favorite::new);
-                if (player.getLocation().add(0, -0.125, 0).getBlock().getType() == Material.SAND) {
-                    onSand = true;
-                    favorite.onSandUntil = now + 1000L;
-                    favorite.onSand = true;
-                } else {
-                    long until = favorite.onSandUntil;
-                    onSand = until >= now;
-                    favorite.onSand = false;
+            private static boolean isOnSand(Location location) {
+                Block block = location.add(0, -0.125, 0).getBlock();
+                for (int i = 0; i < 3; i += 1) {
+                    if (block.getType().name().contains("SAND")) return true;
+                    if (!block.getCollisionShape().getBoundingBoxes().isEmpty()) return false;
+                    block = block.getRelative(0, -1, 0);
                 }
-                return onSand ? entityAttributes : null;
+                return false;
             }
 
             @Override
             public void tick(LivingEntity living, int has) {
-                if (!(living instanceof Player)) return;
-                Player player = (Player) living;
-                Favorite favorite = MytemsPlugin.getInstance().getSessions().of(player).getFavorites().getOrSet(Favorite.class, Favorite::new);
-                if (!favorite.onSand) return;
-                if ((favorite.ticks++ % 2) != 0) return;
-                player.getWorld().spawnParticle(Particle.SOUL, player.getLocation().add(0, 0.125, 0), 1, 0, 0, 0, 0);
+                if (isOnSand(living.getLocation())) {
+                    speedAttribute.add(living);
+                    if (living.getTicksLived() % 4 == 0 && living instanceof Player player) {
+                        player.getWorld().spawnParticle(Particle.SOUL, player.getLocation().add(0, 0.125, 0), 1, 0.25, 0, 0.25, 0);
+                    }
+                } else {
+                    speedAttribute.remove(living);
+                }
             }
         }
 

@@ -72,7 +72,8 @@ public final class Equipment {
         }
         entityAttributes.clear();
         for (SetBonus setBonus : setBonuses) {
-            List<EntityAttribute> list = setBonus.getEntityAttributes(livingEntity);
+            int has = countSetItems(setBonus.getItemSet());
+            List<EntityAttribute> list = setBonus.getEntityAttributes(has);
             if (list == null) continue;
             entityAttributes.addAll(list);
         }

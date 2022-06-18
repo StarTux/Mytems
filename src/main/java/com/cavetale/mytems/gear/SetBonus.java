@@ -43,12 +43,12 @@ public interface SetBonus {
         return false;
     }
 
-    default List<EntityAttribute> getEntityAttributes() {
-        return List.of();
+    default List<EntityAttribute> getEntityAttributes(int has) {
+        return getEntityAttributes();
     }
 
-    default List<EntityAttribute> getEntityAttributes(LivingEntity living) {
-        return getEntityAttributes();
+    default List<EntityAttribute> getEntityAttributes() {
+        return List.of();
     }
 
     default List<PotionEffect> getPotionEffects(int has) {

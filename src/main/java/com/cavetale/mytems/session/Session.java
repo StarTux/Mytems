@@ -79,7 +79,6 @@ public final class Session {
             }
         }
         flying.tick(player);
-        attributes.tick(player);
         for (SetBonus setBonus : equipment.getSetBonuses()) {
             int has = equipment.countSetItems(setBonus.getItemSet());
             setBonus.tick(player, has);
@@ -114,6 +113,7 @@ public final class Session {
             ItemStack itemStack = inventory.getItem(slot.bukkitEquipmentSlot);
             if (itemStack != null) updateLooseItem(itemStack);
         }
+        attributes.update(player);
     }
 
     private void updateLooseItem(ItemStack itemStack) {

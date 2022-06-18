@@ -12,7 +12,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier.Operation;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -71,7 +70,7 @@ public final class SantaItemSet implements ItemSet {
                                     Operation.ADD_SCALAR));
 
         @Override
-        public List<EntityAttribute> getEntityAttributes(LivingEntity living) {
+        public List<EntityAttribute> getEntityAttributes() {
             return entityAttributes;
         }
     }

@@ -17,7 +17,7 @@ import org.bukkit.entity.Player;
  * This manages the plugin-wide attributes mechanism for one player.
  *
  * Item sets (possibly items) can emit a list of EntityAttribute which
- * the player should have. The Equipment keeps a list of them, which
+ * the player should have.  The Equipment keeps a list of them, which
  * is updated every tick in the Session. This manager reads the list
  * and adds the attributes that are missing from the player and
  * removes the ones that they should no longer have.
@@ -53,7 +53,7 @@ public final class Attributes {
         }
     }
 
-    protected void tick(Player player) {
+    protected void update(Player player) {
         hasAttributes.clear();
         shouldHaveAttributeNames.clear();
         shouldHaveAttributes.values().forEach(List::clear);

@@ -1,12 +1,16 @@
 package com.cavetale.mytems.gear;
 
+import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bukkit.attribute.Attributable;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.attribute.AttributeModifier;
+import static com.cavetale.mytems.session.Attributes.PREFIX;
 
 /**
  * An attribute which should be added to an entity by their item (set).
@@ -22,7 +26,7 @@ import org.bukkit.attribute.AttributeModifier;
 public final class EntityAttribute {
     protected Attribute attribute;
     protected UUID uuid;
-    protected String name;
+    protected String name; // PREFIX will be added
     protected double amount;
     protected Operation operation;
 
@@ -40,5 +44,27 @@ public final class EntityAttribute {
         default: op = "?";
         }
         return attribute.getKey().getKey() + op + String.format("%.2f", amount);
+    }
+
+    public boolean add(Attributable target) {
+        String fullName = PREFIX + name;
+        AttributeInstance attributeInstance = target.getAttribute(attribute);
+        for (AttributeModifier attributeModifier : attributeInstance.getModifiers()) {
+            if (attributeModifier.getName().equals(fullName)) return false;
+        }
+        attributeInstance.addModifier(toAttributeModifier(PREFIX));
+        return true;
+    }
+
+    public boolean remove(Attributable target) {
+        String fullName = PREFIX + name;
+        AttributeInstance attributeInstance = target.getAttribute(attribute);
+        for (AttributeModifier attributeModifier : List.copyOf(attributeInstance.getModifiers())) {
+            if (attributeModifier.getName().equals(fullName)) {
+                attributeInstance.removeModifier(attributeModifier);
+                return true;
+            }
+        }
+        return false;
     }
 }
