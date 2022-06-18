@@ -47,8 +47,9 @@ public final class EntityAttribute {
     }
 
     public boolean add(Attributable target) {
-        String fullName = PREFIX + name;
         AttributeInstance attributeInstance = target.getAttribute(attribute);
+        if (attributeInstance == null) return false;
+        String fullName = PREFIX + name;
         for (AttributeModifier attributeModifier : attributeInstance.getModifiers()) {
             if (attributeModifier.getName().equals(fullName)) return false;
         }
@@ -57,8 +58,9 @@ public final class EntityAttribute {
     }
 
     public boolean remove(Attributable target) {
-        String fullName = PREFIX + name;
         AttributeInstance attributeInstance = target.getAttribute(attribute);
+        if (attributeInstance == null) return false;
+        String fullName = PREFIX + name;
         for (AttributeModifier attributeModifier : List.copyOf(attributeInstance.getModifiers())) {
             if (attributeModifier.getName().equals(fullName)) {
                 attributeInstance.removeModifier(attributeModifier);
