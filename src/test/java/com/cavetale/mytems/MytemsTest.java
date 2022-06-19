@@ -9,6 +9,7 @@ public final class MytemsTest {
     public void test() {
         final Set<Integer> customModelDataSet = new HashSet<>();
         final Set<Character> characterSet = new HashSet<>();
+        int min = Integer.MAX_VALUE;;
         for (Mytems mytems : Mytems.values()) {
             if (mytems.material == null) {
                 throw new IllegalStateException(mytems + ": material is null!");
@@ -20,6 +21,7 @@ public final class MytemsTest {
                     }
                     customModelDataSet.add(mytems.customModelData);
                 }
+                if (min > mytems.customModelData) min = mytems.customModelData;
             } else {
                 System.out.println("No custom model data: " + mytems);
             }
@@ -30,5 +32,13 @@ public final class MytemsTest {
                 characterSet.add(mytems.character);
             }
         }
+        int max;
+        for (max = min;; max += 1) {
+            if (!customModelDataSet.contains(max)) {
+                if (!customModelDataSet.contains(max + 1)) break;
+                System.out.println("Mytems Model Gap: " + max);
+            }
+        }
+        System.out.println("Mytems Models: " + min + "..." + max);
     }
 }
