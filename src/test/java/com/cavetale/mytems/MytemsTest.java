@@ -1,6 +1,8 @@
 package com.cavetale.mytems;
 
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import org.junit.Test;
 
@@ -33,12 +35,18 @@ public final class MytemsTest {
             }
         }
         int max;
+        List<Integer> gaps = new ArrayList<>();
         for (max = min;; max += 1) {
             if (!customModelDataSet.contains(max)) {
-                if (!customModelDataSet.contains(max + 1)) break;
-                System.out.println("Mytems Model Gap: " + max);
+                if (!customModelDataSet.contains(max + 1)) {
+                    max -= 1;
+                    break;
+                }
+                gaps.add(max);
             }
         }
-        System.out.println("Mytems Models: " + min + "..." + max);
+        System.out.println("// CustomModelData Range: " + min + "..." + max);
+        System.out.println("// CustomModelData Gaps: " + gaps);
+        System.out.println("// CustomModelData Next: " + (max + 1));
     }
 }

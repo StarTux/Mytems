@@ -882,8 +882,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     RED_JESTER_SHOES(EquipmentItem::new, LEATHER_BOOTS, 586, EQUIP_RED_JESTER_SET),
     RED_JESTER_PANTS(EquipmentItem::new, LEATHER_LEGGINGS, 587, EQUIP_RED_JESTER_SET),
     ;
-    // Next CustomModelData: 345
-    // Gaps: 20, 79, 275, 316
+    // CustomModelData Range: 1...587
+    // CustomModelData Gaps: [79, 275, 316]
+    // CustomModelData Next: 588
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
