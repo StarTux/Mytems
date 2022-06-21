@@ -1,5 +1,6 @@
 package com.cavetale.mytems.session;
 
+import com.cavetale.core.event.hud.PlayerHudEvent;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.gear.Equipment;
@@ -125,5 +126,8 @@ public final class Session {
 
     public void equipmentDidChange() {
         equipmentUpdateTicks = 1;
+    }
+
+    protected void onPlayerHud(PlayerHudEvent event) {
     }
 }

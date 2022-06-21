@@ -9,7 +9,7 @@ public final class MytemsTest {
     public void test() {
         final Set<Integer> customModelDataSet = new HashSet<>();
         final Set<Character> characterSet = new HashSet<>();
-        int min = Integer.MAX_VALUE;;
+        int min = Integer.MAX_VALUE;
         for (Mytems mytems : Mytems.values()) {
             if (mytems.material == null) {
                 throw new IllegalStateException(mytems + ": material is null!");

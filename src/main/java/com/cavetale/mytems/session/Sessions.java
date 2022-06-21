@@ -1,5 +1,6 @@
 package com.cavetale.mytems.session;
 
+import com.cavetale.core.event.hud.PlayerHudEvent;
 import com.cavetale.mytems.MytemsPlugin;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -68,6 +69,11 @@ public final class Sessions implements Listener {
         if (event.isFlying()) return;
         Player player = event.getPlayer();
         of(player).getFlying().onToggleOff(player);
+    }
+
+    @EventHandler
+    private void onPlayerHud(PlayerHudEvent event) {
+        of(event.getPlayer()).onPlayerHud(event);
     }
 
     private void tick() {
