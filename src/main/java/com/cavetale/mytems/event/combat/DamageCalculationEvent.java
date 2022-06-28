@@ -15,7 +15,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 
 /**
  * Access the DamageCalculation of an EntityDamageEvent.  In order to
- * have an affect, handled must be set to true!  See EventHandler.
+ * have an effect, handled must be set to true!  See EventHandler.
  * DamageCalculation must be valid!
  */
 @RequiredArgsConstructor
