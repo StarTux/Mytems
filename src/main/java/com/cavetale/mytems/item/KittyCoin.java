@@ -2,39 +2,40 @@ package com.cavetale.mytems.item;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import java.util.Base64;
+import com.cavetale.mytems.util.Items;
+import com.cavetale.mytems.util.Skull;
 import java.util.List;
+import java.util.UUID;
 import lombok.Getter;
-import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.format.TextColor.color;
+import static net.kyori.adventure.text.format.TextDecoration.BOLD;
 
-@RequiredArgsConstructor
 public final class KittyCoin implements Mytem {
     @Getter private final Mytems key;
-    @Getter private Component displayName;
-    private ItemStack prototype;
+    @Getter private final Component displayName;
+    private final ItemStack prototype;
+    @SuppressWarnings("LineLength")
+    private static final Skull SKULL = new
+        Skull("Cavetale",
+              UUID.fromString("38b7fcf5-8cd8-4654-98f8-64a98c286f1e"),
+              "ewogICJ0aW1lc3RhbXAiIDogMTYwNzQ2MzI5MDg0NCwKICAicHJvZmlsZUlkIiA6ICIzOGI3ZmNmNThjZDg0NjU0OThmODY0YTk4YzI4NmYxZSIsCiAgInByb2ZpbGVOYW1lIiA6ICJDYXZldGFsZSIsCiAgInNpZ25hdHVyZVJlcXVpcmVkIiA6IHRydWUsCiAgInRleHR1cmVzIiA6IHsKICAgICJTS0lOIiA6IHsKICAgICAgInVybCIgOiAiaHR0cDovL3RleHR1cmVzLm1pbmVjcmFmdC5uZXQvdGV4dHVyZS9iMmU1ZWZiMDM2ZGFkYmJkODY5NzI4YzE0NzZhODMzZTRmMjkzYmU4MGJhYjA5NTYyYzZmZWE0ZjgwMDk4ZDU5IgogICAgfQogIH0KfQ==",
+              "lKwExnC/9al/Koi8QgQbzaXyEIwkK/Vjvc/ovEelZv6WMSUSICuE+Fmqd3GR6jQGwxskW4uMD2w3AO1Nf7qlG3op0voWjbs0w4PzfehuNF9mx4we6Mm7TZ0qA6QN6XIxxtQebAD/GXARvzWQk4LtHoiJ9l3BIxGb/dDwbav1COGe+zl+hOrxpi5lSMthH4EcVHX41bA+XIAC6vrFs83wy4VRi0MR9prFKOBW61LrMKxVgOLPJy0W1hIaf8v25Wtsa8jzuiPBE8WBxJwffqyGneI0LRR80i8MCX8G4pUuQ5scS9cYphJwsvhu7Dg+DUofxCXOw4GEd47ocv2aPTqdW7HTKlgaDOVTAMcp3/9yv2U8+AiKqX6yuzpjUpwQfzagund0wtlvZSRne6lDGt+RfYV8Wh6cS9VnH8TKzFHTvF19CdCdyU1+tess8q2g5tvz3V8y/TB7OBr4ZfuTYkHcDYUo0jDkP7CoEGGJT12RQI7aUwgEWa6mFI4PeN01YalA4YRVgcHGLFFxA9gzr7eGg5gn0I571/cSXUYbYP8OYesnB4gKtl0Uf9sv6yX+xUpkFkPMXtfSYNb8m3Uw20x+VlPQLnT1SO0q1+62ghx+b0JZAekri1knHGhXOHNH0CE4V2kovTtl9dR/P4H7X+zp1bdviHGIsGgnLpJckvzyKLY=");
+
+    public KittyCoin(final Mytems key) {
+        this.key = key;
+        this.displayName = text("Kitty Coin", color(0xFFD700), BOLD);
+        this.prototype = SKULL.create();
+        prototype.editMeta(meta -> {
+                Items.text(meta, List.of(displayName));
+                key.markItemMeta(meta);
+            });
+    }
 
     @Override
     public void enable() {
-        @SuppressWarnings("LineLength")
-        final byte[] bytes = Base64.getDecoder().decode("H4sIAAAAAAAAAMVUO6+jRhhlH1Hu3q3TpIiuXEXyKgYb2/hKW2CwAduAjQEDURQNMDzM8/KG1f6DTZFui/yBSOnzM9Lmj0RKkSJ4N/uuk1SjOd+Z75yj+WauEeQB8pgGBVBhlvtJjCDXX14h930b+SLyY2hlwClu0xC0MPveg8C+Rh4UwL1GPrf9/AJfIQ8FEEHkx2cD2BQZGNx++2xgJqE9uC2yEj4Z+AUIfWtw64Aw77dlbMMs7Dvbb6G8yPwAFl6WlK73Fk1Mp8wtULxHtJIwyQa3A/fS/smg6AX73dYvivaGSvx48Py7t+jg+SPk4S7J4BVyifjyU3v/NP03/GWgfedPgjaE0U3h+fmN9YlL5Lf/zxkobnYgtiOQBTcRzCwPxEX+zeD5k2cfa785b/fU79MyS0M4eC/EB4F++E8DfTAKoxpk6Ud2rpHrY1CGoVjHMHszrVcUqGDvBvbVfZakMCt8mD9Cri7nygzm1/3U3LtCPlNBWMJ7P8E6cTlqg4ITFloTyTM10ufoxOVlvRa6w5jvuClPu6hA1VuOIn2L3VRGFOaGEgacT844iutEhpsYkRAJsnc2LtyzgoqyF4m0jupygOsdhwuR3hhHLqd80uXiZWuOjdRkVFHvdV/32dC6ZoQ2s87f8YTUGE89m1VbQ92ElqamVqS+1mWl1j4p//CkELIS1te617X84vWSSz6iofghduGrrUlxruiTPmAl1KKTajd512MXYakZqWcrWkc2NS0N7VDZjIq/8nFc+HykYMbJ8HmaHxvMOtCjTdBnnQp9Tr1boUJneCLNd4YsRfw56PRIwXlm4+lncirIeqt3RmScVqhxdmueDnCDVqacm7zy5hz6lUW3zuHp0yvk0dF3Y3C5t/u/hNt61cTUaAHC0TbxiYN7MDugtSuuDrYj9VxZo6RawdCoZif+qBw5qlwN19GdPWGk2fnA1E0enPCSp8f1hBQxwZnfhcwkSdEqOZ3NHK3xfedArxTWi6jBazjjo7lsoHfk7CDMNK5pigM0SXrEaKRUdadDgO8KNvE3i3Cy5BrGHNl0bYIKo0QGDrtw6IlZk/rT8MgXHouvLJXVcMwkhxpHUrMqW+fEpG5xVfJRXlqk2XorLk8zbJfx20Z1xd1+06InzOOAQ1Tj6anIAXHuSn+/XBGnZbOpHeeuZWLIoTtJIlCf4CmNYPBUKQ/T3DouLD31NnVeeeWcdoe0kjgNpYk1zqxsfJ5Y1Rjs5Tv7NGflbegCWlRlkrfSyWjRVmOFGJL+9k6btWWXnpW0PjgdcPtHjdZFWBlHKYazkGaKoeToKnHyZr2eGrOEvO3WrFytsQVlU3arYMMC5jlxN3anRdVNVKIdycu5uMxwwyllPWAtWlcS9EwH+zmVrBhmI2Nj6cDNgVK7qxOYRWsO30MBxXQQkrguqa7FMrv1uiEXbpfNIeNO3RjlpnNsZB01RTf1PSHqMI+XuLstQlRxFnk1a7Vho6TBOtjzWuEcdcEkoolSj9FmqIb7wy6WsaOI3mHD2dj1mqGJbgwSBpmPBTHLeJrICixKrXB1HCSVXIQLWxrtcXauDbsUM+3KZxkuZ9x4l26soOra7U5/iiCPkfuc3X81D4lf//rjxe9r+eWf9s8vvk6+6n8f5DMqKePiHvI3CFevWKQHAAA=");
-        prototype = ItemStack.deserializeBytes(bytes);
-        displayName = Component.text("Kitty Coin").color(NamedTextColor.GOLD).decorate(TextDecoration.BOLD).decoration(TextDecoration.ITALIC, false);
-        ItemMeta meta = prototype.getItemMeta();
-        meta.displayName(displayName);
-        List<Component> lore = meta.lore();
-        lore.set(lore.size() - 1, Component.text(""));
-        lore.add(Component.text("/warp Bazaar").color(NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false));
-        lore.add(Component.text("/warp WitchLair").color(NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false));
-        lore.add(Component.text("/warp DwarvenVillage").color(NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false));
-        lore.add(Component.text("/warp CloudVillage").color(NamedTextColor.GOLD).decoration(TextDecoration.ITALIC, false));
-        meta.lore(lore);
-        key.markItemMeta(meta);
-        prototype.setItemMeta(meta);
     }
 
     @Override
