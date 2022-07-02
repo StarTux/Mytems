@@ -10,7 +10,6 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Gui;
 import com.cavetale.mytems.util.Items;
-import com.cavetale.mytems.util.PlayerPlacedBlocks;
 import com.cavetale.mytems.util.Text;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +35,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.core.exploits.PlayerPlacedBlocks.isPlayerPlaced;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
@@ -98,7 +98,7 @@ public final class TreeChopper implements Mytem {
     private void tryToChop(Cancellable event, Player player, ItemStack itemStack, Block block) {
         if (event.isCancelled()) return;
         if (!Tag.LOGS.isTagged(block.getType())) return;
-        if (PlayerPlacedBlocks.isPlayerPlaced(block)) return;
+        if (isPlayerPlaced(block)) return;
         TreeChopperTag tag = serializeTag(itemStack);
         switch (player.getGameMode()) {
         case SURVIVAL:

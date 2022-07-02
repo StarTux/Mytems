@@ -4,7 +4,6 @@ import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.event.block.PlayerBreakBlockEvent;
 import com.cavetale.core.event.block.PlayerChangeBlockEvent;
 import com.cavetale.mytems.MytemsPlugin;
-import com.cavetale.mytems.util.PlayerPlacedBlocks;
 import com.destroystokyo.paper.MaterialSetTag;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -24,6 +23,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
+import static com.cavetale.core.exploits.PlayerPlacedBlocks.isPlayerPlaced;
 import static com.cavetale.mytems.item.treechopper.TreeChopStatus.*;
 
 /**
@@ -40,7 +40,7 @@ public final class TreeChop {
                 Material.GRASS_BLOCK,
                 Material.PODZOL,
                 Material.FARMLAND,
-                // Wrold Gen
+                // World Gen
                 Material.GRAVEL,
                 Material.SAND,
             }));
@@ -107,7 +107,7 @@ public final class TreeChop {
                 done.add(nbor);
                 if (CHOPPING.contains(nbor)) continue;
                 if (nbor.getY() < minHeight) continue;
-                if (PlayerPlacedBlocks.isPlayerPlaced(nbor)) continue;
+                if (isPlayerPlaced(nbor)) continue;
                 if (Tag.LOGS.isTagged(nbor.getType())) {
                     if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, nbor)) {
                         continue;
@@ -144,7 +144,7 @@ public final class TreeChop {
                 done.add(nbor);
                 if (CHOPPING.contains(nbor)) continue;
                 if (nbor.getY() < minHeight) continue;
-                if (PlayerPlacedBlocks.isPlayerPlaced(nbor)) continue;
+                if (isPlayerPlaced(nbor)) continue;
                 if (Tag.LEAVES.isTagged(nbor.getType())) {
                     // If the leaf is attached to a log from a
                     // different tree, we skip it.
