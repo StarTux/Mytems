@@ -26,10 +26,11 @@ public final class MytemsTag {
             MytemsCategory.WITCH_HAT, MytemsCategory.SUNGLASSES,
         });
     public static final MytemsTag WARDROBE = new MytemsTag("wardrobe", new MytemsCategory[] {
-            MytemsCategory.WARDROBE_HAT,
-            MytemsCategory.WARDROBE_HANDHELD,
             MytemsCategory.CAT_EARS,
             MytemsCategory.SUNGLASSES,
+            MytemsCategory.WARDROBE_HANDHELD,
+            MytemsCategory.WARDROBE_HAT,
+            MytemsCategory.WITCH_HAT,
         });
     public static final MytemsTag ITEM_SETS = new MytemsTag("item_sets", new MytemsCategory[] {
             MytemsCategory.ACULA,
