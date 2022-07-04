@@ -17,7 +17,9 @@ public enum ChoppedType {
     SPRUCE(Tag.SPRUCE_LOGS, Material.SPRUCE_LEAVES, Material.SPRUCE_SAPLING),
     AZALEA(new MaterialSetTag(null, List.of()),
            new MaterialSetTag(null, List.of(Material.AZALEA_LEAVES, Material.FLOWERING_AZALEA_LEAVES)),
-           new MaterialSetTag(null, List.of(Material.AZALEA, Material.FLOWERING_AZALEA)));
+           new MaterialSetTag(null, List.of(Material.AZALEA, Material.FLOWERING_AZALEA))),
+    MANGROVE(Tag.MANGROVE_LOGS, Material.MANGROVE_LEAVES, Material.MANGROVE_PROPAGULE),
+    ;
 
     public final Tag<Material> logs;
     public final Tag<Material> leaves;
