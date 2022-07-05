@@ -181,6 +181,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     EMPTY_WATERING_CAN(EmptyWateringCan::new, STONE_HOE, 334, UTILITY),
     GOLDEN_WATERING_CAN(WateringCan::new, GOLDEN_HOE, 307, UTILITY),
     EMPTY_GOLDEN_WATERING_CAN(EmptyWateringCan::new, STONE_HOE, 335, UTILITY),
+    MONKEY_WRENCH(DummyMytem::new, STONE_HOE, 79, UTILITY),
     // Wardrobe
     WHITE_BUNNY_EARS(WardrobeItem::new, IRON_BOOTS, 3919001, (char) 0, WARDROBE_HAT), // EPIC
     RED_LIGHTSABER(WardrobeItem::new, END_ROD, 3919002, (char) 0, WARDROBE_HANDHELD),
