@@ -13,6 +13,7 @@ public enum TrophyCategory {
     HIDE_AND_SEEK,
     VOTE,
     SPLEEF,
+    END_FIGHT,
 
     SHOVEL,
     SWORD,
