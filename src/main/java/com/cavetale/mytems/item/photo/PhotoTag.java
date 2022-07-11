@@ -1,10 +1,10 @@
 package com.cavetale.mytems.item.photo;
 
+import com.cavetale.core.playercache.PlayerCache;
 import com.cavetale.mytems.MytemTag;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.worldmarker.util.Tags;
-import com.winthier.playercache.PlayerCache;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -71,7 +71,9 @@ public final class PhotoTag extends MytemTag {
                 }
                 if (data.owner() != null) {
                     String ownerName = PlayerCache.nameForUuid(data.owner());
-                    tooltip.add(join(noSeparators(), text(tiny("owner "), GRAY), text(ownerName, color(SEPIA))));
+                    if (ownerName != null) {
+                        tooltip.add(join(noSeparators(), text(tiny("owner "), GRAY), text(ownerName, color(SEPIA))));
+                    }
                 }
                 tooltip.add(join(noSeparators(), text(tiny("see "), GRAY), text("/photo", color(SEPIA))));
                 Items.text(meta, tooltip);
