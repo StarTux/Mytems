@@ -36,7 +36,7 @@ public final class LootTableListener implements Listener {
     private void onChestGenerate(LootTable lootTable, List<ItemStack> loot) {
         List<Mytems> list = MytemsTag.of(MytemsCategory.TREE_SEED).getMytems();
         Mytems mytems = list.get(random.nextInt(list.size()));
-        int amount = random.nextInt(64) + 1;
+        int amount = random.nextInt(16) + 1;
         loot.add(mytems.createItemStack(amount));
     }
 
