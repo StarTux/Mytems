@@ -127,6 +127,10 @@ public final class EventListener implements Listener {
 
     /**
      * Mytems cannot be crafted on any workstation.
+     * Should handle:
+     * - PrepareAnvilEvent
+     * - PrepareGrindstoneEvent
+     * - PrepareSmithingEvent
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
     void onPrepareResult(PrepareResultEvent event) {
