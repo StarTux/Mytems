@@ -7,6 +7,7 @@ import com.cavetale.core.command.CommandNode;
 import com.cavetale.core.command.CommandWarn;
 import com.cavetale.core.util.Json;
 import com.cavetale.mytems.gear.Equipment;
+import com.cavetale.mytems.item.coin.BankTeller;
 import com.cavetale.mytems.item.font.Glyph;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Blocks;
@@ -108,6 +109,10 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         damageCalcNode.addChild("toggledebug").denyTabCompletion()
             .description("Toggle player debug spam")
             .playerCaller(this::damageCalcToggleDebug);
+        // Bank Teller
+        rootNode.addChild("atm").arguments("<player>")
+            .description("Open the bank teller")
+            .senderCaller(this::bankTeller);
     }
 
     protected boolean list(CommandSender sender, String[] args) {
@@ -408,6 +413,13 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
             plugin.getEventListener().getDamageCalculationDebugPlayers().add(player.getUniqueId());
             player.sendMessage(text("Damage calculation debug spam enabled", AQUA));
         }
+        return true;
+    }
+
+    private boolean bankTeller(CommandSender sender, String[] args) {
+        if (args.length != 1) return false;
+        Player player = CommandArgCompleter.requirePlayer(args[0]);
+        BankTeller.open(player);
         return true;
     }
 

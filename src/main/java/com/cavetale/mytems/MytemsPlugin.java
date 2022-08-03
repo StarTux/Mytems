@@ -98,6 +98,7 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
         }
         mytems.clear();
         ItemFinder.super.unregister();
+        Gui.disable();
     }
 
     public void enableItems() {
