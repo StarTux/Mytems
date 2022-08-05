@@ -39,7 +39,7 @@ public final class BankTeller {
         int y = 3;
         for (Denomination deno : Denomination.values()) {
             final ItemStack coinItem = deno.mytems.getMytem().createItemStack();
-            final int x = deno.ordinal() + 3;
+            final int x = deno.ordinal() + 2;
             Consumer<InventoryClickEvent> clickHandler = click -> {
                 if (!click.isLeftClick()) return;
                 int stackSize = gui.getItem(x + y * 9).getAmount();

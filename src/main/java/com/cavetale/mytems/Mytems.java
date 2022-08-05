@@ -535,6 +535,8 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     COPPER_COIN(Coin::new, COPPER_INGOT, 183, COIN),
     SILVER_COIN(Coin::new, IRON_INGOT, 184, COIN),
     GOLDEN_COIN(Coin::new, GOLD_INGOT, 185, COIN),
+    DIAMOND_COIN(Coin::new, DIAMOND, 275, COIN),
+    RUBY_COIN(Coin::new, EMERALD, 316, COIN),
     // Paintbrush
     BLACK_PAINTBRUSH(Paintbrush::new, WOODEN_SHOVEL, 186, PAINTBRUSH),
     RED_PAINTBRUSH(Paintbrush::new, WOODEN_SHOVEL, 187, PAINTBRUSH),
