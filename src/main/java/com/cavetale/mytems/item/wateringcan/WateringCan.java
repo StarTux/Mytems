@@ -44,8 +44,7 @@ public final class WateringCan implements Mytem {
                           text(tiny("make them grow"), GRAY),
                           text(tiny("super fast."), GRAY));
         prototype.editMeta(meta -> {
-                meta.setUnbreakable(true);
-                meta.addItemFlags(HIDE_UNBREAKABLE, HIDE_ATTRIBUTES);
+                meta.addItemFlags(HIDE_ATTRIBUTES);
                 key.markItemMeta(meta);
             });
         WateringCanTag tag = new WateringCanTag();

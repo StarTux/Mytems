@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Objects;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import static com.cavetale.core.font.Unicode.tiny;
@@ -53,11 +54,16 @@ public final class WateringCanTag extends MytemTag {
                 Tags.set(tag, MytemsPlugin.namespacedKey(WATER), water);
                 List<Component> tooltip = new ArrayList<>();
                 tooltip.addAll(wateringCan.tooltip);
-                int waterLeft = wateringCan.type.maxWater - water;
+                final int maxWater = wateringCan.type.maxWater;
+                final int waterLeft = maxWater - water;
                 if (waterLeft > 0) {
                     tooltip.add(join(noSeparators(), text(tiny("water "), GRAY), text(waterLeft, BLUE)));
                 }
                 text(meta, tooltip);
+                int maxDamage = itemStack.getType().getMaxDurability();
+                if (maxDamage > 0 && meta instanceof Damageable damageable) {
+                    damageable.setDamage((water * maxDamage) / maxWater);
+                }
             });
     }
 
