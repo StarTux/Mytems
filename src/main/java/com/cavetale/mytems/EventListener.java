@@ -59,6 +59,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
@@ -597,5 +598,11 @@ public final class EventListener implements Listener {
                 mytems.getMytem().onAttackingDamageCalculation(event, itemStack, slot);
             }
         }
+    }
+
+    @EventHandler(priority = EventPriority.LOWEST)
+    private void onPlayerItemDamage(PlayerItemDamageEvent event) {
+        Mytems mytems = Mytems.forItem(event.getItem());
+        if (mytems != null) mytems.getMytem().onPlayerItemDamage(event);
     }
 }

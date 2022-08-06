@@ -20,6 +20,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
@@ -88,6 +89,10 @@ public interface Mytem {
     default void onDefendingDamageCalculation(DamageCalculationEvent event, ItemStack item, EquipmentSlot slot) { }
 
     default void onAttackingDamageCalculation(DamageCalculationEvent event, ItemStack item, EquipmentSlot slot) { }
+
+    default void onPlayerItemDamage(PlayerItemDamageEvent event) {
+        event.setCancelled(true);
+    }
 
     /**
      * These can be overridden entirely.
