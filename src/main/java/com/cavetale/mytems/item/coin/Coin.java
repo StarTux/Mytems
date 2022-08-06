@@ -50,7 +50,7 @@ public final class Coin implements Mytem {
         prototype.editMeta(meta -> {
                 Items.text(meta, List.of(new Component[] {
                             displayName,
-                            text("Worth " + denomination.value + " Coins", denomination.color),
+                            text("Worth " + formatHelper(denomination.value) + " Coins", denomination.color),
                             Component.empty(),
                             join(noSeparators(),
                                  text("pick up ", denomination.color),
@@ -102,16 +102,21 @@ public final class Coin implements Mytem {
         MONEY_FORMAT.setParseBigDecimal(true);
     }
 
-    public static Component format(double amount) {
+    private static String formatHelper(double amount) {
         String format = MONEY_FORMAT.format(amount);
         if (format.endsWith(".00")) format = format.substring(0, format.length() - 3);
         if (format.isEmpty()) format = "0";
+        return format;
+    }
+
+    public static Component format(double amount) {
         Denomination denomination = Denomination.COPPER;
         for (Denomination deno : Denomination.values()) {
             if ((double) deno.value <= amount) {
                 denomination = deno;
             }
         }
+        String format = formatHelper(amount);
         return join(noSeparators(), denomination.mytems.component, text(format))
             .color(denomination.color)
             .hoverEvent(showText(join(separator(newline()),
