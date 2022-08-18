@@ -424,6 +424,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     HEART(DummyMytem::new, HEART_OF_THE_SEA, 9, (char) 0xE241, COLLECTIBLES),
     STAR(DummyMytem::new, NETHER_STAR, 18, (char) 0xE24B, COLLECTIBLES),
     MOON(DummyMytem::new, YELLOW_DYE, 204, COLLECTIBLES),
+    GREEN_MOON(DummyMytem::new, LIME_DYE, 592, COLLECTIBLES),
     LIGHTNING(DummyMytem::new, LIGHTNING_ROD, 250, COLLECTIBLES),
     // Dice
     DICE(DiceItem::new, PLAYER_HEAD, 213, DIE),
@@ -891,8 +892,8 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     RED_JESTER_PANTS(EquipmentItem::new, LEATHER_LEGGINGS, 587, EQUIP_RED_JESTER_SET),
     ;
     // CustomModelData Range: 1...587
-    // CustomModelData Gaps: [79, 275, 316]
-    // CustomModelData Next: 592
+    // CustomModelData Gaps: []
+    // CustomModelData Next: 593
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
