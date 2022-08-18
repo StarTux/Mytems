@@ -6,6 +6,7 @@ import com.cavetale.core.font.GlyphPolicy;
 import com.cavetale.core.item.ItemFinder;
 import com.cavetale.mytems.item.photo.Photo;
 import com.cavetale.mytems.loot.LootTableListener;
+import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.session.Sessions;
 import com.cavetale.mytems.util.Gui;
 import java.util.ArrayList;
@@ -287,5 +288,9 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
     public Mytems findItem(NamespacedKey key) {
         if (!key.namespace().equals("mytems")) return null;
         return Mytems.forId(key.getKey());
+    }
+
+    public static Session sessionOf(Player player) {
+        return instance.sessions.of(player);
     }
 }

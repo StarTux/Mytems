@@ -63,6 +63,7 @@ import com.cavetale.mytems.item.vote.VoteCandy;
 import com.cavetale.mytems.item.vote.VoteFirework;
 import com.cavetale.mytems.item.wateringcan.EmptyWateringCan;
 import com.cavetale.mytems.item.wateringcan.WateringCan;
+import com.cavetale.mytems.item.wrench.MonkeyWrench;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Skull;
 import com.cavetale.worldmarker.item.ItemMarker;
@@ -181,7 +182,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     EMPTY_WATERING_CAN(EmptyWateringCan::new, STONE_HOE, 334, UTILITY),
     GOLDEN_WATERING_CAN(WateringCan::new, GOLDEN_HOE, 307, UTILITY),
     EMPTY_GOLDEN_WATERING_CAN(EmptyWateringCan::new, STONE_HOE, 335, UTILITY),
-    MONKEY_WRENCH(DummyMytem::new, STONE_HOE, 79, UTILITY),
+    MONKEY_WRENCH(MonkeyWrench::new, STONE_HOE, 79, UTILITY),
     // Wardrobe
     WHITE_BUNNY_EARS(WardrobeItem::new, IRON_BOOTS, 3919001, (char) 0, WARDROBE_HAT), // EPIC
     RED_LIGHTSABER(WardrobeItem::new, END_ROD, 3919002, (char) 0, WARDROBE_HANDHELD),
