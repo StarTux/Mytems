@@ -16,6 +16,8 @@ import org.bukkit.block.data.Orientable;
 import org.bukkit.block.data.Rail;
 import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.Bed;
+import org.bukkit.block.data.type.Piston;
+import org.bukkit.block.data.type.PistonHead;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.block.data.type.Wall;
@@ -34,7 +36,11 @@ public enum WrenchEdit {
         }
 
         @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
-            return blockData instanceof Directional && !(blockData instanceof Bed);
+            if (!(blockData instanceof Directional)) return false;
+            if (blockData instanceof Piston piston && piston.isExtended()) return false;
+            if (blockData instanceof Bed) return false;
+            if (blockData instanceof PistonHead) return false;
+            return true;
         }
 
         @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
