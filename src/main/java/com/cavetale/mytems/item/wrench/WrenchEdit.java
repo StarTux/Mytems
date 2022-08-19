@@ -15,7 +15,6 @@ import org.bukkit.block.data.Lightable;
 import org.bukkit.block.data.Orientable;
 import org.bukkit.block.data.Rail;
 import org.bukkit.block.data.Rotatable;
-import org.bukkit.block.data.type.Bed;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Piston;
@@ -41,7 +40,6 @@ public enum WrenchEdit {
         @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
             if (!(blockData instanceof Directional)) return false;
             if (blockData instanceof Piston piston && piston.isExtended()) return false;
-            if (blockData instanceof Bed) return false;
             if (blockData instanceof PistonHead) return false;
             if (blockData instanceof Door) return false;
             if (blockData instanceof Chest chest && chest.getType() != Chest.Type.SINGLE) return false;
