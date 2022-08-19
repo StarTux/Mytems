@@ -16,6 +16,8 @@ import org.bukkit.block.data.Orientable;
 import org.bukkit.block.data.Rail;
 import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.Bed;
+import org.bukkit.block.data.type.Chest;
+import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Piston;
 import org.bukkit.block.data.type.PistonHead;
 import org.bukkit.block.data.type.Slab;
@@ -30,6 +32,7 @@ import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 public enum WrenchEdit {
+    /** Facing one of four cardinal directions. */
     DIRECTION {
         @Override public Component getDisplayName() {
             return join(noSeparators(), VanillaItems.COMPASS, text("Direction", BLUE));
@@ -40,6 +43,8 @@ public enum WrenchEdit {
             if (blockData instanceof Piston piston && piston.isExtended()) return false;
             if (blockData instanceof Bed) return false;
             if (blockData instanceof PistonHead) return false;
+            if (blockData instanceof Door) return false;
+            if (blockData instanceof Chest chest && chest.getType() != Chest.Type.SINGLE) return false;
             return true;
         }
 
@@ -57,6 +62,7 @@ public enum WrenchEdit {
             return blockFaceText(newFace);
         }
     },
+    /** Facing one of 16 BlockFace values. */
     ROTATION {
         @Override public Component getDisplayName() {
             return join(noSeparators(), VanillaItems.COMPASS, text("Rotation", BLUE));
@@ -79,6 +85,7 @@ public enum WrenchEdit {
             return blockFaceText(newFace);
         }
     },
+    /** Aligned with one of 3 axes: x, y, z. */
     ORIENTATION {
         @Override public Component getDisplayName() {
             return join(noSeparators(), VanillaItems.COMPASS, text("Orientation", BLUE));
