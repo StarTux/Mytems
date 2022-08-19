@@ -6,17 +6,21 @@ import com.cavetale.mytems.item.font.Glyph;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Axis;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Lightable;
+import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.Orientable;
 import org.bukkit.block.data.Rail;
 import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.Door;
+import org.bukkit.block.data.type.Fence;
+import org.bukkit.block.data.type.GlassPane;
 import org.bukkit.block.data.type.Piston;
 import org.bukkit.block.data.type.PistonHead;
 import org.bukkit.block.data.type.Slab;
@@ -26,8 +30,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import static com.cavetale.core.util.CamelCase.toCamelCase;
 import static net.kyori.adventure.text.Component.join;
+import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
+import static net.kyori.adventure.text.JoinConfiguration.separator;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 public enum WrenchEdit {
@@ -180,7 +186,7 @@ public enum WrenchEdit {
         @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
             if (!(blockData instanceof Rail rail)) return null;
             final Rail.Shape shape = rail.getShape();
-            List<Rail.Shape> shapeList = List.of(Rail.Shape.values());
+            List<Rail.Shape> shapeList = List.copyOf(rail.getShapes());
             final int index = shapeList.indexOf(shape);
             final int newIndex = index >= 0 && index < shapeList.size() - 1
                 ? index + 1
@@ -211,9 +217,7 @@ public enum WrenchEdit {
             if (!(blockData instanceof Lightable lightable)) return null;
             boolean newLit = !lightable.isLit();
             lightable.setLit(newLit);
-            return newLit
-                ? join(noSeparators(), Mytems.ON, text("On", GREEN))
-                : join(noSeparators(), Mytems.OFF, text("Off", GRAY));
+            return booleanText(newLit);
         }
     },
     WALL_UP {
@@ -244,6 +248,37 @@ public enum WrenchEdit {
             return newUp
                 ? join(noSeparators(), Mytems.ON, text("Yes", GREEN))
                 : join(noSeparators(), Mytems.OFF, text("No", GRAY));
+        }
+    },
+    CONNECT {
+        @Override public Component getDisplayName() {
+            return join(noSeparators(), Mytems.MAGNET, text("Connection", BLUE));
+        }
+
+        @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
+            return blockData instanceof Fence
+                || blockData instanceof GlassPane;
+        }
+
+        @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
+            if (!(blockData instanceof MultipleFacing multipleFacing)) return null;
+            Location point = event.getInteractionPoint();
+            final BlockFace face;
+            if (point != null) {
+                final double dx = point.getX() - (double) block.getX() - 0.5;
+                final double dz = point.getZ() - (double) block.getZ() - 0.5;
+                if (Math.abs(dx) > Math.abs(dz)) {
+                    face = dx < 0 ? BlockFace.WEST : BlockFace.EAST;
+                } else {
+                    face = dz < 0 ? BlockFace.NORTH : BlockFace.SOUTH;
+                }
+            } else {
+                face = event.getBlockFace();
+            }
+            if (!multipleFacing.getAllowedFaces().contains(face)) return null;
+            final boolean newValue = !multipleFacing.hasFace(face);
+            multipleFacing.setFace(face, newValue);
+            return join(separator(space()), blockFaceText(face), booleanText(newValue));
         }
     },
     ;
@@ -280,5 +315,11 @@ public enum WrenchEdit {
         case WEST: return join(noSeparators(), Mytems.ARROW_LEFT, text);
         default: return join(noSeparators(), Mytems.REDO, text);
         }
+    }
+
+    private static Component booleanText(boolean value) {
+        return value
+            ? join(noSeparators(), Mytems.ON, text("On", GREEN))
+            : join(noSeparators(), Mytems.OFF, text("Off", GRAY));
     }
 }
