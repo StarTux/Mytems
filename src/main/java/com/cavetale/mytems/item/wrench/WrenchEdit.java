@@ -3,6 +3,7 @@ package com.cavetale.mytems.item.wrench;
 import com.cavetale.core.font.VanillaItems;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.item.font.Glyph;
+import java.util.ArrayList;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Axis;
@@ -55,8 +56,9 @@ public enum WrenchEdit {
 
         @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
             if (!(blockData instanceof Directional directional)) return null;
-            final List<BlockFace> faces = List.copyOf(directional.getFaces());
+            final List<BlockFace> faces = new ArrayList<>(directional.getFaces());
             assert !faces.isEmpty();
+            sortFaces(faces);
             final BlockFace face = directional.getFacing();
             final int index = faces.indexOf(face);
             final int newIndex = index >= 0 && index < faces.size() - 1
@@ -301,6 +303,10 @@ public enum WrenchEdit {
                                                              BlockFace.WEST_NORTH_WEST,
                                                              BlockFace.NORTH_WEST,
                                                              BlockFace.NORTH_NORTH_WEST);
+
+    private static void sortFaces(List<BlockFace> list) {
+        list.sort((a, b) -> Integer.compare(ROTATIONS.indexOf(a), ROTATIONS.indexOf(b)));
+    }
 
     abstract Component getDisplayName();
 
