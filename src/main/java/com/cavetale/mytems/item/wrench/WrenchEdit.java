@@ -20,6 +20,7 @@ import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Fence;
+import org.bukkit.block.data.type.Furnace;
 import org.bukkit.block.data.type.GlassPane;
 import org.bukkit.block.data.type.Piston;
 import org.bukkit.block.data.type.PistonHead;
@@ -203,6 +204,7 @@ public enum WrenchEdit {
 
         @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
             if (!(blockData instanceof Lightable)) return false;
+            if (blockData instanceof Furnace) return true;
             switch (blockData.getMaterial()) {
             case DEEPSLATE_REDSTONE_ORE:
             case FURNACE:
