@@ -100,6 +100,11 @@ public final class MonkeyWrench implements Mytem {
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
         if (!event.hasBlock()) return;
         event.setCancelled(true);
+        WrenchSession session = sessionOf(player).getFavorites().getOrSet(WrenchSession.class, WrenchSession::new);
+        if (session.ticks == player.getTicksLived()) {
+            return;
+        }
+        session.ticks = player.getTicksLived();
         final Block block = event.getClickedBlock();
         assert block != null;
         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) {
@@ -119,7 +124,6 @@ public final class MonkeyWrench implements Mytem {
             player.sendActionBar(empty());
             return;
         }
-        WrenchSession session = sessionOf(player).getFavorites().getOrSet(WrenchSession.class, WrenchSession::new);
         if (session.edit == null || !editList.contains(session.edit)) {
             session.edit = editList.get(0);
         }
