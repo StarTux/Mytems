@@ -226,7 +226,7 @@ public enum WrenchEdit {
     },
     WALL_UP {
         @Override public Component getDisplayName() {
-            return join(noSeparators(), Mytems.ARROW_UP, text("Height", BLUE));
+            return join(noSeparators(), Mytems.ARROW_UP, text("Wall Post", BLUE));
         }
 
         /**
