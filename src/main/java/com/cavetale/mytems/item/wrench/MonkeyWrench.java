@@ -16,6 +16,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Rail;
 import org.bukkit.entity.Player;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -145,6 +146,11 @@ public final class MonkeyWrench implements Mytem {
             player.sendActionBar(text("FAIL", DARK_RED));
             soundFail(player);
         }
+    }
+
+    @Override
+    public void onDamageEntity(EntityDamageByEntityEvent event, Player player, ItemStack item) {
+        event.setCancelled(true);
     }
 
     private void soundUse(Player player) {
