@@ -18,6 +18,7 @@ import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.FaceAttachable;
+import org.bukkit.block.data.Hangable;
 import org.bukkit.block.data.Lightable;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.Openable;
@@ -421,6 +422,22 @@ public enum WrenchEdit {
                         text("/", GRAY),
                         text(powerable.getMaximumPower()))
                 .color(GOLD);
+        }
+    },
+    HANGING {
+        @Override public Component getDisplayName() {
+            return join(noSeparators(), VanillaItems.LANTERN, text("Hanging", BLUE));
+        }
+
+        @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
+            return blockData instanceof Hangable;
+        }
+
+        @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
+            if (!(blockData instanceof Hangable hangable)) return null;
+            boolean newHanging = !hangable.isHanging();
+            hangable.setHanging(newHanging);
+            return booleanText(newHanging);
         }
     },
     ;
