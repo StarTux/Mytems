@@ -26,6 +26,7 @@ import org.bukkit.block.data.Powerable;
 import org.bukkit.block.data.Rail;
 import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.Barrel;
+import org.bukkit.block.data.type.Bell;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Fence;
@@ -328,6 +329,29 @@ public enum WrenchEdit {
             final FaceAttachable.AttachedFace newFace = faces.get(newIndex);
             attachable.setAttachedFace(newFace);
             return text(toCamelCase(" ", newFace));
+        }
+    },
+    BELL_ATTACHMENT {
+        @Override public Component getDisplayName() {
+            return join(noSeparators(), VanillaItems.BELL, text("Attachment", BLUE));
+        }
+
+        @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
+            return blockData instanceof Bell;
+        }
+
+        @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
+            if (!(blockData instanceof Bell bell)) return null;
+            List<Bell.Attachment> attachments = List.of(Bell.Attachment.values());
+            final Bell.Attachment attachment = bell.getAttachment();
+            final int index = attachments.indexOf(attachment);
+            assert index >= 0;
+            final int newIndex = index < attachments.size() - 1
+                ? index + 1
+                : 0;
+            final Bell.Attachment newAttachment = attachments.get(newIndex);
+            bell.setAttachment(newAttachment);
+            return text(toCamelCase(" ", newAttachment));
         }
     },
     OPEN {
