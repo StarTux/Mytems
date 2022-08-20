@@ -4,6 +4,7 @@ import com.cavetale.core.font.VanillaItems;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.item.font.Glyph;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Axis;
@@ -291,9 +292,7 @@ public enum WrenchEdit {
         private static final List<Material> MATERIALS = List.of(Material.BROWN_MUSHROOM_BLOCK,
                                                                 Material.RED_MUSHROOM_BLOCK,
                                                                 Material.CHORUS_PLANT,
-                                                                Material.MUSHROOM_STEM,
-                                                                Material.VINE,
-                                                                Material.GLOW_LICHEN);
+                                                                Material.MUSHROOM_STEM);
 
         @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
             if (!(blockData instanceof MultipleFacing)) return false;
@@ -304,7 +303,7 @@ public enum WrenchEdit {
 
         @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
             if (!(blockData instanceof MultipleFacing multipleFacing)) return null;
-            final BlockFace face = clickedFace(event);
+            final BlockFace face = clickedFace(event, multipleFacing.getAllowedFaces());
             if (!multipleFacing.getAllowedFaces().contains(face)) return null;
             final boolean newValue = !multipleFacing.hasFace(face);
             multipleFacing.setFace(face, newValue);
@@ -322,7 +321,7 @@ public enum WrenchEdit {
 
         @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
             if (!(blockData instanceof RedstoneWire wire)) return null;
-            final BlockFace face = clickedFace(event);
+            final BlockFace face = clickedFace(event, CARDINALS);
             final RedstoneWire.Connection value = wire.getFace(face);
             final RedstoneWire.Connection newValue = value == RedstoneWire.Connection.NONE
                 ? RedstoneWire.Connection.SIDE
@@ -344,7 +343,7 @@ public enum WrenchEdit {
 
         @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
             if (!(blockData instanceof RedstoneWire wire)) return null;
-            final BlockFace face = clickedFace(event);
+            final BlockFace face = clickedFace(event, CARDINALS);
             if (!wire.getAllowedFaces().contains(face)) return null;
             final RedstoneWire.Connection value = wire.getFace(face);
             if (value == RedstoneWire.Connection.NONE) return null;
@@ -464,6 +463,11 @@ public enum WrenchEdit {
                                                              BlockFace.NORTH_WEST,
                                                              BlockFace.NORTH_NORTH_WEST);
 
+    private static final List<BlockFace> CARDINALS = List.of(BlockFace.NORTH,
+                                                             BlockFace.EAST,
+                                                             BlockFace.SOUTH,
+                                                             BlockFace.WEST);
+
     private static void sortFaces(List<BlockFace> list) {
         list.sort((a, b) -> Integer.compare(ROTATIONS.indexOf(a), ROTATIONS.indexOf(b)));
     }
@@ -485,13 +489,16 @@ public enum WrenchEdit {
         }
     }
 
-    private static BlockFace clickedFace(PlayerInteractEvent event) {
+    private static BlockFace clickedFace(PlayerInteractEvent event, Collection<BlockFace> allowedFaces) {
         Location point = event.getInteractionPoint();
         if (point == null) return event.getBlockFace();
         Block block = event.getClickedBlock();
         final double dx = point.getX() - (double) block.getX() - 0.5;
+        final double dy = point.getY() - (double) block.getY() - 0.5;
         final double dz = point.getZ() - (double) block.getZ() - 0.5;
-        if (Math.abs(dx) > Math.abs(dz)) {
+        if (allowedFaces.contains(BlockFace.UP) && Math.abs(dy) > Math.abs(dx) && Math.abs(dy) > Math.abs(dz)) {
+            return dy < 0 ? BlockFace.DOWN : BlockFace.UP;
+        } else if (Math.abs(dx) > Math.abs(dz)) {
             return dx < 0 ? BlockFace.WEST : BlockFace.EAST;
         } else {
             return dz < 0 ? BlockFace.NORTH : BlockFace.SOUTH;
