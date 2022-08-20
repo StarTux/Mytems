@@ -34,7 +34,6 @@ import org.bukkit.block.data.type.GlassPane;
 import org.bukkit.block.data.type.Piston;
 import org.bukkit.block.data.type.PistonHead;
 import org.bukkit.block.data.type.RedstoneRail;
-import org.bukkit.block.data.type.RedstoneWire;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Stairs;
 import org.bukkit.block.data.type.Switch;
@@ -240,10 +239,8 @@ public enum WrenchEdit {
             if (!(blockData instanceof Lightable)) return false;
             if (blockData instanceof Furnace) return true;
             switch (blockData.getMaterial()) {
-            case DEEPSLATE_REDSTONE_ORE:
             case FURNACE:
             case REDSTONE_LAMP:
-            case REDSTONE_ORE:
                 return true;
             default: return false;
             }
@@ -308,50 +305,6 @@ public enum WrenchEdit {
             final boolean newValue = !multipleFacing.hasFace(face);
             multipleFacing.setFace(face, newValue);
             return join(separator(space()), blockFaceText(face), booleanText(newValue));
-        }
-    },
-    REDSTONE_SIDE {
-        @Override public Component getDisplayName() {
-            return join(noSeparators(), VanillaItems.REDSTONE, text("Side", BLUE));
-        }
-
-        @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
-            return blockData instanceof RedstoneWire;
-        }
-
-        @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
-            if (!(blockData instanceof RedstoneWire wire)) return null;
-            final BlockFace face = clickedFace(event, CARDINALS);
-            final RedstoneWire.Connection value = wire.getFace(face);
-            final RedstoneWire.Connection newValue = value == RedstoneWire.Connection.NONE
-                ? RedstoneWire.Connection.SIDE
-                : RedstoneWire.Connection.NONE;
-            wire.setFace(face, newValue);
-            return join(noSeparators(),
-                        blockFaceText(face),
-                        booleanText(newValue == RedstoneWire.Connection.SIDE));
-        }
-    },
-    REDSTONE_UP {
-        @Override public Component getDisplayName() {
-            return join(noSeparators(), VanillaItems.REDSTONE, text("Up", BLUE));
-        }
-
-        @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
-            return blockData instanceof RedstoneWire;
-        }
-
-        @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
-            if (!(blockData instanceof RedstoneWire wire)) return null;
-            final BlockFace face = clickedFace(event, CARDINALS);
-            if (!wire.getAllowedFaces().contains(face)) return null;
-            final RedstoneWire.Connection value = wire.getFace(face);
-            if (value == RedstoneWire.Connection.NONE) return null;
-            final RedstoneWire.Connection newValue = value == RedstoneWire.Connection.UP
-                ? RedstoneWire.Connection.SIDE
-                : RedstoneWire.Connection.UP;
-            wire.setFace(face, newValue);
-            return booleanText(newValue == RedstoneWire.Connection.UP);
         }
     },
     ATTACHMENT {
@@ -462,11 +415,6 @@ public enum WrenchEdit {
                                                              BlockFace.WEST_NORTH_WEST,
                                                              BlockFace.NORTH_WEST,
                                                              BlockFace.NORTH_NORTH_WEST);
-
-    private static final List<BlockFace> CARDINALS = List.of(BlockFace.NORTH,
-                                                             BlockFace.EAST,
-                                                             BlockFace.SOUTH,
-                                                             BlockFace.WEST);
 
     private static void sortFaces(List<BlockFace> list) {
         list.sort((a, b) -> Integer.compare(ROTATIONS.indexOf(a), ROTATIONS.indexOf(b)));
