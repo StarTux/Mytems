@@ -28,6 +28,7 @@ import com.cavetale.mytems.item.beestick.Beestick;
 import com.cavetale.mytems.item.captain.Blunderbuss;
 import com.cavetale.mytems.item.captain.CaptainsCutlass;
 import com.cavetale.mytems.item.coin.Coin;
+import com.cavetale.mytems.item.dividers.Dividers;
 import com.cavetale.mytems.item.dune.DuneItem;
 import com.cavetale.mytems.item.dwarven.DwarvenItem;
 import com.cavetale.mytems.item.easter.EasterBasket;
@@ -183,6 +184,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     GOLDEN_WATERING_CAN(WateringCan::new, GOLDEN_HOE, 307, UTILITY),
     EMPTY_GOLDEN_WATERING_CAN(EmptyWateringCan::new, STONE_HOE, 335, UTILITY),
     MONKEY_WRENCH(MonkeyWrench::new, STONE_HOE, 79, UTILITY),
+    DIVIDERS(Dividers::new, WOODEN_HOE, 593, UTILITY),
     // Wardrobe
     WHITE_BUNNY_EARS(WardrobeItem::new, IRON_BOOTS, 3919001, (char) 0, WARDROBE_HAT), // EPIC
     RED_LIGHTSABER(WardrobeItem::new, END_ROD, 3919002, (char) 0, WARDROBE_HANDHELD),
@@ -894,7 +896,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     ;
     // CustomModelData Range: 1...587
     // CustomModelData Gaps: []
-    // CustomModelData Next: 593
+    // CustomModelData Next: 594
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
