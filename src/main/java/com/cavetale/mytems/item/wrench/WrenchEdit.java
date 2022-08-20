@@ -8,6 +8,7 @@ import java.util.List;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Axis;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
@@ -99,7 +100,8 @@ public enum WrenchEdit {
         }
 
         @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
-            return blockData instanceof Orientable;
+            return blockData instanceof Orientable
+                && blockData.getMaterial() != Material.NETHER_PORTAL;
         }
 
         @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
