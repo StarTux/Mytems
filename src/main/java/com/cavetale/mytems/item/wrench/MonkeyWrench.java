@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
@@ -63,6 +64,7 @@ public final class MonkeyWrench implements Mytem {
     @Override
     public void onPlayerLeftClick(PlayerInteractEvent event, Player player, ItemStack item) {
         if (!event.hasBlock()) return;
+        if (player.getGameMode() == GameMode.SPECTATOR) return;
         event.setCancelled(true);
         final Block block = event.getClickedBlock();
         assert block != null;
@@ -100,6 +102,7 @@ public final class MonkeyWrench implements Mytem {
     @Override
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
         if (!event.hasBlock()) return;
+        if (player.getGameMode() == GameMode.SPECTATOR) return;
         event.setCancelled(true);
         WrenchSession session = sessionOf(player).getFavorites().getOrSet(WrenchSession.class, WrenchSession::new);
         if (session.ticks == player.getTicksLived()) {
