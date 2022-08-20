@@ -261,9 +261,18 @@ public enum WrenchEdit {
             return join(noSeparators(), Mytems.MAGNET, text("Connection", BLUE));
         }
 
+        private static final List<Material> MATERIALS = List.of(Material.BROWN_MUSHROOM_BLOCK,
+                                                                Material.RED_MUSHROOM_BLOCK,
+                                                                Material.CHORUS_PLANT,
+                                                                Material.MUSHROOM_STEM,
+                                                                Material.VINE,
+                                                                Material.GLOW_LICHEN);
+
         @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
+            if (!(blockData instanceof MultipleFacing)) return false;
             return blockData instanceof Fence
-                || blockData instanceof GlassPane;
+                || blockData instanceof GlassPane
+                || MATERIALS.contains(blockData.getMaterial());
         }
 
         @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
