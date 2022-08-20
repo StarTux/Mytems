@@ -16,6 +16,7 @@ import org.bukkit.block.data.AnaloguePowerable;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.FaceAttachable;
 import org.bukkit.block.data.Lightable;
 import org.bukkit.block.data.MultipleFacing;
 import org.bukkit.block.data.Openable;
@@ -303,22 +304,34 @@ public enum WrenchEdit {
         @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
             if (!(blockData instanceof MultipleFacing multipleFacing)) return null;
             Location point = event.getInteractionPoint();
-            final BlockFace face;
-            if (point != null) {
-                final double dx = point.getX() - (double) block.getX() - 0.5;
-                final double dz = point.getZ() - (double) block.getZ() - 0.5;
-                if (Math.abs(dx) > Math.abs(dz)) {
-                    face = dx < 0 ? BlockFace.WEST : BlockFace.EAST;
-                } else {
-                    face = dz < 0 ? BlockFace.NORTH : BlockFace.SOUTH;
-                }
-            } else {
-                face = event.getBlockFace();
-            }
+            final BlockFace face = clickedFace(event);
             if (!multipleFacing.getAllowedFaces().contains(face)) return null;
             final boolean newValue = !multipleFacing.hasFace(face);
             multipleFacing.setFace(face, newValue);
             return join(separator(space()), blockFaceText(face), booleanText(newValue));
+        }
+    },
+    ATTACHMENT {
+        @Override public Component getDisplayName() {
+            return join(noSeparators(), Mytems.MAGNET, text("Attachment", BLUE));
+        }
+
+        @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
+            return blockData instanceof FaceAttachable;
+        }
+
+        @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
+            if (!(blockData instanceof FaceAttachable attachable)) return null;
+            List<FaceAttachable.AttachedFace> faces = List.of(FaceAttachable.AttachedFace.values());
+            final FaceAttachable.AttachedFace face = attachable.getAttachedFace();
+            final int index = faces.indexOf(face);
+            assert index >= 0;
+            final int newIndex = index < faces.size() - 1
+                ? index + 1
+                : 0;
+            final FaceAttachable.AttachedFace newFace = faces.get(newIndex);
+            attachable.setAttachedFace(newFace);
+            return text(toCamelCase(" ", newFace));
         }
     },
     OPEN {
@@ -425,6 +438,19 @@ public enum WrenchEdit {
         case EAST: return join(noSeparators(), Mytems.ARROW_RIGHT, text);
         case WEST: return join(noSeparators(), Mytems.ARROW_LEFT, text);
         default: return join(noSeparators(), Mytems.REDO, text);
+        }
+    }
+
+    private static BlockFace clickedFace(PlayerInteractEvent event) {
+        Location point = event.getInteractionPoint();
+        if (point == null) return event.getBlockFace();
+        Block block = event.getClickedBlock();
+        final double dx = point.getX() - (double) block.getX() - 0.5;
+        final double dz = point.getZ() - (double) block.getZ() - 0.5;
+        if (Math.abs(dx) > Math.abs(dz)) {
+            return dx < 0 ? BlockFace.WEST : BlockFace.EAST;
+        } else {
+            return dz < 0 ? BlockFace.NORTH : BlockFace.SOUTH;
         }
     }
 
