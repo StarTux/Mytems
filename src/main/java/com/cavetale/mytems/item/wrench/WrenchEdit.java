@@ -12,6 +12,7 @@ import org.bukkit.Material;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
+import org.bukkit.block.data.AnaloguePowerable;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
@@ -361,6 +362,30 @@ public enum WrenchEdit {
             boolean newPower = !powerable.isPowered();
             powerable.setPowered(newPower);
             return booleanText(newPower);
+        }
+    },
+    POWER {
+        @Override public Component getDisplayName() {
+            return join(noSeparators(), Mytems.LIGHTNING, text("Power", BLUE));
+        }
+
+        @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
+            return blockData instanceof AnaloguePowerable
+                && blockData.getMaterial() != Material.TARGET;
+        }
+
+        @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
+            if (!(blockData instanceof AnaloguePowerable powerable)) return null;
+            final int power = powerable.getPower();
+            final int newPower = power < powerable.getMaximumPower()
+                ? power + 1
+                : 0;
+            powerable.setPower(newPower);
+            return join(noSeparators(),
+                        text(newPower),
+                        text("/", GRAY),
+                        text(powerable.getMaximumPower()))
+                .color(GOLD);
         }
     },
     ;
