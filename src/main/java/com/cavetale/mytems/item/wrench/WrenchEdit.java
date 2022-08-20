@@ -380,7 +380,9 @@ public enum WrenchEdit {
 
         @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
             return blockData instanceof AnaloguePowerable
-                && blockData.getMaterial() != Material.TARGET;
+                && blockData.getMaterial() != Material.TARGET
+                && blockData.getMaterial() != Material.SCULK_SENSOR
+                && blockData.getMaterial() != Material.DAYLIGHT_DETECTOR;
         }
 
         @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
