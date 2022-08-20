@@ -9,6 +9,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Axis;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.Bisected;
@@ -16,9 +17,12 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Lightable;
 import org.bukkit.block.data.MultipleFacing;
+import org.bukkit.block.data.Openable;
 import org.bukkit.block.data.Orientable;
+import org.bukkit.block.data.Powerable;
 import org.bukkit.block.data.Rail;
 import org.bukkit.block.data.Rotatable;
+import org.bukkit.block.data.type.Barrel;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Fence;
@@ -26,8 +30,11 @@ import org.bukkit.block.data.type.Furnace;
 import org.bukkit.block.data.type.GlassPane;
 import org.bukkit.block.data.type.Piston;
 import org.bukkit.block.data.type.PistonHead;
+import org.bukkit.block.data.type.RedstoneRail;
 import org.bukkit.block.data.type.Slab;
 import org.bukkit.block.data.type.Stairs;
+import org.bukkit.block.data.type.Switch;
+import org.bukkit.block.data.type.TrapDoor;
 import org.bukkit.block.data.type.Wall;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -136,6 +143,25 @@ public enum WrenchEdit {
             return join(noSeparators(),
                         (newType == Slab.Type.TOP ? Mytems.ARROW_UP : Mytems.ARROW_DOWN),
                         text(toCamelCase(" ", newType)));
+        }
+    },
+    TRAPDOOR_HALF {
+        @Override public Component getDisplayName() {
+            return join(noSeparators(), Mytems.HALF_HEART, text("Half", BLUE));
+        }
+
+        @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
+            return blockData instanceof TrapDoor;
+        }
+
+        @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
+            if (!(blockData instanceof TrapDoor bisected)) return null;
+            Bisected.Half half = bisected.getHalf();
+            Bisected.Half newHalf = half == Bisected.Half.BOTTOM ? Bisected.Half.TOP : Bisected.Half.BOTTOM;
+            bisected.setHalf(newHalf);
+            return join(noSeparators(),
+                        newHalf == Bisected.Half.TOP ? Mytems.ARROW_UP : Mytems.ARROW_DOWN,
+                        text(toCamelCase(" ", newHalf)));
         }
     },
     STAIR_HALF {
@@ -251,9 +277,7 @@ public enum WrenchEdit {
             if (!isLong(wall)) return null;
             boolean newUp = !wall.isUp();
             wall.setUp(newUp);
-            return newUp
-                ? join(noSeparators(), Mytems.ON, text("Yes", GREEN))
-                : join(noSeparators(), Mytems.OFF, text("No", GRAY));
+            return booleanText(newUp);
         }
     },
     CONNECT {
@@ -294,6 +318,49 @@ public enum WrenchEdit {
             final boolean newValue = !multipleFacing.hasFace(face);
             multipleFacing.setFace(face, newValue);
             return join(separator(space()), blockFaceText(face), booleanText(newValue));
+        }
+    },
+    OPEN {
+        @Override public Component getDisplayName() {
+            return join(noSeparators(), Mytems.SILVER_KEY, text("Open", BLUE));
+        }
+
+        @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
+            if (!(blockData instanceof Openable)) return false;
+            return blockData instanceof Barrel
+                || blockData.getMaterial() == Material.IRON_TRAPDOOR;
+        }
+
+        @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
+            if (!(blockData instanceof Openable openable)) return null;
+            boolean newOpen = !openable.isOpen();
+            openable.setOpen(newOpen);
+            return booleanText(newOpen);
+        }
+    },
+    POWERED {
+        @Override public Component getDisplayName() {
+            return join(noSeparators(), Mytems.LIGHTNING, text("Powered", BLUE));
+        }
+
+        private static final List<Material> MATERIALS = List.of(Material.LIGHTNING_ROD,
+                                                                Material.OBSERVER,
+                                                                Material.REPEATER,
+                                                                Material.COMPARATOR);
+
+        @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
+            if (!(blockData instanceof Powerable)) return false;
+            return blockData instanceof Switch
+                || blockData instanceof RedstoneRail
+                || Tag.PRESSURE_PLATES.isTagged(blockData.getMaterial())
+                || MATERIALS.contains(blockData.getMaterial());
+        }
+
+        @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
+            if (!(blockData instanceof Powerable powerable)) return null;
+            boolean newPower = !powerable.isPowered();
+            powerable.setPowered(newPower);
+            return booleanText(newPower);
         }
     },
     ;
