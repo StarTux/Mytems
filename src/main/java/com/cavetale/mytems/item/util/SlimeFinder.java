@@ -23,6 +23,7 @@ import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 import static net.kyori.adventure.text.format.TextColor.color;
+import static net.kyori.adventure.text.format.TextDecoration.*;
 
 @Getter
 public final class SlimeFinder implements Mytem {
@@ -39,6 +40,7 @@ public final class SlimeFinder implements Mytem {
         this.prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
                 Items.text(meta, List.of(displayName,
+                                         text("Gloopert", DARK_GRAY, ITALIC),
                                          text("Find chunks which are", GRAY),
                                          text("able to spawn slimes.", GRAY),
                                          empty(),
@@ -80,6 +82,7 @@ public final class SlimeFinder implements Mytem {
         }
         player.sendActionBar(join(noSeparators(), Mytems.SLIME_FINDER,
                                   text("This is a slime chunk: " + x + " " + z, SLIME_GREEN)));
+        soundUse(player);
     }
 
     @Override
@@ -88,7 +91,7 @@ public final class SlimeFinder implements Mytem {
     }
 
     private void soundUse(Player player) {
-        player.playSound(player.getLocation(), Sound.ENTITY_SLIME_JUMP, SoundCategory.MASTER, 1.0f, 2.0f);
+        player.playSound(player.getLocation(), Sound.ENTITY_SLIME_JUMP, SoundCategory.MASTER, 1.0f, 1.0f);
     }
 
     private void soundFail(Player player) {
