@@ -26,6 +26,7 @@ import org.bukkit.block.data.Orientable;
 import org.bukkit.block.data.Powerable;
 import org.bukkit.block.data.Rail;
 import org.bukkit.block.data.Rotatable;
+import org.bukkit.block.data.Snowable;
 import org.bukkit.block.data.type.Barrel;
 import org.bukkit.block.data.type.Bell;
 import org.bukkit.block.data.type.Chest;
@@ -438,6 +439,22 @@ public enum WrenchEdit {
             boolean newHanging = !hangable.isHanging();
             hangable.setHanging(newHanging);
             return booleanText(newHanging);
+        }
+    },
+    SNOW {
+        @Override public Component getDisplayName() {
+            return join(noSeparators(), VanillaItems.SNOWBALL, text("Snow", BLUE));
+        }
+
+        @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
+            return blockData instanceof Snowable;
+        }
+
+        @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
+            if (!(blockData instanceof Snowable snowable)) return null;
+            boolean newSnowy = !snowable.isSnowy();
+            snowable.setSnowy(newSnowy);
+            return booleanText(newSnowy);
         }
     },
     ;
