@@ -36,6 +36,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.exploits.PlayerPlacedBlocks.isPlayerPlaced;
+import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
@@ -230,9 +231,8 @@ public final class TreeChopper implements Mytem {
             result.add(text("Chopped trees grant ex-", GRAY));
             result.add(text("perience which unlock", GRAY));
             result.add(text("powerful upgrades!", GRAY));
-            result.add(join(noSeparators(),
-                            text("right-click ", ALLGREEN),
-                            text("Upgrade Menu", GRAY)));
+            result.add(empty());
+            result.add(join(noSeparators(), Mytems.MOUSE_RIGHT, text(" Open menu", GRAY)));
         }
         for (TreeChopperStat stat : TreeChopperStat.values()) {
             if (stat.type != TreeChopperStat.Type.UPGRADE) continue;

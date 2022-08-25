@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
@@ -56,9 +57,12 @@ public final class DiceItem implements Mytem {
             this.prototype = new ItemStack(key.material);
         }
         text = List.of(displayName,
+                       text("Rolls any number", GRAY),
+                       text("between 1 and " + type.sides + ".", GRAY),
+                       empty(),
                        join(noSeparators(),
-                            text("right-click ", GREEN),
-                            text("Roll", GRAY)),
+                            Mytems.MOUSE_RIGHT,
+                            text(" Roll", GRAY)),
                        text("Put in item frame", DARK_GRAY),
                        text("to announce the", DARK_GRAY),
                        text("result locally", DARK_GRAY));
