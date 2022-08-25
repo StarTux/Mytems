@@ -261,25 +261,14 @@ public enum WrenchEdit {
             return join(noSeparators(), Mytems.ARROW_UP, text("Wall Post", BLUE));
         }
 
-        /**
-         * Walls can turn partially or completely invisible if set to
-         * low while L-shaped or standing alone.
-         */
-        private static boolean isLong(Wall wall) {
-            return (wall.getHeight(BlockFace.NORTH) != Wall.Height.NONE
-                    && wall.getHeight(BlockFace.SOUTH) != Wall.Height.NONE)
-                || (wall.getHeight(BlockFace.EAST) != Wall.Height.NONE
-                    && wall.getHeight(BlockFace.WEST) != Wall.Height.NONE);
-        }
-
         @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
-            return blockData instanceof Wall wall && isLong(wall);
+            return blockData instanceof Wall wall;
         }
 
         @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
             if (!(blockData instanceof Wall wall)) return null;
-            if (!isLong(wall)) return null;
             boolean newUp = !wall.isUp();
+            if (!newUp && !isLong(wall)) return null;
             wall.setUp(newUp);
             return booleanText(newUp);
         }
@@ -308,6 +297,32 @@ public enum WrenchEdit {
             final boolean newValue = !multipleFacing.hasFace(face);
             multipleFacing.setFace(face, newValue);
             return join(separator(space()), blockFaceText(face), booleanText(newValue));
+        }
+    },
+    WALL_CONNECT {
+        @Override public Component getDisplayName() {
+            return join(noSeparators(), Mytems.MAGNET, text("Connection", BLUE));
+        }
+
+        @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
+            return blockData instanceof Wall;
+        }
+
+        @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
+            if (!(blockData instanceof Wall wall)) return null;
+            final BlockFace face = clickedFace(event, CARDINALS);
+            final Wall.Height height = wall.getHeight(face);
+            final List<Wall.Height> heights = List.of(Wall.Height.values());
+            final int index = heights.indexOf(height);
+            final int newIndex = index < heights.size() - 1
+                ? index + 1
+                : 0;
+            final Wall.Height newHeight = heights.get(newIndex);
+            wall.setHeight(face, newHeight);
+            if (!isLong(wall)) {
+                wall.setUp(true);
+            }
+            return join(separator(space()), blockFaceText(face), text(toCamelCase(" ", newHeight)));
         }
     },
     ATTACHMENT {
@@ -476,6 +491,11 @@ public enum WrenchEdit {
                                                              BlockFace.NORTH_WEST,
                                                              BlockFace.NORTH_NORTH_WEST);
 
+    private static final List<BlockFace> CARDINALS = List.of(BlockFace.NORTH,
+                                                             BlockFace.EAST,
+                                                             BlockFace.SOUTH,
+                                                             BlockFace.WEST);
+
     private static void sortFaces(List<BlockFace> list) {
         list.sort((a, b) -> Integer.compare(ROTATIONS.indexOf(a), ROTATIONS.indexOf(b)));
     }
@@ -517,5 +537,16 @@ public enum WrenchEdit {
         return value
             ? join(noSeparators(), Mytems.ON, text("On", GREEN))
             : join(noSeparators(), Mytems.OFF, text("Off", GRAY));
+    }
+
+    /**
+     * Walls can turn partially or completely invisible if set to
+     * low while L-shaped or standing alone.
+     */
+    private static boolean isLong(Wall wall) {
+        return (wall.getHeight(BlockFace.NORTH) != Wall.Height.NONE
+                && wall.getHeight(BlockFace.SOUTH) != Wall.Height.NONE)
+            || (wall.getHeight(BlockFace.EAST) != Wall.Height.NONE
+                && wall.getHeight(BlockFace.WEST) != Wall.Height.NONE);
     }
 }
