@@ -268,7 +268,7 @@ public enum WrenchEdit {
         @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
             if (!(blockData instanceof Wall wall)) return null;
             boolean newUp = !wall.isUp();
-            if (!newUp && !isLong(wall)) return null;
+            if (!newUp && !isStraight(wall)) return null;
             wall.setUp(newUp);
             return booleanText(newUp);
         }
@@ -319,7 +319,7 @@ public enum WrenchEdit {
                 : 0;
             final Wall.Height newHeight = heights.get(newIndex);
             wall.setHeight(face, newHeight);
-            if (!isLong(wall)) {
+            if (!isStraight(wall)) {
                 wall.setUp(true);
             }
             return join(separator(space()), blockFaceText(face), text(toCamelCase(" ", newHeight)));
@@ -543,10 +543,12 @@ public enum WrenchEdit {
      * Walls can turn partially or completely invisible if set to
      * low while L-shaped or standing alone.
      */
-    private static boolean isLong(Wall wall) {
-        return (wall.getHeight(BlockFace.NORTH) != Wall.Height.NONE
-                && wall.getHeight(BlockFace.SOUTH) != Wall.Height.NONE)
-            || (wall.getHeight(BlockFace.EAST) != Wall.Height.NONE
-                && wall.getHeight(BlockFace.WEST) != Wall.Height.NONE);
+    private static boolean isStraight(Wall wall) {
+        final Wall.Height n = wall.getHeight(BlockFace.NORTH);
+        final Wall.Height s = wall.getHeight(BlockFace.SOUTH);
+        final Wall.Height e = wall.getHeight(BlockFace.EAST);
+        final Wall.Height w = wall.getHeight(BlockFace.WEST);
+        return (s == n && s != Wall.Height.NONE)
+            || (w == e && w != Wall.Height.NONE);
     }
 }
