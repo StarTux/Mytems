@@ -30,6 +30,7 @@ public final class Session {
     protected Flying flying = new Flying(this);
     protected Attributes attributes = new Attributes(this);
     protected final Favorites favorites = new Favorites();
+    private boolean hidingPlayers;
 
     public Session(final MytemsPlugin plugin, final Player player) {
         this.plugin = plugin;
@@ -129,5 +130,19 @@ public final class Session {
     }
 
     protected void onPlayerHud(PlayerHudEvent event) {
+    }
+
+    public void setHidingPlayers(boolean value) {
+        if (hidingPlayers == value) return;
+        Player player = getPlayer();
+        for (Player other : Bukkit.getOnlinePlayers()) {
+            if (other.equals(player)) continue;
+            if (value) {
+                player.hidePlayer(plugin, other);
+            } else {
+                player.showPlayer(plugin, other);
+            }
+        }
+        this.hidingPlayers = value;
     }
 }

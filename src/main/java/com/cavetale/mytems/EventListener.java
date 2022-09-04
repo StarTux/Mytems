@@ -122,8 +122,15 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    void onPlayerJoin(PlayerJoinEvent event) {
-        plugin.fixPlayerInventory(event.getPlayer());
+    private void onPlayerJoin(PlayerJoinEvent event) {
+        final Player player = event.getPlayer();
+        plugin.fixPlayerInventory(player);
+        for (Player online : Bukkit.getOnlinePlayers()) {
+            if (online.equals(player)) continue;
+            if (plugin.sessionOf(online).isHidingPlayers()) {
+                online.hidePlayer(plugin, event.getPlayer());
+            }
+        }
     }
 
     /**

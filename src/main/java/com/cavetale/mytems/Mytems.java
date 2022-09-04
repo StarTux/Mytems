@@ -59,6 +59,7 @@ import com.cavetale.mytems.item.swampy.SwampyItem;
 import com.cavetale.mytems.item.tree.TreeSeed;
 import com.cavetale.mytems.item.treechopper.TreeChopper;
 import com.cavetale.mytems.item.trophy.Trophy;
+import com.cavetale.mytems.item.util.BlindEye;
 import com.cavetale.mytems.item.util.SlimeFinder;
 import com.cavetale.mytems.item.util.Sneakers;
 import com.cavetale.mytems.item.vote.VoteCandy;
@@ -187,6 +188,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     MONKEY_WRENCH(MonkeyWrench::new, STONE_HOE, 79, UTILITY),
     DIVIDERS(Dividers::new, WOODEN_HOE, 593, UTILITY),
     SLIME_FINDER(SlimeFinder::new, SLIME_BALL, 594, UTILITY),
+    BLIND_EYE(BlindEye::new, CARROT, 596, UTILITY),
     // Wardrobe
     WHITE_BUNNY_EARS(WardrobeItem::new, IRON_BOOTS, 3919001, (char) 0, WARDROBE_HAT), // EPIC
     RED_LIGHTSABER(WardrobeItem::new, END_ROD, 3919002, (char) 0, WARDROBE_HANDHELD),
@@ -425,6 +427,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     MOUSE_RIGHT(ForbiddenMytem::new, RED_CONCRETE, 338, UI),
     SHIFT_KEY(ForbiddenMytem::new, LIGHT_GRAY_CONCRETE, 339, UI),
     THUMBS_UP(ForbiddenMytem::new, GREEN_CONCRETE, 340, UI),
+    EYES(ForbiddenMytem::new, SPYGLASS, 595, UI),
     // Collectibles
     HEART(DummyMytem::new, HEART_OF_THE_SEA, 9, (char) 0xE241, COLLECTIBLES),
     STAR(DummyMytem::new, NETHER_STAR, 18, (char) 0xE24B, COLLECTIBLES),
@@ -896,9 +899,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     RED_JESTER_SHOES(EquipmentItem::new, LEATHER_BOOTS, 586, EQUIP_RED_JESTER_SET),
     RED_JESTER_PANTS(EquipmentItem::new, LEATHER_LEGGINGS, 587, EQUIP_RED_JESTER_SET),
     ;
-    // CustomModelData Range: 1...587
+    // CustomModelData Range: 1...596
     // CustomModelData Gaps: []
-    // CustomModelData Next: 595
+    // CustomModelData Next: 597
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
