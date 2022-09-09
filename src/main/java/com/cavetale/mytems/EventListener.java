@@ -263,6 +263,11 @@ public final class EventListener implements Listener {
     @EventHandler
     void onPlayerDropItem(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
+        if (player.getOpenInventory().getTopInventory().getHolder() instanceof Gui) {
+            event.setCancelled(true);
+            player.closeInventory();
+            plugin.getLogger().severe(player.getName() + " tried to drop with open GUI");
+        }
         ItemStack item = event.getItemDrop().getItemStack();
         Mytems mytems = Mytems.forItem(item);
         if (mytems != null) {
