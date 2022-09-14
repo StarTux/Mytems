@@ -242,9 +242,18 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler
-    void onInventoryClick(InventoryClickEvent event) {
-        if (event.getClickedInventory() instanceof PlayerInventory && event.getWhoClicked() instanceof Player) {
-            plugin.sessions.of((Player) event.getWhoClicked()).equipmentDidChange();
+    private void onInventoryClick(InventoryClickEvent event) {
+        if (!(event.getWhoClicked() instanceof Player player)) return;
+        // We could also check:
+        // player.getOpenInventory().getTopInventory().getHolder() instanceof Gui
+        if (!event.getView().equals(player.getOpenInventory())) {
+            plugin.getLogger().severe(player.getName() + " tried to click non-opened inventory");
+            event.setCancelled(true);
+            Bukkit.getScheduler().runTask(plugin, () -> player.closeInventory());
+            return;
+        }
+        if (event.getClickedInventory() instanceof PlayerInventory) {
+            plugin.sessions.of(player).equipmentDidChange();
         }
     }
 
@@ -512,30 +521,35 @@ public final class EventListener implements Listener {
         final ItemStack itemStack = event.getItem();
         if (itemStack == null) return;
         if (!Tag.SHULKER_BOXES.isTagged(itemStack.getType())) return;
-        if (!(itemStack.getItemMeta() instanceof BlockStateMeta meta)) return;
-        if (!(meta.getBlockState() instanceof ShulkerBox shulkerBox)) return;
+        if (!(itemStack.getItemMeta() instanceof BlockStateMeta shulkerMeta)) return;
+        if (!(shulkerMeta.getBlockState() instanceof ShulkerBox shulkerBox)) return;
         event.setCancelled(true);
-        Inventory inventory = shulkerBox.getInventory();
-        final int size = inventory.getSize();
+        Inventory shulkerInventory = shulkerBox.getInventory();
+        final int size = shulkerInventory.getSize();
         Gui gui = new Gui()
             .type(InventoryType.SHULKER_BOX)
             .size(size)
-            .title(meta.hasDisplayName()
-                   ? meta.displayName()
+            .title(shulkerMeta.hasDisplayName()
+                   ? shulkerMeta.displayName()
                    : text("Shulker Box"));
         for (int i = 0; i < size; i += 1) {
-            gui.setItem(i, inventory.getItem(i));
+            gui.setItem(i, shulkerInventory.getItem(i));
         }
         gui.setEditable(true);
         gui.setLockedSlot(event.getHand() == EquipmentSlot.OFF_HAND
                           ? Gui.OFF_HAND
                           : player.getInventory().getHeldItemSlot());
+        gui.onOpen(evt -> {
+                shulkerInventory.clear();
+                shulkerMeta.setBlockState(shulkerBox);
+                itemStack.setItemMeta(shulkerMeta);
+            });
         gui.onClose(evt -> {
                 for (int i = 0; i < size; i += 1) {
-                    inventory.setItem(i, gui.getInventory().getItem(i));
+                    shulkerInventory.setItem(i, gui.getInventory().getItem(i));
                 }
-                meta.setBlockState(shulkerBox);
-                itemStack.setItemMeta(meta);
+                shulkerMeta.setBlockState(shulkerBox);
+                itemStack.setItemMeta(shulkerMeta);
                 player.playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_CLOSE, SoundCategory.BLOCKS, 1.0f, 1.0f);
             });
         gui.open(player);
