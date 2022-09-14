@@ -524,6 +524,7 @@ public final class EventListener implements Listener {
         if (!(itemStack.getItemMeta() instanceof BlockStateMeta shulkerMeta)) return;
         if (!(shulkerMeta.getBlockState() instanceof ShulkerBox shulkerBox)) return;
         event.setCancelled(true);
+        player.getOpenInventory().close();
         Inventory shulkerInventory = shulkerBox.getInventory();
         final int size = shulkerInventory.getSize();
         Gui gui = new Gui()
