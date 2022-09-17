@@ -34,6 +34,10 @@ public final class Items {
         return item;
     }
 
+    public static String serializeToBase64(ItemStack itemStack) {
+        return Base64.getEncoder().encodeToString(itemStack.serializeAsBytes());
+    }
+
     public static void unbreakable(ItemMeta meta) {
         meta.setUnbreakable(true);
         if (meta instanceof Repairable) {

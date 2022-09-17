@@ -4,6 +4,7 @@ import com.cavetale.mytems.event.combat.DamageCalculation;
 import com.cavetale.mytems.event.combat.DamageCalculationEvent;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.util.Gui;
+import com.cavetale.mytems.util.Items;
 import com.cavetale.worldmarker.entity.EntityMarker;
 import com.cavetale.worldmarker.item.ItemMarker;
 import com.cavetale.worldmarker.util.Tags;
@@ -11,7 +12,9 @@ import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
 import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -274,7 +277,7 @@ public final class EventListener implements Listener {
         Player player = event.getPlayer();
         if (player.getOpenInventory().getTopInventory().getHolder() instanceof Gui) {
             event.setCancelled(true);
-            player.closeInventory();
+            Bukkit.getScheduler().runTask(plugin, () -> player.closeInventory());
             plugin.getLogger().severe(player.getName() + " tried to drop with open GUI");
         }
         ItemStack item = event.getItemDrop().getItemStack();
@@ -520,7 +523,8 @@ public final class EventListener implements Listener {
         if (!event.hasItem()) return;
         final ItemStack itemStack = event.getItem();
         if (itemStack == null) return;
-        if (!Tag.SHULKER_BOXES.isTagged(itemStack.getType())) return;
+        final Material itemType = itemStack.getType();
+        if (!Tag.SHULKER_BOXES.isTagged(itemType)) return;
         if (!(itemStack.getItemMeta() instanceof BlockStateMeta shulkerMeta)) return;
         if (!(shulkerMeta.getBlockState() instanceof ShulkerBox shulkerBox)) return;
         event.setCancelled(true);
@@ -533,24 +537,46 @@ public final class EventListener implements Listener {
             .title(shulkerMeta.hasDisplayName()
                    ? shulkerMeta.displayName()
                    : text("Shulker Box"));
-        for (int i = 0; i < size; i += 1) {
-            gui.setItem(i, shulkerInventory.getItem(i));
-        }
         gui.setEditable(true);
         gui.setLockedSlot(event.getHand() == EquipmentSlot.OFF_HAND
                           ? Gui.OFF_HAND
                           : player.getInventory().getHeldItemSlot());
         gui.onOpen(evt -> {
+                final ItemStack itemStack2 = player.getInventory().getItemInHand();
+                if (itemStack2 == null || itemStack2.getType() != itemType) {
+                    plugin.getLogger().severe(player.getName() + " opened invalid shulker box: " + itemStack2.getType());
+                    return;
+                }
+                for (int i = 0; i < size; i += 1) {
+                    ItemStack item = shulkerInventory.getItem(i);
+                    if (item == null || item.getType().isAir()) continue;
+                    gui.setItem(i, item);
+                }
                 shulkerInventory.clear();
                 shulkerMeta.setBlockState(shulkerBox);
-                itemStack.setItemMeta(shulkerMeta);
+                itemStack2.setItemMeta(shulkerMeta);
             });
         gui.onClose(evt -> {
+                ItemStack itemStack2 = player.getInventory().getItemInHand();
+                // Check for error
+                if (itemStack2 == null || itemStack2.getType() != itemType) {
+                    List<String> list = new ArrayList<>();
+                    for (int i = 0; i < size; i += 1) {
+                        ItemStack item = gui.getInventory().getItem(i);
+                        if (item == null || item.getType().isAir()) continue;
+                        list.add(Items.serializeToBase64(item));
+                    }
+                    plugin.getLogger().severe(player.getName() + " lost shulker box: " + list);
+                    return;
+                }
+                // Move/copy items
                 for (int i = 0; i < size; i += 1) {
-                    shulkerInventory.setItem(i, gui.getInventory().getItem(i));
+                    ItemStack item = gui.getInventory().getItem(i);
+                    if (item == null || item.getType().isAir()) continue;
+                    shulkerInventory.setItem(i, item);
                 }
                 shulkerMeta.setBlockState(shulkerBox);
-                itemStack.setItemMeta(shulkerMeta);
+                itemStack2.setItemMeta(shulkerMeta);
                 player.playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_CLOSE, SoundCategory.BLOCKS, 1.0f, 1.0f);
             });
         gui.open(player);
