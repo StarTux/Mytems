@@ -279,6 +279,7 @@ public final class EventListener implements Listener {
             event.setCancelled(true);
             Bukkit.getScheduler().runTask(plugin, () -> player.closeInventory());
             plugin.getLogger().severe(player.getName() + " tried to drop with open GUI");
+            return;
         }
         ItemStack item = event.getItemDrop().getItemStack();
         Mytems mytems = Mytems.forItem(item);
@@ -307,7 +308,14 @@ public final class EventListener implements Listener {
 
     @EventHandler
     void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
-        plugin.sessions.of(event.getPlayer()).equipmentDidChange();
+        Player player = event.getPlayer();
+        if (player.getOpenInventory().getTopInventory().getHolder() instanceof Gui) {
+            event.setCancelled(true);
+            Bukkit.getScheduler().runTask(plugin, () -> player.closeInventory());
+            plugin.getLogger().severe(player.getName() + " tried to swap off-hand with open GUI");
+            return;
+        }
+        plugin.sessions.of(player).equipmentDidChange();
     }
 
     @EventHandler(priority = EventPriority.HIGH)
@@ -542,7 +550,7 @@ public final class EventListener implements Listener {
                           ? Gui.OFF_HAND
                           : player.getInventory().getHeldItemSlot());
         gui.onOpen(evt -> {
-                final ItemStack itemStack2 = player.getInventory().getItemInHand();
+                final ItemStack itemStack2 = player.getInventory().getItemInMainHand();
                 if (itemStack2 == null || itemStack2.getType() != itemType) {
                     plugin.getLogger().severe(player.getName() + " opened invalid shulker box: " + itemStack2.getType());
                     return;
@@ -557,7 +565,7 @@ public final class EventListener implements Listener {
                 itemStack2.setItemMeta(shulkerMeta);
             });
         gui.onClose(evt -> {
-                ItemStack itemStack2 = player.getInventory().getItemInHand();
+                ItemStack itemStack2 = player.getInventory().getItemInMainHand();
                 // Check for error
                 if (itemStack2 == null || itemStack2.getType() != itemType) {
                     List<String> list = new ArrayList<>();
