@@ -412,12 +412,14 @@ public final class TreeChopper implements Mytem {
     }
 
     protected boolean upgrade(Player player, ItemStack itemStack, TreeChopperTag tag, TreeChopperStat stat) {
-        if (tag.getStat(TreeChopperStat.XP) < tag.getUpgradeCost()) return false;
+        final int xp = tag.getStat(TreeChopperStat.XP);
+        final int cost = tag.getUpgradeCost();
+        if (xp < cost) return false;
         int level = tag.getStat(stat);
         if (level >= stat.maxLevel) return false;
         if (stat.conflictsWith(tag)) return false;
         if (!stat.doesMeetRequirements(tag)) return false;
-        tag.setStat(TreeChopperStat.XP, 0);
+        tag.setStat(TreeChopperStat.XP, xp - cost);
         level += 1;
         tag.setStat(stat, level);
         tag.store(itemStack);
