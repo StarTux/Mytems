@@ -226,7 +226,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     GOLDEN_CROWN(WardrobeItem::new, GOLD_INGOT, 146, (char) 0, WARDROBE_HAT),
     DEVIL_HORNS(WardrobeItem::new, NETHERITE_LEGGINGS, 147, (char) 0, WARDROBE_HAT),
     ELF_HAT(WardrobeItem::new, RED_WOOL, 148, (char) 0, WARDROBE_HAT),
-    FIREMAN_HELMET(WardrobeItem::new, RED_CONCRETE, 149, (char) 0, WARDROBE_HAT),
+    FIREFIGHTER_HELMET(WardrobeItem::new, RED_CONCRETE, 149, (char) 0, WARDROBE_HAT),
     PLAGUE_DOCTOR(WardrobeItem::new, BLACK_CONCRETE, 150, (char) 0, WARDROBE_HAT),
     PLAGUE_DOCTOR_2(WardrobeItem::new, BLACK_CONCRETE, 151, (char) 0, WARDROBE_HAT),
     PUMPKIN_STUB(WardrobeItem::new, SEA_PICKLE, 152, (char) 0, WARDROBE_HAT),
@@ -387,7 +387,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     CLICKS_AND_STICKS(MusicalInstrument::new, STICK, 66, (char) 0xE282, MUSIC), // Sticks
     ANGELIC_HARP(MusicalInstrument::new, STICK, 67, (char) 0xE283, MUSIC), // Piano
     // Enemy
-    KOBOLD_HEAD(ForbiddenMytem::new, GREEN_CONCRETE, 1, (char) 0, ENEMY),
+    KOBOLD_HEAD(WardrobeItem::new, GREEN_CONCRETE, 1, (char) 0, ENEMY),
     // Random
     RUBY(DummyMytem::new, EMERALD, 6, (char) 0xE23E, CURRENCY),
     // UI
@@ -926,6 +926,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
         ID_MAP.put("vote:firework", VOTE_FIREWORK); // legacy
         ID_MAP.put("corroded_drum", OLD_OVEN_LID);
         ID_MAP.put("brittle_barrel", SOOTY_STOVE_PIPE);
+        ID_MAP.put("fireman_helmet", FIREFIGHTER_HELMET);
     }
 
     Mytems(final Function<Mytems, Mytem> ctor, final Material material, final Integer customModelData, final char character, final MytemsCategory category) {
