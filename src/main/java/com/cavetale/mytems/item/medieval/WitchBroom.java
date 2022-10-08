@@ -32,6 +32,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
@@ -49,6 +50,12 @@ public final class WitchBroom implements Mytem, Listener {
     public void enable() {
         displayName = text("Witch Broom", LIGHT_PURPLE);
         List<Component> text = List.of(displayName,
+                                       text("Soar through the skies", GRAY),
+                                       text("on this magic broom.", GRAY),
+                                       empty(),
+                                       text("Broomstick Servicing", GRAY),
+                                       text("Kit sold separately.", GRAY),
+                                       empty(),
                                        join(noSeparators(),
                                             Mytems.MOUSE_RIGHT.component,
                                             text(" Lift off!", GRAY)));
@@ -135,7 +142,7 @@ public final class WitchBroom implements Mytem, Listener {
                     player.sendMessage(text("You exit the Witch Broom", GRAY));
                     return;
                 }
-                armorStand.setVelocity(lookAt.normalize().multiply(0.6));
+                armorStand.setVelocity(lookAt.normalize().multiply(0.3));
                 player.getWorld().spawnParticle(Particle.WAX_ON, location, 1, 0.0, 0.0, 0.0, 0.0);
             }
         }.runTaskTimer(MytemsPlugin.getInstance(), 0L, 0L);
