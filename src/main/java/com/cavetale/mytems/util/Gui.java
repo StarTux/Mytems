@@ -42,6 +42,7 @@ public final class Gui implements InventoryHolder {
     @Getter @Setter private InventoryType inventoryType = null;
     protected boolean locked = false;
     @Getter @Setter protected int lockedSlot = -1;
+    @Getter @Setter private boolean dropping;
 
     @RequiredArgsConstructor @AllArgsConstructor
     private static final class Slot {
@@ -178,17 +179,27 @@ public final class Gui implements InventoryHolder {
             if (event.getView().getBottomInventory().equals(event.getView().getInventory(event.getRawSlot()))) {
                 if (event.getSlot() == lockedSlot) {
                     event.setCancelled(true);
+                    return;
                 }
             }
             if (event.getClick() == ClickType.NUMBER_KEY) {
                 if (lockedSlot == event.getHotbarButton()) {
                     event.setCancelled(true);
+                    return;
                 }
             } else if (event.getClick() == ClickType.SWAP_OFFHAND) {
                 Bukkit.getScheduler().runTaskLater(plugin, () -> ((Player) event.getWhoClicked()).updateInventory(), 10L);
                 if (lockedSlot == OFF_HAND) {
                     event.setCancelled(true);
+                    return;
                 }
+            }
+            switch (event.getClick()) {
+            case DROP:
+            case CONTROL_DROP:
+                this.dropping = true;
+                Bukkit.getScheduler().runTask(plugin, () -> this.dropping = false);
+            default: break;
             }
             return;
         }

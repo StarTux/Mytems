@@ -273,9 +273,13 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler
-    void onPlayerDropItem(PlayerDropItemEvent event) {
+    private void onPlayerDropItem(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
-        if (player.getOpenInventory().getTopInventory().getHolder() instanceof Gui) {
+        if (player.getOpenInventory().getTopInventory().getHolder() instanceof Gui gui) {
+            if (gui.isDropping()) {
+                gui.setDropping(false);
+                return;
+            }
             event.setCancelled(true);
             Bukkit.getScheduler().runTask(plugin, () -> player.closeInventory());
             plugin.getLogger().severe(player.getName() + " tried to drop with open GUI");
@@ -523,6 +527,7 @@ public final class EventListener implements Listener {
         }
         if (event.getHand() != EquipmentSlot.HAND) return;
         Player player = event.getPlayer();
+        if (player.getOpenInventory().getType() != InventoryType.CRAFTING) return;
         if (player.isSneaking()) return;
         if (player.getGameMode() != GameMode.SURVIVAL && player.getGameMode() != GameMode.ADVENTURE) {
             return;
