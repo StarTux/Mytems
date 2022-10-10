@@ -527,7 +527,6 @@ public final class EventListener implements Listener {
         }
         if (event.getHand() != EquipmentSlot.HAND) return;
         Player player = event.getPlayer();
-        if (player.getOpenInventory().getType() != InventoryType.CRAFTING) return;
         if (player.isSneaking()) return;
         if (player.getGameMode() != GameMode.SURVIVAL && player.getGameMode() != GameMode.ADVENTURE) {
             return;
@@ -541,6 +540,7 @@ public final class EventListener implements Listener {
         if (!(itemStack.getItemMeta() instanceof BlockStateMeta shulkerMeta)) return;
         if (!(shulkerMeta.getBlockState() instanceof ShulkerBox shulkerBox)) return;
         event.setCancelled(true);
+        if (player.getOpenInventory().getType() != InventoryType.CRAFTING) return;
         player.getOpenInventory().close();
         Inventory shulkerInventory = shulkerBox.getInventory();
         final int size = shulkerInventory.getSize();
