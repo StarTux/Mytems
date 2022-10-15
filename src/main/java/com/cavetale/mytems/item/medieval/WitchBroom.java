@@ -109,6 +109,10 @@ public final class WitchBroom implements Mytem, Listener {
             player.sendActionBar(text("You cannot fly here", RED));
             return;
         }
+        startFlying(player);
+    }
+
+    public void startFlying(Player player) {
         PluginPlayerEvent.Name.START_FLYING.call(MytemsPlugin.getInstance(), player);
         final ArmorStand armorStand = player.getWorld().spawn(player.getLocation(), ArmorStand.class, e -> {
                 e.setPersistent(false);
@@ -172,7 +176,7 @@ public final class WitchBroom implements Mytem, Listener {
         }
     }
 
-    public static SessionData getSessionData(Player player) {
+    public SessionData getSessionData(Player player) {
         return sessionOf(player).getFavorites().getOrSet(SessionData.class, SessionData::new);
     }
 }
