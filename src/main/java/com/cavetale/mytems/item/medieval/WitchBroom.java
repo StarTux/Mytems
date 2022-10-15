@@ -11,6 +11,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import java.util.UUID;
+import lombok.Data;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
@@ -32,6 +33,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
+import static com.cavetale.mytems.MytemsPlugin.sessionOf;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
@@ -40,7 +42,8 @@ import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 @RequiredArgsConstructor @Getter
 public final class WitchBroom implements Mytem, Listener {
-    public static final long MAX_LIFETIME = 1000L * 60L * 2L;
+    public static final long MAX_LIFE_TICKS = 20L * 60L * 2L;
+    public static final double FLY_SPEED = 0.4;
     private final Mytems key;
     private ItemStack prototype;
     private Component displayName;
@@ -84,6 +87,16 @@ public final class WitchBroom implements Mytem, Listener {
         event.setCancelled(true);
     }
 
+    @Data
+    public static final class SessionData {
+        protected int flyTicks = 0;
+        protected int noMoveTicks = 0;
+        protected int x;
+        protected int y;
+        protected int z;
+        protected double speedFactor = 1.0;
+    }
+
     @Override
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack itemStack) {
         event.setUseInteractedBlock(Event.Result.DENY);
@@ -104,45 +117,47 @@ public final class WitchBroom implements Mytem, Listener {
             });
         if (armorStand == null || armorStand.isDead()) return;
         armorStand.addPassenger(player);
-        final long then = System.currentTimeMillis();
         flyingPlayers.add(player.getUniqueId());
         new BukkitRunnable() {
-            private int noMoveTicks = 0;
-            private int x;
-            private int y;
-            private int z;
             @Override public void run() {
-                long now = System.currentTimeMillis();
+                if (!player.isValid() || !player.isOnline()) {
+                    cancel();
+                    flyingPlayers.remove(player.getUniqueId());
+                    armorStand.remove();
+                    return;
+                }
+                SessionData data = sessionOf(player).getFavorites().getOrSet(SessionData.class, SessionData::new);
                 Location location = player.getLocation();
                 boolean canFly = true;
-                if (x != location.getBlockX() || y != location.getBlockY() || z != location.getBlockZ()) {
-                    x = location.getBlockX();
-                    y = location.getBlockY();
-                    z = location.getBlockZ();
-                    noMoveTicks = 0;
+                if (data.x != location.getBlockX() || data.y != location.getBlockY() || data.z != location.getBlockZ()) {
+                    data.x = location.getBlockX();
+                    data.y = location.getBlockY();
+                    data.z = location.getBlockZ();
+                    data.noMoveTicks = 0;
                     canFly = PlayerBlockAbilityQuery.Action.FLY.query(player, location.getBlock());
                 } else {
-                    noMoveTicks += 1;
+                    data.noMoveTicks += 1;
                 }
                 Vector lookAt = location.getDirection();
                 boolean shouldRemove =
                     !canFly
-                    || then + MAX_LIFETIME < now
-                    || !player.isOnline()
+                    || data.flyTicks > MAX_LIFE_TICKS
                     || armorStand.isDead()
                     || player.getVehicle() != armorStand
                     || lookAt.length() < 0.01
-                    || noMoveTicks >= 20
-                    || y > 400;
+                    || data.noMoveTicks >= 20
+                    || data.y > 400;
                 if (shouldRemove) {
                     flyingPlayers.remove(player.getUniqueId());
                     armorStand.remove();
                     cancel();
                     player.setFallDistance(0);
                     player.sendMessage(text("You exit the Witch Broom", GRAY));
+                    sessionOf(player).getFavorites().clear(SessionData.class);
                     return;
                 }
-                armorStand.setVelocity(lookAt.normalize().multiply(0.3));
+                data.flyTicks += 1;
+                armorStand.setVelocity(lookAt.normalize().multiply(FLY_SPEED * data.speedFactor));
                 player.getWorld().spawnParticle(Particle.WAX_ON, location, 1, 0.0, 0.0, 0.0, 0.0);
             }
         }.runTaskTimer(MytemsPlugin.getInstance(), 0L, 0L);
@@ -155,5 +170,9 @@ public final class WitchBroom implements Mytem, Listener {
         if (query.getName() == PluginPlayerQuery.Name.IS_FLYING && flyingPlayers.contains(query.getPlayer().getUniqueId())) {
             PluginPlayerQuery.Name.IS_FLYING.respond(query, MytemsPlugin.getInstance(), true);
         }
+    }
+
+    public static SessionData getSessionData(Player player) {
+        return sessionOf(player).getFavorites().getOrSet(SessionData.class, SessionData::new);
     }
 }
