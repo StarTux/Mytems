@@ -37,6 +37,10 @@ public final class Skull {
         apply(meta, name, uuid, texture, signature);
     }
 
+    public static Skull of(final String name, final UUID uuid, final String texture, final String signature) {
+        return new Skull(name, uuid, texture, signature);
+    }
+
     public static Skull of(ItemStack itemStack) {
         SkullMeta meta = (SkullMeta) itemStack.getItemMeta();
         return of(meta);

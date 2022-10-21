@@ -47,6 +47,8 @@ public final class MytemsTag {
             MytemsCategory.EASTER_TOKENS,
             MytemsCategory.HALLOWEEN,
             MytemsCategory.MAY,
+            MytemsCategory.CREEPER_COSTUME,
+            MytemsCategory.SPIDER_COSTUME,
         });
     public static final MytemsTag EQUIPMENT = new MytemsTag("equipment", new MytemsCategory[] {
             MytemsCategory.EQUIP_AXE,

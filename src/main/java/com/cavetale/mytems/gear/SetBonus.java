@@ -13,7 +13,10 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import static net.kyori.adventure.text.Component.text;
@@ -83,9 +86,15 @@ public interface SetBonus {
 
     default void onPlayerJump(PlayerJumpEvent event, Player player) { }
 
+    default void onPlayerMove(PlayerMoveEvent event, Player player) { }
+
     default void onDefendingDamageCalculation(DamageCalculationEvent event) { }
 
     default void onAttackingDamageCalculation(DamageCalculationEvent event) { }
+
+    default void onEntityTargetPlayer(EntityTargetEvent event, Player player) { }
+
+    default void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player) { }
 
     default void tick(LivingEntity living, int has) { }
 }

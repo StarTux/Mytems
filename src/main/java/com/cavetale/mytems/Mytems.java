@@ -44,6 +44,8 @@ import com.cavetale.mytems.item.halloween.HalloweenToken2;
 import com.cavetale.mytems.item.halloween.HalloweenToken;
 import com.cavetale.mytems.item.medieval.GoldenScythe;
 import com.cavetale.mytems.item.medieval.WitchBroom;
+import com.cavetale.mytems.item.mobcostume.CreeperCostume;
+import com.cavetale.mytems.item.mobcostume.SpiderCostume;
 import com.cavetale.mytems.item.music.HyruleInstrument;
 import com.cavetale.mytems.item.music.MusicalInstrument;
 import com.cavetale.mytems.item.photo.Photo;
@@ -526,6 +528,15 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     ORANGE_CANDY(HalloweenCandy::new, COOKIE, 54, (char) 0xE276, HALLOWEEN),
     HALLOWEEN_TOKEN(HalloweenToken::new, PUMPKIN, 109, (char) 0xE2AC, HALLOWEEN),
     HALLOWEEN_TOKEN_2(HalloweenToken2::new, JACK_O_LANTERN, 110, (char) 0xE2AD, HALLOWEEN),
+    // Halloween 2022
+    CREEPER_CUSTOME_HELMET(CreeperCostume.CreeperHelmet::new, CREEPER_HEAD, null, (char) 0, CREEPER_COSTUME),
+    CREEPER_CUSTOME_CHESTPLATE(CreeperCostume.CreeperChestplate::new, LEATHER_CHESTPLATE, null, (char) 0, CREEPER_COSTUME),
+    CREEPER_CUSTOME_LEGGINGS(CreeperCostume.CreeperLeggings::new, LEATHER_LEGGINGS, null, (char) 0, CREEPER_COSTUME),
+    CREEPER_CUSTOME_BOOTS(CreeperCostume.CreeperBoots::new, LEATHER_BOOTS, null, (char) 0, CREEPER_COSTUME),
+    SPIDER_CUSTOME_HELMET(SpiderCostume.SpiderHelmet::new, PLAYER_HEAD, null, (char) 0, SPIDER_COSTUME),
+    SPIDER_CUSTOME_CHESTPLATE(SpiderCostume.SpiderChestplate::new, LEATHER_CHESTPLATE, null, (char) 0, SPIDER_COSTUME),
+    SPIDER_CUSTOME_LEGGINGS(SpiderCostume.SpiderLeggings::new, LEATHER_LEGGINGS, null, (char) 0, SPIDER_COSTUME),
+    SPIDER_CUSTOME_BOOTS(SpiderCostume.SpiderBoots::new, LEATHER_BOOTS, null, (char) 0, SPIDER_COSTUME),
     // Scarlet
     SCARLET_HELMET(ScarletItem.Helmet::new, PLAYER_HEAD, 156, SCARLET),
     SCARLET_CHESTPLATE(ScarletItem.Chestplate::new, LEATHER_CHESTPLATE, 157, SCARLET),

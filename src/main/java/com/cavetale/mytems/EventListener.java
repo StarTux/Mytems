@@ -49,6 +49,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
@@ -65,6 +66,7 @@ import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
+import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
@@ -120,8 +122,12 @@ public final class EventListener implements Listener {
         Player player = event.getPlayer();
         ItemStack item = player.getInventory().getItem(event.getHand());
         Mytems mytems = Mytems.forItem(item);
-        if (mytems == null) return;
-        mytems.getMytem().onPlayerInteractEntity(event, player, item);
+        if (mytems != null) {
+            mytems.getMytem().onPlayerInteractEntity(event, player, item);
+        }
+        for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
+            setBonus.onPlayerInteractEntity(event, player);
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -408,6 +414,15 @@ public final class EventListener implements Listener {
         }
     }
 
+    @EventHandler(priority = EventPriority.HIGH)
+    void onPlayerMove(PlayerMoveEvent event) {
+        if (!event.hasChangedPosition()) return;
+        Player player = event.getPlayer();
+        for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
+            setBonus.onPlayerMove(event, player);
+        }
+    }
+
     @EventHandler
     void onPluginDisable(PluginDisableEvent event) {
         if (event.getPlugin() == plugin) return;
@@ -670,5 +685,14 @@ public final class EventListener implements Listener {
     private void onPlayerItemDamage(PlayerItemDamageEvent event) {
         Mytems mytems = Mytems.forItem(event.getItem());
         if (mytems != null) mytems.getMytem().onPlayerItemDamage(event);
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    private void onEntityTargetPlayer(EntityTargetEvent event) {
+        if (event.getTarget() instanceof Player player) {
+            for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
+                setBonus.onEntityTargetPlayer(event, player);
+            }
+        }
     }
 }
