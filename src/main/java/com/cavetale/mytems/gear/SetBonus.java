@@ -2,6 +2,7 @@ package com.cavetale.mytems.gear;
 
 import com.cavetale.mytems.event.combat.DamageCalculationEvent;
 import com.cavetale.mytems.util.Text;
+import com.destroystokyo.paper.event.entity.ProjectileCollideEvent;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -95,6 +96,8 @@ public interface SetBonus {
     default void onEntityTargetPlayer(EntityTargetEvent event, Player player) { }
 
     default void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player) { }
+
+    default void onProjectileCollidePlayer(ProjectileCollideEvent event, Player player) { }
 
     default void tick(LivingEntity living, int has) { }
 }

@@ -13,7 +13,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.block.Block;
+import org.bukkit.GameMode;
 import org.bukkit.entity.EntityCategory;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -24,7 +24,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.BoundingBox;
-import org.bukkit.util.Vector;
+import static com.cavetale.mytems.util.Collision.collidesWithBlock;
 import static com.cavetale.mytems.util.LeatherArmor.leatherArmor;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
@@ -67,35 +67,12 @@ public abstract class SpiderCostume implements GearItem {
             private static boolean isTouchingWalls(Player player) {
                 final double expand = 0.0625;
                 BoundingBox bb = player.getBoundingBox().expand(expand, 0.0, expand);
-                final Vector min = bb.getMin();
-                final Vector max = bb.getMax();
-                final int ax = min.getBlockX();
-                final int ay = min.getBlockY() - 1; // be nice to walls
-                final int az = min.getBlockZ();
-                final int bx = max.getBlockX();
-                final int by = max.getBlockY();
-                final int bz = max.getBlockZ();
-                int bs = 0;
-                int bbs = 0;
-                for (int y = ay; y <= by; y += 1) {
-                    for (int z = az; z <= bz; z += 1) {
-                        for (int x = ax; x <= bx; x += 1) {
-                            Block block = player.getWorld().getBlockAt(x, y, z);
-                            bs += 1;
-                            for (BoundingBox box : block.getCollisionShape().getBoundingBoxes()) {
-                                bbs += 1;
-                                if (bb.overlaps(box.shift((double) x, (double) y, (double) z))) {
-                                    return true;
-                                }
-                            }
-                        }
-                    }
-                }
-                return false;
+                return collidesWithBlock(player.getWorld(), bb);
             }
 
             @Override
             public void onPlayerMove(PlayerMoveEvent event, Player player) {
+                if (player.getGameMode() == GameMode.SPECTATOR) return;
                 if (player.isGliding()) return;
                 if (player.isFlying()) return;
                 if (player.isInsideVehicle()) return;

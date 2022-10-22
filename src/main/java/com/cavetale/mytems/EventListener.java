@@ -9,6 +9,7 @@ import com.cavetale.worldmarker.entity.EntityMarker;
 import com.cavetale.worldmarker.item.ItemMarker;
 import com.cavetale.worldmarker.util.Tags;
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
+import com.destroystokyo.paper.event.entity.ProjectileCollideEvent;
 import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
@@ -688,10 +689,19 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    private void onEntityTargetPlayer(EntityTargetEvent event) {
+    private void onEntityTarget(EntityTargetEvent event) {
         if (event.getTarget() instanceof Player player) {
             for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
                 setBonus.onEntityTargetPlayer(event, player);
+            }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    private void onProjectileCollidePlayer(ProjectileCollideEvent event) {
+        if (event.getCollidedWith() instanceof Player player) {
+            for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
+                setBonus.onProjectileCollidePlayer(event, player);
             }
         }
     }

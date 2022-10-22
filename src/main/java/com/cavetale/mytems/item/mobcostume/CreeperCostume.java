@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.entity.Creeper;
@@ -62,6 +63,7 @@ public abstract class CreeperCostume implements GearItem {
 
             @Override
             public void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player) {
+                if (player.getGameMode() == GameMode.SPECTATOR) return;
                 if (!(event.getRightClicked() instanceof Creeper creeper)) return;
                 if (!player.getPassengers().isEmpty()) return;
                 if (creeper.isInsideVehicle()) return;

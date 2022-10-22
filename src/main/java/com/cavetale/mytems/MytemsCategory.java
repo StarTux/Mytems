@@ -17,6 +17,7 @@ public enum MytemsCategory {
     EASTER_BASKETS,
     EASTER_EGGS,
     EASTER_TOKENS,
+    ENDERMAN_COSTUME,
     ENEMY,
     FRIENDS,
     FURNITURE,
