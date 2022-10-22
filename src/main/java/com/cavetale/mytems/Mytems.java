@@ -44,6 +44,7 @@ import com.cavetale.mytems.item.halloween.HalloweenToken2;
 import com.cavetale.mytems.item.halloween.HalloweenToken;
 import com.cavetale.mytems.item.medieval.GoldenScythe;
 import com.cavetale.mytems.item.medieval.WitchBroom;
+import com.cavetale.mytems.item.mobcostume.ChickenCostume;
 import com.cavetale.mytems.item.mobcostume.CreeperCostume;
 import com.cavetale.mytems.item.mobcostume.EndermanCostume;
 import com.cavetale.mytems.item.mobcostume.SkeletonCostume;
@@ -547,6 +548,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     SKELETON_CUSTOME_CHESTPLATE(SkeletonCostume.SkeletonChestplate::new, LEATHER_CHESTPLATE, null, (char) 0, SKELETON_COSTUME),
     SKELETON_CUSTOME_LEGGINGS(SkeletonCostume.SkeletonLeggings::new, LEATHER_LEGGINGS, null, (char) 0, SKELETON_COSTUME),
     SKELETON_CUSTOME_BOOTS(SkeletonCostume.SkeletonBoots::new, LEATHER_BOOTS, null, (char) 0, SKELETON_COSTUME),
+    CHICKEN_CUSTOME_HELMET(ChickenCostume.ChickenHelmet::new, PLAYER_HEAD, null, (char) 0, CHICKEN_COSTUME),
+    CHICKEN_CUSTOME_CHESTPLATE(ChickenCostume.ChickenChestplate::new, LEATHER_CHESTPLATE, null, (char) 0, CHICKEN_COSTUME),
+    CHICKEN_CUSTOME_LEGGINGS(ChickenCostume.ChickenLeggings::new, LEATHER_LEGGINGS, null, (char) 0, CHICKEN_COSTUME),
+    CHICKEN_CUSTOME_BOOTS(ChickenCostume.ChickenBoots::new, LEATHER_BOOTS, null, (char) 0, CHICKEN_COSTUME),
     // Scarlet
     SCARLET_HELMET(ScarletItem.Helmet::new, PLAYER_HEAD, 156, SCARLET),
     SCARLET_CHESTPLATE(ScarletItem.Chestplate::new, LEATHER_CHESTPLATE, 157, SCARLET),

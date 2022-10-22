@@ -5,6 +5,7 @@ public enum MytemsCategory {
     ARMOR_PART,
     ARROWS,
     CAT_EARS,
+    CHICKEN_COSTUME,
     CHRISTMAS,
     COIN,
     COLLECTIBLES,

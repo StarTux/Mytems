@@ -69,6 +69,7 @@ import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.EntitiesLoadEvent;
@@ -703,6 +704,13 @@ public final class EventListener implements Listener {
             for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
                 setBonus.onProjectileCollidePlayer(event, player);
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    private void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
+        if (event.isSneaking()) {
+            event.getPlayer().eject();
         }
     }
 }
