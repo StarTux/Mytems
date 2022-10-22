@@ -41,6 +41,7 @@ public enum MytemsCategory {
     REACTION,
     SANTA,
     SCARLET,
+    SKELETON_COSTUME,
     SPIDER_COSTUME,
     SUNGLASSES,
     SWAMPY,

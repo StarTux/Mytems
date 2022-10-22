@@ -46,6 +46,7 @@ import com.cavetale.mytems.item.medieval.GoldenScythe;
 import com.cavetale.mytems.item.medieval.WitchBroom;
 import com.cavetale.mytems.item.mobcostume.CreeperCostume;
 import com.cavetale.mytems.item.mobcostume.EndermanCostume;
+import com.cavetale.mytems.item.mobcostume.SkeletonCostume;
 import com.cavetale.mytems.item.mobcostume.SpiderCostume;
 import com.cavetale.mytems.item.music.HyruleInstrument;
 import com.cavetale.mytems.item.music.MusicalInstrument;
@@ -542,6 +543,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     ENDERMAN_CUSTOME_CHESTPLATE(EndermanCostume.EndermanChestplate::new, LEATHER_CHESTPLATE, null, (char) 0, ENDERMAN_COSTUME),
     ENDERMAN_CUSTOME_LEGGINGS(EndermanCostume.EndermanLeggings::new, LEATHER_LEGGINGS, null, (char) 0, ENDERMAN_COSTUME),
     ENDERMAN_CUSTOME_BOOTS(EndermanCostume.EndermanBoots::new, LEATHER_BOOTS, null, (char) 0, ENDERMAN_COSTUME),
+    SKELETON_CUSTOME_HELMET(SkeletonCostume.SkeletonHelmet::new, SKELETON_SKULL, null, (char) 0, SKELETON_COSTUME),
+    SKELETON_CUSTOME_CHESTPLATE(SkeletonCostume.SkeletonChestplate::new, LEATHER_CHESTPLATE, null, (char) 0, SKELETON_COSTUME),
+    SKELETON_CUSTOME_LEGGINGS(SkeletonCostume.SkeletonLeggings::new, LEATHER_LEGGINGS, null, (char) 0, SKELETON_COSTUME),
+    SKELETON_CUSTOME_BOOTS(SkeletonCostume.SkeletonBoots::new, LEATHER_BOOTS, null, (char) 0, SKELETON_COSTUME),
     // Scarlet
     SCARLET_HELMET(ScarletItem.Helmet::new, PLAYER_HEAD, 156, SCARLET),
     SCARLET_CHESTPLATE(ScarletItem.Chestplate::new, LEATHER_CHESTPLATE, 157, SCARLET),

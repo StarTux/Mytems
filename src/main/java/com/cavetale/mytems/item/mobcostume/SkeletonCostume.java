@@ -14,9 +14,9 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
-import org.bukkit.entity.Creeper;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Spider;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
@@ -26,11 +26,11 @@ import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 @Getter @RequiredArgsConstructor
-public abstract class CreeperCostume implements GearItem {
+public abstract class SkeletonCostume implements GearItem {
     protected final Mytems key;
     protected final ItemStack prototype;
     protected final Component displayName;
-    protected static final TextColor COLOR = TextColor.color(0x62D153);
+    protected static final TextColor COLOR = TextColor.color(0xBCBCBC);
     private static final SetBonus SET_BONUS = new SetBonus() {
             @Override
             public ItemSet getItemSet() {
@@ -44,18 +44,18 @@ public abstract class CreeperCostume implements GearItem {
 
             @Override
             public String getName() {
-                return "Creeper Camo";
+                return "Skeleton Party";
             }
 
             @Override
             public String getDescription() {
-                return "Creepers will not attack you but will allow you to pick them up";
+                return "Skeletons will not attack you, and you can ride spiders";
             }
 
             @Override
             public void onEntityTargetPlayer(EntityTargetEvent event, Player player) {
                 if (event.isCancelled()) return;
-                if (event.getEntity().getType() == EntityType.CREEPER) {
+                if (event.getEntity().getType() == EntityType.SKELETON) {
                     event.setCancelled(true);
                 }
             }
@@ -63,18 +63,17 @@ public abstract class CreeperCostume implements GearItem {
             @Override
             public void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player) {
                 if (player.getGameMode() == GameMode.SPECTATOR) return;
-                if (!(event.getRightClicked() instanceof Creeper creeper)) return;
-                if (!player.getPassengers().isEmpty()) return;
-                if (creeper.isInsideVehicle()) return;
-                if (!PlayerEntityAbilityQuery.Action.PICKUP.query(player, creeper)) return;
-                player.addPassenger(creeper);
+                if (!(event.getRightClicked() instanceof Spider spider)) return;
+                if (!spider.getPassengers().isEmpty()) return;
+                if (!PlayerEntityAbilityQuery.Action.MOUNT.query(player, spider)) return;
+                spider.addPassenger(player);
                 player.playSound(player.getLocation(), Sound.ENTITY_HORSE_SADDLE, 1.0f, 1.0f);
             }
         };
     private static final ItemSet ITEM_SET = new ItemSet() {
             @Override
             public String getName() {
-                return "Creeper Costume";
+                return "Skeleton Costume";
             }
 
             @Override
@@ -106,47 +105,47 @@ public abstract class CreeperCostume implements GearItem {
         return ITEM_SET;
     }
 
-    public static final class CreeperHelmet extends CreeperCostume {
-        public CreeperHelmet(final Mytems key) {
-            super(key, new ItemStack(key.material), text("Creeper Mask", COLOR));
+    public static final class SkeletonHelmet extends SkeletonCostume {
+        public SkeletonHelmet(final Mytems key) {
+            super(key, new ItemStack(key.material), text("Skeleton Mask", COLOR));
         }
 
         @Override
         public List<Component> getBaseLore() {
-            return Text.wrapLore("Trick or treat! The trick is that you explode.", c -> c.color(GRAY));
+            return Text.wrapLore("Did you know that you have a skeleton skull inside your head?", c -> c.color(GRAY));
         }
     }
 
-    public static final class CreeperChestplate extends CreeperCostume {
-        public CreeperChestplate(final Mytems key) {
-            super(key, leatherArmor(key.material, COLOR), text("Creeper Pajama Top", COLOR));
+    public static final class SkeletonChestplate extends SkeletonCostume {
+        public SkeletonChestplate(final Mytems key) {
+            super(key, leatherArmor(key.material, COLOR), text("Ribcage Costume", COLOR));
         }
 
         @Override
         public List<Component> getBaseLore() {
-            return Text.wrapLore("Inofficial creeper apparel, kid size.", c -> c.color(GRAY));
+            return Text.wrapLore("Did you know that there are 206 bones in the human body?", c -> c.color(GRAY));
         }
     }
 
-    public static final class CreeperLeggings extends CreeperCostume {
-        public CreeperLeggings(final Mytems key) {
-            super(key, leatherArmor(key.material, COLOR), text("Creeper Pajama Bottom", COLOR));
+    public static final class SkeletonLeggings extends SkeletonCostume {
+        public SkeletonLeggings(final Mytems key) {
+            super(key, leatherArmor(key.material, COLOR), text("Skeleton Legs", COLOR));
         }
 
         @Override
         public List<Component> getBaseLore() {
-            return Text.wrapLore("Wash at 40°C.", c -> c.color(GRAY));
+            return Text.wrapLore("Break a leg bone!", c -> c.color(GRAY));
         }
     }
 
-    public static final class CreeperBoots extends CreeperCostume {
-        public CreeperBoots(final Mytems key) {
-            super(key, leatherArmor(key.material, COLOR), text("Creeper Slippers", COLOR));
+    public static final class SkeletonBoots extends SkeletonCostume {
+        public SkeletonBoots(final Mytems key) {
+            super(key, leatherArmor(key.material, COLOR), text("Skeleton Feet", COLOR));
         }
 
         @Override
         public List<Component> getBaseLore() {
-            return Text.wrapLore("Only suitable for indoor wearing.", c -> c.color(GRAY));
+            return Text.wrapLore("Each toe is fully articulated.", c -> c.color(GRAY));
         }
     }
 }
