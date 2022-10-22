@@ -124,7 +124,7 @@ public abstract class CreeperCostume implements GearItem {
 
         @Override
         public List<Component> getBaseLore() {
-            return Text.wrapLore("Inofficial creeper apparel, kid size.", c -> c.color(GRAY));
+            return Text.wrapLore("Unofficial creeper apparel, kid size.", c -> c.color(GRAY));
         }
     }
 
