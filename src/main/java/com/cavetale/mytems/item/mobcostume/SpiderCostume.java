@@ -66,7 +66,8 @@ public abstract class SpiderCostume implements GearItem {
 
             private static boolean isTouchingWalls(Player player) {
                 final double expand = 0.0625;
-                BoundingBox bb = player.getBoundingBox().expand(expand, 0.0, expand);
+                BoundingBox bb = player.getBoundingBox().expand(expand, 0.0, expand)
+                    .expand(0.0, -0.125, 0.0, 0.0, 0.0, 0.0);
                 return collidesWithBlock(player.getWorld(), bb);
             }
 
