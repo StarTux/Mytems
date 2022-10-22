@@ -232,6 +232,9 @@ public final class PocketMobTag extends MytemTag {
                     nameComponents.add(0, "Tamed");
                 }
             }
+            if (entity.isGlowing()) {
+                nameComponents.add(0, "Glowing");
+            }
             if (finalNameComponent != null) {
                 nameComponents.add(finalNameComponent);
             }
