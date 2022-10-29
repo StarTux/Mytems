@@ -295,4 +295,9 @@ public final class HyruleInstrument implements Mytem {
         default: break;
         }
     }
+
+    @Override
+    public int getMaxStackSize() {
+        return 1;
+    }
 }

@@ -561,4 +561,9 @@ public final class MusicalInstrument implements Mytem {
         }
         Items.text(meta, text);
     }
+
+    @Override
+    public int getMaxStackSize() {
+        return 1;
+    }
 }
