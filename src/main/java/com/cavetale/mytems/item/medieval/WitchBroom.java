@@ -156,7 +156,7 @@ public final class WitchBroom implements Mytem, Listener {
                     armorStand.remove();
                     cancel();
                     player.setFallDistance(0);
-                    player.sendMessage(text("You exit the Witch Broom", GRAY));
+                    player.sendActionBar(text("You exit the Witch Broom", GRAY));
                     sessionOf(player).getFavorites().clear(SessionData.class);
                     return;
                 }
@@ -165,7 +165,7 @@ public final class WitchBroom implements Mytem, Listener {
                 player.getWorld().spawnParticle(Particle.WAX_ON, location, 1, 0.0, 0.0, 0.0, 0.0);
             }
         }.runTaskTimer(MytemsPlugin.getInstance(), 0L, 0L);
-        player.sendMessage(text("You mount the Witch Broom!", GRAY));
+        player.sendActionBar(text("You mount the Witch Broom!", GRAY));
         player.playSound(player.getLocation(), Sound.ENTITY_PIG_SADDLE, SoundCategory.MASTER, 1.0f, 1.0f);
     }
 
