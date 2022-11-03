@@ -1082,6 +1082,15 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
         final ItemStack item;
         if (material == PLAYER_HEAD) {
             item = Skull.of(createItemStack()).create();
+        } else if (material == LEATHER_HELMET
+                   || material == LEATHER_CHESTPLATE
+                   || material == LEATHER_LEGGINGS
+                   || material == LEATHER_BOOTS) {
+            item = createItemStack();
+            item.editMeta(meta -> {
+                    meta.displayName(Component.empty());
+                    meta.lore(List.of());
+                });
         } else {
             item = new ItemStack(material);
         }
