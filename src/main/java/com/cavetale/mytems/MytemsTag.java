@@ -48,7 +48,7 @@ public final class MytemsTag {
             MytemsCategory.HALLOWEEN,
             MytemsCategory.MAY,
         });
-    public static final MytemsTag CUSTOME = new MytemsTag("costume", new MytemsCategory[] {
+    public static final MytemsTag COSTUME = new MytemsTag("costume", new MytemsCategory[] {
             MytemsCategory.CREEPER_COSTUME,
             MytemsCategory.SPIDER_COSTUME,
             MytemsCategory.ENDERMAN_COSTUME,
