@@ -75,6 +75,7 @@ import com.cavetale.mytems.item.wrench.MonkeyWrench;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Skull;
 import com.cavetale.worldmarker.item.ItemMarker;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -433,6 +434,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     SHIFT_KEY(ForbiddenMytem::new, LIGHT_GRAY_CONCRETE, 339, UI),
     THUMBS_UP(ForbiddenMytem::new, GREEN_CONCRETE, 340, UI),
     EYES(ForbiddenMytem::new, SPYGLASS, 595, UI),
+    RAINBOW_BUTTERFLY(ForbiddenMytem::new, FEATHER, 633, (char) 633, chrarr(633, 634, 635, 636, 637, 638, 639, 640), UI),
     // Collectibles
     HEART(DummyMytem::new, HEART_OF_THE_SEA, 9, (char) 0xE241, COLLECTIBLES),
     STAR(DummyMytem::new, NETHER_STAR, 18, (char) 0xE24B, COLLECTIBLES),
@@ -567,11 +569,11 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     SILVER_KEYHOLE(ForbiddenMytem::new, IRON_BLOCK, 181, KEYHOLE),
     GOLDEN_KEYHOLE(ForbiddenMytem::new, GOLD_BLOCK, 182, KEYHOLE),
     // Coins
-    COPPER_COIN(Coin::new, COPPER_INGOT, 183, COIN),
-    SILVER_COIN(Coin::new, IRON_INGOT, 184, COIN),
-    GOLDEN_COIN(Coin::new, GOLD_INGOT, 185, COIN),
-    DIAMOND_COIN(Coin::new, DIAMOND, 275, COIN),
-    RUBY_COIN(Coin::new, EMERALD, 316, COIN),
+    COPPER_COIN(Coin::new, COPPER_INGOT, 183, (char) 183, chrarr(604, 605, 183, 606, 607, 608, 609, 610), COIN),
+    SILVER_COIN(Coin::new, IRON_INGOT, 184, (char) 184, chrarr(611, 612, 184, 613, 614, 615, 616, 617), COIN),
+    GOLDEN_COIN(Coin::new, GOLD_INGOT, 185, (char) 185, chrarr(597, 598, 185, 599, 600, 601, 602, 603), COIN),
+    DIAMOND_COIN(Coin::new, DIAMOND, 275, (char) 275, chrarr(618, 619, 275, 620, 621, 622, 623, 624), COIN),
+    RUBY_COIN(Coin::new, EMERALD, 316, (char) 316, chrarr(625, 626, 316, 627, 628, 629, 630, 631), COIN),
     // Paintbrush
     BLACK_PAINTBRUSH(Paintbrush::new, WOODEN_SHOVEL, 186, PAINTBRUSH),
     RED_PAINTBRUSH(Paintbrush::new, WOODEN_SHOVEL, 187, PAINTBRUSH),
@@ -936,6 +938,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     public final Material material;
     public final Integer customModelData;
     public final char character;
+    public final char[] animation; // Contains `character'
     public final Component component;
     public final MytemsCategory category;
 
@@ -955,12 +958,16 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
         ID_MAP.put("fireman_helmet", FIREFIGHTER_HELMET);
     }
 
-    Mytems(final Function<Mytems, Mytem> ctor, final Material material, final Integer customModelData, final char character, final MytemsCategory category) {
+    Mytems(final Function<Mytems, Mytem> ctor, final Material material,
+           final Integer customModelData,
+           final char character, final char[] animation,
+           final MytemsCategory category) {
         this.ctor = ctor;
         this.id = name().toLowerCase();
         this.material = material;
         this.customModelData = customModelData;
         this.character = character;
+        this.animation = animation;
         this.component = character > 0
             ? (Component.text(character)
                .style(Style.style()
@@ -970,8 +977,24 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
         this.category = category;
     }
 
-    Mytems(final Function<Mytems, Mytem> ctor, final Material material, final int customModelData, final MytemsCategory category) {
-        this(ctor, material, customModelData, (char) customModelData, category);
+    Mytems(final Function<Mytems, Mytem> ctor, final Material material,
+           final Integer customModelData,
+           final char character,
+           final MytemsCategory category) {
+        this(ctor, material, customModelData, character, new char[] {character}, category);
+    }
+
+    Mytems(final Function<Mytems, Mytem> ctor, final Material material,
+           final int customModelData, final MytemsCategory category) {
+        this(ctor, material, customModelData, (char) customModelData, chrarr(customModelData), category);
+    }
+
+    private static char[] chrarr(int... values) {
+        char[] result = new char[values.length];
+        for (int i = 0; i < values.length; i += 1) {
+            result[i] = (char) values[i];
+        }
+        return result;
     }
 
     public static Mytems forId(String in) {
@@ -1168,5 +1191,33 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
         return tagA != null
             ? tagA.isSimilar(tagB)
             : tagB.isSimilar(tagA);
+    }
+
+    public boolean isAnimated() {
+        return animation.length > 1;
+    }
+
+    public int getAnimationFrameCount() {
+        return animation.length;
+    }
+
+    public Component getAnimationFrame(int index) {
+        char chr = animation[index];
+        if ((int) chr == 0) {
+            throw new IllegalArgumentException(this + ": Animation frame " + index + " is 0!");
+        }
+        return Component.text(chr)
+            .style(Style.style()
+                   .font(Key.key("cavetale:default"))
+                   .color(NamedTextColor.WHITE));
+    }
+
+    public List<Component> getAnimationFrames() {
+        List<Component> list = new ArrayList<>(animation.length);
+        for (int i = 0; i < animation.length; i += 1) {
+            if (animation[i] == (char) 0) continue;
+            list.add(getAnimationFrame(i));
+        }
+        return list;
     }
 }

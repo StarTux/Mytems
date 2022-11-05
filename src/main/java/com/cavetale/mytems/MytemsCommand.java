@@ -37,7 +37,10 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
+import static net.kyori.adventure.text.Component.newline;
+import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
 import static net.kyori.adventure.text.JoinConfiguration.separator;
@@ -79,6 +82,10 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         rootNode.addChild("glyph").arguments("<text...>")
             .description("Turn text into glyphs")
             .senderCaller(this::glyph);
+        rootNode.addChild("animation").arguments("<mytem>")
+            .description("Print animation frames")
+            .completers(CommandArgCompleter.enumLowerList(Mytems.class))
+            .senderCaller(this::animation);
         // Serialize
         CommandNode serializeNode = rootNode.addChild("serialize")
             .description("Item serialization commands");
@@ -129,10 +136,10 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
                            text(mytems.ordinal() + ") ", GRAY),
                            mytems.component.insertion(GsonComponentSerializer.gson().serialize(mytems.component)),
                            mytems.getMytem().getDisplayName(),
-                           Component.space(),
+                           space(),
                            text(mytems.id, DARK_GRAY).insertion(mytems.id)));
         }
-        sender.sendMessage(join(separator(Component.newline()), lines));
+        sender.sendMessage(join(separator(newline()), lines));
         return true;
     }
 
@@ -172,7 +179,7 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
             if (retain >= amount) {
                 throw new CommandWarn("Could not add item to inventory: " + mytems + ", " + target.getName());
             }
-            Component component = Component.empty().color(YELLOW)
+            Component component = empty().color(YELLOW)
                 .append(text("" + (amount - retain)).color(WHITE))
                 .append(text("x").color(DARK_GRAY))
                 .append(mytems.component)
@@ -248,6 +255,15 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
                                    .insertion(output)));
         sender.sendMessage(text("Raw ", YELLOW)
                            .append(text(output, WHITE).insertion(output)));
+        return true;
+    }
+
+    protected boolean animation(CommandSender sender, String[] args) {
+        if (args.length != 1) return false;
+        Mytems mytems = CommandArgCompleter.requireEnum(Mytems.class, args[0]);
+        if (mytems.character == (char) 0) throw new CommandWarn(mytems + " does not have a chat character!");
+        sender.sendMessage(text(mytems + " has " + mytems.getAnimationFrameCount() + " animation frames:", AQUA));
+        sender.sendMessage(join(separator(space()), mytems.getAnimationFrames()));
         return true;
     }
 

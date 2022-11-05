@@ -29,9 +29,19 @@ public final class MytemsTest {
             }
             if (mytems.character != (char) 0) {
                 if (characterSet.contains(mytems.character)) {
-                    throw new IllegalStateException(mytems + ": duplicate character: " + Integer.toHexString((int) mytems.character));
+                    int num = (int) mytems.character;
+                    throw new IllegalStateException(mytems + ": duplicate character: " + num + " 0x" + Integer.toHexString(num));
                 }
                 characterSet.add(mytems.character);
+            }
+            for (Character it : mytems.animation) {
+                if (it == null || it == (char) 0 || it == mytems.character) continue;
+                if (characterSet.contains(it)) {
+                    int num = (int) it;
+                    throw new IllegalStateException(mytems + ": duplicate character: " + num + " 0x" + Integer.toHexString(num));
+                }
+                characterSet.add(it);
+                customModelDataSet.add((int) it);
             }
         }
         int max;
