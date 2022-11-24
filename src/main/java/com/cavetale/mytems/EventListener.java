@@ -3,12 +3,14 @@ package com.cavetale.mytems;
 import com.cavetale.mytems.event.combat.DamageCalculation;
 import com.cavetale.mytems.event.combat.DamageCalculationEvent;
 import com.cavetale.mytems.gear.SetBonus;
+import com.cavetale.mytems.util.Entities;
 import com.cavetale.mytems.util.Gui;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.worldmarker.entity.EntityMarker;
 import com.cavetale.worldmarker.item.ItemMarker;
 import com.cavetale.worldmarker.util.Tags;
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
+import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
 import com.destroystokyo.paper.event.entity.ProjectileCollideEvent;
 import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
@@ -711,6 +713,14 @@ public final class EventListener implements Listener {
     private void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
         if (event.isSneaking()) {
             event.getPlayer().eject();
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    private void onEntityRemoveFromWorld(EntityRemoveFromWorldEvent event) {
+        Entity entity = event.getEntity();
+        if (Entities.isTransient(entity)) {
+            Bukkit.getScheduler().runTask(plugin, () -> entity.remove());
         }
     }
 }
