@@ -4,15 +4,18 @@ import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Skull;
+import com.cavetale.mytems.util.Text;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.JoinConfiguration;
-import net.kyori.adventure.text.format.NamedTextColor;
-import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.inventory.ItemStack;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.textOfChildren;
+import static net.kyori.adventure.text.format.NamedTextColor.*;
+import static net.kyori.adventure.text.format.TextColor.color;
 
 @Getter @RequiredArgsConstructor
 public final class ChristmasToken implements Mytem {
@@ -22,34 +25,28 @@ public final class ChristmasToken implements Mytem {
 
     @Override
     public void enable() {
-        displayName = Component.join(JoinConfiguration.noSeparators(), new Component[] {
-                Component.text("C", TextColor.color(0x1111ff)),
-                Component.text("h", TextColor.color(0x3333ff)),
-                Component.text("r", NamedTextColor.BLUE),
-                Component.text("i", TextColor.color(0x7777ff)),
-                Component.text("s", TextColor.color(0x9999ff)),
-                Component.text("t", TextColor.color(0xbbbbff)),
-                Component.text("m", TextColor.color(0xddddff)),
-                Component.text("a", NamedTextColor.WHITE),
-                Component.text("s", TextColor.color(0xddddff)),
-                Component.text(" ", TextColor.color(0xbbbbff)),
-                Component.text("T", TextColor.color(0x9999ff)),
-                Component.text("o", TextColor.color(0x7777ff)),
-                Component.text("k", NamedTextColor.BLUE),
-                Component.text("e", TextColor.color(0x3333ff)),
-                Component.text("n", TextColor.color(0x1111ff)),
-            });
-        List<Component> text = List.of(new Component[] {
-                displayName,
-                Component.text("Christmas Event 2020", NamedTextColor.DARK_GRAY),
-                Component.empty(),
-                Component.text("Ho ho ho! Find out how to", NamedTextColor.BLUE),
-                Component.text("exchange this token for actual", NamedTextColor.BLUE),
-                Component.text("goodies.", NamedTextColor.BLUE),
-                Component.empty(),
-                Component.text("You will when Santa comes to", NamedTextColor.BLUE),
-                Component.text("town.", NamedTextColor.BLUE),
-            });
+        displayName = textOfChildren(text("C", color(0x1111ff)),
+                                     text("h", color(0x3333ff)),
+                                     text("r", BLUE),
+                                     text("i", color(0x7777ff)),
+                                     text("s", color(0x9999ff)),
+                                     text("t", color(0xbbbbff)),
+                                     text("m", color(0xddddff)),
+                                     text("a", WHITE),
+                                     text("s", color(0xddddff)),
+                                     text(" ", color(0xbbbbff)),
+                                     text("T", color(0x9999ff)),
+                                     text("o", color(0x7777ff)),
+                                     text("k", BLUE),
+                                     text("e", color(0x3333ff)),
+                                     text("n", color(0x1111ff)));
+        String rawText = ""
+            + "Ho ho ho! Find out how to exchange this token for actual goodies."
+            + "\n\n"
+            + "You will when Santa comes to town.";
+        List<Component> text = new ArrayList<>();
+        text.add(displayName);
+        text.addAll(Text.wrapLore(rawText, c -> c.color(BLUE)));
         String texture = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6"
             + "Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUv"
             + "ZjU2MTJkYzdiODZkNzFhZmMxMTk3MzAxYzE1ZmQ5Nzll"
