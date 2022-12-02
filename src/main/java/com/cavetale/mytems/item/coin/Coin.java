@@ -15,6 +15,7 @@ import java.util.List;
 import java.util.Locale;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -111,16 +112,18 @@ public final class Coin implements Mytem {
 
     public static Component format(double amount) {
         Denomination denomination = Denomination.COPPER;
+        final double abs = Math.abs(amount);
         for (Denomination deno : Denomination.values()) {
-            if ((double) deno.value <= amount) {
+            if ((double) deno.value <= abs) {
                 denomination = deno;
             }
         }
-        String format = formatHelper(amount);
+        final String format = formatHelper(amount);
+        final TextColor color = amount >= 0 ? denomination.color : DARK_RED;
         return join(noSeparators(), denomination.mytems.component, text(format))
-            .color(denomination.color)
+            .color(color)
             .hoverEvent(showText(join(separator(newline()),
-                                      text(format + " Coins", denomination.color),
+                                      text(format + " Coins", color),
                                       text("/money", GRAY))))
             .clickEvent(runCommand("/money"));
     }
