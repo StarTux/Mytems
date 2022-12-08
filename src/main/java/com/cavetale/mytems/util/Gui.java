@@ -3,6 +3,7 @@ package com.cavetale.mytems.util;
 import com.cavetale.mytems.MytemsPlugin;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 import java.util.function.Consumer;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,7 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryDragEvent;
@@ -36,13 +36,13 @@ public final class Gui implements InventoryHolder {
     private Map<Integer, Slot> slots = new HashMap<>();
     private Consumer<InventoryCloseEvent> onClose = null;
     private Consumer<InventoryOpenEvent> onOpen = null;
+    private Consumer<InventoryClickEvent> onClick = null;
     @Getter @Setter private boolean editable = false;
     @Getter private int size = 3 * 9;
     @Getter private Component title = Component.empty();
     @Getter @Setter private InventoryType inventoryType = null;
     protected boolean locked = false;
-    @Getter @Setter protected int lockedSlot = -1;
-    @Getter @Setter private boolean dropping;
+    private static final Map<UUID, Gui> GUI_MAP = new HashMap<>();
 
     @RequiredArgsConstructor @AllArgsConstructor
     private static final class Slot {
@@ -152,6 +152,11 @@ public final class Gui implements InventoryHolder {
         return this;
     }
 
+    public Gui onClick(Consumer<InventoryClickEvent> responder) {
+        onClick = responder;
+        return this;
+    }
+
     public Gui clear() {
         if (inventory != null) inventory.clear();
         slots.clear();
@@ -160,48 +165,25 @@ public final class Gui implements InventoryHolder {
         return this;
     }
 
-    void onInventoryOpen(InventoryOpenEvent event) {
+    private void onInventoryOpen(InventoryOpenEvent event) {
         if (onOpen != null) {
             Bukkit.getScheduler().runTask(plugin, () -> onOpen.accept(event));
         }
     }
 
-    void onInventoryClose(InventoryCloseEvent event) {
+    private void onInventoryClose(InventoryCloseEvent event) {
         if (onClose != null) {
             onClose.accept(event);
         }
     }
 
-    void onInventoryClick(InventoryClickEvent event) {
+    private void onInventoryClick(InventoryClickEvent event) {
+        if (onClick != null) {
+            onClick.accept(event);
+            if (event.isCancelled()) return;
+        }
         if (!editable) {
             event.setCancelled(true);
-        } else if (lockedSlot >= 0) {
-            if (event.getView().getBottomInventory().equals(event.getView().getInventory(event.getRawSlot()))) {
-                if (event.getSlot() == lockedSlot) {
-                    event.setCancelled(true);
-                    return;
-                }
-            }
-            if (event.getClick() == ClickType.NUMBER_KEY) {
-                if (lockedSlot == event.getHotbarButton()) {
-                    event.setCancelled(true);
-                    return;
-                }
-            } else if (event.getClick() == ClickType.SWAP_OFFHAND) {
-                Bukkit.getScheduler().runTaskLater(plugin, () -> ((Player) event.getWhoClicked()).updateInventory(), 10L);
-                if (lockedSlot == OFF_HAND) {
-                    event.setCancelled(true);
-                    return;
-                }
-            }
-            switch (event.getClick()) {
-            case DROP:
-            case CONTROL_DROP:
-                this.dropping = true;
-                Bukkit.getScheduler().runTask(plugin, () -> this.dropping = false);
-            default: break;
-            }
-            return;
         }
         if (locked) return;
         if (!(event.getWhoClicked() instanceof Player)) return;
@@ -222,16 +204,6 @@ public final class Gui implements InventoryHolder {
     void onInventoryDrag(InventoryDragEvent event) {
         if (!editable) {
             event.setCancelled(true);
-        } else if (lockedSlot >= 0) {
-            for (int raw : event.getRawSlots()) {
-
-                if (event.getView().getBottomInventory().equals(event.getView().getInventory(raw))) {
-                    if (lockedSlot == event.getView().convertSlot(raw)) {
-                        event.setCancelled(true);
-                    }
-                }
-            }
-            return;
         }
     }
 
@@ -239,29 +211,44 @@ public final class Gui implements InventoryHolder {
     public static final class EventListener implements Listener {
         @EventHandler(ignoreCancelled = false, priority = EventPriority.LOWEST)
         void onInventoryOpen(final InventoryOpenEvent event) {
-            if (event.getInventory().getHolder() instanceof Gui) {
-                ((Gui) event.getInventory().getHolder()).onInventoryOpen(event);
+            if (event.getInventory().getHolder() instanceof Gui gui) {
+                gui.onInventoryOpen(event);
+            } else if (event.getPlayer() instanceof Player player) {
+                Gui gui = Gui.of(player);
+                if (gui != null) gui.onInventoryOpen(event);
             }
         }
 
         @EventHandler(ignoreCancelled = false, priority = EventPriority.LOWEST)
         void onInventoryClose(final InventoryCloseEvent event) {
-            if (event.getInventory().getHolder() instanceof Gui) {
-                ((Gui) event.getInventory().getHolder()).onInventoryClose(event);
+            if (event.getInventory().getHolder() instanceof Gui gui) {
+                gui.onInventoryClose(event);
+            } else if (event.getPlayer() instanceof Player player) {
+                Gui gui = Gui.of(player);
+                if (gui != null) {
+                    GUI_MAP.remove(player.getUniqueId());
+                    gui.onInventoryClose(event);
+                }
             }
         }
 
         @EventHandler(ignoreCancelled = false, priority = EventPriority.LOWEST)
         void onInventoryClick(final InventoryClickEvent event) {
-            if (event.getInventory().getHolder() instanceof Gui) {
-                ((Gui) event.getInventory().getHolder()).onInventoryClick(event);
+            if (event.getInventory().getHolder() instanceof Gui gui) {
+                gui.onInventoryClick(event);
+            } else if (event.getWhoClicked() instanceof Player player) {
+                Gui gui = Gui.of(player);
+                if (gui != null) gui.onInventoryClick(event);
             }
         }
 
         @EventHandler(ignoreCancelled = false, priority = EventPriority.LOWEST)
         void onInventoryDrag(final InventoryDragEvent event) {
-            if (event.getInventory().getHolder() instanceof Gui) {
-                ((Gui) event.getInventory().getHolder()).onInventoryDrag(event);
+            if (event.getInventory().getHolder() instanceof Gui gui) {
+                gui.onInventoryDrag(event);
+            } else if (event.getWhoClicked() instanceof Player player) {
+                Gui gui = Gui.of(player);
+                if (gui != null) gui.onInventoryDrag(event);
             }
         }
 
@@ -279,14 +266,22 @@ public final class Gui implements InventoryHolder {
         }
     }
 
+    public void open(Player player, Inventory theInventory) {
+        player.closeInventory();
+        this.inventory = theInventory;
+        GUI_MAP.put(player.getUniqueId(), this);
+        player.openInventory(inventory);
+    }
+
     public static Gui of(Player player) {
+        Gui mapped = GUI_MAP.get(player.getUniqueId());
+        if (mapped != null) return mapped;
         InventoryView view = player.getOpenInventory();
         if (view == null) return null;
         Inventory topInventory = view.getTopInventory();
         if (topInventory == null) return null;
         InventoryHolder holder = topInventory.getHolder();
-        if (!(holder instanceof Gui)) return null;
-        Gui gui = (Gui) holder;
+        if (!(holder instanceof Gui gui)) return null;
         return gui;
     }
 

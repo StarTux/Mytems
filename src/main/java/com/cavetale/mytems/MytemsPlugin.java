@@ -8,6 +8,7 @@ import com.cavetale.mytems.item.photo.Photo;
 import com.cavetale.mytems.loot.LootTableListener;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.session.Sessions;
+import com.cavetale.mytems.shulker.ShulkerBoxListener;
 import com.cavetale.mytems.util.Gui;
 import java.util.ArrayList;
 import java.util.EnumMap;
@@ -60,6 +61,7 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
         instance = this;
         mytemsCommand.enable();
         eventListener.enable();
+        new ShulkerBoxListener(this).enable();
         enableItems();
         fixAllPlayerInventoriesLater();
         sessions.enable();

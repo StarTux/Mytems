@@ -4,8 +4,6 @@ import com.cavetale.mytems.event.combat.DamageCalculation;
 import com.cavetale.mytems.event.combat.DamageCalculationEvent;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.util.Entities;
-import com.cavetale.mytems.util.Gui;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.worldmarker.entity.EntityMarker;
 import com.cavetale.worldmarker.item.ItemMarker;
 import com.cavetale.worldmarker.util.Tags;
@@ -15,9 +13,7 @@ import com.destroystokyo.paper.event.entity.ProjectileCollideEvent;
 import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -30,8 +26,6 @@ import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
-import org.bukkit.Tag;
-import org.bukkit.block.ShulkerBox;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.enchantments.EnchantmentOffer;
 import org.bukkit.entity.AbstractArrow;
@@ -58,7 +52,6 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
@@ -76,14 +69,11 @@ import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.EntitiesLoadEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
-import org.bukkit.inventory.meta.BlockStateMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.plugin.java.JavaPlugin;
-import static net.kyori.adventure.text.Component.text;
 
 @RequiredArgsConstructor
 public final class EventListener implements Listener {
@@ -104,6 +94,11 @@ public final class EventListener implements Listener {
         case RIGHT_CLICK_BLOCK:
         case RIGHT_CLICK_AIR: {
             ItemStack item = event.getItem();
+            if (item != null && item.getType() == Material.WRITTEN_BOOK) {
+                // Close inventories before opening any books because
+                // InventoryCloseEvent is never called!
+                event.getPlayer().closeInventory();
+            }
             Mytems mytems = Mytems.forItem(item);
             if (mytems == null) return;
             mytems.getMytem().onPlayerRightClick(event, event.getPlayer(), item);
@@ -257,14 +252,6 @@ public final class EventListener implements Listener {
     @EventHandler
     private void onInventoryClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) return;
-        // We could also check:
-        // player.getOpenInventory().getTopInventory().getHolder() instanceof Gui
-        if (!event.getView().equals(player.getOpenInventory())) {
-            plugin.getLogger().severe(player.getName() + " tried to click non-opened inventory");
-            event.setCancelled(true);
-            Bukkit.getScheduler().runTask(plugin, () -> player.closeInventory());
-            return;
-        }
         if (event.getClickedInventory() instanceof PlayerInventory) {
             plugin.sessions.of(player).equipmentDidChange();
         }
@@ -285,16 +272,6 @@ public final class EventListener implements Listener {
     @EventHandler
     private void onPlayerDropItem(PlayerDropItemEvent event) {
         Player player = event.getPlayer();
-        if (player.getOpenInventory().getTopInventory().getHolder() instanceof Gui gui) {
-            if (gui.isDropping()) {
-                gui.setDropping(false);
-                return;
-            }
-            event.setCancelled(true);
-            Bukkit.getScheduler().runTask(plugin, () -> player.closeInventory());
-            plugin.getLogger().severe(player.getName() + " tried to drop with open GUI");
-            return;
-        }
         ItemStack item = event.getItemDrop().getItemStack();
         Mytems mytems = Mytems.forItem(item);
         if (mytems != null) {
@@ -323,12 +300,6 @@ public final class EventListener implements Listener {
     @EventHandler
     void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
         Player player = event.getPlayer();
-        if (player.getOpenInventory().getTopInventory().getHolder() instanceof Gui) {
-            event.setCancelled(true);
-            Bukkit.getScheduler().runTask(plugin, () -> player.closeInventory());
-            plugin.getLogger().severe(player.getName() + " tried to swap off-hand with open GUI");
-            return;
-        }
         plugin.sessions.of(player).equipmentDidChange();
     }
 
@@ -527,93 +498,6 @@ public final class EventListener implements Listener {
         if (!(event.getEntity() instanceof Trident trident)) return;
         if (!EntityMarker.hasId(trident, "mytems:trident")) return;
         trident.remove();
-    }
-
-    /**
-     * A shulker box in hand is opened when right clicking under the
-     * following conditions.
-     * - Player in survival or adventure mode.
-     * - Not sneaking
-     * - Not facing interactable block
-     * - Uses main hand
-     */
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
-    protected void onPlayerClickShulkerBox(PlayerInteractEvent event) {
-        switch (event.getAction()) {
-        case RIGHT_CLICK_BLOCK:
-        case RIGHT_CLICK_AIR: break;
-        default: return;
-        }
-        if (event.getHand() != EquipmentSlot.HAND) return;
-        Player player = event.getPlayer();
-        if (player.isSneaking()) return;
-        if (player.getGameMode() != GameMode.SURVIVAL && player.getGameMode() != GameMode.ADVENTURE) {
-            return;
-        }
-        if (event.hasBlock() && event.getClickedBlock().getType().isInteractable()) return;
-        if (!event.hasItem()) return;
-        final ItemStack itemStack = event.getItem();
-        if (itemStack == null) return;
-        final Material itemType = itemStack.getType();
-        if (!Tag.SHULKER_BOXES.isTagged(itemType)) return;
-        if (!(itemStack.getItemMeta() instanceof BlockStateMeta shulkerMeta)) return;
-        if (!(shulkerMeta.getBlockState() instanceof ShulkerBox shulkerBox)) return;
-        event.setCancelled(true);
-        if (player.getOpenInventory().getType() != InventoryType.CRAFTING) return;
-        player.getOpenInventory().close();
-        Inventory shulkerInventory = shulkerBox.getInventory();
-        final int size = shulkerInventory.getSize();
-        Gui gui = new Gui()
-            .type(InventoryType.SHULKER_BOX)
-            .size(size)
-            .title(shulkerMeta.hasDisplayName()
-                   ? shulkerMeta.displayName()
-                   : text("Shulker Box"));
-        gui.setEditable(true);
-        gui.setLockedSlot(event.getHand() == EquipmentSlot.OFF_HAND
-                          ? Gui.OFF_HAND
-                          : player.getInventory().getHeldItemSlot());
-        gui.onOpen(evt -> {
-                final ItemStack itemStack2 = player.getInventory().getItemInMainHand();
-                if (itemStack2 == null || itemStack2.getType() != itemType) {
-                    plugin.getLogger().severe(player.getName() + " opened invalid shulker box: " + itemStack2.getType());
-                    return;
-                }
-                for (int i = 0; i < size; i += 1) {
-                    ItemStack item = shulkerInventory.getItem(i);
-                    if (item == null || item.getType().isAir()) continue;
-                    gui.setItem(i, item);
-                }
-                shulkerInventory.clear();
-                shulkerMeta.setBlockState(shulkerBox);
-                itemStack2.setItemMeta(shulkerMeta);
-            });
-        gui.onClose(evt -> {
-                ItemStack itemStack2 = player.getInventory().getItemInMainHand();
-                // Check for error
-                if (itemStack2 == null || itemStack2.getType() != itemType) {
-                    List<String> list = new ArrayList<>();
-                    for (int i = 0; i < size; i += 1) {
-                        ItemStack item = gui.getInventory().getItem(i);
-                        if (item == null || item.getType().isAir()) continue;
-                        list.add(Items.serializeToBase64(item));
-                    }
-                    plugin.getLogger().severe(player.getName() + " lost shulker box: " + list);
-                    return;
-                }
-                // Move/copy items
-                for (int i = 0; i < size; i += 1) {
-                    ItemStack item = gui.getInventory().getItem(i);
-                    if (item == null || item.getType().isAir()) continue;
-                    shulkerInventory.setItem(i, item);
-                }
-                shulkerMeta.setBlockState(shulkerBox);
-                itemStack2.setItemMeta(shulkerMeta);
-                player.playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_CLOSE, SoundCategory.BLOCKS, 1.0f, 1.0f);
-            });
-        gui.open(player);
-        player.sendActionBar(text("Sneak to Place Shulker Box"));
-        player.playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, SoundCategory.BLOCKS, 1.0f, 1.0f);
     }
 
     protected DamageCalculationEvent damageCalculationEvent;
