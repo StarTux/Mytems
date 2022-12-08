@@ -255,6 +255,7 @@ public final class MusicalInstrument implements Mytem {
         event.setUseInteractedBlock(Event.Result.DENY);
         event.setUseItemInHand(Event.Result.DENY);
         if (Gui.of(player) != null) return;
+        if (player.isSneaking()) return;
         openGui(player, item);
     }
 
@@ -262,6 +263,7 @@ public final class MusicalInstrument implements Mytem {
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player, ItemStack item) {
         event.setCancelled(true);
         if (Gui.of(player) != null) return;
+        if (player.isSneaking()) return;
         openGui(player, item);
     }
 
