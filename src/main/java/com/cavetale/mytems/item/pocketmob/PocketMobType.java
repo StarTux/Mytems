@@ -13,6 +13,7 @@ public enum PocketMobType {
     BAT(Mytems.POCKET_BAT, EntityType.BAT),
     BEE(Mytems.POCKET_BEE, EntityType.BEE),
     BLAZE(Mytems.POCKET_BLAZE, EntityType.BLAZE),
+    CAMEL(Mytems.POCKET_CAMEL, EntityType.CAMEL),
     CAT(Mytems.POCKET_CAT, EntityType.CAT),
     CAVE_SPIDER(Mytems.POCKET_CAVE_SPIDER, EntityType.CAVE_SPIDER),
     CHICKEN(Mytems.POCKET_CHICKEN, EntityType.CHICKEN),
