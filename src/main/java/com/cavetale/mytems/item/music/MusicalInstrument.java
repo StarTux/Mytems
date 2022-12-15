@@ -57,7 +57,7 @@ import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 @RequiredArgsConstructor
 public final class MusicalInstrument implements Mytem {
-    protected static final int HERO_OFFSET = 4 * 9;
+    protected static final int HERO_OFFSET = 4 * 9 + 1;
     protected static final int HERO_CLOCK = 5 * 9;
     protected static final int GRID_TIME = 20 * 6;
     public static final String NOTE1 = "\u266A";
@@ -328,6 +328,8 @@ public final class MusicalInstrument implements Mytem {
             privateData.stopHero();
             return;
         }
+        gui.setItem(HERO_OFFSET - 1, Mytems.ARROW_RIGHT.createIcon(List.of(text("Play these notes", GRAY),
+                                                                           text("in order.", GRAY))));
         for (int i = 0; i < 3; i += 1) {
             int index = privateData.hero.melodyIndex + i;
             Beat beat = index < privateData.hero.melody.getBeats().size()
