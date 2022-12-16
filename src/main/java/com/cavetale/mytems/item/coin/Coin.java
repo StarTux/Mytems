@@ -7,7 +7,6 @@ import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Items;
-import com.cavetale.mytems.util.Text;
 import com.cavetale.worldmarker.util.Tags;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -21,6 +20,7 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.core.util.CamelCase.toCamelCase;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.text;
@@ -41,7 +41,7 @@ public final class Coin implements Mytem {
     public Coin(final Mytems mytems) {
         this.key = mytems;
         this.denomination = Denomination.of(key);
-        this.rawDisplayName = Text.toCamelCase(denomination.name()) + " Coin";
+        this.rawDisplayName = toCamelCase(" ", denomination.mytems) + " Coin";
         this.displayName = text(rawDisplayName, denomination.color);
     }
 
@@ -114,6 +114,7 @@ public final class Coin implements Mytem {
         Denomination denomination = Denomination.COPPER;
         final double abs = Math.abs(amount);
         for (Denomination deno : Denomination.values()) {
+            if (!deno.regularCurrency) continue;
             if ((double) deno.value <= abs) {
                 denomination = deno;
             }

@@ -575,6 +575,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     GOLDEN_COIN(Coin::new, GOLD_INGOT, 185, (char) 185, chrarr(597, 598, 185, 599, 600, 601, 602, 603), COIN),
     DIAMOND_COIN(Coin::new, DIAMOND, 275, (char) 275, chrarr(618, 619, 275, 620, 621, 622, 623, 624), COIN),
     RUBY_COIN(Coin::new, EMERALD, 316, (char) 316, chrarr(625, 626, 316, 627, 628, 629, 630, 631), COIN),
+    GOLDEN_HOOP(Coin::new, GOLD_INGOT, 641, (char) 641, chrarr(641, 642, 643, 644, 645, 646, 647, 648), COIN),
     // Paintbrush
     BLACK_PAINTBRUSH(Paintbrush::new, WOODEN_SHOVEL, 186, PAINTBRUSH),
     RED_PAINTBRUSH(Paintbrush::new, WOODEN_SHOVEL, 187, PAINTBRUSH),
@@ -928,9 +929,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     RED_JESTER_SHOES(EquipmentItem::new, LEATHER_BOOTS, 586, EQUIP_RED_JESTER_SET),
     RED_JESTER_PANTS(EquipmentItem::new, LEATHER_LEGGINGS, 587, EQUIP_RED_JESTER_SET),
     ;
-    // CustomModelData Range: 1...596
-    // CustomModelData Gaps: []
-    // CustomModelData Next: 597
+    // CustomModelData Range: 1...648
+    // CustomModelData Gaps: [632]
+    // CustomModelData Next: 649
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
