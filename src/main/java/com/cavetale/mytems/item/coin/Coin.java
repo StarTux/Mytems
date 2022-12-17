@@ -16,15 +16,20 @@ import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.GameMode;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.util.CamelCase.toCamelCase;
+import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.text;
-import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
+import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.JoinConfiguration.separator;
 import static net.kyori.adventure.text.event.ClickEvent.runCommand;
 import static net.kyori.adventure.text.event.HoverEvent.showText;
@@ -49,15 +54,12 @@ public final class Coin implements Mytem {
     public void enable() {
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.text(meta, List.of(new Component[] {
-                            displayName,
-                            text("Worth " + formatHelper(denomination.value) + " Coins", denomination.color),
-                            Component.empty(),
-                            join(noSeparators(),
-                                 text("pick up ", denomination.color),
-                                 text("Deposit to", GRAY)),
-                            text("your account", GRAY),
-                        }));
+                Items.text(meta, List.of(displayName,
+                                         text("Worth " + formatHelper(denomination.value) + " Coins", denomination.color),
+                                         empty(),
+                                         textOfChildren(Mytems.MOUSE_RIGHT, text(" or pick up", GRAY)),
+                                         textOfChildren(text("to deposit ", GRAY), key, text(" to", GRAY)),
+                                         text("your account", GRAY)));
                 key.markItemMeta(meta);
             });
     }
@@ -97,6 +99,25 @@ public final class Coin implements Mytem {
                          message);
     }
 
+    @Override
+    public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack itemStack) {
+        if (player.isSneaking()) return;
+        if (player.getGameMode() != GameMode.SURVIVAL && player.getGameMode() != GameMode.ADVENTURE) {
+            return;
+        }
+        if (!ServerCategory.current().isSurvival()) return;
+        event.setCancelled(true);
+        event.setUseItemInHand(Event.Result.DENY);
+        event.setUseInteractedBlock(Event.Result.DENY);
+        if (itemStack.getAmount() < 1) return;
+        itemStack.subtract(1);
+        Money.get().give(player.getUniqueId(),
+                         (double) denomination.value,
+                         MytemsPlugin.getInstance(),
+                         "Use " + rawDisplayName);
+        player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.MASTER, 1.0f, 1.0f);
+    }
+
     private static final DecimalFormat MONEY_FORMAT = new DecimalFormat("#,###.00", new DecimalFormatSymbols(Locale.US));
 
     static {
@@ -121,7 +142,7 @@ public final class Coin implements Mytem {
         }
         final String format = formatHelper(amount);
         final TextColor color = amount >= 0 ? denomination.color : DARK_RED;
-        return join(noSeparators(), denomination.mytems.component, text(format))
+        return textOfChildren(denomination.mytems.component, text(format))
             .color(color)
             .hoverEvent(showText(join(separator(newline()),
                                       text(format + " Coins", color),
