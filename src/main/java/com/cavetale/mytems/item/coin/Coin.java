@@ -41,7 +41,7 @@ public final class Coin implements Mytem {
     public Coin(final Mytems mytems) {
         this.key = mytems;
         this.denomination = Denomination.of(key);
-        this.rawDisplayName = toCamelCase(" ", denomination.mytems) + " Coin";
+        this.rawDisplayName = toCamelCase(" ", denomination.mytems);
         this.displayName = text(rawDisplayName, denomination.color);
     }
 
