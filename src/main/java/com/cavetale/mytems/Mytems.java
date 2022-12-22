@@ -236,8 +236,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     PLAGUE_DOCTOR(WardrobeItem::new, BLACK_CONCRETE, 150, (char) 0, WARDROBE_HAT),
     PLAGUE_DOCTOR_2(WardrobeItem::new, BLACK_CONCRETE, 151, (char) 0, WARDROBE_HAT),
     PUMPKIN_STUB(WardrobeItem::new, SEA_PICKLE, 152, (char) 0, WARDROBE_HAT),
-    STOCKING_CAP(WardrobeItem::new, RED_WOOL, 153, (char) 0, WARDROBE_HAT),
+    STOCKING_CAP(WardrobeItem::new, RED_WOOL, 153, (char) 0, WARDROBE_HAT), // Santa Hat
     STRAW_HAT(WardrobeItem::new, HAY_BLOCK, 154, (char) 0, WARDROBE_HAT),
+    // Wardrobe Christmas 2022
+    CHRISTMAS_HAT(WardrobeItem::new, RED_CONCRETE, 632, (char) 0, WARDROBE_HAT),
     // Witch Hats
     WHITE_WITCH_HAT(WardrobeItem::new, WHITE_SHULKER_BOX, 155, (char) 0, WITCH_HAT),
     ORANGE_WITCH_HAT(WardrobeItem::new, ORANGE_SHULKER_BOX, 162, (char) 0, WITCH_HAT),
