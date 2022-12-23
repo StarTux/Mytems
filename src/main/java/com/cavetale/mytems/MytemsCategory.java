@@ -55,6 +55,7 @@ public enum MytemsCategory {
     VOTE,
     WARDROBE_HANDHELD,
     WARDROBE_HAT,
+    WARDROBE_MOUNT,
     WITCH_HAT,
     // Equipment
     EQUIP_AXE,

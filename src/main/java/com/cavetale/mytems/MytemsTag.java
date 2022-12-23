@@ -30,6 +30,7 @@ public final class MytemsTag {
             MytemsCategory.SUNGLASSES,
             MytemsCategory.WARDROBE_HANDHELD,
             MytemsCategory.WARDROBE_HAT,
+            MytemsCategory.WARDROBE_MOUNT,
             MytemsCategory.WITCH_HAT,
         });
     public static final MytemsTag ITEM_SETS = new MytemsTag("item_sets", new MytemsCategory[] {

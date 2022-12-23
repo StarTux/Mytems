@@ -240,6 +240,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     STRAW_HAT(WardrobeItem::new, HAY_BLOCK, 154, (char) 0, WARDROBE_HAT),
     // Wardrobe Christmas 2022
     CHRISTMAS_HAT(WardrobeItem::new, RED_CONCRETE, 632, (char) 0, WARDROBE_HAT),
+    SANTA_SLED(WardrobeItem::new, RED_CONCRETE, 649, (char) 0, WARDROBE_MOUNT),
     // Witch Hats
     WHITE_WITCH_HAT(WardrobeItem::new, WHITE_SHULKER_BOX, 155, (char) 0, WITCH_HAT),
     ORANGE_WITCH_HAT(WardrobeItem::new, ORANGE_SHULKER_BOX, 162, (char) 0, WITCH_HAT),
@@ -396,7 +397,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     CLICKS_AND_STICKS(MusicalInstrument::new, STICK, 66, (char) 0xE282, MUSIC), // Sticks
     ANGELIC_HARP(MusicalInstrument::new, STICK, 67, (char) 0xE283, MUSIC), // Piano
     // Enemy
-    KOBOLD_HEAD(WardrobeItem::new, GREEN_CONCRETE, 1, (char) 0, ENEMY),
+    KOBOLD_HEAD(WardrobeItem::new, GREEN_CONCRETE, 1, (char) 0, WARDROBE_HAT),
     // Random
     RUBY(DummyMytem::new, EMERALD, 6, (char) 0xE23E, CURRENCY),
     // UI
@@ -931,9 +932,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     RED_JESTER_SHOES(EquipmentItem::new, LEATHER_BOOTS, 586, EQUIP_RED_JESTER_SET),
     RED_JESTER_PANTS(EquipmentItem::new, LEATHER_LEGGINGS, 587, EQUIP_RED_JESTER_SET),
     ;
-    // CustomModelData Range: 1...648
-    // CustomModelData Gaps: [632]
-    // CustomModelData Next: 649
+    // CustomModelData Range: 1...649
+    // CustomModelData Gaps: []
+    // CustomModelData Next: 650
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
