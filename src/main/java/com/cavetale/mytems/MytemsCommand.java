@@ -35,6 +35,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import static net.kyori.adventure.text.Component.empty;
@@ -42,8 +43,10 @@ import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.newline;
 import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
 import static net.kyori.adventure.text.JoinConfiguration.separator;
+import static net.kyori.adventure.text.event.HoverEvent.showText;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
@@ -74,10 +77,11 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         rootNode.addChild("fixall").denyTabCompletion()
             .description("Fix all player inventories")
             .senderCaller(this::fixall);
-        rootNode.addChild("placeblock").arguments("<mytems> <facing>")
+        rootNode.addChild("placeblock").arguments("<mytems> <facing> <small>")
             .description("Place a Mytem as a block")
             .completers(CommandArgCompleter.enumLowerList(Mytems.class),
-                        CommandArgCompleter.enumLowerList(BlockFace.class))
+                        CommandArgCompleter.enumLowerList(BlockFace.class),
+                        CommandArgCompleter.BOOLEAN)
             .playerCaller(this::placeBlock);
         rootNode.addChild("glyph").arguments("<text...>")
             .description("Turn text into glyphs")
@@ -400,7 +404,7 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
     }
 
     protected boolean placeBlock(Player player, String[] args) {
-        if (args.length != 2) return false;
+        if (args.length != 2 && args.length != 3) return false;
         Mytems mytems = Mytems.forId(args[0]);
         if (mytems == null) throw new CommandWarn("Invalid id: " + args[0]);
         BlockFace blockFace;
@@ -409,14 +413,17 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         } catch (IllegalArgumentException iae) {
             throw new CommandWarn("Invalid block face: " + args[1]);
         }
+        boolean small = args.length >= 3
+            ? CommandArgCompleter.requireBoolean(args[2])
+            : true;
         Block block = player.getLocation().getBlock();
-        player.sendMessage(text("Spawning ", YELLOW)
-                           .append(mytems.getMytem().getDisplayName())
-                           .append(text(" as block at"
-                                        + " " + block.getX()
-                                        + " " + block.getY()
-                                        + " " + block.getZ())));
-        Blocks.place(mytems, block, blockFace);
+        ArmorStand as = Blocks.place(mytems, block, blockFace, small);
+        if (as == null) throw new CommandWarn("Armor stand could not be spawned!");
+        player.sendMessage(textOfChildren(text("Placed ", YELLOW),
+                                          mytems,
+                                          text(" at" + " " + block.getX() + " " + block.getY() + " " + block.getZ(), GRAY))
+                           .hoverEvent(showText(text(as.getUniqueId().toString(), GRAY)))
+                           .insertion(as.getUniqueId().toString()));
         return true;
     }
 
