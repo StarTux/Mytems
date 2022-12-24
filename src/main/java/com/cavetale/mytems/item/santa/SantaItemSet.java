@@ -1,17 +1,15 @@
 package com.cavetale.mytems.item.santa;
 
-import com.cavetale.mytems.MytemsPlugin;
-import com.cavetale.mytems.gear.EntityAttribute;
+import com.cavetale.mytems.event.combat.DamageCalculationEvent;
+import com.cavetale.mytems.event.combat.DamageFactor;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
 import java.util.List;
-import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier.Operation;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
@@ -27,51 +25,37 @@ public final class SantaItemSet implements ItemSet {
     @Getter @RequiredArgsConstructor
     public static final class CookieBonus implements SetBonus {
         protected final SantaItemSet itemSet;
-        protected final int requiredItemCount = 2;
-        protected final String name = "Cookie Bonus";
-        protected final String description = "Eating cookies gives extra health";
+        protected final int requiredItemCount;
+        protected final String name = "Cookie Crunch";
+        protected final String description = "Eating cookies boosts health of players around you";
 
         @Override
         public void onPlayerItemConsume(PlayerItemConsumeEvent event, Player player, ItemStack item) {
             if (item.getType() == Material.COOKIE) {
-                player.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 20 * 120, 1, true, false, true));
+                final double r = 12;
+                for (Player nearby : player.getLocation().getNearbyEntitiesByType(Player.class, r, r, r)) {
+                    final PotionEffect oldHealthBoost = nearby.getPotionEffect(PotionEffectType.HEALTH_BOOST);
+                    final int healthBoostAmp = oldHealthBoost != null
+                        ? Math.min(oldHealthBoost.getAmplifier() + 1, 4)
+                        : 0;
+                    nearby.addPotionEffect(new PotionEffect(PotionEffectType.HEALTH_BOOST, 20 * 45, healthBoostAmp, true, false, true));
+                    nearby.addPotionEffect(new PotionEffect(PotionEffectType.REGENERATION, 20 * 5, healthBoostAmp, true, false, true));
+                    nearby.getWorld().playSound(nearby.getLocation(), Sound.ENTITY_PLAYER_BURP, SoundCategory.PLAYERS, 1.0f, 1.0f);
+                }
             }
         }
     }
 
     @Getter @RequiredArgsConstructor
-    public static final class MilkBonus implements SetBonus {
+    public static final class FullDefense implements SetBonus {
         protected final SantaItemSet itemSet;
-        protected final int requiredItemCount = 3;
-        protected final String name = "Milk Bonus";
-        protected final String description = "Drinking milk gives absorption";
+        protected final int requiredItemCount;
+        protected final String name = "Santa Skin";
+        protected final String description = "Maximum enchantment protection";
 
         @Override
-        public void onPlayerItemConsume(PlayerItemConsumeEvent event, Player player, ItemStack item) {
-            if (item.getType() == Material.MILK_BUCKET) {
-                Bukkit.getScheduler().runTask(MytemsPlugin.getInstance(), () -> {
-                        player.addPotionEffect(new PotionEffect(PotionEffectType.ABSORPTION, 20 * 120, 1, true, false, true));
-                    });
-            }
-        }
-    }
-
-    @Getter @RequiredArgsConstructor
-    public static final class BonusHealth implements SetBonus {
-        protected final SantaItemSet itemSet;
-        protected final int requiredItemCount = 4;
-        protected final String name = "Bonus Health";
-        protected final String description = "Get 10% more health";
-        protected final List<EntityAttribute> entityAttributes = List
-            .of(new EntityAttribute(Attribute.GENERIC_MAX_HEALTH,
-                                    UUID.fromString("60fbcfa6-eea5-4953-91a6-1e50905c9665"),
-                                    "SantaHealth",
-                                    0.1,
-                                    Operation.ADD_SCALAR));
-
-        @Override
-        public List<EntityAttribute> getEntityAttributes() {
-            return entityAttributes;
+        public void onDefendingDamageCalculation(DamageCalculationEvent event) {
+            event.setIfApplicable(DamageFactor.PROTECTION, 0.2f);
         }
     }
 
@@ -81,8 +65,7 @@ public final class SantaItemSet implements ItemSet {
     }
 
     private SantaItemSet() {
-        setBonuses = List.of(new CookieBonus(this),
-                             new MilkBonus(this),
-                             new BonusHealth(this));
+        setBonuses = List.of(new FullDefense(this, 2),
+                             new CookieBonus(this, 4));
     }
 }
