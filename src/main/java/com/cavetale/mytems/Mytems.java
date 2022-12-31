@@ -402,6 +402,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     KOBOLD_HEAD(WardrobeItem::new, GREEN_CONCRETE, 1, (char) 0, WARDROBE_HAT),
     // Random
     RUBY(DummyMytem::new, EMERALD, 6, (char) 0xE23E, CURRENCY),
+    RUBY_KITTY(DummyMytem::new, EMERALD, 651, CURRENCY),
     // UI
     OK(ForbiddenMytem::new, BLUE_CONCRETE, 7, (char) 0xE23F, UI),
     NO(ForbiddenMytem::new, RED_CONCRETE, 8, (char) 0xE240, UI),
@@ -934,9 +935,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     RED_JESTER_SHOES(EquipmentItem::new, LEATHER_BOOTS, 586, EQUIP_RED_JESTER_SET),
     RED_JESTER_PANTS(EquipmentItem::new, LEATHER_LEGGINGS, 587, EQUIP_RED_JESTER_SET),
     ;
-    // CustomModelData Range: 1...650
+    // CustomModelData Range: 1...651
     // CustomModelData Gaps: []
-    // CustomModelData Next: 651
+    // CustomModelData Next: 652
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
