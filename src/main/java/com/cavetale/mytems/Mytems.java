@@ -44,6 +44,7 @@ import com.cavetale.mytems.item.garden.Scythe;
 import com.cavetale.mytems.item.halloween.HalloweenCandy;
 import com.cavetale.mytems.item.halloween.HalloweenToken2;
 import com.cavetale.mytems.item.halloween.HalloweenToken;
+import com.cavetale.mytems.item.magnifier.Magnifier;
 import com.cavetale.mytems.item.medieval.WitchBroom;
 import com.cavetale.mytems.item.mobcostume.ChickenCostume;
 import com.cavetale.mytems.item.mobcostume.CreeperCostume;
@@ -197,6 +198,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     SLIME_FINDER(SlimeFinder::new, SLIME_BALL, 594, UTILITY),
     BLIND_EYE(BlindEye::new, CARROT, 596, UTILITY),
     SCISSORS(Scissors::new, SHEARS, 652, GARDENING),
+    MAGNIFYING_GLASS(Magnifier::new, AMETHYST_SHARD, 653, UTILITY),
     // Wardrobe
     WHITE_BUNNY_EARS(WardrobeItem::new, IRON_BOOTS, 3919001, (char) 0, WARDROBE_HAT), // EPIC
     RED_LIGHTSABER(WardrobeItem::new, END_ROD, 3919002, (char) 0, WARDROBE_HANDHELD),
@@ -442,7 +444,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     MOUSE_RIGHT(ForbiddenMytem::new, RED_CONCRETE, 338, UI),
     SHIFT_KEY(ForbiddenMytem::new, LIGHT_GRAY_CONCRETE, 339, UI),
     THUMBS_UP(ForbiddenMytem::new, GREEN_CONCRETE, 340, UI),
-    EYES(ForbiddenMytem::new, SPYGLASS, 595, UI),
+    EYES(ForbiddenMytem::new, ENDER_EYE, 595, UI),
     RAINBOW_BUTTERFLY(ForbiddenMytem::new, FEATHER, 633, (char) 633, chrarr(633, 634, 635, 636, 637, 638, 639, 640), UI),
     // Collectibles
     HEART(DummyMytem::new, HEART_OF_THE_SEA, 9, (char) 0xE241, COLLECTIBLES),
@@ -937,9 +939,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     RED_JESTER_SHOES(EquipmentItem::new, LEATHER_BOOTS, 586, EQUIP_RED_JESTER_SET),
     RED_JESTER_PANTS(EquipmentItem::new, LEATHER_LEGGINGS, 587, EQUIP_RED_JESTER_SET),
     ;
-    // CustomModelData Range: 1...652
+    // CustomModelData Range: 1...653
     // CustomModelData Gaps: []
-    // CustomModelData Next: 653
+    // CustomModelData Next: 654
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
