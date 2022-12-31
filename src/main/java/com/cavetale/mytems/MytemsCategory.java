@@ -22,6 +22,7 @@ public enum MytemsCategory {
     ENEMY,
     FRIENDS,
     FURNITURE,
+    GARDENING,
     HALLOWEEN,
     KEY,
     KEYHOLE,

@@ -39,10 +39,10 @@ import com.cavetale.mytems.item.equipment.EquipmentItem;
 import com.cavetale.mytems.item.farawaymap.FarawayMap;
 import com.cavetale.mytems.item.fertilizer.Fertilizer;
 import com.cavetale.mytems.item.font.GlyphItem;
+import com.cavetale.mytems.item.garden.Scythe;
 import com.cavetale.mytems.item.halloween.HalloweenCandy;
 import com.cavetale.mytems.item.halloween.HalloweenToken2;
 import com.cavetale.mytems.item.halloween.HalloweenToken;
-import com.cavetale.mytems.item.medieval.GoldenScythe;
 import com.cavetale.mytems.item.medieval.WitchBroom;
 import com.cavetale.mytems.item.mobcostume.ChickenCostume;
 import com.cavetale.mytems.item.mobcostume.CreeperCostume;
@@ -187,10 +187,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     TREE_CHOPPER(TreeChopper::new, GOLDEN_AXE, 242, UTILITY),
     ARMOR_STAND_EDITOR(ArmorStandEditor::new, FLINT, 241, UTILITY),
     FERTILIZER(Fertilizer::new, BONE_MEAL, 285, UTILITY),
-    WATERING_CAN(WateringCan::new, STONE_HOE, 297, UTILITY),
-    EMPTY_WATERING_CAN(EmptyWateringCan::new, STONE_HOE, 334, UTILITY),
-    GOLDEN_WATERING_CAN(WateringCan::new, GOLDEN_HOE, 307, UTILITY),
-    EMPTY_GOLDEN_WATERING_CAN(EmptyWateringCan::new, STONE_HOE, 335, UTILITY),
+    WATERING_CAN(WateringCan::new, STONE_HOE, 297, GARDENING),
+    EMPTY_WATERING_CAN(EmptyWateringCan::new, STONE_HOE, 334, GARDENING),
+    GOLDEN_WATERING_CAN(WateringCan::new, GOLDEN_HOE, 307, GARDENING),
+    EMPTY_GOLDEN_WATERING_CAN(EmptyWateringCan::new, STONE_HOE, 335, GARDENING),
     MONKEY_WRENCH(MonkeyWrench::new, STONE_HOE, 79, UTILITY),
     DIVIDERS(Dividers::new, WOODEN_HOE, 593, UTILITY),
     SLIME_FINDER(SlimeFinder::new, SLIME_BALL, 594, UTILITY),
@@ -372,7 +372,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     // Pirate
     CAPTAINS_CUTLASS(CaptainsCutlass::new, WOODEN_SWORD, 2, (char) 0xE239, UTILITY),
     BLUNDERBUSS(Blunderbuss::new, IRON_INGOT, 3, (char) 0xE23A, UTILITY),
-    GOLDEN_SCYTHE(GoldenScythe::new, GOLDEN_HOE, 4, (char) 0xE23B, UTILITY),
+    // Medieval
+    IRON_SCYTHE(Scythe::new, IRON_HOE, 650, GARDENING),
+    GOLDEN_SCYTHE(Scythe::new, GOLDEN_HOE, 4, (char) 0xE23B, GARDENING),
     WITCH_BROOM(WitchBroom::new, WOODEN_SHOVEL, 51, (char) 0xE273, UTILITY),
     // Musical Instruments
     OCARINA_OF_CHIME(HyruleInstrument::new, NAUTILUS_SHELL, 36, (char) 0xE264, MUSIC_HYRULE),
@@ -932,9 +934,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     RED_JESTER_SHOES(EquipmentItem::new, LEATHER_BOOTS, 586, EQUIP_RED_JESTER_SET),
     RED_JESTER_PANTS(EquipmentItem::new, LEATHER_LEGGINGS, 587, EQUIP_RED_JESTER_SET),
     ;
-    // CustomModelData Range: 1...649
+    // CustomModelData Range: 1...650
     // CustomModelData Gaps: []
-    // CustomModelData Next: 650
+    // CustomModelData Next: 651
     // (Deprecated) Next High Unicode Character: \uE2AE
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();

@@ -295,4 +295,8 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
     public static Session sessionOf(Player player) {
         return instance.sessions.of(player);
     }
+
+    public static MytemsPlugin plugin() {
+        return instance;
+    }
 }
