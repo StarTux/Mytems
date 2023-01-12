@@ -140,6 +140,7 @@ public final class TreeChopper implements Mytem {
                                + " logs=" + chop.logBlocks.size() + "/" + tag.getMaxLogBlocks()
                                + " leaves=" + chop.leafBlocks.size() + "/" + tag.getMaxLeafBlocks());
         }
+        new TreeChopEvent(player, chop, status).callEvent();
         switch (status) {
         case SUCCESS: break;
         case TOO_MANY_LOGS:
@@ -150,9 +151,9 @@ public final class TreeChopper implements Mytem {
                                  .color(GRAY));
             return;
         case NOTHING_FOUND:
+        case NO_SAPLING:
         default: return;
         }
-        if (chop.saplingBlocks.isEmpty()) return;
         event.setCancelled(true);
         chop.chop(player);
         session.x = block.getX();

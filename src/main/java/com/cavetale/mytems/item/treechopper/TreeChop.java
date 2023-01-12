@@ -50,7 +50,6 @@ public final class TreeChop {
     protected final List<Block> logBlocks = new ArrayList<>();
     protected final List<Block> leafBlocks = new ArrayList<>();
     protected final List<Block> saplingBlocks = new ArrayList<>(); // for placement
-    protected final Map<ChoppedType, Integer> leafCount = new EnumMap<>(ChoppedType.class);
     protected int minHeight;
     // Used for chopping
     protected ChoppedType replantType = null;
@@ -176,7 +175,48 @@ public final class TreeChop {
                 }
             }
         }
-        return logBlocks.size() > 2 ? SUCCESS : NOTHING_FOUND;
+        if (saplingBlocks.isEmpty()) return NO_SAPLING;
+        if (logBlocks.size() < 4) return NOTHING_FOUND;
+        return SUCCESS;
+    }
+
+    /**
+     * Guess the type of tree.  This will depend on how many logs are
+     * to be chopped, except for Azalea, which uses oak logs, so we
+     * count the leaves.  So this method is mostly reliable unless
+     * this is an azalea or custom tree.
+     */
+    public ChoppedType guessChoppedType() {
+        final Map<ChoppedType, Integer> leafCount = new EnumMap<>(ChoppedType.class);
+        ChoppedType result = null;
+        for (Block leafBlock : leafBlocks) {
+            ChoppedType type = ChoppedType.of(leafBlock);
+            if (type == null) continue;
+            leafCount.compute(type, (t, i) -> i != null ? i + 1 : 1);
+        }
+        int highest = 0;
+        for (ChoppedType type : ChoppedType.values()) {
+            int count = leafCount.getOrDefault(type, 0);
+            if (count > highest) {
+                result = type;
+                highest = count;
+            }
+        }
+        if (leafCount.getOrDefault(ChoppedType.AZALEA, 0) > 0 && result != null) return result;
+        final Map<ChoppedType, Integer> logCount = new EnumMap<>(ChoppedType.class);
+        for (Block logBlock : logBlocks) {
+            ChoppedType type = ChoppedType.of(logBlock);
+            if (type == null) continue;
+            logCount.compute(type, (t, i) -> i != null ? i + 1 : 1);
+        }
+        for (ChoppedType type : ChoppedType.values()) {
+            int count = logCount.getOrDefault(type, 0);
+            if (count > highest) {
+                result = type;
+                highest = count;
+            }
+        }
+        return result;
     }
 
     public void chop(Player player) {
@@ -188,19 +228,7 @@ public final class TreeChop {
         // Determine the primary tree type.
         // If replant is not unlocked, we skip this!
         if (doReplant && !leafBlocks.isEmpty()) {
-            for (Block leafBlock : leafBlocks) {
-                ChoppedType type = ChoppedType.of(leafBlock);
-                if (type == null) continue;
-                leafCount.compute(type, (t, i) -> i != null ? i + 1 : 1);
-            }
-            int highest = 0;
-            for (ChoppedType type : ChoppedType.values()) {
-                int count = leafCount.getOrDefault(type, 0);
-                if (count > highest) {
-                    replantType = type;
-                    highest = count;
-                }
-            }
+            replantType = guessChoppedType();
         }
         final int speed = tag.getChoppingSpeed();
         CHOPPING.addAll(logBlocks);
