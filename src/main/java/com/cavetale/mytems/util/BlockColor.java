@@ -53,6 +53,7 @@ public enum BlockColor {
     public final String niceName;
     public final TextColor textColor;
     public final org.bukkit.Color bukkitColor;
+    public final DyeColor dyeColor;
     private static final Map<Material, BlockColor> MATERIAL_MAP = new EnumMap<>(Material.class);
     private static final Map<DyeColor, BlockColor> DYE_COLOR_MAP = new EnumMap<>(DyeColor.class);
     private final Map<Suffix, Material> suffixMap = new EnumMap<>(Suffix.class);
@@ -62,6 +63,7 @@ public enum BlockColor {
         this.niceName = Text.toCamelCase(this, " ");
         this.textColor = TextColor.color(hex);
         this.bukkitColor = org.bukkit.Color.fromRGB(hex);
+        this.dyeColor = DyeColor.valueOf(name());
     }
 
     static {
@@ -73,7 +75,7 @@ public enum BlockColor {
                     MATERIAL_MAP.put(material, blockColor);
                     blockColor.suffixMap.put(suffix, material);
                     blockColor.materialSuffixMap.put(material, suffix);
-                    DYE_COLOR_MAP.put(DyeColor.valueOf(blockColor.name()), blockColor);
+                    DYE_COLOR_MAP.put(blockColor.dyeColor, blockColor);
                 } catch (IllegalArgumentException iae) {
                     MytemsPlugin.getInstance().getLogger().warning("BlockColor: Material not found: " + key);
                 }
