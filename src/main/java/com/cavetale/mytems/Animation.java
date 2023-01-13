@@ -1,0 +1,86 @@
+package com.cavetale.mytems;
+
+import java.util.List;
+import lombok.RequiredArgsConstructor;
+import lombok.Value;
+
+/**
+ * Mimic the data structure of an mcmeta file in the resource pack.
+ *
+ * This will be used to synthesize the mcmeta file for the animated
+ * texture by CavetaleResourcePack.
+ *
+ * This also helps to create the animation in chat in a manner
+ * consistent with the resource pack.  This can only be done if the
+ * Mytems is registered with sufficient characters.
+ */
+@Value
+public final class Animation {
+    public final boolean interpolate;
+    public final int width;
+    public final int height;
+    public final int frametime;
+    public final List<Frame> frames;
+
+    @Value @RequiredArgsConstructor
+    public static final class Frame {
+        public final int index;
+        public final int time;
+
+        public Frame(final int index) {
+            this(index, 0);
+        }
+    }
+
+    public static Animation frametime(int frametime) {
+        return new Animation(false, 0, 0, frametime, null);
+    }
+
+    public static final Animation MAGIC_MAP = new Animation(false, 0, 0, 6, List.of(new Frame(0, 60),
+                                                                                    new Frame(1),
+                                                                                    new Frame(2),
+                                                                                    new Frame(3),
+                                                                                    new Frame(4),
+                                                                                    new Frame(5),
+                                                                                    new Frame(6),
+                                                                                    new Frame(7),
+                                                                                    new Frame(8),
+                                                                                    new Frame(9),
+                                                                                    new Frame(10),
+                                                                                    new Frame(11),
+                                                                                    new Frame(12),
+                                                                                    new Frame(13),
+                                                                                    new Frame(14),
+                                                                                    new Frame(15, 40),
+                                                                                    new Frame(14),
+                                                                                    new Frame(13),
+                                                                                    new Frame(12),
+                                                                                    new Frame(11),
+                                                                                    new Frame(10),
+                                                                                    new Frame(9),
+                                                                                    new Frame(8),
+                                                                                    new Frame(7),
+                                                                                    new Frame(6),
+                                                                                    new Frame(5),
+                                                                                    new Frame(4),
+                                                                                    new Frame(3),
+                                                                                    new Frame(2),
+                                                                                    new Frame(1)));
+    public static final Animation SPINNING_COIN = new Animation(false, 0, 0, 2, List.of(new Frame(0, 4),
+                                                                                        new Frame(1),
+                                                                                        new Frame(2),
+                                                                                        new Frame(3),
+                                                                                        new Frame(4),
+                                                                                        new Frame(5),
+                                                                                        new Frame(6),
+                                                                                        new Frame(7)));
+    public static final Animation MAGIC_CAPE = new Animation(false, 0, 0, 0, List.of(new Frame(0, 8),
+                                                                                     new Frame(1, 3),
+                                                                                     new Frame(2, 2),
+                                                                                     new Frame(3, 3),
+                                                                                     new Frame(4, 4)));
+    public static final Animation DUNE_DIGGER = new Animation(false, 0, 0, 0, List.of(new Frame(0, 55),
+                                                                                      new Frame(1),
+                                                                                      new Frame(2),
+                                                                                      new Frame(3)));
+}

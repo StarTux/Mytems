@@ -68,6 +68,7 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
         Gui.enable();
         new MytemsBlockMarkerHook(this).enable();
         for (Mytems it : Mytems.values()) {
+            it.preprocessAnimationFrames();
             if (it.component.equals(Component.empty())) continue;
             String name = it.name().toLowerCase();
             Emoji.addEmoji(name, it.component, it.getMytem().getDisplayName(),

@@ -34,7 +34,7 @@ public final class MytemsTest {
                 }
                 characterSet.add(mytems.character);
             }
-            for (Character it : mytems.animation) {
+            for (Character it : mytems.characters) {
                 if (it == null || it == (char) 0 || it == mytems.character) continue;
                 if (characterSet.contains(it)) {
                     int num = (int) it;

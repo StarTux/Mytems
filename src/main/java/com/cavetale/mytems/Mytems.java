@@ -93,6 +93,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import static com.cavetale.mytems.Animation.SPINNING_COIN;
 import static com.cavetale.mytems.MytemsCategory.*;
 import static net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText;
 import static org.bukkit.Material.*;
@@ -110,7 +111,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     BAT_MASK(BatMask::new, PLAYER_HEAD, 741306, (char) 0xE237, ACULA),
     // Cloud City
     UNICORN_HORN(UnicornHorn::new, END_ROD, 7413003, (char) 0, UTILITY),
-    MAGIC_CAPE(MagicCape::new, ELYTRA, 7413006, (char) 0xE238, UTILITY),
+    MAGIC_CAPE(MagicCape::new, ELYTRA, 7413006, (char) 0xE238, UTILITY, Animation.MAGIC_CAPE),
     SNEAKERS(Sneakers::new, LEATHER_BOOTS, 333, UTILITY),
     // Generic
     KITTY_COIN(KittyCoin::new, PLAYER_HEAD, 7413001, (char) 0xE200, CURRENCY),
@@ -133,7 +134,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     DUNE_CHESTPLATE(DuneItem.Chestplate::new, GOLDEN_CHESTPLATE, 7413202, (char) 0xE226, DUNE),
     DUNE_LEGGINGS(DuneItem.Leggings::new, GOLDEN_LEGGINGS, 7413203, (char) 0xE227, DUNE),
     DUNE_BOOTS(DuneItem.Boots::new, GOLDEN_BOOTS, 7413204, (char) 0xE228, DUNE),
-    DUNE_DIGGER(DuneItem.Weapon::new, GOLDEN_SHOVEL, 7413205, (char) 0xE229, DUNE),
+    DUNE_DIGGER(DuneItem.Weapon::new, GOLDEN_SHOVEL, 7413205, (char) 0xE229, DUNE, Animation.DUNE_DIGGER),
     // Swampy set
     SWAMPY_HELMET(SwampyItem.Helmet::new, PLAYER_HEAD, 7413301, (char) 0xE22A, SWAMPY),
     SWAMPY_CHESTPLATE(SwampyItem.Chestplate::new, LEATHER_CHESTPLATE, 7413302, (char) 0xE22B, SWAMPY),
@@ -183,7 +184,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     BLACK_SOFA_RIGHT(ForbiddenMytem::new, RED_WOOL, 145, (char) 0, FURNITURE),
     // Utility
     WEDDING_RING(WeddingRing::new, PLAYER_HEAD, 7413002, (char) 0xE21C, FRIENDS),
-    MAGIC_MAP(MagicMap::new, FILLED_MAP, 7413005, (char) 0xE21D, UTILITY),
+    MAGIC_MAP(MagicMap::new, FILLED_MAP, 7413005, (char) 0xE21D, UTILITY, Animation.MAGIC_MAP),
     SNOW_SHOVEL(SnowShovel::new, IRON_SHOVEL, 220, UTILITY),
     HASTY_PICKAXE(ForbiddenMytem::new, GOLDEN_PICKAXE, 223, UTILITY),
     TREE_CHOPPER(TreeChopper::new, GOLDEN_AXE, 242, UTILITY),
@@ -445,7 +446,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     SHIFT_KEY(ForbiddenMytem::new, LIGHT_GRAY_CONCRETE, 339, UI),
     THUMBS_UP(ForbiddenMytem::new, GREEN_CONCRETE, 340, UI),
     EYES(ForbiddenMytem::new, ENDER_EYE, 595, UI),
-    RAINBOW_BUTTERFLY(ForbiddenMytem::new, FEATHER, 633, (char) 633, chrarr(633, 634, 635, 636, 637, 638, 639, 640), UI),
+    RAINBOW_BUTTERFLY(ForbiddenMytem::new, FEATHER, 633, (char) 633, chrarr(633, 634, 635, 636, 637, 638, 639, 640), UI, Animation.frametime(4)),
     // Collectibles
     HEART(DummyMytem::new, HEART_OF_THE_SEA, 9, (char) 0xE241, COLLECTIBLES),
     STAR(DummyMytem::new, NETHER_STAR, 18, (char) 0xE24B, COLLECTIBLES),
@@ -570,7 +571,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     SCARLET_CHESTPLATE(ScarletItem.Chestplate::new, LEATHER_CHESTPLATE, 157, SCARLET),
     SCARLET_LEGGINGS(ScarletItem.Leggings::new, LEATHER_LEGGINGS, 158, SCARLET),
     SCARLET_BOOTS(ScarletItem.Boots::new, LEATHER_BOOTS, 159, SCARLET),
-    SCARLET_SWORD(ScarletItem.Sword::new, NETHERITE_SWORD, 160, SCARLET),
+    SCARLET_SWORD(ScarletItem.Sword::new, NETHERITE_SWORD, 160, SCARLET, Animation.frametime(4)),
     SCARLET_SHIELD(ScarletItem.Shield::new, SHIELD, 161, SCARLET),
     // Keys
     COPPER_KEY(ForbiddenMytem::new, COPPER_INGOT, 177, KEY),
@@ -580,12 +581,12 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     SILVER_KEYHOLE(ForbiddenMytem::new, IRON_BLOCK, 181, KEYHOLE),
     GOLDEN_KEYHOLE(ForbiddenMytem::new, GOLD_BLOCK, 182, KEYHOLE),
     // Coins
-    COPPER_COIN(Coin::new, COPPER_INGOT, 183, (char) 183, chrarr(604, 605, 183, 606, 607, 608, 609, 610), COIN),
-    SILVER_COIN(Coin::new, IRON_INGOT, 184, (char) 184, chrarr(611, 612, 184, 613, 614, 615, 616, 617), COIN),
-    GOLDEN_COIN(Coin::new, GOLD_INGOT, 185, (char) 185, chrarr(597, 598, 185, 599, 600, 601, 602, 603), COIN),
-    DIAMOND_COIN(Coin::new, DIAMOND, 275, (char) 275, chrarr(618, 619, 275, 620, 621, 622, 623, 624), COIN),
-    RUBY_COIN(Coin::new, EMERALD, 316, (char) 316, chrarr(625, 626, 316, 627, 628, 629, 630, 631), COIN),
-    GOLDEN_HOOP(Coin::new, GOLD_INGOT, 641, (char) 641, chrarr(641, 642, 643, 644, 645, 646, 647, 648), COIN),
+    COPPER_COIN(Coin::new, COPPER_INGOT, 183, (char) 183, chrarr(604, 605, 183, 606, 607, 608, 609, 610), COIN, SPINNING_COIN),
+    SILVER_COIN(Coin::new, IRON_INGOT, 184, (char) 184, chrarr(611, 612, 184, 613, 614, 615, 616, 617), COIN, SPINNING_COIN),
+    GOLDEN_COIN(Coin::new, GOLD_INGOT, 185, (char) 185, chrarr(597, 598, 185, 599, 600, 601, 602, 603), COIN, SPINNING_COIN),
+    DIAMOND_COIN(Coin::new, DIAMOND, 275, (char) 275, chrarr(618, 619, 275, 620, 621, 622, 623, 624), COIN, SPINNING_COIN),
+    RUBY_COIN(Coin::new, EMERALD, 316, (char) 316, chrarr(625, 626, 316, 627, 628, 629, 630, 631), COIN, SPINNING_COIN),
+    GOLDEN_HOOP(Coin::new, GOLD_INGOT, 641, (char) 641, chrarr(641, 642, 643, 644, 645, 646, 647, 648), COIN, SPINNING_COIN),
     // Paintbrush
     BLACK_PAINTBRUSH(Paintbrush::new, WOODEN_SHOVEL, 186, PAINTBRUSH),
     RED_PAINTBRUSH(Paintbrush::new, WOODEN_SHOVEL, 187, PAINTBRUSH),
@@ -622,9 +623,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     AZALEA_SEED(TreeSeed::new, BEETROOT_SEEDS, 260, TREE_SEED),
     SCOTCH_PINE_CONE(TreeSeed::new, BEETROOT_SEEDS, 261, TREE_SEED),
     FIR_CONE(TreeSeed::new, BEETROOT_SEEDS, 262, TREE_SEED),
-    FANCY_OAK_SEED(TreeSeed::new, BEETROOT_SEEDS, 263, TREE_SEED),
-    FANCY_BIRCH_SEED(TreeSeed::new, BEETROOT_SEEDS, 264, TREE_SEED),
-    FANCY_SPRUCE_CONE(TreeSeed::new, BEETROOT_SEEDS, 265, TREE_SEED),
+    FANCY_OAK_SEED(TreeSeed::new, BEETROOT_SEEDS, 263, TREE_SEED, Animation.frametime(6)),
+    FANCY_BIRCH_SEED(TreeSeed::new, BEETROOT_SEEDS, 264, TREE_SEED, Animation.frametime(6)),
+    FANCY_SPRUCE_CONE(TreeSeed::new, BEETROOT_SEEDS, 265, TREE_SEED, Animation.frametime(6)),
     // Potions
     EMPTY_FLASK(DummyMytem::new, GLASS_BOTTLE, 257, POTIONS),
     POTION_FLASK(PotionFlask::new, POTION, 258, POTIONS),
@@ -950,9 +951,11 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     public final Material material;
     public final Integer customModelData;
     public final char character;
-    public final char[] animation; // Contains `character'
+    public final char[] characters; // Contains `character'
     public final Component component;
     public final MytemsCategory category;
+    public final Animation animation;
+    private char[] animationFrames;
 
     static {
         for (Mytems it : Mytems.values()) {
@@ -972,14 +975,15 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
 
     Mytems(final Function<Mytems, Mytem> ctor, final Material material,
            final Integer customModelData,
-           final char character, final char[] animation,
-           final MytemsCategory category) {
+           final char character, final char[] characters,
+           final MytemsCategory category,
+           final Animation animation) {
         this.ctor = ctor;
         this.id = name().toLowerCase();
         this.material = material;
         this.customModelData = customModelData;
         this.character = character;
-        this.animation = animation;
+        this.characters = characters;
         this.component = character > 0
             ? (Component.text(character)
                .style(Style.style()
@@ -987,6 +991,14 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
                       .color(NamedTextColor.WHITE)))
             : Component.empty();
         this.category = category;
+        this.animation = animation;
+    }
+
+    Mytems(final Function<Mytems, Mytem> ctor, final Material material,
+           final Integer customModelData,
+           final char character, final char[] characters,
+           final MytemsCategory category) {
+        this(ctor, material, customModelData, character, characters, category, null);
     }
 
     Mytems(final Function<Mytems, Mytem> ctor, final Material material,
@@ -997,8 +1009,21 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     }
 
     Mytems(final Function<Mytems, Mytem> ctor, final Material material,
+           final Integer customModelData,
+           final char character,
+           final MytemsCategory category,
+           final Animation animation) {
+        this(ctor, material, customModelData, character, new char[] {character}, category, animation);
+    }
+
+    Mytems(final Function<Mytems, Mytem> ctor, final Material material,
            final int customModelData, final MytemsCategory category) {
         this(ctor, material, customModelData, (char) customModelData, chrarr(customModelData), category);
+    }
+
+    Mytems(final Function<Mytems, Mytem> ctor, final Material material,
+           final int customModelData, final MytemsCategory category, final Animation animation) {
+        this(ctor, material, customModelData, (char) customModelData, chrarr(customModelData), category, animation);
     }
 
     private static char[] chrarr(int... values) {
@@ -1206,15 +1231,15 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     }
 
     public boolean isAnimated() {
-        return animation.length > 1;
+        return animationFrames.length > 1;
     }
 
     public int getAnimationFrameCount() {
-        return animation.length;
+        return animationFrames.length;
     }
 
     public Component getAnimationFrame(int index) {
-        char chr = animation[index];
+        char chr = animationFrames[index];
         if ((int) chr == 0) {
             throw new IllegalArgumentException(this + ": Animation frame " + index + " is 0!");
         }
@@ -1225,11 +1250,41 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     }
 
     public List<Component> getAnimationFrames() {
-        List<Component> list = new ArrayList<>(animation.length);
-        for (int i = 0; i < animation.length; i += 1) {
-            if (animation[i] == (char) 0) continue;
+        List<Component> list = new ArrayList<>(characters.length);
+        for (int i = 0; i < animationFrames.length; i += 1) {
+            if (characters[i] == (char) 0) continue;
             list.add(getAnimationFrame(i));
         }
         return list;
+    }
+
+    /**
+     * Internal use only.
+     */
+    public void preprocessAnimationFrames() {
+        if (animation == null || characters.length == 1) {
+            this.animationFrames = characters;
+            return;
+        }
+        List<Character> list = new ArrayList<>();
+        if (animation.frames != null) {
+            for (Animation.Frame frame : animation.frames) {
+                final int time = frame.time != 0 ? frame.time : animation.frametime;
+                char theCharacter = characters[frame.index];
+                for (int i = 0; i < time; i += 1) {
+                    list.add(theCharacter);
+                }
+            }
+        } else {
+            for (char theCharacter : characters) {
+                for (int i = 0; i < animation.frametime; i += 1) {
+                    list.add(theCharacter);
+                }
+            }
+        }
+        this.animationFrames = new char[list.size()];
+        for (int i = 0; i < list.size(); i += 1) {
+            animationFrames[i] = list.get(i);
+        }
     }
 }
