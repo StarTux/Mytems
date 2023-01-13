@@ -111,7 +111,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     BAT_MASK(BatMask::new, PLAYER_HEAD, 741306, (char) 0xE237, ACULA),
     // Cloud City
     UNICORN_HORN(UnicornHorn::new, END_ROD, 7413003, (char) 0, UTILITY),
-    MAGIC_CAPE(MagicCape::new, ELYTRA, 7413006, (char) 0xE238, UTILITY, Animation.MAGIC_CAPE),
+    MAGIC_CAPE(MagicCape::new, ELYTRA, 7413006, (char) 0xE238, chrarr(0xE238, 654, 655, 656, 657), UTILITY, Animation.MAGIC_CAPE),
     SNEAKERS(Sneakers::new, LEATHER_BOOTS, 333, UTILITY),
     // Generic
     KITTY_COIN(KittyCoin::new, PLAYER_HEAD, 7413001, (char) 0xE200, CURRENCY),
@@ -184,7 +184,8 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     BLACK_SOFA_RIGHT(ForbiddenMytem::new, RED_WOOL, 145, (char) 0, FURNITURE),
     // Utility
     WEDDING_RING(WeddingRing::new, PLAYER_HEAD, 7413002, (char) 0xE21C, FRIENDS),
-    MAGIC_MAP(MagicMap::new, FILLED_MAP, 7413005, (char) 0xE21D, UTILITY, Animation.MAGIC_MAP),
+    MAGIC_MAP(MagicMap::new, FILLED_MAP, 7413005, (char) 0xE21D,
+              chrarr(0xE21D, 658, 659, 660, 661, 662, 663, 664, 665, 666, 667, 668, 669, 670, 671, 672), UTILITY, Animation.MAGIC_MAP),
     SNOW_SHOVEL(SnowShovel::new, IRON_SHOVEL, 220, UTILITY),
     HASTY_PICKAXE(ForbiddenMytem::new, GOLDEN_PICKAXE, 223, UTILITY),
     TREE_CHOPPER(TreeChopper::new, GOLDEN_AXE, 242, UTILITY),
@@ -446,7 +447,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     SHIFT_KEY(ForbiddenMytem::new, LIGHT_GRAY_CONCRETE, 339, UI),
     THUMBS_UP(ForbiddenMytem::new, GREEN_CONCRETE, 340, UI),
     EYES(ForbiddenMytem::new, ENDER_EYE, 595, UI),
-    RAINBOW_BUTTERFLY(ForbiddenMytem::new, FEATHER, 633, (char) 633, chrarr(633, 634, 635, 636, 637, 638, 639, 640), UI, Animation.frametime(4)),
+    RAINBOW_BUTTERFLY(ForbiddenMytem::new, FEATHER, 633, (char) 633, chrarr(633, 634, 635, 636, 637, 638, 639, 640), UI, Animation.frametime(8)),
+    SNOWFLAKE(ForbiddenMytem::new, SNOWBALL, 673, (char) 673,
+              chrarr(673, 674, 675, 676, 677, 678, 679, 680, 681, 682, 683, 684, 685, 686, 687, 688), UI, Animation.SNOWFLAKE),
     // Collectibles
     HEART(DummyMytem::new, HEART_OF_THE_SEA, 9, (char) 0xE241, COLLECTIBLES),
     STAR(DummyMytem::new, NETHER_STAR, 18, (char) 0xE24B, COLLECTIBLES),

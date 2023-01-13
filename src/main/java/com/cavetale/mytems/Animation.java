@@ -66,7 +66,8 @@ public final class Animation {
                                                                                     new Frame(3),
                                                                                     new Frame(2),
                                                                                     new Frame(1)));
-    public static final Animation SPINNING_COIN = new Animation(false, 0, 0, 2, List.of(new Frame(0, 4),
+
+    public static final Animation SPINNING_COIN = new Animation(false, 0, 0, 3, List.of(new Frame(0, 4),
                                                                                         new Frame(1),
                                                                                         new Frame(2),
                                                                                         new Frame(3),
@@ -74,13 +75,34 @@ public final class Animation {
                                                                                         new Frame(5),
                                                                                         new Frame(6),
                                                                                         new Frame(7)));
+
     public static final Animation MAGIC_CAPE = new Animation(false, 0, 0, 0, List.of(new Frame(0, 8),
                                                                                      new Frame(1, 3),
                                                                                      new Frame(2, 2),
                                                                                      new Frame(3, 3),
                                                                                      new Frame(4, 4)));
+
     public static final Animation DUNE_DIGGER = new Animation(false, 0, 0, 0, List.of(new Frame(0, 55),
                                                                                       new Frame(1),
                                                                                       new Frame(2),
                                                                                       new Frame(3)));
+
+    public static final Animation SNOWFLAKE = new Animation(false, 0, 0, 1, List.of(new Frame[] {
+                // Pause
+                new Frame(0, 20),
+                new Frame(1, 20),
+                new Frame(0, 20),
+                new Frame(1, 20),
+                // Down
+                new Frame(2, 6), new Frame(3, 4), new Frame(4, 2), new Frame(5), new Frame(6, 2), new Frame(7, 4),
+                new Frame(8, 10), new Frame(7, 4), new Frame(6, 2), new Frame(5), new Frame(4), new Frame(3), new Frame(2),
+                // Pause
+                new Frame(0),
+                // Up
+                new Frame(15), new Frame(14), new Frame(13), new Frame(12), new Frame(11, 2), new Frame(10, 4),
+                new Frame(9, 10), new Frame(10, 4), new Frame(11, 2), new Frame(12), new Frame(13, 2), new Frame(14, 4), new Frame(15, 6),
+                // Pause
+                new Frame(0, 20),
+                new Frame(1, 20),
+            }));
 }
