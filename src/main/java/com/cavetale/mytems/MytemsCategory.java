@@ -30,6 +30,7 @@ public enum MytemsCategory {
     MAY,
     MAYPOLE,
     MOB_CATCHERS,
+    MOB_FACE,
     MUSIC,
     MUSICAL,
     MUSIC_HYRULE,
