@@ -447,6 +447,8 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     SHIFT_KEY(ForbiddenMytem::new, LIGHT_GRAY_CONCRETE, 339, UI),
     THUMBS_UP(ForbiddenMytem::new, GREEN_CONCRETE, 340, UI),
     EYES(ForbiddenMytem::new, ENDER_EYE, 595, UI),
+    CAVETALE_DUNGEON(ForbiddenMytem::new, SPAWNER, 706, UI),
+    // Animated Shines
     RAINBOW_BUTTERFLY(ForbiddenMytem::new, FEATHER, 633, (char) 633, chrarr(633, 634, 635, 636, 637, 638, 639, 640), UI, Animation.frametime(8)),
     SNOWFLAKE(ForbiddenMytem::new, SNOWBALL, 673, (char) 673,
               chrarr(673, 674, 675, 676, 677, 678, 679, 680, 681, 682, 683, 684, 685, 686, 687, 688), UI, Animation.SNOWFLAKE),
