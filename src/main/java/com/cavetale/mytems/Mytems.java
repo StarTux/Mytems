@@ -466,6 +466,13 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     DICE12(DiceItem::new, PRISMARINE_SHARD, 246, DIE),
     DICE20(DiceItem::new, PRISMARINE_SHARD, 247, DIE),
     DICE100(DiceItem::new, PRISMARINE_SHARD, 248, DIE),
+    DICE_1(ForbiddenMytem::new, QUARTZ_BLOCK, 707, UI),
+    DICE_2(ForbiddenMytem::new, QUARTZ_BLOCK, 708, UI),
+    DICE_3(ForbiddenMytem::new, QUARTZ_BLOCK, 709, UI),
+    DICE_4(ForbiddenMytem::new, QUARTZ_BLOCK, 710, UI),
+    DICE_5(ForbiddenMytem::new, QUARTZ_BLOCK, 711, UI),
+    DICE_6(ForbiddenMytem::new, QUARTZ_BLOCK, 712, UI),
+    DICE_ROLL(ForbiddenMytem::new, QUARTZ_BLOCK, 713, (char) 713, chrarr(713, 714, 715, 716, 717, 718), UI, Animation.frametime(2)),
     // Leters
     LETTER_A(GlyphItem::new, PLAYER_HEAD, 68, (char) 0xE284, LETTER),
     LETTER_B(GlyphItem::new, PLAYER_HEAD, 69, (char) 0xE285, LETTER),
