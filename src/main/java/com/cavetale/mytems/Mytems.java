@@ -51,6 +51,7 @@ import com.cavetale.mytems.item.mobcostume.CreeperCostume;
 import com.cavetale.mytems.item.mobcostume.EndermanCostume;
 import com.cavetale.mytems.item.mobcostume.SkeletonCostume;
 import com.cavetale.mytems.item.mobcostume.SpiderCostume;
+import com.cavetale.mytems.item.mobslayer.Mobslayer;
 import com.cavetale.mytems.item.music.HyruleInstrument;
 import com.cavetale.mytems.item.music.MusicalInstrument;
 import com.cavetale.mytems.item.photo.Photo;
@@ -725,6 +726,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     // Photo
     PHOTO(Photo::new, FILLED_MAP, 306, PHOTOS),
     DEBUG(DummyMytem::new, DIAMOND, 20, UTILITY),
+    // Mob Arena
+    MOBSLAYER(Mobslayer::new, NETHERITE_SWORD, 719, MOBSLAYERS),
+    MOBSLAYER2(Mobslayer::new, NETHERITE_SWORD, 720, MOBSLAYERS),
+    MOBSLAYER3(Mobslayer::new, NETHERITE_SWORD, 721, MOBSLAYERS),
     // Equipment
     GOLDEN_QUIVER(EquipmentItem::new, STICK, 345, EQUIP_QUIVER),
     STEEL_QUIVER(EquipmentItem::new, STICK, 346, EQUIP_QUIVER),
