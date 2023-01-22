@@ -56,6 +56,13 @@ public final class MytemsTag {
             MytemsCategory.SKELETON_COSTUME,
             MytemsCategory.CHICKEN_COSTUME,
         });
+    public static final MytemsTag UTILITY = new MytemsTag("utility", new MytemsCategory[] {
+            MytemsCategory.UTILITY,
+            MytemsCategory.BINGO_BUKKITS,
+        });
+    public static final MytemsTag WEAPON = new MytemsTag("weapon", new MytemsCategory[] {
+            MytemsCategory.MOBSLAYERS,
+        });
     public static final MytemsTag EQUIPMENT = new MytemsTag("equipment", new MytemsCategory[] {
             MytemsCategory.EQUIP_AXE,
             MytemsCategory.EQUIP_BASIC_IRON_SET,

@@ -4,6 +4,7 @@ public enum MytemsCategory {
     ACULA,
     ARMOR_PART,
     ARROWS,
+    BINGO_BUKKITS,
     CAT_EARS,
     CHICKEN_COSTUME,
     CHRISTMAS,

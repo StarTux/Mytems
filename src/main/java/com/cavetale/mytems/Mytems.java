@@ -25,6 +25,7 @@ import com.cavetale.mytems.item.acula.FlameShield;
 import com.cavetale.mytems.item.acula.GhastBow;
 import com.cavetale.mytems.item.acula.Stompers;
 import com.cavetale.mytems.item.beestick.Beestick;
+import com.cavetale.mytems.item.bingo.BingoBukkit;
 import com.cavetale.mytems.item.captain.Blunderbuss;
 import com.cavetale.mytems.item.captain.CaptainsCutlass;
 import com.cavetale.mytems.item.coin.Coin;
@@ -730,6 +731,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     MOBSLAYER(Mobslayer::new, NETHERITE_SWORD, 719, MOBSLAYERS),
     MOBSLAYER2(Mobslayer::new, NETHERITE_SWORD, 720, MOBSLAYERS),
     MOBSLAYER3(Mobslayer::new, NETHERITE_SWORD, 721, MOBSLAYERS),
+    // Bingo
+    BINGO_BUKKIT(BingoBukkit::new, WOODEN_PICKAXE, 722, BINGO_BUKKITS),
+    GOLD_BINGO_BUKKIT(BingoBukkit::new, WOODEN_PICKAXE, 723, BINGO_BUKKITS),
+    DIAMOND_BINGO_BUKKIT(BingoBukkit::new, WOODEN_PICKAXE, 724, BINGO_BUKKITS),
     // Equipment
     GOLDEN_QUIVER(EquipmentItem::new, STICK, 345, EQUIP_QUIVER),
     STEEL_QUIVER(EquipmentItem::new, STICK, 346, EQUIP_QUIVER),
