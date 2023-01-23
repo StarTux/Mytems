@@ -22,6 +22,7 @@ import org.bukkit.block.data.Waterlogged;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.RayTraceResult;
 import static java.util.Objects.requireNonNull;
@@ -53,6 +54,7 @@ public final class BingoBukkit implements Mytem {
                            textOfChildren(Mytems.SHIFT_KEY, Mytems.MOUSE_RIGHT, text(" Place", GRAY)));
         prototype.editMeta(meta -> {
                 Items.text(meta, baseText);
+                meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                 key.markItemMeta(meta);
             });
     }
