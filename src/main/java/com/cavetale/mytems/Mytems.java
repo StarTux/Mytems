@@ -426,8 +426,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     TURN_LEFT(ForbiddenMytem::new, ARROW, 283, ARROWS),
     TURN_RIGHT(ForbiddenMytem::new, ARROW, 284, ARROWS),
     CHECKBOX(ForbiddenMytem::new, WHITE_CONCRETE, 14, (char) 0xE247, UI),
-    CHECKED_CHECKBOX(ForbiddenMytem::new, GREEN_CONCRETE, 15, (char) 0xE248, UI),
-    CROSSED_CHECKBOX(ForbiddenMytem::new, BARRIER, 16, (char) 0xE249, UI),
+    CHECKED_CHECKBOX(ForbiddenMytem::new, GREEN_CONCRETE, 15, (char) 0xE248,
+                     chrarr(0xE248, 725, 726, 727), UI, Animation.CHECKBOX),
+    CROSSED_CHECKBOX(ForbiddenMytem::new, BARRIER, 16, (char) 0xE249,
+                     chrarr(0xE249, 728, 729, 730), UI, Animation.frametime(20)),
     EAGLE(ForbiddenMytem::new, FEATHER, 19, (char) 0xE24C, UI),
     EARTH(ForbiddenMytem::new, ENDER_PEARL, 5, (char) 0xE23D, UI),
     EASTER_EGG(DummyMytem::new, EGG, 345715, (char) 0xE23C, COLLECTIBLES),
@@ -1323,5 +1325,12 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
         for (int i = 0; i < list.size(); i += 1) {
             animationFrames[i] = list.get(i);
         }
+    }
+
+    public Component getCurrentAnimationFrame() {
+        if (!isAnimated()) return component;
+        long tick = System.currentTimeMillis() / 50L;
+        int frame = (int) (tick % (long) getAnimationFrameCount());
+        return getAnimationFrame(frame);
     }
 }

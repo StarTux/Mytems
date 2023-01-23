@@ -105,4 +105,23 @@ public final class Animation {
                 new Frame(0, 20),
                 new Frame(1, 20),
             }));
+
+    public static final Animation CHECKBOX = new Animation(false, 0, 0, 4, List.of(new Frame[] {
+                new Frame(0),
+                new Frame(1),
+                new Frame(0),
+                new Frame(1),
+                new Frame(0),
+                new Frame(1),
+                new Frame(0),
+                new Frame(1),
+                new Frame(2),
+                new Frame(3),
+                new Frame(2),
+                new Frame(3),
+                new Frame(2),
+                new Frame(3),
+                new Frame(2),
+                new Frame(3),
+            }));
 }
