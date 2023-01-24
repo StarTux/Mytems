@@ -3,6 +3,7 @@ package com.cavetale.mytems.item.pocketmob;
 import com.cavetale.core.font.Unicode;
 import com.cavetale.mytems.MytemTag;
 import com.cavetale.mytems.util.BlockColor;
+import com.cavetale.mytems.util.Entities;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Json;
 import com.cavetale.mytems.util.Text;
@@ -26,6 +27,7 @@ import org.bukkit.World;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Ageable;
+import org.bukkit.entity.Animals;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.Cat;
 import org.bukkit.entity.Creeper;
@@ -129,7 +131,8 @@ public final class PocketMobTag extends MytemTag {
                                                        Component.text(Unicode.HEART.string + health, NamedTextColor.RED),
                                                        Component.text("/", COLOR_BG),
                                                        Component.text(maxHealth, NamedTextColor.RED))));
-                if (mobEntity.getRemoveWhenFarAway() || !mobEntity.isPersistent()) {
+                if ((!(mobEntity instanceof Animals) && mobEntity.getRemoveWhenFarAway())
+                    || !mobEntity.isPersistent() || Entities.isTransient(mobEntity)) {
                     text.add(prop("Warning", Component.text("May Despawn!", TextColor.color(0xFF0000))));
                 }
             }
