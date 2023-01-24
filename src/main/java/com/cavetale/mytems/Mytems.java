@@ -569,6 +569,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     WITHER_SKELETON_FACE(ForbiddenMytem::new, SLIME_BALL, 703, MOB_FACE),
     ENDER_DRAGON_FACE(ForbiddenMytem::new, SLIME_BALL, 704, MOB_FACE),
     STRAY_FACE(ForbiddenMytem::new, SLIME_BALL, 705, MOB_FACE),
+    BEE_FACE(ForbiddenMytem::new, SLIME_BALL, 731, MOB_FACE),
+    TEMPERATE_FROG_FACE(ForbiddenMytem::new, SLIME_BALL, 732, MOB_FACE),
+    COLD_FROG_FACE(ForbiddenMytem::new, SLIME_BALL, 733, MOB_FACE),
+    WARM_FROG_FACE(ForbiddenMytem::new, SLIME_BALL, 734, MOB_FACE),
     // Pic
     PIC_WOLF(ForbiddenMytem::new, BONE, 39, (char) 0xE267, PICTURE),
     PIC_CAT(ForbiddenMytem::new, STRING, 40, (char) 0xE268, PICTURE),
