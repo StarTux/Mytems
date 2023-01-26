@@ -3,13 +3,16 @@ package com.cavetale.mytems.item.wrench;
 import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.event.block.PlayerChangeBlockEvent;
 import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
+import com.cavetale.core.font.VanillaPaintings;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Items;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Art;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
@@ -18,12 +21,14 @@ import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Rail;
 import org.bukkit.entity.ItemFrame;
+import org.bukkit.entity.Painting;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.core.util.CamelCase.toCamelCase;
 import static com.cavetale.mytems.MytemsPlugin.sessionOf;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.space;
@@ -103,6 +108,10 @@ public final class MonkeyWrench implements Mytem {
         if (!event.hasBlock()) return;
         if (player.getGameMode() == GameMode.SPECTATOR) return;
         event.setCancelled(true);
+        if (cancelOnce != null && player.getUniqueId().equals(cancelOnce)) {
+            cancelOnce = null;
+            return;
+        }
         WrenchSession session = sessionOf(player).getFavorites().getOrSet(WrenchSession.class, WrenchSession::new);
         if (session.ticks == player.getTicksLived()) {
             return;
@@ -147,6 +156,8 @@ public final class MonkeyWrench implements Mytem {
         }
     }
 
+    private UUID cancelOnce;
+
     @Override
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player, ItemStack item) {
         if (player.isSneaking()) return;
@@ -159,6 +170,27 @@ public final class MonkeyWrench implements Mytem {
             player.sendActionBar(visible
                                  ? textOfChildren(Mytems.EYES, text("Visible", BLUE))
                                  : textOfChildren(Mytems.BLIND_EYE, text("Invisible", BLUE)));
+        } else if (event.getRightClicked() instanceof Painting painting) {
+            if (!PlayerEntityAbilityQuery.Action.INVENTORY.query(player, painting)) return;
+            event.setCancelled(true);
+            // Painting interactions are still followed by the
+            // PlayerInteractEvent even if cancelled.
+            cancelOnce = player.getUniqueId();
+            Art art = painting.getArt();
+            List<Art> arts = List.of(Art.values());
+            int index = arts.indexOf(art);
+            for (int i = 1; i < arts.size(); i += 1) {
+                index += 1;
+                if (index >= arts.size()) index = 0;
+                Art newArt = arts.get(index);
+                if (painting.setArt(newArt)) {
+                    soundUse(player);
+                    player.sendActionBar(textOfChildren(VanillaPaintings.componentOf(newArt),
+                                                        text(toCamelCase(" ", newArt), BLUE)));
+                    return;
+                }
+            }
+            soundFail(player);
         }
     }
 
