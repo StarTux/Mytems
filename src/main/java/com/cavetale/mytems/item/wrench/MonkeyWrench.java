@@ -2,6 +2,7 @@ package com.cavetale.mytems.item.wrench;
 
 import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.event.block.PlayerChangeBlockEvent;
+import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Items;
@@ -16,17 +17,18 @@ import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Rail;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.mytems.MytemsPlugin.sessionOf;
 import static net.kyori.adventure.text.Component.empty;
-import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
-import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
+import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 @Getter
@@ -43,10 +45,8 @@ public final class MonkeyWrench implements Mytem {
                                          text("Modify blocks without", GRAY),
                                          text("picking them up.", GRAY),
                                          empty(),
-                                         join(noSeparators(),
-                                              Mytems.MOUSE_LEFT, text(" Switch mode", GRAY)),
-                                         join(noSeparators(),
-                                              Mytems.MOUSE_RIGHT, text(" Change block", GRAY))));
+                                         textOfChildren(Mytems.MOUSE_LEFT, text(" Switch mode", GRAY)),
+                                         textOfChildren(Mytems.MOUSE_RIGHT, text(" Change block", GRAY))));
                 meta.setUnbreakable(true);
                 meta.addItemFlags(ItemFlag.values());
                 key.markItemMeta(meta);
@@ -93,9 +93,8 @@ public final class MonkeyWrench implements Mytem {
                 : 0;
             session.edit = editList.get(newIndex);
         }
-        player.sendActionBar(join(noSeparators(),
-                                  text((newIndex + 1) + "/" + editList.size() + " ", GRAY),
-                                  session.edit.getDisplayName()));
+        player.sendActionBar(textOfChildren(text((newIndex + 1) + "/" + editList.size() + " ", GRAY),
+                                            session.edit.getDisplayName()));
         soundSwitch(player);
     }
 
@@ -140,14 +139,26 @@ public final class MonkeyWrench implements Mytem {
                 block.setType(Material.AIR, false);
             }
             block.setBlockData(blockData, false);
-            player.sendActionBar(join(noSeparators(),
-                                      session.edit.getDisplayName(),
-                                      space(),
-                                      result));
+            player.sendActionBar(textOfChildren(session.edit.getDisplayName(), space(), result));
             soundUse(player);
         } else {
             player.sendActionBar(text("FAIL", DARK_RED));
             soundFail(player);
+        }
+    }
+
+    @Override
+    public void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player, ItemStack item) {
+        if (player.isSneaking()) return;
+        if (event.getRightClicked() instanceof ItemFrame itemFrame) {
+            if (!PlayerEntityAbilityQuery.Action.INVENTORY.query(player, itemFrame)) return;
+            event.setCancelled(true);
+            boolean visible = !itemFrame.isVisible();
+            itemFrame.setVisible(visible);
+            soundUse(player);
+            player.sendActionBar(visible
+                                 ? textOfChildren(Mytems.EYES, text("Visible", BLUE))
+                                 : textOfChildren(Mytems.BLIND_EYE, text("Invisible", BLUE)));
         }
     }
 
