@@ -1,7 +1,7 @@
 package com.cavetale.mytems.item.pocketmob;
 
-import com.cavetale.core.font.Unicode;
 import com.cavetale.mytems.MytemTag;
+import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.BlockColor;
 import com.cavetale.mytems.util.Entities;
 import com.cavetale.mytems.util.Items;
@@ -17,8 +17,6 @@ import java.util.Objects;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.JoinConfiguration;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.DyeColor;
@@ -55,6 +53,12 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Colorable;
 import org.bukkit.persistence.PersistentDataContainer;
+import static com.cavetale.core.font.Unicode.tiny;
+import static net.kyori.adventure.text.Component.empty;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.textOfChildren;
+import static net.kyori.adventure.text.format.NamedTextColor.*;
+import static net.kyori.adventure.text.format.TextColor.color;
 
 /**
  * The data stored in a PocketMob item.
@@ -63,8 +67,8 @@ import org.bukkit.persistence.PersistentDataContainer;
 public final class PocketMobTag extends MytemTag {
     public static final NamespacedKey KEY_MOB_TAG = NamespacedKey.fromString("pocketmob:mob_tag");
     public static final NamespacedKey KEY_MOB = NamespacedKey.fromString("pocketmob:mob");
-    public static final TextColor COLOR_FG = TextColor.color(0xffa600); // gold
-    public static final TextColor COLOR_BG = TextColor.color(0x3f274d); // pale purle
+    public static final TextColor COLOR_FG = color(0xffa600); // gold
+    public static final TextColor COLOR_BG = color(0x3f274d); // pale purle
     protected String mobTag; // Legacy, Dirty
     protected String mob; // UnsafeValues#serializeEntity, Base64
 
@@ -83,21 +87,22 @@ public final class PocketMobTag extends MytemTag {
     }
 
     private static Component prop(String key, String value) {
-        return Component.join(JoinConfiguration.noSeparators(),
-                              Component.text(key + " ", COLOR_BG),
-                              Component.text(value, COLOR_FG));
+        return textOfChildren(text(tiny(key) + " ", COLOR_BG), text(value, COLOR_FG));
+    }
+
+    private static Component prop(String key, boolean value) {
+        return textOfChildren(text(tiny(key) + " ", COLOR_BG),
+                              (value ? Mytems.OK : Mytems.NO),
+                              (value ? text("Yes", GREEN) : text("No", RED)));
     }
 
     private static Component prop(String key, Component value) {
-        return Component.join(JoinConfiguration.noSeparators(),
-                              Component.text(key + " ", COLOR_BG),
-                              value);
+        return textOfChildren(text(tiny(key) + " ", COLOR_BG), value);
     }
 
     private static Component prop(String key, BlockColor blockColor) {
-        return Component.join(JoinConfiguration.noSeparators(),
-                              Component.text(key + " ", COLOR_BG),
-                              Component.text(blockColor.niceName, blockColor.textColor));
+        return textOfChildren(text(tiny(key) + " ", COLOR_BG),
+                              text(blockColor.niceName, blockColor.textColor));
     }
 
     /**
@@ -122,18 +127,15 @@ public final class PocketMobTag extends MytemTag {
             }
             if (entity instanceof Mob mobEntity) {
                 Component customName = mobEntity.customName();
-                if (customName != null && !Component.empty().equals(customName)) {
+                if (customName != null && !empty().equals(customName)) {
                     text.add(prop("Name", customName));
                 }
                 String health = "" + (int) Math.ceil(mobEntity.getHealth());
                 String maxHealth = "" + (int) Math.ceil(mobEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
-                text.add(prop("Health", Component.join(JoinConfiguration.noSeparators(),
-                                                       Component.text(Unicode.HEART.string + health, NamedTextColor.RED),
-                                                       Component.text("/", COLOR_BG),
-                                                       Component.text(maxHealth, NamedTextColor.RED))));
+                text.add(prop("Health", textOfChildren(Mytems.HEART, text(health, RED), text("/", COLOR_BG), text(maxHealth, RED))));
                 if ((!(mobEntity instanceof Animals) && mobEntity.getRemoveWhenFarAway())
                     || !mobEntity.isPersistent() || Entities.isTransient(mobEntity)) {
-                    text.add(prop("Warning", Component.text("May Despawn!", TextColor.color(0xFF0000))));
+                    text.add(prop("Warning", text("May Despawn!", color(0xFF0000))));
                 }
             }
             List<String> nameComponents = new ArrayList<>();
@@ -183,6 +185,8 @@ public final class PocketMobTag extends MytemTag {
                 if (bee.getAnger() > 0) {
                     nameComponents.add(0, "Angry");
                 }
+                text.add(prop("Nectar", bee.hasNectar()));
+                text.add(prop("Sting", !bee.hasStung()));
             } else if (entity instanceof PufferFish pufferfish) {
                 if (pufferfish.getPuffState() > 0) {
                     nameComponents.add(0, "Inflated");
@@ -242,18 +246,17 @@ public final class PocketMobTag extends MytemTag {
                 nameComponents.add(finalNameComponent);
             }
             if (text.get(0) == null) {
-                text.set(0, Component.text(String.join(" ", nameComponents), COLOR_FG));
+                text.set(0, text(String.join(" ", nameComponents), COLOR_FG));
             } else {
-                text.add(1, Component.text(String.join(" ", nameComponents), COLOR_BG));
+                text.add(1, text(String.join(" ", nameComponents), COLOR_BG));
             }
         } else {
             Map<String, Object> map = parseMobTag();
             Object o;
             o = map.get("Health");
             if (o instanceof Number) {
-                text.add(Component.join(JoinConfiguration.noSeparators(),
-                                        Component.text("Health ", COLOR_BG),
-                                        Component.text(((Number) o).intValue(), COLOR_FG)));
+                text.add(textOfChildren(text("Health ", COLOR_BG),
+                                        text(((Number) o).intValue(), COLOR_FG)));
             }
         }
         Items.text(meta, text);
@@ -278,7 +281,7 @@ public final class PocketMobTag extends MytemTag {
         if (mobTag == null) return new HashMap<>();
         try {
             @SuppressWarnings("unchecked")
-            Map<String, Object> result = (Map<String, Object>) Json.deserialize(mobTag, Map.class);
+                Map<String, Object> result = (Map<String, Object>) Json.deserialize(mobTag, Map.class);
             return result;
         } catch (Exception e) {
             e.printStackTrace();
