@@ -33,6 +33,12 @@ public final class Skull {
         return create(this.name, this.uuid, this.texture, this.signature);
     }
 
+    public ItemStack create(int amount) {
+        ItemStack result = create();
+        result.setAmount(amount);
+        return result;
+    }
+
     public void apply(SkullMeta meta) {
         apply(meta, name, uuid, texture, signature);
     }

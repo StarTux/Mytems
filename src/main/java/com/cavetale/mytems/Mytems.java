@@ -1181,21 +1181,21 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
      * Create an item with the looks of the Mytem, but none of the
      * stats, id, or lore attached.
      */
-    public ItemStack createIcon() {
+    public ItemStack createIcon(int amount) {
         final ItemStack item;
         if (material == PLAYER_HEAD) {
-            item = Skull.of(createItemStack()).create();
+            item = Skull.of(createItemStack()).create(amount);
         } else if (material == LEATHER_HELMET
                    || material == LEATHER_CHESTPLATE
                    || material == LEATHER_LEGGINGS
                    || material == LEATHER_BOOTS) {
-            item = createItemStack();
+            item = createItemStack(1);
             item.editMeta(meta -> {
                     meta.displayName(Component.empty());
                     meta.lore(List.of());
                 });
         } else {
-            item = new ItemStack(material);
+            item = new ItemStack(material, amount);
         }
         if (customModelData != null) {
             item.editMeta(meta -> meta.setCustomModelData(customModelData));
@@ -1203,8 +1203,16 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
         return item;
     }
 
+    public ItemStack createIcon() {
+        return createIcon(1);
+    }
+
     public ItemStack createIcon(List<Component> text) {
-        return Items.text(createIcon(), text);
+        return Items.text(createIcon(1), text);
+    }
+
+    public ItemStack createIcon(int amount, List<Component> text) {
+        return Items.text(createIcon(amount), text);
     }
 
     public boolean isItem(ItemStack item) {
