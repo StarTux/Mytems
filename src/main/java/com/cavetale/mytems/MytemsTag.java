@@ -63,6 +63,10 @@ public final class MytemsTag {
     public static final MytemsTag WEAPON = new MytemsTag("weapon", new MytemsCategory[] {
             MytemsCategory.MOBSLAYERS,
         });
+    public static final MytemsTag COLLECTIBLES = new MytemsTag("collectibles", new MytemsCategory[] {
+            MytemsCategory.COLLECTIBLES,
+            MytemsCategory.CAVEBOY,
+        });
     public static final MytemsTag EQUIPMENT = new MytemsTag("equipment", new MytemsCategory[] {
             MytemsCategory.EQUIP_AXE,
             MytemsCategory.EQUIP_BASIC_IRON_SET,

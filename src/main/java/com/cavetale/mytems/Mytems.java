@@ -24,6 +24,8 @@ import com.cavetale.mytems.item.acula.DrAculaStaff;
 import com.cavetale.mytems.item.acula.FlameShield;
 import com.cavetale.mytems.item.acula.GhastBow;
 import com.cavetale.mytems.item.acula.Stompers;
+import com.cavetale.mytems.item.arcade.Caveboy;
+import com.cavetale.mytems.item.arcade.SealedCaveboy;
 import com.cavetale.mytems.item.beestick.Beestick;
 import com.cavetale.mytems.item.bingo.BingoBukkit;
 import com.cavetale.mytems.item.captain.Blunderbuss;
@@ -752,6 +754,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     BINGO_BUKKIT(BingoBukkit::new, WOODEN_PICKAXE, 722, BINGO_BUKKITS),
     GOLD_BINGO_BUKKIT(BingoBukkit::new, WOODEN_PICKAXE, 723, BINGO_BUKKITS),
     DIAMOND_BINGO_BUKKIT(BingoBukkit::new, WOODEN_PICKAXE, 724, BINGO_BUKKITS),
+    // Caveboy
+    SEALED_CAVEBOY(SealedCaveboy::new, WOODEN_SHOVEL, 748, CAVEBOY),
+    CAVEBOY_TICTACTOE(Caveboy::new, IRON_SHOVEL, 746, CAVEBOY),
+    CAVEBOY_TNTSWEEP(Caveboy::new, IRON_SHOVEL, 747, CAVEBOY),
     // Equipment
     GOLDEN_QUIVER(EquipmentItem::new, STICK, 345, EQUIP_QUIVER),
     STEEL_QUIVER(EquipmentItem::new, STICK, 346, EQUIP_QUIVER),
