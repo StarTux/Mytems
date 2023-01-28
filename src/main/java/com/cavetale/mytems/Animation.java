@@ -124,4 +124,25 @@ public final class Animation {
                 new Frame(2),
                 new Frame(3),
             }));
+
+    public static final Animation LIGHTNING = new Animation(false, 0, 0, 2, List.of(new Frame[] {
+                new Frame(0, 100),
+                new Frame(1),
+                new Frame(2),
+                new Frame(3),
+                new Frame(4),
+                new Frame(5),
+                new Frame(6),
+                new Frame(7),
+                new Frame(8),
+                new Frame(9),
+                new Frame(10, 1),
+                new Frame(11, 1),
+                new Frame(12, 1),
+                new Frame(13, 1),
+                new Frame(14, 1),
+                new Frame(15, 1),
+                new Frame(16, 1),
+                new Frame(17, 1),
+            }));
 }

@@ -463,7 +463,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     STAR(DummyMytem::new, NETHER_STAR, 18, (char) 0xE24B, COLLECTIBLES),
     MOON(DummyMytem::new, YELLOW_DYE, 204, COLLECTIBLES),
     GREEN_MOON(DummyMytem::new, LIME_DYE, 592, COLLECTIBLES),
-    LIGHTNING(DummyMytem::new, LIGHTNING_ROD, 250, COLLECTIBLES),
+    LIGHTNING(DummyMytem::new, LIGHTNING_ROD, 250, (char) 250,
+              chrarr(250, 749, 750, 751, 752, 753, 754, 755, 756, 757, 758, 759, 760, 761, 762, 763, 764, 765),
+              COLLECTIBLES, Animation.LIGHTNING),
     // Dice
     DICE(DiceItem::new, PLAYER_HEAD, 213, DIE),
     DICE4(DiceItem::new, PRISMARINE_SHARD, 243, DIE),
