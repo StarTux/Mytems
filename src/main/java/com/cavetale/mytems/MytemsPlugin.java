@@ -107,7 +107,12 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
 
     public void enableItems() {
         for (Mytems it : Mytems.values()) {
-            Mytem mytem = it.ctor.apply(it);
+            final Mytem mytem;
+            try {
+                mytem = it.mytemClass.getConstructor(Mytems.class).newInstance(it);
+            } catch (Exception t) {
+                throw new RuntimeException(t);
+            }
             mytems.put(it, mytem);
             mytem.enable();
         }
@@ -270,7 +275,13 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                Mytem mytem = customMytemSlot.mytems.ctor.apply(customMytemSlot.mytems);
+                final Mytem mytem;
+                try {
+                    Mytems it = customMytemSlot.mytems;
+                    mytem = it.mytemClass.getConstructor(Mytems.class).newInstance(it);
+                } catch (Exception t) {
+                    throw new RuntimeException(t);
+                }
                 mytems.put(customMytemSlot.mytems, mytem);
                 mytem.enable();
             }

@@ -16,6 +16,7 @@ import lombok.Value;
  */
 @Value
 public final class Animation {
+    public final String name;
     public final boolean interpolate;
     public final int width;
     public final int height;
@@ -33,10 +34,11 @@ public final class Animation {
     }
 
     public static Animation frametime(int frametime) {
-        return new Animation(false, 0, 0, frametime, null);
+        return new Animation("frametime(" + frametime + ")", false, 0, 0, frametime, null);
     }
 
-    public static final Animation MAGIC_MAP = new Animation(false, 0, 0, 6, List.of(new Frame(0, 60),
+    public static final Animation MAGIC_MAP = new Animation("MAGIC_MAP",
+                                                            false, 0, 0, 6, List.of(new Frame(0, 60),
                                                                                     new Frame(1),
                                                                                     new Frame(2),
                                                                                     new Frame(3),
@@ -67,7 +69,8 @@ public final class Animation {
                                                                                     new Frame(2),
                                                                                     new Frame(1)));
 
-    public static final Animation SPINNING_COIN = new Animation(false, 0, 0, 3, List.of(new Frame(0, 4),
+    public static final Animation SPINNING_COIN = new Animation("SPINNING_COIN",
+                                                                false, 0, 0, 3, List.of(new Frame(0, 4),
                                                                                         new Frame(1),
                                                                                         new Frame(2),
                                                                                         new Frame(3),
@@ -76,18 +79,21 @@ public final class Animation {
                                                                                         new Frame(6),
                                                                                         new Frame(7)));
 
-    public static final Animation MAGIC_CAPE = new Animation(false, 0, 0, 0, List.of(new Frame(0, 8),
+    public static final Animation MAGIC_CAPE = new Animation("MAGIC_CAPE",
+                                                             false, 0, 0, 0, List.of(new Frame(0, 8),
                                                                                      new Frame(1, 3),
                                                                                      new Frame(2, 2),
                                                                                      new Frame(3, 3),
                                                                                      new Frame(4, 4)));
 
-    public static final Animation DUNE_DIGGER = new Animation(false, 0, 0, 0, List.of(new Frame(0, 55),
+    public static final Animation DUNE_DIGGER = new Animation("DUNE_DIGGER",
+                                                              false, 0, 0, 0, List.of(new Frame(0, 55),
                                                                                       new Frame(1),
                                                                                       new Frame(2),
                                                                                       new Frame(3)));
 
-    public static final Animation SNOWFLAKE = new Animation(false, 0, 0, 1, List.of(new Frame[] {
+    public static final Animation SNOWFLAKE = new Animation("SNOWFLAKE",
+                                                            false, 0, 0, 1, List.of(new Frame[] {
                 // Pause
                 new Frame(0, 20),
                 new Frame(1, 20),
@@ -106,7 +112,7 @@ public final class Animation {
                 new Frame(1, 20),
             }));
 
-    public static final Animation CHECKBOX = new Animation(false, 0, 0, 4, List.of(new Frame[] {
+    public static final Animation CHECKBOX = new Animation("CHECKBOX", false, 0, 0, 4, List.of(new Frame[] {
                 new Frame(0),
                 new Frame(1),
                 new Frame(0),
@@ -125,7 +131,7 @@ public final class Animation {
                 new Frame(3),
             }));
 
-    public static final Animation LIGHTNING = new Animation(false, 0, 0, 2, List.of(new Frame[] {
+    public static final Animation LIGHTNING = new Animation("LIGHTNING", false, 0, 0, 2, List.of(new Frame[] {
                 new Frame(0, 100),
                 new Frame(1),
                 new Frame(2),
