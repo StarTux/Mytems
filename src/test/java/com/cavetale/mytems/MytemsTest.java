@@ -1,5 +1,10 @@
 package com.cavetale.mytems;
 
+import com.cavetale.core.font.DefaultFont;
+import com.cavetale.core.font.Font;
+import com.cavetale.core.font.VanillaEffects;
+import com.cavetale.core.font.VanillaItems;
+import com.cavetale.core.font.VanillaPaintings;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -8,10 +13,11 @@ import java.util.Set;
 import org.junit.Test;
 
 public final class MytemsTest {
+    final Set<Character> characterSet = new HashSet<>();
+
     @Test
     public void test() {
         final Set<Integer> customModelDataSet = new HashSet<>();
-        final Set<Character> characterSet = new HashSet<>();
         int min = Integer.MAX_VALUE;
         for (Mytems mytems : Mytems.values()) {
             if (mytems.material == null) {
@@ -59,10 +65,27 @@ public final class MytemsTest {
         System.out.println("// CustomModelData Range: " + min + "..." + max);
         System.out.println("// CustomModelData Gaps: " + gaps);
         System.out.println("// CustomModelData Next: " + (max + 1));
-        testCharacters(characterSet);
+        testCharacters();
+        testCore(DefaultFont.class);
+        testCore(VanillaEffects.class);
+        testCore(VanillaPaintings.class);
+        testCore(VanillaItems.class);
     }
 
-    private void testCharacters(Set<Character> characterSet) {
+    /**
+     * Check for clashes with Core.  Must be called after the
+     * characterSet has been populated.
+     */
+    private <E extends Enum<E> & Font> void testCore(Class<E> clazz) {
+        for (E font : clazz.getEnumConstants()) {
+            char value = font.getCharacter();
+            if (characterSet.contains(value)) {
+                throw new IllegalStateException("Core Clash: " + clazz.getSimpleName() + "." + font.name() + ": " + strint((int) value));
+            }
+        }
+    }
+
+    private void testCharacters() {
         // Character
         List<Character> characterList = new ArrayList<>(characterSet);
         Collections.sort(characterList);
@@ -88,7 +111,7 @@ public final class MytemsTest {
     }
 
     private String strint(int in) {
-        if (in < 0xE000 || in > 0xEEEE) {
+        if (in < 0xE000 || in > 0xF8FF) {
             return "" + in;
         } else {
             return "0x" + Integer.toHexString(in).toUpperCase();
@@ -99,7 +122,7 @@ public final class MytemsTest {
      * Rewrite the Mytems enum to make automated changes.
      */
     public void rewriteAllMytems() {
-        char top = (char) 0xE2AD;
+        char top = (char) 0xF000;
         for (Mytems mytems : Mytems.values()) {
             Class<?> enclosing = mytems.mytemClass.getEnclosingClass();
             String className = enclosing != null
