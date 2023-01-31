@@ -101,4 +101,11 @@ public enum PocketMobType {
     public static PocketMobType of(Mytems mytems) {
         return MYTEMS_MAP.get(mytems);
     }
+
+    public static PocketMobType of(EntityType entityType) {
+        for (var it : values()) {
+            if (it.entityType == entityType) return it;
+        }
+        return null;
+    }
 }
