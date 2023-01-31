@@ -55,6 +55,7 @@ public final class MytemsTag {
             MytemsCategory.ENDERMAN_COSTUME,
             MytemsCategory.SKELETON_COSTUME,
             MytemsCategory.CHICKEN_COSTUME,
+            MytemsCategory.BEE_COSTUME,
         });
     public static final MytemsTag UTILITY = new MytemsTag("utility", new MytemsCategory[] {
             MytemsCategory.UTILITY,

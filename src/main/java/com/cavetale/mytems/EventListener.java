@@ -89,7 +89,11 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler
-    void onPlayerInteract(PlayerInteractEvent event) {
+    private void onPlayerInteract(PlayerInteractEvent event) {
+        Player player = event.getPlayer();
+        for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
+            setBonus.onPlayerInteract(event, player);
+        }
         switch (event.getAction()) {
         case RIGHT_CLICK_BLOCK:
         case RIGHT_CLICK_AIR: {
@@ -97,11 +101,11 @@ public final class EventListener implements Listener {
             if (item != null && item.getType() == Material.WRITTEN_BOOK) {
                 // Close inventories before opening any books because
                 // InventoryCloseEvent is never called!
-                event.getPlayer().closeInventory();
+                player.closeInventory();
             }
             Mytems mytems = Mytems.forItem(item);
             if (mytems == null) return;
-            mytems.getMytem().onPlayerRightClick(event, event.getPlayer(), item);
+            mytems.getMytem().onPlayerRightClick(event, player, item);
             break;
         }
         case LEFT_CLICK_BLOCK:
@@ -109,7 +113,7 @@ public final class EventListener implements Listener {
             ItemStack item = event.getItem();
             Mytems mytems = Mytems.forItem(item);
             if (mytems == null) return;
-            mytems.getMytem().onPlayerLeftClick(event, event.getPlayer(), item);
+            mytems.getMytem().onPlayerLeftClick(event, player, item);
             break;
         }
         default: break;
@@ -117,7 +121,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler
-    void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
+    private void onPlayerInteractEntity(PlayerInteractEntityEvent event) {
         Player player = event.getPlayer();
         ItemStack item = player.getInventory().getItem(event.getHand());
         Mytems mytems = Mytems.forItem(item);
@@ -149,7 +153,7 @@ public final class EventListener implements Listener {
      * - PrepareSmithingEvent
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-    void onPrepareResult(PrepareResultEvent event) {
+    private void onPrepareResult(PrepareResultEvent event) {
         ItemStack item = event.getResult();
         Mytems mytems = Mytems.forItem(item);
         if (mytems == null) return;
@@ -157,7 +161,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-    void onPrepareItemEnchant(PrepareItemEnchantEvent event) {
+    private void onPrepareItemEnchant(PrepareItemEnchantEvent event) {
         ItemStack item = event.getItem();
         Mytems mytems = Mytems.forItem(item);
         if (mytems == null) return;
@@ -172,7 +176,7 @@ public final class EventListener implements Listener {
      * Mytems should not be wasted in regular recipes.
      */
     @EventHandler(ignoreCancelled = true, priority = EventPriority.LOW)
-    void onPrepareItemCraft(PrepareItemCraftEvent event) {
+    private void onPrepareItemCraft(PrepareItemCraftEvent event) {
         for (ItemStack item : event.getInventory().getMatrix()) {
             Mytems mytems = Mytems.forItem(item);
             if (mytems != null) {
@@ -183,7 +187,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.MONITOR)
-    void onPlayerFallDamage(EntityDamageEvent event) {
+    private void onPlayerFallDamage(EntityDamageEvent event) {
         if (event.getCause() != EntityDamageEvent.DamageCause.FALL) return;
         if (!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
@@ -200,7 +204,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.HIGH)
-    void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
+    private void onEntityDamageByEntity(EntityDamageByEntityEvent event) {
         if (event.getDamager() instanceof Player) {
             if (event.getCause() == DamageCause.ENTITY_ATTACK) {
                 Player player = (Player) event.getDamager();
@@ -220,7 +224,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.LOW)
-    void onEntityShootBow(EntityShootBowEvent event) {
+    private void onEntityShootBow(EntityShootBowEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
         ItemStack item = event.getBow();
         if (item == null) return;
@@ -232,12 +236,12 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler
-    void onPlayerItemHeld(PlayerItemHeldEvent event) {
+    private void onPlayerItemHeld(PlayerItemHeldEvent event) {
         plugin.sessions.of(event.getPlayer()).equipmentDidChange();
     }
 
     @EventHandler
-    void onPlayerArmorChange(PlayerArmorChangeEvent event) {
+    private void onPlayerArmorChange(PlayerArmorChangeEvent event) {
         Mytems oldMytems = Mytems.forItem(event.getOldItem());
         if (oldMytems != null) {
             oldMytems.getMytem().onPlayerArmorRemove(event, event.getPlayer(), event.getOldItem());
@@ -258,7 +262,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
-    void onEntityAddToWorld(EntityAddToWorldEvent event) {
+    private void onEntityAddToWorld(EntityAddToWorldEvent event) {
         if (event.getEntity() instanceof Item) {
             Item item = (Item) event.getEntity();
             ItemStack itemStack = item.getItemStack();
@@ -282,7 +286,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler
-    void onEntityPickupItem(EntityPickupItemEvent event) {
+    private void onEntityPickupItem(EntityPickupItemEvent event) {
         ItemStack item = event.getItem().getItemStack();
         Mytems mytems = Mytems.forItem(item);
         if (mytems == null) return;
@@ -290,7 +294,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOW)
-    void onInventoryPickupItem(InventoryPickupItemEvent event) {
+    private void onInventoryPickupItem(InventoryPickupItemEvent event) {
         ItemStack item = event.getItem().getItemStack();
         Mytems mytems = Mytems.forItem(item);
         if (mytems == null) return;
@@ -298,13 +302,13 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler
-    void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
+    private void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
         Player player = event.getPlayer();
         plugin.sessions.of(player).equipmentDidChange();
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    void onBlockPlace(BlockPlaceEvent event) {
+    private void onBlockPlace(BlockPlaceEvent event) {
         ItemStack itemStack = event.getItemInHand();
         if (itemStack != null) {
             Mytems mytems = Mytems.forItem(itemStack);
@@ -315,7 +319,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    void onBlockBreak(BlockBreakEvent event) {
+    private void onBlockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         if (itemStack != null) {
@@ -327,7 +331,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    void onBlockDamage(BlockDamageEvent event) {
+    private void onBlockDamage(BlockDamageEvent event) {
         Player player = event.getPlayer();
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         if (itemStack != null) {
@@ -339,7 +343,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    void onPlayerBucketFill(PlayerBucketFillEvent event) {
+    private void onPlayerBucketFill(PlayerBucketFillEvent event) {
         ItemStack itemStack = event.getItemStack();
         if (itemStack == null) return;
         Mytems mytems = Mytems.forItem(itemStack);
@@ -348,7 +352,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    void onEntityToggleGlide(EntityToggleGlideEvent event) {
+    private void onEntityToggleGlide(EntityToggleGlideEvent event) {
         if (!(event.getEntity() instanceof Player)) return;
         Player player = (Player) event.getEntity();
         ItemStack itemStack = player.getInventory().getChestplate();
@@ -359,7 +363,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    void onPlayerItemConsume(PlayerItemConsumeEvent event) {
+    private void onPlayerItemConsume(PlayerItemConsumeEvent event) {
         Player player = event.getPlayer();
         ItemStack item = event.getItem();
         Mytems mytems = Mytems.forItem(item);
@@ -372,7 +376,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    void onEntityPotionEffect(EntityPotionEffectEvent event) {
+    private void onEntityPotionEffect(EntityPotionEffectEvent event) {
         if (event.getEntity() instanceof Player) {
             Player player = (Player) event.getEntity();
             for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
@@ -382,7 +386,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    void onPlayerJump(PlayerJumpEvent event) {
+    private void onPlayerJump(PlayerJumpEvent event) {
         Player player = event.getPlayer();
         for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
             setBonus.onPlayerJump(event, player);
@@ -390,7 +394,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGH)
-    void onPlayerMove(PlayerMoveEvent event) {
+    private void onPlayerMove(PlayerMoveEvent event) {
         if (!event.hasChangedPosition()) return;
         Player player = event.getPlayer();
         for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
@@ -399,7 +403,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler
-    void onPluginDisable(PluginDisableEvent event) {
+    private void onPluginDisable(PluginDisableEvent event) {
         if (event.getPlugin() == plugin) return;
         if (event.getPlugin() instanceof JavaPlugin) {
             plugin.onDisablePlugin((JavaPlugin) event.getPlugin());
@@ -407,7 +411,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onChunkLoad(ChunkLoadEvent event) {
+    private void onChunkLoad(ChunkLoadEvent event) {
         final Chunk chunk = event.getChunk();
         Bukkit.getScheduler().runTask(plugin, () -> {
                 PersistentDataContainer tag = chunk.getPersistentDataContainer();
@@ -419,7 +423,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
-    protected void onEntitiesLoad(EntitiesLoadEvent event) {
+    private void onEntitiesLoad(EntitiesLoadEvent event) {
         Bukkit.getScheduler().runTask(plugin, () -> {
                 for (Entity entity : event.getEntities()) {
                     plugin.fixEntity(entity);
@@ -428,13 +432,13 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
-    protected void onPlayerAttemptPickupItem(PlayerAttemptPickupItemEvent event) {
+    private void onPlayerAttemptPickupItem(PlayerAttemptPickupItemEvent event) {
         Mytems mytems = Mytems.forItem(event.getItem().getItemStack());
         if (mytems == null) return;
         mytems.getMytem().onPlayerAttemptPickupItem(event);
     }
 
-    protected boolean onPlayerLaunchTridentRecursiveLock;
+    private boolean onPlayerLaunchTridentRecursiveLock;
 
     /**
      * Return elytra with loytalty instantly.  We do this by
@@ -445,7 +449,7 @@ public final class EventListener implements Listener {
      * the ideal solution, is not possible.
      */
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    protected void onPlayerLaunchTrident(ProjectileLaunchEvent event) {
+    private void onPlayerLaunchTrident(ProjectileLaunchEvent event) {
         if (onPlayerLaunchTridentRecursiveLock) return;
         if (!(event.getEntity() instanceof Trident trident)) return;
         ItemStack itemStack = trident.getItemStack();
@@ -500,10 +504,10 @@ public final class EventListener implements Listener {
         trident.remove();
     }
 
-    protected DamageCalculationEvent damageCalculationEvent;
+    private DamageCalculationEvent damageCalculationEvent;
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    protected void onEntityDamageCalculateLow(EntityDamageEvent event) {
+    private void onEntityDamageCalculateLow(EntityDamageEvent event) {
         DamageCalculation calc = new DamageCalculation(event);
         if (!calc.isValid()) return;
         damageCalculationEvent = new DamageCalculationEvent(calc);
@@ -520,7 +524,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
-    protected void onEntityDamageCalculateHighest(EntityDamageEvent event) {
+    private void onEntityDamageCalculateHighest(EntityDamageEvent event) {
         if (damageCalculationEvent == null) return;
         if (damageCalculationEvent.getEntityDamageEvent() != event) {
             damageCalculationEvent = null;
@@ -536,7 +540,7 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(priority = EventPriority.NORMAL)
-    protected void onDamageCalculation(DamageCalculationEvent event) {
+    private void onDamageCalculation(DamageCalculationEvent event) {
         // Defender
         if (event.targetIsPlayer()) {
             Player target = event.getTargetPlayer();

@@ -16,6 +16,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.bukkit.inventory.ItemStack;
@@ -94,6 +95,8 @@ public interface SetBonus {
     default void onAttackingDamageCalculation(DamageCalculationEvent event) { }
 
     default void onEntityTargetPlayer(EntityTargetEvent event, Player player) { }
+
+    default void onPlayerInteract(PlayerInteractEvent event, Player player) { }
 
     default void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player) { }
 
