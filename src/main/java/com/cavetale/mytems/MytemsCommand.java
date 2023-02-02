@@ -105,9 +105,9 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         serializeNode.addChild("base64").denyTabCompletion()
             .description("Serialize hand via base64")
             .playerCaller(this::serializeBase64);
-        serializeNode.addChild("head").denyTabCompletion()
+        serializeNode.addChild("skull").denyTabCompletion()
             .description("Serialize player head in hand")
-            .playerCaller(this::serializeHead);
+            .playerCaller(this::serializeSkull);
         serializeNode.addChild("java").arguments("item")
             .completers(CommandArgCompleter.enumLowerList(Mytems.class))
             .description("Serialize item to Java")
@@ -357,17 +357,19 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         return true;
     }
 
-    protected boolean serializeHead(Player player, String[] args) {
+    protected boolean serializeSkull(Player player, String[] args) {
         if (args.length != 0) return false;
         ItemStack itemStack = player.getInventory().getItemInMainHand();
         if (itemStack == null || itemStack.getType() != Material.PLAYER_HEAD) {
             throw new CommandWarn("There's no player head in your main hand!");
         }
         Skull skull = Skull.of(itemStack);
-        player.sendMessage(Json.serialize(skull));
-        plugin.getLogger().info("Serialize Head: " + Json.serialize(skull));
+        player.sendMessage(text(Json.serialize(skull), AQUA)
+                           .hoverEvent(showText(text("" + skull.getTexture(), YELLOW)))
+                           .insertion("" + skull.getTexture()));
+        plugin.getLogger().info("Serialize Head: " + Json.prettyPrint(skull));
         plugin.getDataFolder().mkdirs();
-        File file = new File(plugin.getDataFolder(), "head.json");
+        File file = new File(plugin.getDataFolder(), "skull.json");
         Json.save(file, skull, true);
         return true;
     }
