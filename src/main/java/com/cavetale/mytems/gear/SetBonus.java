@@ -15,6 +15,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -101,6 +102,8 @@ public interface SetBonus {
     default void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player) { }
 
     default void onProjectileCollidePlayer(ProjectileCollideEvent event, Player player) { }
+
+    default void onFoodLevelChange(FoodLevelChangeEvent event, Player player) { }
 
     default void tick(LivingEntity living, int has) { }
 }

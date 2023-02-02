@@ -5,7 +5,6 @@ import com.cavetale.mytems.event.combat.DamageCalculationEvent;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.util.Entities;
 import com.cavetale.worldmarker.entity.EntityMarker;
-import com.cavetale.worldmarker.item.ItemMarker;
 import com.cavetale.worldmarker.util.Tags;
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
@@ -43,11 +42,13 @@ import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityEnterBlockEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
@@ -187,20 +188,18 @@ public final class EventListener implements Listener {
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.MONITOR)
-    private void onPlayerFallDamage(EntityDamageEvent event) {
-        if (event.getCause() != EntityDamageEvent.DamageCause.FALL) return;
-        if (!(event.getEntity() instanceof Player)) return;
-        Player player = (Player) event.getEntity();
+    private void onPlayerDamage(EntityDamageEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
         for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
             setBonus.onPlayerDamage(event, player);
         }
-        ItemStack item = player.getInventory().getBoots();
-        if (item == null) return;
-        String id = ItemMarker.getId(item);
-        if (id == null) return;
-        Mytems mytems = Mytems.forId(id);
-        if (mytems == null) return;
-        plugin.getMytem(mytems).onPlayerFallDamage(event, player, item);
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            ItemStack item = player.getInventory().getItem(slot);
+            if (item == null) continue;
+            Mytems mytems = Mytems.forItem(item);
+            if (mytems == null) continue;
+            plugin.getMytem(mytems).onPlayerDamage(event, player, item, slot);
+        }
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.HIGH)
@@ -228,9 +227,7 @@ public final class EventListener implements Listener {
         if (!(event.getEntity() instanceof Player player)) return;
         ItemStack item = event.getBow();
         if (item == null) return;
-        String id = ItemMarker.getId(item);
-        if (id == null) return;
-        Mytems mytems = Mytems.forId(id);
+        Mytems mytems = Mytems.forItem(item);
         if (mytems == null) return;
         plugin.getMytem(mytems).onPlayerShootBow(event, player, item);
     }
@@ -575,7 +572,8 @@ public final class EventListener implements Listener {
 
     @EventHandler(priority = EventPriority.LOWEST)
     private void onPlayerItemDamage(PlayerItemDamageEvent event) {
-        Mytems mytems = Mytems.forItem(event.getItem());
+        ItemStack item = event.getItem();
+        Mytems mytems = Mytems.forItem(item);
         if (mytems != null) mytems.getMytem().onPlayerItemDamage(event);
     }
 
@@ -597,6 +595,16 @@ public final class EventListener implements Listener {
         }
     }
 
+
+    @EventHandler(priority = EventPriority.LOW)
+    private void onFoodLevelChange(FoodLevelChangeEvent event) {
+        if (event.getEntity() instanceof Player player) {
+            for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
+                setBonus.onFoodLevelChange(event, player);
+            }
+        }
+    }
+
     @EventHandler(priority = EventPriority.HIGH)
     private void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
         if (event.isSneaking()) {
@@ -609,6 +617,15 @@ public final class EventListener implements Listener {
         Entity entity = event.getEntity();
         if (Entities.isTransient(entity)) {
             Bukkit.getScheduler().runTask(plugin, () -> entity.remove());
+        }
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    private void onEntityEnterBlock(EntityEnterBlockEvent event) {
+        Entity entity = event.getEntity();
+        if (Entities.isTransient(entity)) {
+            event.setCancelled(true);
+            entity.remove();
         }
     }
 }

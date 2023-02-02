@@ -83,7 +83,7 @@ public final class DamageCalculationEvent extends Event {
     }
 
     public boolean isBlocking() {
-        return calc.isBlocking();
+        return getCalculation().isBlocking();
     }
 
     public EntityDamageEvent getEntityDamageEvent() {

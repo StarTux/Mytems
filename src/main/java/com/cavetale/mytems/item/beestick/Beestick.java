@@ -4,6 +4,7 @@ import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
+import com.cavetale.mytems.util.Entities;
 import com.cavetale.mytems.util.Items;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -90,6 +91,7 @@ public final class Beestick implements Mytem {
         location = location.add(location.getDirection());
         Bee bee = location.getWorld().spawn(location, Bee.class, e -> {
                 e.setPersistent(false);
+                Entities.setTransient(e);
                 e.setRemoveWhenFarAway(true);
                 e.setAdult();
                 e.getAttribute(GENERIC_MAX_HEALTH).setBaseValue(0.1);

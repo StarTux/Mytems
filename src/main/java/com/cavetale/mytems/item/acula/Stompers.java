@@ -15,6 +15,7 @@ import org.bukkit.entity.Damageable;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Tameable;
 import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
 
@@ -47,7 +48,9 @@ public final class Stompers extends AculaItem {
     }
 
     @Override
-    public void onPlayerFallDamage(EntityDamageEvent event, Player player, ItemStack item) {
+    public void onPlayerDamage(EntityDamageEvent event, Player player, ItemStack item, EquipmentSlot slot) {
+        if (event.getCause() != EntityDamageEvent.DamageCause.FALL) return;
+        if (slot != EquipmentSlot.FEET) return;
         double dmg = event.getDamage();
         List<Damageable> targets = new ArrayList<>();
         Location center = player.getLocation();

@@ -10,8 +10,8 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 
 /**
- * A special category of mytems which provide buffs and set bonuses and
- * stuff.
+ * A special category of mytems which is capable of providing set
+ * bonuses and based on that, produce a consistent tooltip.
  */
 public interface GearItem extends Mytem {
     default ItemSet getItemSet() {

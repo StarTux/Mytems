@@ -50,6 +50,7 @@ import com.cavetale.mytems.item.halloween.HalloweenToken;
 import com.cavetale.mytems.item.magnifier.Magnifier;
 import com.cavetale.mytems.item.medieval.WitchBroom;
 import com.cavetale.mytems.item.mobcostume.BeeCostume;
+import com.cavetale.mytems.item.mobcostume.CactusCostume;
 import com.cavetale.mytems.item.mobcostume.ChickenCostume;
 import com.cavetale.mytems.item.mobcostume.CreeperCostume;
 import com.cavetale.mytems.item.mobcostume.EndermanCostume;
@@ -577,6 +578,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     BEE_CUSTOME_CHESTPLATE(BeeCostume.BeeChestplate.class, LEATHER_CHESTPLATE, null, (char) 0, BEE_COSTUME),
     BEE_CUSTOME_LEGGINGS(BeeCostume.BeeLeggings.class, LEATHER_LEGGINGS, null, (char) 0, BEE_COSTUME),
     BEE_CUSTOME_BOOTS(BeeCostume.BeeBoots.class, LEATHER_BOOTS, null, (char) 0, BEE_COSTUME),
+    CACTUS_CUSTOME_HELMET(CactusCostume.CactusHelmet.class, PLAYER_HEAD, null, (char) 0, CACTUS_COSTUME),
+    CACTUS_CUSTOME_CHESTPLATE(CactusCostume.CactusChestplate.class, LEATHER_CHESTPLATE, null, (char) 0, CACTUS_COSTUME),
+    CACTUS_CUSTOME_LEGGINGS(CactusCostume.CactusLeggings.class, LEATHER_LEGGINGS, null, (char) 0, CACTUS_COSTUME),
+    CACTUS_CUSTOME_BOOTS(CactusCostume.CactusBoots.class, LEATHER_BOOTS, null, (char) 0, CACTUS_COSTUME),
     SCARLET_HELMET(ScarletItem.Helmet.class, PLAYER_HEAD, 156, (char) 0xF0BC, SCARLET),
     SCARLET_CHESTPLATE(ScarletItem.Chestplate.class, LEATHER_CHESTPLATE, 157, (char) 0xF0BD, SCARLET),
     SCARLET_LEGGINGS(ScarletItem.Leggings.class, LEATHER_LEGGINGS, 158, (char) 0xF0BE, SCARLET),

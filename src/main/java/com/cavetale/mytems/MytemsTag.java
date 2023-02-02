@@ -50,12 +50,13 @@ public final class MytemsTag {
             MytemsCategory.MAY,
         });
     public static final MytemsTag COSTUME = new MytemsTag("costume", new MytemsCategory[] {
+            MytemsCategory.BEE_COSTUME,
+            MytemsCategory.CACTUS_COSTUME,
+            MytemsCategory.CHICKEN_COSTUME,
             MytemsCategory.CREEPER_COSTUME,
-            MytemsCategory.SPIDER_COSTUME,
             MytemsCategory.ENDERMAN_COSTUME,
             MytemsCategory.SKELETON_COSTUME,
-            MytemsCategory.CHICKEN_COSTUME,
-            MytemsCategory.BEE_COSTUME,
+            MytemsCategory.SPIDER_COSTUME,
         });
     public static final MytemsTag UTILITY = new MytemsTag("utility", new MytemsCategory[] {
             MytemsCategory.UTILITY,

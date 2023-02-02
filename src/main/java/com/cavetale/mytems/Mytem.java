@@ -56,7 +56,7 @@ public interface Mytem {
 
     default void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player, ItemStack item) { }
 
-    default void onPlayerFallDamage(EntityDamageEvent event, Player player, ItemStack item) { }
+    default void onPlayerDamage(EntityDamageEvent event, Player player, ItemStack item, EquipmentSlot slot) { }
 
     default void onPlayerShootBow(EntityShootBowEvent event, Player player, ItemStack item) { }
 
