@@ -16,7 +16,6 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
-import org.bukkit.entity.Chicken;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -56,18 +55,20 @@ public abstract class ChickenCostume implements GearItem {
 
             @Override
             public String getDescription() {
-                return "You can pick up chickens which slows your fall";
+                return "You can pick up farm animals, carrying chickens slows your fall";
             }
 
             @Override
             public void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player) {
                 if (player.getGameMode() == GameMode.SPECTATOR) return;
-                if (!(event.getRightClicked() instanceof Chicken chicken)) return;
+                Entity entity = event.getRightClicked();
+                if (!(isFarmAnimal(entity))) return;
                 if (!player.getPassengers().isEmpty()) return;
-                if (chicken.isInsideVehicle()) return;
-                if (!PlayerEntityAbilityQuery.Action.PICKUP.query(player, chicken)) return;
-                player.addPassenger(chicken);
+                if (entity.isInsideVehicle()) return;
+                if (!PlayerEntityAbilityQuery.Action.PICKUP.query(player, entity)) return;
+                player.addPassenger(entity);
                 player.playSound(player.getLocation(), Sound.ENTITY_HORSE_SADDLE, 1.0f, 1.0f);
+                player.sendActionBar(text("Sneak to Put Down"));
             }
 
             @Override
@@ -164,6 +165,21 @@ public abstract class ChickenCostume implements GearItem {
         @Override
         public List<Component> getBaseLore() {
             return Text.wrapLore("Only walk at chicken speed.", c -> c.color(GRAY));
+        }
+    }
+
+    private static boolean isFarmAnimal(Entity entity) {
+        if (entity == null) return false;
+        switch (entity.getType()) {
+        case CHICKEN:
+        case COW:
+        case GOAT:
+        case PIG:
+        case SHEEP:
+        case MUSHROOM_COW:
+        case RABBIT:
+            return true;
+        default: return false;
         }
     }
 }
