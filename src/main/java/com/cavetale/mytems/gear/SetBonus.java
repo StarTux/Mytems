@@ -20,6 +20,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import static net.kyori.adventure.text.Component.text;
@@ -104,6 +105,8 @@ public interface SetBonus {
     default void onProjectileCollidePlayer(ProjectileCollideEvent event, Player player) { }
 
     default void onFoodLevelChange(FoodLevelChangeEvent event, Player player) { }
+
+    default void onPlayerShearEntity(PlayerShearEntityEvent event, Player player) { }
 
     default void tick(LivingEntity living, int has) { }
 }

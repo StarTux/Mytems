@@ -50,7 +50,7 @@ public abstract class ChickenCostume implements GearItem {
 
             @Override
             public String getName() {
-                return "Chicken Pickup";
+                return "Farmhand";
             }
 
             @Override

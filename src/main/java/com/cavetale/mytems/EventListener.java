@@ -64,6 +64,7 @@ import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerItemHeldEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
+import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
 import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.event.server.PluginDisableEvent;
@@ -602,6 +603,14 @@ public final class EventListener implements Listener {
             for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
                 setBonus.onFoodLevelChange(event, player);
             }
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    private void onPlayerShearEntity(PlayerShearEntityEvent event) {
+        Player player = event.getPlayer();
+        for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
+            setBonus.onPlayerShearEntity(event, player);
         }
     }
 

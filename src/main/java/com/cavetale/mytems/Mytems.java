@@ -54,6 +54,7 @@ import com.cavetale.mytems.item.mobcostume.CactusCostume;
 import com.cavetale.mytems.item.mobcostume.ChickenCostume;
 import com.cavetale.mytems.item.mobcostume.CreeperCostume;
 import com.cavetale.mytems.item.mobcostume.EndermanCostume;
+import com.cavetale.mytems.item.mobcostume.SheepCostume;
 import com.cavetale.mytems.item.mobcostume.SkeletonCostume;
 import com.cavetale.mytems.item.mobcostume.SpiderCostume;
 import com.cavetale.mytems.item.mobslayer.Mobslayer;
@@ -582,6 +583,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     CACTUS_CUSTOME_CHESTPLATE(CactusCostume.CactusChestplate.class, LEATHER_CHESTPLATE, null, (char) 0, CACTUS_COSTUME),
     CACTUS_CUSTOME_LEGGINGS(CactusCostume.CactusLeggings.class, LEATHER_LEGGINGS, null, (char) 0, CACTUS_COSTUME),
     CACTUS_CUSTOME_BOOTS(CactusCostume.CactusBoots.class, LEATHER_BOOTS, null, (char) 0, CACTUS_COSTUME),
+    SHEEP_CUSTOME_HELMET(SheepCostume.SheepHelmet.class, PLAYER_HEAD, null, (char) 0, SHEEP_COSTUME),
+    SHEEP_CUSTOME_CHESTPLATE(SheepCostume.SheepChestplate.class, LEATHER_CHESTPLATE, null, (char) 0, SHEEP_COSTUME),
+    SHEEP_CUSTOME_LEGGINGS(SheepCostume.SheepLeggings.class, LEATHER_LEGGINGS, null, (char) 0, SHEEP_COSTUME),
+    SHEEP_CUSTOME_BOOTS(SheepCostume.SheepBoots.class, LEATHER_BOOTS, null, (char) 0, SHEEP_COSTUME),
     SCARLET_HELMET(ScarletItem.Helmet.class, PLAYER_HEAD, 156, (char) 0xF0BC, SCARLET),
     SCARLET_CHESTPLATE(ScarletItem.Chestplate.class, LEATHER_CHESTPLATE, 157, (char) 0xF0BD, SCARLET),
     SCARLET_LEGGINGS(ScarletItem.Leggings.class, LEATHER_LEGGINGS, 158, (char) 0xF0BE, SCARLET),

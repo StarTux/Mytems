@@ -18,7 +18,6 @@ import org.bukkit.inventory.ItemStack;
 import static com.cavetale.mytems.util.LeatherArmor.leatherArmor;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
-import static net.kyori.adventure.text.format.TextColor.color;
 
 @Getter @RequiredArgsConstructor
 /**
@@ -105,7 +104,7 @@ public abstract class DummyCostume implements GearItem {
 
     public static final class DummyChestplate extends DummyCostume {
         public DummyChestplate(final Mytems key) {
-            super(key, leatherArmor(key.material, color(0xFFFF00)), text("Dummy Chestplate"));
+            super(key, leatherArmor(key.material, BLACK), text("Dummy Chestplate"));
         }
 
         @Override

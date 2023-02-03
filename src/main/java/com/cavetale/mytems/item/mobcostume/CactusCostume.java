@@ -51,7 +51,7 @@ public abstract class CactusCostume implements GearItem {
 
             @Override
             public String getName() {
-                return "Cactus";
+                return "Desert Plant";
             }
 
             @Override

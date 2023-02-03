@@ -52,7 +52,7 @@ public abstract class BeeCostume implements GearItem {
 
             @Override
             public String getName() {
-                return "Bee";
+                return "Beethoscope";
             }
 
             @Override
