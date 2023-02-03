@@ -149,4 +149,23 @@ public final class Coin implements Mytem {
                                       text("/money", GRAY))))
             .clickEvent(runCommand("/money"));
     }
+
+    public static Component formatAnimated(double amount) {
+        Denomination denomination = Denomination.COPPER;
+        final double abs = Math.abs(amount);
+        for (Denomination deno : Denomination.values()) {
+            if (!deno.regularCurrency) continue;
+            if ((double) deno.value <= abs) {
+                denomination = deno;
+            }
+        }
+        final String format = formatHelper(amount);
+        final TextColor color = amount >= 0 ? denomination.color : DARK_RED;
+        return textOfChildren(denomination.mytems.getCurrentAnimationFrame(), text(format))
+            .color(color)
+            .hoverEvent(showText(join(separator(newline()),
+                                      text(format + " Coins", color),
+                                      text("/money", GRAY))))
+            .clickEvent(runCommand("/money"));
+    }
 }
