@@ -12,6 +12,7 @@ public enum MytemsCategory {
     CHICKEN_COSTUME,
     CHRISTMAS,
     COIN,
+    COIN_SHINE,
     COLLECTIBLES,
     CREEPER_COSTUME,
     CURRENCY,
