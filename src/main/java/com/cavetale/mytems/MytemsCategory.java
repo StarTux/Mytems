@@ -60,6 +60,7 @@ public enum MytemsCategory {
     TROPHY,
     UI,
     UTILITY,
+    VALENTINE_TOKENS,
     VOTE,
     WARDROBE_HANDHELD,
     WARDROBE_HAT,

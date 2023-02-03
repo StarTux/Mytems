@@ -48,6 +48,7 @@ public final class MytemsTag {
             MytemsCategory.EASTER_TOKENS,
             MytemsCategory.HALLOWEEN,
             MytemsCategory.MAY,
+            MytemsCategory.VALENTINE_TOKENS,
         });
     public static final MytemsTag COSTUME = new MytemsTag("costume", new MytemsCategory[] {
             MytemsCategory.BEE_COSTUME,
