@@ -470,6 +470,7 @@ public final class MusicalInstrument implements Mytem {
             .detail(Detail.NOTE, touch.bukkitNote)
             .detail(Detail.INSTRUMENT, type.instrument)
             .callEvent();
+        new PlayerPlayInstrumentEvent(player, type, touch).callEvent();
         if (privateData.hero != null) {
             Beat beat = privateData.hero.grid[privateData.hero.gridIndex];
             if (beat != null && beat.countsAs(privateData.hero.melody, touch)) {

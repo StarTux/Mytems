@@ -56,6 +56,7 @@ public final class MytemsTag {
             MytemsCategory.CHICKEN_COSTUME,
             MytemsCategory.CREEPER_COSTUME,
             MytemsCategory.ENDERMAN_COSTUME,
+            MytemsCategory.FOX_COSTUME,
             MytemsCategory.SHEEP_COSTUME,
             MytemsCategory.SKELETON_COSTUME,
             MytemsCategory.SPIDER_COSTUME,

@@ -1,6 +1,7 @@
 package com.cavetale.mytems.gear;
 
 import com.cavetale.mytems.event.combat.DamageCalculationEvent;
+import com.cavetale.mytems.item.music.PlayerPlayInstrumentEvent;
 import com.cavetale.mytems.util.Text;
 import com.destroystokyo.paper.event.entity.ProjectileCollideEvent;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
@@ -107,6 +108,8 @@ public interface SetBonus {
     default void onFoodLevelChange(FoodLevelChangeEvent event, Player player) { }
 
     default void onPlayerShearEntity(PlayerShearEntityEvent event, Player player) { }
+
+    default void onPlayerPlayInstrument(PlayerPlayInstrumentEvent event, Player player) { }
 
     default void tick(LivingEntity living, int has) { }
 }

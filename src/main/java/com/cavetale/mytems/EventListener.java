@@ -3,6 +3,7 @@ package com.cavetale.mytems;
 import com.cavetale.mytems.event.combat.DamageCalculation;
 import com.cavetale.mytems.event.combat.DamageCalculationEvent;
 import com.cavetale.mytems.gear.SetBonus;
+import com.cavetale.mytems.item.music.PlayerPlayInstrumentEvent;
 import com.cavetale.mytems.util.Entities;
 import com.cavetale.worldmarker.entity.EntityMarker;
 import com.cavetale.worldmarker.util.Tags;
@@ -611,6 +612,14 @@ public final class EventListener implements Listener {
         Player player = event.getPlayer();
         for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
             setBonus.onPlayerShearEntity(event, player);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR)
+    private void onPlayerPlayInstrument(PlayerPlayInstrumentEvent event) {
+        Player player = event.getPlayer();
+        for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
+            setBonus.onPlayerPlayInstrument(event, player);
         }
     }
 
