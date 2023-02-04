@@ -47,6 +47,7 @@ import com.cavetale.mytems.item.garden.Scythe;
 import com.cavetale.mytems.item.halloween.HalloweenCandy;
 import com.cavetale.mytems.item.halloween.HalloweenToken2;
 import com.cavetale.mytems.item.halloween.HalloweenToken;
+import com.cavetale.mytems.item.hourglass.Hourglass;
 import com.cavetale.mytems.item.magnifier.Magnifier;
 import com.cavetale.mytems.item.medieval.WitchBroom;
 import com.cavetale.mytems.item.mobcostume.BeeCostume;
@@ -716,6 +717,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     SEALED_CAVEBOY(SealedCaveboy.class, WOODEN_SHOVEL, 748, (char) 0xF157, CAVEBOY),
     CAVEBOY_TICTACTOE(Caveboy.class, IRON_SHOVEL, 746, (char) 0xF158, CAVEBOY),
     CAVEBOY_TNTSWEEP(Caveboy.class, IRON_SHOVEL, 747, (char) 0xF159, CAVEBOY),
+    COLORFALL_HOURGLASS(Hourglass.class, CLOCK, 0xF24E, HOURGLASS, Animation.HOURGLASS),
+    MOONLIGHT_HOURGLASS(Hourglass.class, CLOCK, 0xF24F, HOURGLASS, Animation.HOURGLASS),
+    ATMOSPHERE_HOURGLASS(Hourglass.class, CLOCK, 0xF250, HOURGLASS, Animation.HOURGLASS),
+    CLIMATE_HOURGLASS(Hourglass.class, CLOCK, 0xF251, HOURGLASS, Animation.HOURGLASS),
     GOLDEN_QUIVER(EquipmentItem.class, STICK, 345, (char) 0xF15A, EQUIP_QUIVER),
     STEEL_QUIVER(EquipmentItem.class, STICK, 346, (char) 0xF15B, EQUIP_QUIVER),
     WOODEN_QUIVER(EquipmentItem.class, STICK, 347, (char) 0xF15C, EQUIP_QUIVER),

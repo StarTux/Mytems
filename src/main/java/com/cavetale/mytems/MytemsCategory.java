@@ -30,6 +30,7 @@ public enum MytemsCategory {
     FURNITURE,
     GARDENING,
     HALLOWEEN,
+    HOURGLASS,
     KEY,
     KEYHOLE,
     LETTER,

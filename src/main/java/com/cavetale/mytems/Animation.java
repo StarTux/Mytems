@@ -151,4 +151,19 @@ public final class Animation {
                 new Frame(16, 1),
                 new Frame(17, 1),
             }));
+
+    public static final Animation HOURGLASS = new Animation("HOURGLASS", false, 0, 0, 12, List.of(new Frame[] {
+                new Frame(0),
+                new Frame(1),
+                new Frame(2),
+                new Frame(3),
+                new Frame(4),
+                new Frame(5),
+                new Frame(6, 20),
+                new Frame(7, 2),
+                new Frame(8, 2),
+                new Frame(9, 2),
+                new Frame(10, 2),
+                new Frame(11, 2),
+            }));
 }
