@@ -166,4 +166,15 @@ public final class Animation {
                 new Frame(10, 2),
                 new Frame(11, 2),
             }));
+
+    public static final Animation HEART = new Animation("HEART", false, 0, 0, 2, List.of(new Frame[] {
+                new Frame(0, 80),
+                new Frame(1),
+                new Frame(0, 1),
+                new Frame(2, 4),
+                new Frame(0, 8),
+                new Frame(1),
+                new Frame(0, 1),
+                new Frame(2, 4),
+            }));
 }

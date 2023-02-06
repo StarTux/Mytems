@@ -427,7 +427,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     CAVETALE_DUNGEON(ForbiddenMytem.class, SPAWNER, 706, (char) 0xF04B, UI),
     RAINBOW_BUTTERFLY(ForbiddenMytem.class, FEATHER, 633, (char) 0xF04C, chrarr(0xF04C, 0xF04D, 0xF04E, 0xF04F, 0xF050, 0xF051, 0xF052, 0xF053), UI, Animation.frametime(8)),
     SNOWFLAKE(ForbiddenMytem.class, SNOWBALL, 673, (char) 0xF054, chrarr(0xF054, 0xF055, 0xF056, 0xF057, 0xF058, 0xF059, 0xF05A, 0xF05B, 0xF05C, 0xF05D, 0xF05E, 0xF05F, 0xF060, 0xF061, 0xF062, 0xF063), UI, Animation.SNOWFLAKE),
-    HEART(DummyMytem.class, HEART_OF_THE_SEA, 9, (char) 0xE241, COLLECTIBLES),
+    HEART(DummyMytem.class, HEART_OF_THE_SEA, 9, (char) 0xE241, chrarr(0xE241, 0xF252, 0xF253), COLLECTIBLES, Animation.HEART),
     STAR(DummyMytem.class, NETHER_STAR, 18, (char) 0xE24B, COLLECTIBLES),
     MOON(DummyMytem.class, YELLOW_DYE, 204, (char) 0xF064, COLLECTIBLES),
     GREEN_MOON(DummyMytem.class, LIME_DYE, 592, (char) 0xF065, COLLECTIBLES),
