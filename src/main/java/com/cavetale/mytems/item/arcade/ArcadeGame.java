@@ -12,6 +12,7 @@ import static net.kyori.adventure.text.format.NamedTextColor.*;
 public enum ArcadeGame {
     TIC_TAC_TOE(Mytems.CAVEBOY_TICTACTOE, ArcadeTicTacToe::start, text("Tic Tac Toe", LIGHT_PURPLE)),
     TNT_SWEEPER(Mytems.CAVEBOY_TNTSWEEP, ArcadeTNTSweeper::start, text("TNT Sweeper", BLUE)),
+    MEMORY(Mytems.CAVEBOY_MEMORY, ArcadeMemory::start, text("Memory", GRAY)),
     ;
 
     public final Mytems mytems;

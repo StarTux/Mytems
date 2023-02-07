@@ -8,17 +8,21 @@ import java.util.List;
 import java.util.Objects;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.font.Unicode.tiny;
+import static com.cavetale.mytems.MytemsPlugin.plugin;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 import static net.kyori.adventure.text.format.TextDecoration.*;
+import static org.bukkit.Sound.BLOCK_NOTE_BLOCK_BIT;
+import static org.bukkit.SoundCategory.MASTER;
 
 @Getter
 public final class Caveboy implements Mytem {
@@ -59,5 +63,9 @@ public final class Caveboy implements Mytem {
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
         event.setUseItemInHand(Event.Result.DENY);
         game.startMethod.accept(player);
+        Bukkit.getScheduler().runTaskLater(plugin(), () -> player.playSound(player.getLocation(), BLOCK_NOTE_BLOCK_BIT, MASTER, 1.0f, 1.1f), 0L);
+        Bukkit.getScheduler().runTaskLater(plugin(), () -> player.playSound(player.getLocation(), BLOCK_NOTE_BLOCK_BIT, MASTER, 1.0f, 1.6f), 2L);
+        Bukkit.getScheduler().runTaskLater(plugin(), () -> player.playSound(player.getLocation(), BLOCK_NOTE_BLOCK_BIT, MASTER, 1.0f, 2.0f), 4L);
+        Bukkit.getScheduler().runTaskLater(plugin(), () -> player.playSound(player.getLocation(), BLOCK_NOTE_BLOCK_BIT, MASTER, 1.0f, 2.0f), 5L);
     }
 }
