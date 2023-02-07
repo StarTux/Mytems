@@ -47,7 +47,7 @@ public final class Hourglass implements Mytem {
                 txt.add(displayName);
                 txt.addAll(Text.wrapLore(tiny(type.description), c -> c.color(GRAY)));
                 txt.add(empty());
-                txt.add(textOfChildren(Mytems.MOUSE_LEFT, text(" " + type.rightClickLine, GRAY)));
+                txt.add(textOfChildren(Mytems.MOUSE_RIGHT, text(" " + type.rightClickLine, GRAY)));
                 Items.text(meta, txt);
                 key.markItemMeta(meta);
             });
