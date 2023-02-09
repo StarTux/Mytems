@@ -41,6 +41,7 @@ import com.cavetale.mytems.item.easter.EasterToken;
 import com.cavetale.mytems.item.equipment.EquipmentItem;
 import com.cavetale.mytems.item.farawaymap.FarawayMap;
 import com.cavetale.mytems.item.fertilizer.Fertilizer;
+import com.cavetale.mytems.item.finder.Finder;
 import com.cavetale.mytems.item.font.GlyphItem;
 import com.cavetale.mytems.item.garden.Scissors;
 import com.cavetale.mytems.item.garden.Scythe;
@@ -722,6 +723,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     MOONLIGHT_HOURGLASS(Hourglass.class, CLOCK, 0xF24F, HOURGLASS, Animation.HOURGLASS),
     ATMOSPHERE_HOURGLASS(Hourglass.class, CLOCK, 0xF250, HOURGLASS, Animation.HOURGLASS),
     CLIMATE_HOURGLASS(Hourglass.class, CLOCK, 0xF251, HOURGLASS, Animation.HOURGLASS),
+    STRUCTURE_FINDER(Finder.class, COMPASS, null, (char) 0, FINDER),
+    SECRET_FINDER(Finder.class, COMPASS, null, (char) 0, FINDER),
+    MASTER_FINDER(Finder.class, COMPASS, null, (char) 0, FINDER),
     GOLDEN_QUIVER(EquipmentItem.class, STICK, 345, (char) 0xF15A, EQUIP_QUIVER),
     STEEL_QUIVER(EquipmentItem.class, STICK, 346, (char) 0xF15B, EQUIP_QUIVER),
     WOODEN_QUIVER(EquipmentItem.class, STICK, 347, (char) 0xF15C, EQUIP_QUIVER),
