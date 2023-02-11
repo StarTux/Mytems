@@ -2,6 +2,7 @@ package com.cavetale.mytems.item;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
+import com.cavetale.mytems.MytemsCategory;
 import com.cavetale.mytems.util.Text;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,8 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
+import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -79,6 +82,13 @@ public final class WardrobeItem implements Mytem {
     public void onInventoryPickup(InventoryPickupItemEvent event, ItemStack item) {
         event.setCancelled(true);
         event.getItem().remove();
+    }
+
+    @Override
+    public void onSwapHandItems(PlayerSwapHandItemsEvent event, Player player, ItemStack item, EquipmentSlot slot) {
+        if (key.category == MytemsCategory.WARDROBE_OFFHAND) {
+            event.setCancelled(true);
+        }
     }
 
     @Override

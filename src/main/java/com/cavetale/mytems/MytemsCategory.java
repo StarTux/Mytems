@@ -69,6 +69,7 @@ public enum MytemsCategory {
     WARDROBE_HANDHELD,
     WARDROBE_HAT,
     WARDROBE_MOUNT,
+    WARDROBE_OFFHAND,
     WITCH_HAT,
     // Equipment
     EQUIP_AXE,

@@ -300,9 +300,20 @@ public final class EventListener implements Listener {
         mytems.getMytem().onInventoryPickup(event, item);
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGH)
     private void onPlayerSwapHandItems(PlayerSwapHandItemsEvent event) {
         Player player = event.getPlayer();
+        ItemStack item = event.getMainHandItem();
+        Mytems mytems = Mytems.forItem(item);
+        if (mytems != null) {
+            mytems.getMytem().onSwapHandItems(event, player, item, EquipmentSlot.HAND);
+        }
+        item = event.getMainHandItem();
+        mytems = Mytems.forItem(item);
+        if (mytems != null) {
+            mytems.getMytem().onSwapHandItems(event, player, item, EquipmentSlot.OFF_HAND);
+        }
+        if (event.isCancelled()) return;
         plugin.sessions.of(player).equipmentDidChange();
     }
 
