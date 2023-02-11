@@ -2,6 +2,7 @@ package com.cavetale.mytems.item.finder;
 
 import com.cavetale.core.font.GuiOverlay;
 import com.cavetale.core.struct.Cuboid;
+import com.cavetale.core.struct.Vec3i;
 import com.cavetale.core.structure.Structure;
 import com.cavetale.core.structure.Structures;
 import com.cavetale.mytems.Mytem;
@@ -32,9 +33,12 @@ import static com.cavetale.mytems.MytemsPlugin.plugin;
 import static com.cavetale.mytems.MytemsPlugin.sessionOf;
 import static java.util.Objects.requireNonNull;
 import static net.kyori.adventure.text.Component.empty;
+import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
+import static net.kyori.adventure.text.format.TextColor.color;
+import static net.kyori.adventure.text.format.TextDecoration.*;
 
 @Getter
 public final class Finder implements Mytem {
@@ -47,7 +51,7 @@ public final class Finder implements Mytem {
     public Finder(final Mytems key) {
         this.key = key;
         this.type = requireNonNull(FinderType.of(key));
-        this.displayName = type.displayName;
+        this.displayName = text(type.displayName, type.color);
     }
 
     @Override
@@ -57,6 +61,7 @@ public final class Finder implements Mytem {
                 List<Component> txt = new ArrayList<>();
                 txt.add(displayName);
                 for (FoundType foundType : FoundType.values()) {
+                    if (foundType.isDisabled()) continue;
                     if (foundType.type.ordinal() <= this.type.ordinal()) {
                         findable.add(foundType);
                     }
@@ -79,63 +84,64 @@ public final class Finder implements Mytem {
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
         event.setUseItemInHand(Event.Result.DENY);
         event.setUseInteractedBlock(Event.Result.DENY);
-        Session session = sessionOf(player);
-        long cooldown = session.getCooldownInTicks(key.id);
-        Location location = player.getLocation();
+        final Session session = sessionOf(player);
+        final long cooldown = session.getCooldownInTicks(key.id);
+        final Location location = player.getLocation();
         if (cooldown > 0) {
             long seconds = (cooldown - 1L) / 20L + 1;
             player.sendActionBar(text("Cooldown " + seconds + "s", RED));
             player.playSound(location, Sound.ENTITY_VILLAGER_NO, SoundCategory.MASTER, 1.0f, 1.0f);
             return;
         }
-        session.setCooldown(key.id, 20);
+        session.setCooldown(key.id, 20 * 3);
         final World world = player.getWorld();
-        Cuboid cuboid = new Cuboid(location.getBlockX() - type.range,
-                                   world.getMinHeight(),
-                                   location.getBlockZ() - type.range,
-                                   location.getBlockX() + type.range,
-                                   world.getMaxHeight(),
-                                   location.getBlockZ() + type.range);
-        List<Found> foundList = new ArrayList<>();
+        final Cuboid cuboid = new Cuboid(location.getBlockX() - type.range,
+                                         world.getMinHeight(),
+                                         location.getBlockZ() - type.range,
+                                         location.getBlockX() + type.range,
+                                         world.getMaxHeight(),
+                                         location.getBlockZ() + type.range);
+        final Vec3i playerVector = Vec3i.of(location);
+        final List<Found> foundList = new ArrayList<>();
         for (Structure structure : Structures.get().getStructuresWithin(world, cuboid)) {
             FoundType foundType = FoundType.of(structure.getKey());
             if (foundType == null) {
                 plugin().getLogger().warning("[Finder] Unknown structure: " + structure.getKey());
                 continue;
             }
+            if (foundType.isDisabled()) continue;
             if (!findable.contains(foundType)) continue;
-            Found found = new Found(foundType, structure);
+            int dist = structure.getBoundingBox().getCenter().maxHorizontalDistance(playerVector);
+            Found found = new Found(foundType, structure.getBoundingBox().getCenter(), dist);
             if (foundList.contains(found)) continue;
             foundList.add(found);
         }
-        if (foundList.isEmpty()) {
-            player.sendActionBar(text("No structures nearby", RED));
-            player.playSound(location, Sound.ENTITY_VILLAGER_NO, SoundCategory.MASTER, 1.0f, 1.0f);
-            return;
-        }
-        Collections.sort(foundList, (a, b) -> {
-                int t = Integer.compare(b.type().type.ordinal(),
-                                        a.type().type.ordinal());
-                if (t != 0) return t;
-                return a.type().name().compareTo(b.type().name());
-            });
+        Collections.sort(foundList, (a, b) -> Integer.compare(a.distance(), b.distance()));
         final int size = 9 * (1 + Math.min(5, (foundList.size() - 1) / 9 + 1));
         Gui gui = new Gui().size(size);
         GuiOverlay.Builder builder = GuiOverlay.BLANK.builder(size, type.color)
             .layer(GuiOverlay.TITLE_BAR, GRAY)
             .title(displayName);
         List<Component> info = new ArrayList<>();
-        info.add(textOfChildren(type.displayName, text(" can find:")));
-        for (FoundType foundType : findable) {
-            info.add(text("\u2022 " + foundType.displayName, foundType.type.color));
+        info.add(text(type.displayName + " can locate:", type.color));
+        for (FoundType foundType : FoundType.values()) {
+            if (foundType.isDisabled()) continue;
+            if (findable.contains(foundType)) {
+                info.add(textOfChildren(key, space(), text(foundType.displayName, foundType.type.color)));
+            } else {
+                info.add(textOfChildren(foundType.type.mytems, space(), text(foundType.displayName, foundType.type.color, STRIKETHROUGH)));
+            }
         }
         gui.setItem(4, key.createIcon(info));
         int nextSlot = 0;
         for (Found found : foundList) {
-            final int slot = 9 + (nextSlot++);
+            final int slot = foundList.size() < 9
+                ? 9 + 4 - (foundList.size() / 2) + (nextSlot++)
+                : 9 + (nextSlot++);
             ItemStack icon = found.type().iconSupplier.get();
             icon.editMeta(meta -> {
-                    Items.text(meta, List.of(text(found.type().displayName),
+                    Items.text(meta, List.of(text(found.type().displayName, found.type().type.color),
+                                             textOfChildren(text(tiny("distance ca"), GRAY), text(" " + found.distance() + " blocks", WHITE)),
                                              textOfChildren(Mytems.MOUSE_LEFT, text(" Locate", GRAY))));
                     meta.addItemFlags(ItemFlag.values());
                 });
@@ -143,18 +149,21 @@ public final class Finder implements Mytem {
                     if (!click.isLeftClick()) return;
                     item.editMeta(m -> {
                             if (m instanceof CompassMeta meta) {
-                                Location lodestone = found.structure().getBoundingBox().getCenter().toCenterLocation(world);
-                                lodestone.setY(0.0);
+                                Location lodestone = found.vector().toCenterLocation(world);
+                                lodestone.setY(location.getY());
                                 meta.setLodestone(lodestone);
                                 meta.setLodestoneTracked(false);
+                                meta.displayName(text(found.type().displayName, type.color));
                             }
                         });
+                    gui.setItem(4, Items.text(item.clone(), info));
                     player.sendActionBar(textOfChildren(displayName, text(" points toward " + found.type().displayName)));
                     player.playSound(location, Sound.BLOCK_LEVER_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
                 });
-            if (found.type().type != FinderType.NORMAL) {
-                builder.highlightSlot(slot, found.type().type.color);
-            }
+            builder.highlightSlot(slot, found.type().type.color);
+        }
+        if (foundList.isEmpty()) {
+            gui.setItem(9 + 4, Mytems.NO.createIcon(List.of(text("Nothing found!", color(0xFF0000)))));
         }
         gui.title(builder.build());
         gui.open(player);
