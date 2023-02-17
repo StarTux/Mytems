@@ -8,6 +8,7 @@ public final class DividersSession {
     protected String world;
     protected Vec3i point1;
     protected Vec3i point2;
+    protected int radius;
     protected List<Vec3i> blocks;
 
     protected void reset() {
