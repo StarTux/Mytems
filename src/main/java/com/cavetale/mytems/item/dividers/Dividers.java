@@ -22,12 +22,13 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.core.font.Unicode.tiny;
 import static com.cavetale.mytems.MytemsPlugin.sessionOf;
 import static net.kyori.adventure.text.Component.empty;
-import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
-import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
+import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
+import static net.kyori.adventure.text.format.TextColor.color;
 
 @Getter
 public final class Dividers implements Mytem {
@@ -37,15 +38,16 @@ public final class Dividers implements Mytem {
 
     public Dividers(final Mytems key) {
         this.key = key;
-        this.displayName = text("Dividers", AQUA);
+        this.displayName = text("Dividers", color(0xE1C16E));
         this.prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
                 Items.text(meta, List.of(displayName,
-                                         text("Draw a circle to", GRAY),
-                                         text("help you build.", GRAY),
+                                         text(tiny("Plan out circles on the"), GRAY),
+                                         text(tiny("ground and build them"), GRAY),
+                                         text(tiny("accurately with ease"), GRAY),
                                          empty(),
-                                         join(noSeparators(), Mytems.MOUSE_LEFT, text(" Center", GRAY)),
-                                         join(noSeparators(), Mytems.MOUSE_RIGHT, text(" Radius", GRAY))));
+                                         textOfChildren(Mytems.MOUSE_LEFT, text(" Set Center", GRAY)),
+                                         textOfChildren(Mytems.MOUSE_RIGHT, text(" Draw with Radius", GRAY))));
                 meta.setUnbreakable(true);
                 meta.addItemFlags(ItemFlag.values());
                 key.markItemMeta(meta);
@@ -105,6 +107,17 @@ public final class Dividers implements Mytem {
         return dx * dx + dz * dz;
     }
 
+    private static boolean isFullBlock(Block block) {
+        var voxelShape = block.getCollisionShape();
+        if (voxelShape == null) return false;
+        var boundingBoxes = voxelShape.getBoundingBoxes();
+        if (boundingBoxes.size() != 1) return false;
+        var bb = boundingBoxes.iterator().next();
+        return bb.getWidthX() == 1.0
+            && bb.getHeight() == 1.0
+            && bb.getWidthZ() == 1.0;
+    }
+
     private boolean drawCircle(Player player, DividersSession session, Vec3i a, Vec3i b) {
         World world = player.getWorld();
         Vec3i c = new Vec3i(a.x, b.y, a.z);
@@ -133,15 +146,20 @@ public final class Dividers implements Mytem {
         }
         List<Vec3i> blocks = new ArrayList<>();
         blocks.add(c);
+        LOOP:
         for (double angle = 0.0; angle < tau; angle += step) {
             double dx = Math.cos(angle) * rad;
             double dz = Math.sin(angle) * rad;
             Location outline = center.clone().add(dx, 0.0, dz);
             if (!outline.isChunkLoaded()) continue;
-            Vec3i block = Vec3i.of(outline);
-            if (!blocks.contains(block)) {
-                blocks.add(block);
+            Block block = outline.getBlock();
+            while (!isFullBlock(block)) {
+                if (block.getY() <= world.getMinHeight()) continue LOOP;
+                block = block.getRelative(0, -1, 0);
             }
+            Vec3i vec = Vec3i.of(block);
+            if (blocks.contains(vec)) continue;
+            blocks.add(vec);
         }
         session.drawing = true;
         Bukkit.getScheduler().runTaskLater(MytemsPlugin.getInstance(), () -> {
@@ -152,20 +170,18 @@ public final class Dividers implements Mytem {
                 for (Vec3i vec : blocks) {
                     if (!world.isChunkLoaded(vec.x >> 4, vec.z >> 4)) continue;
                     Block block = vec.toBlock(world);
-                    if (block.getType().isAir() || block.isLiquid() || block.getCollisionShape().getBoundingBoxes().isEmpty()) {
-                        player.sendBlockChange(block.getLocation(), Material.GRAY_STAINED_GLASS.createBlockData());
-                    } else {
-                        player.sendBlockChange(block.getLocation(), Material.GRAY_CONCRETE.createBlockData());
-                    }
+                    Material mat = (block.getX() & 1) == (block.getZ() & 1)
+                        ? Material.BLACK_CONCRETE
+                        : Material.WHITE_CONCRETE;
+                    player.sendBlockChange(block.getLocation(), mat.createBlockData());
                 }
-                player.sendMessage(join(noSeparators(),
-                                        text("Drawn circle at "),
-                                        text(c.x + " " + c.y + " " + c.z, GOLD),
-                                        text(" radius "),
-                                        text((int) Math.round(rad), GOLD),
-                                        (blocks.size() > 1
-                                         ? text(" (" + blocks.size() + " blocks)", GRAY)
-                                         : empty())));
+                player.sendActionBar(textOfChildren(text("Drawn circle at "),
+                                                    text(c.x + " " + c.y + " " + c.z, GOLD),
+                                                    text(" radius "),
+                                                    text((int) Math.round(rad), GOLD),
+                                                    (blocks.size() > 1
+                                                     ? text(" (" + blocks.size() + " blocks)", GRAY)
+                                                     : empty())));
             }, 2L);
         session.blocks = blocks;
         return true;
@@ -177,14 +193,14 @@ public final class Dividers implements Mytem {
     }
 
     private void soundUse(Player player) {
-        player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT_PLAYER, SoundCategory.MASTER, 1.0f, 2.0f);
+        player.playSound(player.getLocation(), Sound.ENTITY_ARROW_HIT, SoundCategory.MASTER, 1.0f, 2.0f);
     }
 
     private void soundDraw(Player player) {
-        player.playSound(player.getLocation(), Sound.ITEM_BOOK_PAGE_TURN, SoundCategory.MASTER, 1.0f, 2.0f);
+        player.playSound(player.getLocation(), Sound.UI_CARTOGRAPHY_TABLE_TAKE_RESULT, SoundCategory.MASTER, 1.0f, 1.25f);
     }
 
     private void soundFail(Player player) {
-        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5f, 0.5f);
+        player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, SoundCategory.MASTER, 0.5f, 0.5f);
     }
 }
