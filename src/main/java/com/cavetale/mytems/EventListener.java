@@ -13,6 +13,7 @@ import com.destroystokyo.paper.event.entity.ProjectileCollideEvent;
 import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
+import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -222,6 +223,14 @@ public final class EventListener implements Listener {
                 setBonus.onPlayerDamageByEntity(event, player, event.getDamager());
             }
         }
+    }
+
+    @EventHandler(ignoreCancelled = false, priority = EventPriority.LOW)
+    private void onPrePlayerAttackEntity(PrePlayerAttackEntityEvent event) {
+        Player player = event.getPlayer();
+        ItemStack item = player.getInventory().getItemInHand();
+        Mytems mytems = Mytems.forItem(item);
+        if (mytems != null) mytems.getMytem().onPrePlayerAttackEntity(event, player, item);
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.LOW)

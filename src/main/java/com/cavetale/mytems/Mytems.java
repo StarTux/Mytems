@@ -361,7 +361,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     FISH_CATCHER(MobCatcher.class, EGG, 908306, (char) 0xE252, MOB_CATCHERS),
     PET_CATCHER(MobCatcher.class, EGG, 908307, (char) 0xE253, MOB_CATCHERS),
     CAPTAINS_CUTLASS(CaptainsCutlass.class, WOODEN_SWORD, 2, (char) 0xE239, UTILITY),
-    BLUNDERBUSS(Blunderbuss.class, IRON_INGOT, 3, (char) 0xE23A, UTILITY),
+    BLUNDERBUSS(Blunderbuss.class, IRON_PICKAXE, 3, (char) 0xE23A, UTILITY),
     IRON_SCYTHE(Scythe.class, IRON_HOE, 650, (char) 0xF02E, GARDENING),
     GOLDEN_SCYTHE(Scythe.class, GOLDEN_HOE, 4, (char) 0xE23B, GARDENING),
     WITCH_BROOM(WitchBroom.class, WOODEN_SHOVEL, 51, (char) 0xE273, UTILITY),

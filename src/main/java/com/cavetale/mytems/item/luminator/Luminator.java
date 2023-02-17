@@ -36,10 +36,9 @@ public final class Luminator implements Mytem {
     public void enable() {
         prototype.editMeta(meta -> {
                 Items.text(meta, List.of(displayName,
-                                         text("Draw light from", GRAY),
-                                         text("the world and", GRAY),
-                                         text("place invisible", GRAY),
-                                         text("light sources.", GRAY),
+                                         text("Draw illumination from", GRAY),
+                                         text("the world and place", GRAY),
+                                         text("invisible light sources", GRAY),
                                          empty(),
                                          join(noSeparators(), Mytems.MOUSE_LEFT, text(" Choose light level", GRAY)),
                                          join(noSeparators(), Mytems.MOUSE_RIGHT, text(" Draw/place light", GRAY))));

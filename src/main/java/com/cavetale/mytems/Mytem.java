@@ -3,6 +3,7 @@ package com.cavetale.mytems;
 import com.cavetale.mytems.event.combat.DamageCalculationEvent;
 import com.cavetale.mytems.util.Json;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
+import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -80,6 +81,8 @@ public interface Mytem {
     default void onInventoryPickup(InventoryPickupItemEvent event, ItemStack item) { }
 
     default void onDamageEntity(EntityDamageByEntityEvent event, Player player, ItemStack item) { }
+
+    default void onPrePlayerAttackEntity(PrePlayerAttackEntityEvent event, Player player, ItemStack item) { }
 
     default void onPlayerArmorRemove(PlayerArmorChangeEvent event, Player player, ItemStack item) { }
 
