@@ -11,6 +11,7 @@ import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import com.cavetale.worldmarker.util.Tags;
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -47,6 +48,7 @@ public final class Blunderbuss implements Mytem {
     private ItemStack prototype;
     private Component displayName;
     private final String description = "Use the mighty blunderbuss t' hit yer enemies from afar.";
+    private static final Duration COOLDOWN = Duration.ofSeconds(5);
     @Getter private static NamespacedKey singleUseKey;
 
     @Override
@@ -100,14 +102,13 @@ public final class Blunderbuss implements Mytem {
      */
     public boolean pullTheTrigger(Player player) {
         Session session = MytemsPlugin.getInstance().getSessions().of(player);
-        long cooldown = session.getCooldownInTicks(key.id);
+        long cooldown = session.getCooldown(key).toSeconds();
         if (cooldown > 0) {
-            long seconds = (cooldown - 1L) / 20L + 1;
-            player.sendActionBar(text("Cooldown " + seconds + "s", DARK_RED));
+            player.sendActionBar(text("Cooldown " + cooldown + "s", DARK_RED));
             player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.5f, 2.0f);
             return false;
         }
-        session.setCooldown(key.id, 60);
+        session.cooldown(key).duration(COOLDOWN);
         final Location playerLocation = player.getLocation();
         final Location eyeLocation = player.getEyeLocation();
         final RayTraceResult rayTraceResult;

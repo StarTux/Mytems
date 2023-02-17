@@ -9,11 +9,11 @@ import static net.kyori.adventure.text.format.TextColor.color;
 
 @RequiredArgsConstructor
 public enum FinderType {
-    STRUCTURE(100, Mytems.STRUCTURE_FINDER, "Structure Finder", color(0xC4A484),
+    STRUCTURE(150, Mytems.STRUCTURE_FINDER, "Structure Finder", color(0xC4A484),
               "Find common structures known to most sailors, adventurers, and birds"),
-    SECRET(150, Mytems.SECRET_FINDER, "Secret Finder", color(0x00CDCD),
+    SECRET(200, Mytems.SECRET_FINDER, "Secret Finder", color(0x00CDCD),
            "Locate secret relics hidden from contemporary knowledge"),
-    MYSTIC(200, Mytems.MYSTIC_FINDER, "Mystic Finder", color(0xD5A000),
+    MYSTIC(250, Mytems.MYSTIC_FINDER, "Mystic Finder", color(0xD5A000),
            "Pinpoint all ancient heritage sites with the wisdom of the elders"),
     ;
 

@@ -11,6 +11,7 @@ import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Gui;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.EnumSet;
@@ -47,6 +48,7 @@ public final class Finder implements Mytem {
     private ItemStack prototype;
     private Component displayName;
     private final Set<FoundType> findable = EnumSet.noneOf(FoundType.class);
+    private static final Duration COOLDOWN = Duration.ofSeconds(5);
 
     public Finder(final Mytems key) {
         this.key = key;
@@ -85,15 +87,14 @@ public final class Finder implements Mytem {
         event.setUseItemInHand(Event.Result.DENY);
         event.setUseInteractedBlock(Event.Result.DENY);
         final Session session = sessionOf(player);
-        final long cooldown = session.getCooldownInTicks(key.id);
+        final long cooldown = session.getCooldown(Mytems.STRUCTURE_FINDER).toSeconds();
         final Location location = player.getLocation();
         if (cooldown > 0) {
-            long seconds = (cooldown - 1L) / 20L + 1;
-            player.sendActionBar(text("Cooldown " + seconds + "s", RED));
+            player.sendActionBar(text("Cooldown " + cooldown + "s", RED));
             player.playSound(location, Sound.ENTITY_VILLAGER_NO, SoundCategory.MASTER, 1.0f, 1.0f);
             return;
         }
-        session.setCooldown(key.id, 20 * 3);
+        session.cooldown(Mytems.STRUCTURE_FINDER).duration(COOLDOWN).icon(key);
         final World world = player.getWorld();
         final Cuboid cuboid = new Cuboid(location.getBlockX() - type.range,
                                          world.getMinHeight(),

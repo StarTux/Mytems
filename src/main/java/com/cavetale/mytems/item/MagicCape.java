@@ -10,6 +10,7 @@ import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -40,7 +41,7 @@ import static net.kyori.adventure.text.format.TextDecoration.*;
 public final class MagicCape implements Mytem, Listener {
     @Getter private final Mytems key;
     public static final float FLY_SPEED = 0.025f;
-    public static final int COOLDOWN_SECONDS = 20;
+    public static final Duration COOLDOWN = Duration.ofSeconds(20);
     public static final int MAX_DISTANCE = 32;
     @Getter private Component displayName;
     private final String description = ""
@@ -108,14 +109,13 @@ public final class MagicCape implements Mytem, Listener {
             player.sendMessage(text("You cannot fly here", RED));
             return;
         }
-        long cooldown = session.getCooldownInTicks(key.id);
+        long cooldown = session.getCooldown(key).toSeconds();
         if (cooldown > 0) {
-            long seconds = (cooldown - 1L) / 20L + 1;
-            player.sendActionBar(rainbowify("Cooldown " + seconds + "s"));
+            player.sendActionBar(rainbowify("Cooldown " + cooldown + "s"));
             fail(player);
             return;
         }
-        session.setCooldown(key.id, COOLDOWN_SECONDS * 20);
+        session.cooldown(key).duration(COOLDOWN);
         PluginPlayerEvent.Name.START_FLYING.call(MytemsPlugin.getInstance(), player);
         session.getFlying().setFlying(player, key, FLY_SPEED, this::onTickFlight, this::onEndFlight);
         Location location = player.getLocation();
@@ -148,11 +148,12 @@ public final class MagicCape implements Mytem, Listener {
         if ((session.getFlying().getFlyTime() % 5) == 0) {
             player.getWorld().spawnParticle(Particle.END_ROD, player.getLocation(), 1, 0.0, 0.0, 0.0, 0.1);
         }
+        session.cooldown(key).duration(COOLDOWN);
     }
 
     private void onEndFlight(Player player) {
         Session session = MytemsPlugin.getInstance().getSessions().of(player);
-        session.setCooldown(key.id, COOLDOWN_SECONDS * 20);
+        session.cooldown(key).duration(COOLDOWN);
         session.getFavorites().clear(MagicCapeFlight.class);
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PHANTOM_FLAP, SoundCategory.PLAYERS, 2.0f, 1.0f);
         return;

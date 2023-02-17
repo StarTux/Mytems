@@ -10,6 +10,7 @@ import com.cavetale.mytems.util.Attr;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
+import java.time.Duration;
 import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
@@ -215,11 +216,11 @@ public abstract class EasterGear implements GearItem {
 
         @Getter @RequiredArgsConstructor
         public static final class BunnyHop implements SetBonus {
-            static final int COOLDOWN = 3;
+            static final Duration COOLDOWN = Duration.ofSeconds(3);
             private final EasterItemSet itemSet;
             private final int requiredItemCount;
             private final String name = "Bunny Hop";
-            private final String description = "Run and jump like the Easter Bunny! (" + COOLDOWN + "s cooldown)";
+            private final String description = "Run and jump like the Easter Bunny! (" + COOLDOWN.toSeconds() + "s cooldown)";
 
             @Override
             public void onPlayerJump(PlayerJumpEvent event, Player player) {
@@ -227,10 +228,10 @@ public abstract class EasterGear implements GearItem {
                 if (player.isSneaking()) return;
                 if (!player.isSprinting()) return;
                 Session session = MytemsPlugin.getInstance().getSessions().of(player);
-                if (session.getCooldownInTicks("easter.jump") > 0) return;
+                if (session.isOnCooldown(Mytems.EASTER_HELMET)) return;
                 Vector direction = player.getLocation().getDirection().setY(0);
                 if (direction.length() < 0.1) return;
-                session.setCooldown("easter.jump", COOLDOWN * 20);
+                session.cooldown(Mytems.EASTER_HELMET).duration(COOLDOWN);
                 Bukkit.getScheduler().runTask(MytemsPlugin.getInstance(), () -> {
                         player.setVelocity(player.getVelocity().add(direction.normalize().multiply(1.0).setY(0.3)));
                     });

@@ -10,6 +10,7 @@ import com.cavetale.mytems.util.BlockColor;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import com.cavetale.worldmarker.block.BlockMarker;
+import java.time.Duration;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -134,11 +135,10 @@ public final class Paintbrush implements Mytem {
             return;
         }
         Session session = MytemsPlugin.getInstance().getSessions().of(player);
-        long cooldown = session.getCooldownInTicks(key.id);
-        if (cooldown > 0) return;
+        if (session.isOnCooldown(key)) return;
         RayTraceResult rayTraceResult = player.rayTraceBlocks(RANGE);
         if (rayTraceResult == null) {
-            session.setCooldown(key.id, 20);
+            session.cooldown(key).duration(Duration.ofSeconds(3));
             return;
         }
         Block block = rayTraceResult.getHitBlock();
@@ -208,11 +208,10 @@ public final class Paintbrush implements Mytem {
             face = event.getBlockFace();
         } else {
             Session session = MytemsPlugin.getInstance().getSessions().of(player);
-            long cooldown = session.getCooldownInTicks(key.id);
-            if (cooldown > 0) return;
+            if (session.isOnCooldown(key)) return;
             RayTraceResult rayTraceResult = player.rayTraceBlocks(RANGE);
             if (rayTraceResult == null) {
-                session.setCooldown(key.id, 20);
+                session.cooldown(key).duration(Duration.ofSeconds(3));
                 return;
             }
             block = rayTraceResult.getHitBlock();

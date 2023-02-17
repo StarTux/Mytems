@@ -4,6 +4,7 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.worldmarker.entity.EntityMarker;
+import java.time.Duration;
 import java.util.UUID;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -31,7 +32,7 @@ import static org.bukkit.inventory.EquipmentSlot.*;
 @Getter
 public final class DrAculaStaff extends AculaItem {
     private final int durationSeconds = 30;
-    private final int cooldownSeconds = 60;
+    private static final Duration COOLDOWN = Duration.ofSeconds(60);
     private final String rawDisplayName = "Dr. Acula's Staff";
     private final String description = ""
         + ChatColor.RED + "This staff was found among the mysterious doctor's belongings in the inn he stayed at, long after he had fled town.";
@@ -69,10 +70,9 @@ public final class DrAculaStaff extends AculaItem {
 
     protected void use(Player player, ItemStack item) {
         Session session = MytemsPlugin.getInstance().getSessions().of(player);
-        long cooldown = session.getCooldownInTicks(key.id);
+        long cooldown = session.getCooldown(key).toSeconds();
         if (cooldown > 0) {
-            long seconds = (cooldown - 1L) / 20L + 1;
-            player.sendActionBar(Component.text("Cooldown " + seconds + "s", NamedTextColor.DARK_RED));
+            player.sendActionBar(Component.text("Cooldown " + cooldown + "s", NamedTextColor.DARK_RED));
             player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.5f, 2.0f);
             return;
         }
@@ -84,7 +84,7 @@ public final class DrAculaStaff extends AculaItem {
         }
         effect = new PotionEffect(PotionEffectType.INVISIBILITY, durationSeconds * 20, 0, false, false, true);
         player.addPotionEffect(effect);
-        session.setCooldown(key.id, cooldownSeconds * 20);
+        session.cooldown(key).duration(COOLDOWN);
         Location base = player.getLocation().add(0, 1, 0);
         for (int i = 0; i < 16; i += 1) {
             Location loc = base.clone().add((Math.random() - Math.random()) * 0.5,

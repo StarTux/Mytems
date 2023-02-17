@@ -1,6 +1,7 @@
 package com.cavetale.mytems.session;
 
 import com.cavetale.core.event.hud.PlayerHudEvent;
+import com.cavetale.core.event.hud.PlayerHudPriority;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.gear.Equipment;
@@ -9,21 +10,32 @@ import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.gear.Slot;
 import com.cavetale.mytems.util.Items;
-import java.util.HashMap;
-import java.util.Map;
+import com.cavetale.mytems.util.Text;
+import java.time.Duration;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import static com.cavetale.core.font.Unicode.subscript;
+import static com.cavetale.core.font.Unicode.tiny;
+import static net.kyori.adventure.text.Component.join;
+import static net.kyori.adventure.text.Component.space;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.textOfChildren;
+import static net.kyori.adventure.text.JoinConfiguration.separator;
+import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
 
 @Getter
 public final class Session {
     protected final MytemsPlugin plugin;
     protected final UUID uuid;
     protected final String name;
-    protected Map<String, Long> cooldowns = new HashMap<>();
+    protected final List<Cooldown> cooldowns = new ArrayList<>();
     public static final long MILLIS_PER_TICK = 50L;
     private int equipmentUpdateTicks = 0;
     protected final Equipment equipment = new Equipment(); // Updated every tick
@@ -51,26 +63,6 @@ public final class Session {
     public void disable(Player player) {
         flying.disable(player);
         attributes.disable(player);
-    }
-
-    public void setCooldown(String key, int ticks) {
-        long now = System.currentTimeMillis();
-        cooldowns.put(key, now + (long) ticks * MILLIS_PER_TICK);
-    }
-
-    public boolean isOnCooldown(String key) {
-        Long cd = cooldowns.get(key);
-        if (cd == null) return false;
-        long now = System.currentTimeMillis();
-        return cd < now;
-    }
-
-    public long getCooldownInTicks(String key) {
-        Long cd = cooldowns.get(key);
-        if (cd == null) return 0L;
-        long now = System.currentTimeMillis();
-        if (now > cd) return 0L;
-        return (cd - now) / MILLIS_PER_TICK;
     }
 
     public void tick(Player player) {
@@ -130,6 +122,32 @@ public final class Session {
     }
 
     protected void onPlayerHud(PlayerHudEvent event) {
+        if (cooldowns.isEmpty()) return;
+        cleanCooldowns();
+        if (cooldowns.isEmpty()) return;
+        List<Component> lines = new ArrayList<>();
+        lines.add(text(tiny("cooldowns"), GRAY));
+        List<Component> line = new ArrayList<>();
+        int total = 0;
+        int lineLength = 0;
+        for (Cooldown cooldown : cooldowns) {
+            String text = subscript("" + cooldown.getDuration().toSeconds());
+            int length = (text.length() * 2 / 3) + 1;
+            int addLineLength = length + (lineLength == 0 ? 0 : 1);
+            if (lineLength + addLineLength > Text.ITEM_LORE_WIDTH) {
+                lines.add(join(separator(space()), line));
+                line.clear();
+                lineLength = 0;
+            }
+            line.add(textOfChildren(cooldown.getIcon(), text(text, GRAY)));
+            lineLength += addLineLength;
+            total += 1;
+        }
+        if (!line.isEmpty()) {
+            lines.add(join(separator(space()), line));
+        }
+        if (total == 0) return;
+        event.sidebar(PlayerHudPriority.LOWEST, lines);
     }
 
     public void setHidingPlayers(boolean value) {
@@ -144,5 +162,36 @@ public final class Session {
             }
         }
         this.hidingPlayers = value;
+    }
+
+    private void cleanCooldowns() {
+        long now = System.currentTimeMillis();
+        cooldowns.removeIf(it -> it.end < now);
+    }
+
+    public Cooldown cooldown(Mytems mytems) {
+        for (Cooldown cooldown : cooldowns) {
+            if (cooldown.mytems == mytems) return cooldown;
+        }
+        Cooldown cooldown = new Cooldown(mytems);
+        cooldowns.add(cooldown);
+        return cooldown;
+    }
+
+    public Duration getCooldown(Mytems mytems) {
+        cleanCooldowns();
+        for (Cooldown cooldown : cooldowns) {
+            if (cooldown.mytems == mytems) return cooldown.getDuration();
+        }
+        return Duration.ZERO;
+    }
+
+    public boolean isOnCooldown(Mytems mytems) {
+        for (Cooldown cooldown : cooldowns) {
+            if (cooldown.mytems == mytems) {
+                return cooldown.end >= System.currentTimeMillis();
+            }
+        }
+        return false;
     }
 }
