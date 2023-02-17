@@ -73,6 +73,7 @@ public final class MytemsTag {
             MytemsCategory.COLLECTIBLES,
             MytemsCategory.CAVEBOY,
             MytemsCategory.HOURGLASS,
+            MytemsCategory.FINDER,
         });
     public static final MytemsTag EQUIPMENT = new MytemsTag("equipment", new MytemsCategory[] {
             MytemsCategory.EQUIP_AXE,
