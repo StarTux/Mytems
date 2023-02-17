@@ -3,7 +3,6 @@ package com.cavetale.mytems.gear;
 import com.cavetale.mytems.event.combat.DamageCalculationEvent;
 import com.cavetale.mytems.item.music.PlayerPlayInstrumentEvent;
 import com.cavetale.mytems.util.Text;
-import com.destroystokyo.paper.event.entity.ProjectileCollideEvent;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +16,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPotionEffectEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
@@ -103,7 +103,7 @@ public interface SetBonus {
 
     default void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player) { }
 
-    default void onProjectileCollidePlayer(ProjectileCollideEvent event, Player player) { }
+    default void onProjectileHitPlayer(ProjectileHitEvent event, Player player) { }
 
     default void onFoodLevelChange(FoodLevelChangeEvent event, Player player) { }
 

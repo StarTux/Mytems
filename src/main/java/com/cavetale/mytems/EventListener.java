@@ -9,7 +9,6 @@ import com.cavetale.worldmarker.entity.EntityMarker;
 import com.cavetale.worldmarker.util.Tags;
 import com.destroystokyo.paper.event.entity.EntityAddToWorldEvent;
 import com.destroystokyo.paper.event.entity.EntityRemoveFromWorldEvent;
-import com.destroystokyo.paper.event.entity.ProjectileCollideEvent;
 import com.destroystokyo.paper.event.inventory.PrepareResultEvent;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
@@ -228,7 +227,7 @@ public final class EventListener implements Listener {
     @EventHandler(ignoreCancelled = false, priority = EventPriority.LOW)
     private void onPrePlayerAttackEntity(PrePlayerAttackEntityEvent event) {
         Player player = event.getPlayer();
-        ItemStack item = player.getInventory().getItemInHand();
+        ItemStack item = player.getInventory().getItemInMainHand();
         Mytems mytems = Mytems.forItem(item);
         if (mytems != null) mytems.getMytem().onPrePlayerAttackEntity(event, player, item);
     }
@@ -518,9 +517,18 @@ public final class EventListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     private void onTridentHit(ProjectileHitEvent event) {
-        if (!(event.getEntity() instanceof Trident trident)) return;
-        if (!EntityMarker.hasId(trident, "mytems:trident")) return;
-        trident.remove();
+        if (event.getEntity() instanceof Trident trident && EntityMarker.hasId(trident, "mytems:trident")) {
+            trident.remove();
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
+    private void onProjectileHitPlayer(ProjectileHitEvent event) {
+        if (event.getHitEntity() instanceof Player player) {
+            for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
+                setBonus.onProjectileHitPlayer(event, player);
+            }
+        }
     }
 
     private DamageCalculationEvent damageCalculationEvent;
@@ -607,16 +615,6 @@ public final class EventListener implements Listener {
             }
         }
     }
-
-    @EventHandler(priority = EventPriority.HIGH)
-    private void onProjectileCollidePlayer(ProjectileCollideEvent event) {
-        if (event.getCollidedWith() instanceof Player player) {
-            for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
-                setBonus.onProjectileCollidePlayer(event, player);
-            }
-        }
-    }
-
 
     @EventHandler(priority = EventPriority.LOW)
     private void onFoodLevelChange(FoodLevelChangeEvent event) {

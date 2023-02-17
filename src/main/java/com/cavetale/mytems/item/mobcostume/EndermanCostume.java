@@ -7,7 +7,6 @@ import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Skull;
 import com.cavetale.mytems.util.Text;
-import com.destroystokyo.paper.event.entity.ProjectileCollideEvent;
 import java.util.List;
 import java.util.Random;
 import java.util.UUID;
@@ -26,6 +25,7 @@ import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
@@ -71,7 +71,7 @@ public abstract class EndermanCostume implements GearItem {
             }
 
             @Override
-            public void onProjectileCollidePlayer(ProjectileCollideEvent event, Player player) {
+            public void onProjectileHitPlayer(ProjectileHitEvent event, Player player) {
                 if (event.isCancelled()) return;
                 if (player.isGliding()) return;
                 if (player.getGameMode() == GameMode.SPECTATOR) return;
