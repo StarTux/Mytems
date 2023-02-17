@@ -73,11 +73,6 @@ public final class BingoBukkit implements Mytem {
     }
 
     @Override
-    public void onPlayerLeftClick(PlayerInteractEvent event, Player player, ItemStack item) {
-        event.setUseInteractedBlock(Event.Result.DENY);
-    }
-
-    @Override
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
         event.setUseInteractedBlock(Event.Result.DENY);
         RayTraceResult trace = player.rayTraceBlocks(5.0, FluidCollisionMode.SOURCE_ONLY);
