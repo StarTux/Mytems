@@ -49,6 +49,7 @@ import com.cavetale.mytems.item.halloween.HalloweenCandy;
 import com.cavetale.mytems.item.halloween.HalloweenToken2;
 import com.cavetale.mytems.item.halloween.HalloweenToken;
 import com.cavetale.mytems.item.hourglass.Hourglass;
+import com.cavetale.mytems.item.luminator.Luminator;
 import com.cavetale.mytems.item.magnifier.Magnifier;
 import com.cavetale.mytems.item.medieval.WitchBroom;
 import com.cavetale.mytems.item.mobcostume.BeeCostume;
@@ -447,7 +448,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     DICE_4(ForbiddenMytem.class, QUARTZ_BLOCK, 710, (char) 0xF082, UI),
     DICE_5(ForbiddenMytem.class, QUARTZ_BLOCK, 711, (char) 0xF083, UI),
     DICE_6(ForbiddenMytem.class, QUARTZ_BLOCK, 712, (char) 0xF084, UI),
-    DICE_ROLL(ForbiddenMytem.class, QUARTZ_BLOCK, 713, (char) 0xF085, chrarr(0xF085, 0xF086, 0xF087, 0xF088, 0xF089, 0xF08A), UI, Animation.frametime(2)),
+    DICE_ROLL(ForbiddenMytem.class, QUARTZ_BLOCK, 713, (char) 0xF085, chrarr(0xF085, 0xF086, 0xF087, 0xF088, 0xF089, 0xF08A), UI, Animation.frametime(3)),
     LETTER_A(GlyphItem.class, PLAYER_HEAD, 68, (char) 0xE284, LETTER),
     LETTER_B(GlyphItem.class, PLAYER_HEAD, 69, (char) 0xE285, LETTER),
     LETTER_C(GlyphItem.class, PLAYER_HEAD, 70, (char) 0xE286, LETTER),
@@ -727,6 +728,8 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     STRUCTURE_FINDER(Finder.class, COMPASS, 0xF255, FINDER),
     SECRET_FINDER(Finder.class, COMPASS, 0xF256, FINDER),
     MYSTIC_FINDER(Finder.class, COMPASS, 0xF257, FINDER),
+    EMPTY_LUMINATOR(Luminator.class, IRON_PICKAXE, 0xF259, UTILITY),
+    LUMINATOR(Luminator.class, IRON_PICKAXE, 0xF25A, UTILITY, Animation.frametime(2)),
     GOLDEN_QUIVER(EquipmentItem.class, STICK, 345, (char) 0xF15A, EQUIP_QUIVER),
     STEEL_QUIVER(EquipmentItem.class, STICK, 346, (char) 0xF15B, EQUIP_QUIVER),
     WOODEN_QUIVER(EquipmentItem.class, STICK, 347, (char) 0xF15C, EQUIP_QUIVER),

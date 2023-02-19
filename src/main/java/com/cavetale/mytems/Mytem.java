@@ -23,6 +23,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.event.player.PlayerItemDamageEvent;
 import org.bukkit.event.player.PlayerSwapHandItemsEvent;
+import org.bukkit.event.player.PlayerToggleSneakEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
@@ -99,6 +100,8 @@ public interface Mytem {
     }
 
     default void onSwapHandItems(PlayerSwapHandItemsEvent event, Player player, ItemStack item, EquipmentSlot slot) { }
+
+    default void onPlayerToggleSneak(PlayerToggleSneakEvent event, Player player, ItemStack item, EquipmentSlot slot) { }
 
     /**
      * These can be overridden entirely.

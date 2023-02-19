@@ -34,4 +34,9 @@ public final class MagicMap implements Mytem {
         item.setItemMeta(meta);
         return item;
     }
+
+    @Override
+    public int getMaxStackSize() {
+        return 1;
+    }
 }

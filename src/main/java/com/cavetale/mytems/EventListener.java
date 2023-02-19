@@ -643,8 +643,16 @@ public final class EventListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     private void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
+        Player player = event.getPlayer();
         if (event.isSneaking()) {
-            event.getPlayer().eject();
+            player.eject();
+        }
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        if (itemStack != null) {
+            Mytems mytems = Mytems.forItem(itemStack);
+            if (mytems != null) {
+                mytems.getMytem().onPlayerToggleSneak(event, player, itemStack, EquipmentSlot.HAND);
+            }
         }
     }
 
