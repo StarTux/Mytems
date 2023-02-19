@@ -50,7 +50,7 @@ public final class Luminance {
         case CAMPFIRE -> {
             Campfire campfire = (Campfire) block.getBlockData();
             if (!campfire.isLit()) yield null;
-            yield new Luminance(15 / 5, () -> {
+            yield new Luminance(15, () -> {
                     campfire.setLit(false);
                     if (!new PlayerChangeBlockEvent(player, block, campfire).callEvent()) return false;
                     block.setBlockData(campfire);
@@ -60,7 +60,7 @@ public final class Luminance {
         case SOUL_CAMPFIRE -> {
             Campfire campfire = (Campfire) block.getBlockData();
             if (!campfire.isLit()) yield null;
-            yield new Luminance(10 / 5, () -> {
+            yield new Luminance(10, () -> {
                     campfire.setLit(false);
                     if (!new PlayerChangeBlockEvent(player, block, campfire).callEvent()) return false;
                     block.setBlockData(campfire);
@@ -86,8 +86,7 @@ public final class Luminance {
             BLACK_CANDLE -> {
             Candle candle = (Candle) block.getBlockData();
             if (!candle.isLit()) yield null;
-            yield new Luminance(candle.getCandles(), () -> {
-                    // light == getCandles () * 3
+            yield new Luminance(3 * candle.getCandles(), () -> {
                     candle.setLit(false);
                     if (!new PlayerChangeBlockEvent(player, block, candle).callEvent()) return false;
                     block.setBlockData(candle);
@@ -97,7 +96,7 @@ public final class Luminance {
         case FURNACE, BLAST_FURNACE, SMOKER -> {
             Furnace furnace = (Furnace) block.getState();
             if (furnace.getBurnTime() <= 0) yield null;
-            yield new Luminance(13 / 5, () -> {
+            yield new Luminance(13, () -> {
                     // No event is called here.
                     furnace.setBurnTime((short) 0);
                     furnace.update();

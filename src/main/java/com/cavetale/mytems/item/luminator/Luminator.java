@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -95,6 +96,7 @@ public final class Luminator implements Mytem {
 
     @Override
     public void onPlayerLeftClick(PlayerInteractEvent event, Player player, ItemStack item) {
+        if (player.getGameMode() == GameMode.SPECTATOR) return;
         if (!event.hasBlock()) return;
         event.setCancelled(true);
         LuminatorTag tag = serializeTag(item);
@@ -119,16 +121,18 @@ public final class Luminator implements Mytem {
         light.setWaterlogged(water);
         if (!new PlayerChangeBlockEvent(player, block, light).callEvent()) return;
         block.setBlockData(light);
-        tag.light = Math.max(0, tag.light - lightAmount);
-        if (tag.light <= 0) {
-            Mytems.EMPTY_LUMINATOR.setItem(item);
-        } else {
-            tag.store(item);
-        }
-        if (tag.light <= 0) {
-            player.sendActionBar(textOfChildren(Mytems.EMPTY_LUMINATOR, text(" Luminator Level ", GRAY), text(tag.light, YELLOW)));
-        } else {
-            player.sendActionBar(textOfChildren(Mytems.LUMINATOR, text(" Luminator Level ", GRAY), text(tag.light, YELLOW)));
+        if (player.getGameMode() != GameMode.CREATIVE) {
+            tag.light = Math.max(0, tag.light - lightAmount);
+            if (tag.light <= 0) {
+                Mytems.EMPTY_LUMINATOR.setItem(item);
+            } else {
+                tag.store(item);
+            }
+            if (tag.light <= 0) {
+                player.sendActionBar(textOfChildren(Mytems.EMPTY_LUMINATOR, text(" Luminator Level ", GRAY), text(tag.light, YELLOW)));
+            } else {
+                player.sendActionBar(textOfChildren(Mytems.LUMINATOR, text(" Luminator Level ", GRAY), text(tag.light, YELLOW)));
+            }
         }
         Location soundLocation = block.getLocation().add(0.5, 0.5, 0.5);
         block.getWorld().playSound(soundLocation, Sound.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 0.5f, 2.0f);
@@ -140,11 +144,12 @@ public final class Luminator implements Mytem {
 
     @Override
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
+        if (player.getGameMode() == GameMode.SPECTATOR) return;
         if (!event.hasBlock()) return;
         event.setCancelled(true);
         Block block = event.getClickedBlock();
         LuminatorTag tag = serializeTag(item);
-        if (tag.light >= MAX_LIGHT) return;
+        if (tag.light >= MAX_LIGHT && player.getGameMode() != GameMode.CREATIVE) return;
         Luminance luminance = Luminance.of(player, block);
         if (luminance == null) {
             block = block.getRelative(event.getBlockFace());
