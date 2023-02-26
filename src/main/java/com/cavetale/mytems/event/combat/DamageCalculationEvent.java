@@ -107,6 +107,7 @@ public final class DamageCalculationEvent extends Event {
     }
 
     public void addPostDamageAction(boolean ignoreCancelled, Runnable callback) {
+        handled = true;
         if (postDamageActions == null) postDamageActions = new ArrayList<>();
         postDamageActions.add(new PostDamageAction(ignoreCancelled, callback));
     }
