@@ -16,6 +16,7 @@ public enum MytemsCategory {
     COLLECTIBLES,
     CREEPER_COSTUME,
     CURRENCY,
+    DEFLECTOR,
     DIE,
     DUNE,
     DWARVEN,
@@ -70,6 +71,7 @@ public enum MytemsCategory {
     WARDROBE_HAT,
     WARDROBE_MOUNT,
     WARDROBE_OFFHAND,
+    WEAPON,
     WITCH_HAT,
     // Equipment
     EQUIP_AXE,

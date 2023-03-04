@@ -528,6 +528,20 @@ public final class EventListener implements Listener {
             for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
                 setBonus.onProjectileHitPlayer(event, player);
             }
+            ItemStack hand = player.getInventory().getItemInMainHand();
+            if (hand != null) {
+                Mytems mytems = Mytems.forItem(hand);
+                if (mytems != null) {
+                    mytems.getMytem().onProjectileHitPlayer(event, player, hand, EquipmentSlot.HAND);
+                }
+            }
+            ItemStack offHand = player.getInventory().getItemInOffHand();
+            if (offHand != null) {
+                Mytems mytems = Mytems.forItem(offHand);
+                if (mytems != null) {
+                    mytems.getMytem().onProjectileHitPlayer(event, player, offHand, EquipmentSlot.OFF_HAND);
+                }
+            }
         }
     }
 

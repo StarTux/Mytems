@@ -14,6 +14,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
@@ -102,6 +103,8 @@ public interface Mytem {
     default void onSwapHandItems(PlayerSwapHandItemsEvent event, Player player, ItemStack item, EquipmentSlot slot) { }
 
     default void onPlayerToggleSneak(PlayerToggleSneakEvent event, Player player, ItemStack item, EquipmentSlot slot) { }
+
+    default void onProjectileHitPlayer(ProjectileHitEvent event, Player player, ItemStack item, EquipmentSlot slot) { }
 
     /**
      * These can be overridden entirely.

@@ -31,6 +31,7 @@ import com.cavetale.mytems.item.bingo.BingoBukkit;
 import com.cavetale.mytems.item.captain.Blunderbuss;
 import com.cavetale.mytems.item.captain.CaptainsCutlass;
 import com.cavetale.mytems.item.coin.Coin;
+import com.cavetale.mytems.item.deflector.DeflectorShield;
 import com.cavetale.mytems.item.dividers.Dividers;
 import com.cavetale.mytems.item.dune.DuneItem;
 import com.cavetale.mytems.item.dwarven.DwarvenItem;
@@ -730,6 +731,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     MYSTIC_FINDER(Finder.class, COMPASS, 0xF257, FINDER),
     EMPTY_LUMINATOR(Luminator.class, IRON_PICKAXE, 0xF259, UTILITY),
     LUMINATOR(Luminator.class, IRON_PICKAXE, 0xF25A, UTILITY, Animation.frametime(2)),
+    DEFLECTOR_SHIELD(DeflectorShield.class, SHIELD, 0xF266, DEFLECTOR),
+    RETURN_SHIELD(DeflectorShield.class, SHIELD, 0xF267, DEFLECTOR),
+    VENGEANCE_SHIELD(DeflectorShield.class, SHIELD, 0xF268, DEFLECTOR),
     GOLDEN_QUIVER(EquipmentItem.class, STICK, 345, (char) 0xF15A, EQUIP_QUIVER),
     STEEL_QUIVER(EquipmentItem.class, STICK, 346, (char) 0xF15B, EQUIP_QUIVER),
     WOODEN_QUIVER(EquipmentItem.class, STICK, 347, (char) 0xF15C, EQUIP_QUIVER),

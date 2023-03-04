@@ -67,6 +67,8 @@ public final class MytemsTag {
             MytemsCategory.BINGO_BUKKITS,
         });
     public static final MytemsTag WEAPON = new MytemsTag("weapon", new MytemsCategory[] {
+            MytemsCategory.WEAPON,
+            MytemsCategory.DEFLECTOR,
             MytemsCategory.MOBSLAYERS,
         });
     public static final MytemsTag COLLECTIBLES = new MytemsTag("collectibles", new MytemsCategory[] {
