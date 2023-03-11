@@ -21,7 +21,7 @@ public enum FoundType {
     PYRAMID(FinderType.STRUCTURE, List.of("minecraft:desert_pyramid"), () -> new ItemStack(Material.SANDSTONE_STAIRS)),
     RUINED_PORTAL(FinderType.STRUCTURE, List.of("minecraft:ruined_portal", "minecraft:ruined_portal_"), () -> new ItemStack(Material.OBSIDIAN)),
     VILLAGE(FinderType.STRUCTURE, List.of("minecraft:village_"), () -> new ItemStack(Material.EMERALD)),
-    WITCH_HUT(FinderType.STRUCTURE, List.of("minecraft:witch_hut"), Mytems.WITCH_FACE::createIcon),
+    WITCH_HUT(FinderType.STRUCTURE, List.of("minecraft:swamp_hut"), Mytems.WITCH_FACE::createIcon),
     // Secret
     BASTION_REMNANT(FinderType.SECRET, List.of("minecraft:bastion_remnant"), () -> new ItemStack(Material.GILDED_BLACKSTONE)),
     BURIED_TREASURE(FinderType.SECRET, List.of("minecraft:buried_treasure"), () -> new ItemStack(Material.CHEST)),
