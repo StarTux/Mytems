@@ -27,6 +27,7 @@ public enum MytemsCategory {
     ENDERMAN_COSTUME,
     ENEMY,
     FINDER,
+    FLAG,
     FOX_COSTUME,
     FRIENDS,
     FURNITURE,
