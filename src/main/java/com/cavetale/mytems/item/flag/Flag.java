@@ -36,7 +36,7 @@ public enum Flag {
 
     public final Mytems mytems;
 
-    public final Flag of(Mytems mytems) {
+    public static Flag of(Mytems mytems) {
         for (var it : values()) {
             if (it.mytems == mytems) return it;
         }
