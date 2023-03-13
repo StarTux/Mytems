@@ -26,4 +26,16 @@ public enum Denomination {
         }
         throw new IllegalArgumentException("mytems=" + mytems);
     }
+
+    public static Denomination ofAmount(double amount) {
+        final double abs = Math.abs(amount);
+        Denomination result = Denomination.COPPER;
+        for (var it : values()) {
+            if (!it.regularCurrency) continue;
+            if ((double) it.value <= abs) {
+                result = it;
+            }
+        }
+        return result;
+    }
 }

@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.Locale;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.event.ClickEvent;
+import net.kyori.adventure.text.event.HoverEvent;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
@@ -132,40 +134,29 @@ public final class Coin implements Mytem {
     }
 
     public static Component format(double amount) {
-        Denomination denomination = Denomination.COPPER;
-        final double abs = Math.abs(amount);
-        for (Denomination deno : Denomination.values()) {
-            if (!deno.regularCurrency) continue;
-            if ((double) deno.value <= abs) {
-                denomination = deno;
-            }
-        }
+        final Denomination denomination = Denomination.ofAmount(amount);
         final String format = formatHelper(amount);
         final TextColor color = amount >= 0 ? denomination.color : DARK_RED;
-        return textOfChildren(denomination.mytems.component, text(format))
-            .color(color)
-            .hoverEvent(showText(join(separator(newline()),
-                                      text(format + " Coins", color),
-                                      text("/money", GRAY))))
-            .clickEvent(runCommand("/money"));
+        return textOfChildren(denomination.mytems.component, text(format, color));
     }
 
     public static Component formatAnimated(double amount) {
-        Denomination denomination = Denomination.COPPER;
-        final double abs = Math.abs(amount);
-        for (Denomination deno : Denomination.values()) {
-            if (!deno.regularCurrency) continue;
-            if ((double) deno.value <= abs) {
-                denomination = deno;
-            }
-        }
+        final Denomination denomination = Denomination.ofAmount(amount);
         final String format = formatHelper(amount);
         final TextColor color = amount >= 0 ? denomination.color : DARK_RED;
-        return textOfChildren(denomination.mytems.getCurrentAnimationFrame(), text(format))
-            .color(color)
-            .hoverEvent(showText(join(separator(newline()),
-                                      text(format + " Coins", color),
-                                      text("/money", GRAY))))
-            .clickEvent(runCommand("/money"));
+        return textOfChildren(denomination.mytems.getCurrentAnimationFrame(), text(format, color));
+    }
+
+    public static ClickEvent clickEvent() {
+        return runCommand("/money");
+    }
+
+    public static HoverEvent hoverEvent(double amount) {
+        final Denomination denomination = Denomination.ofAmount(amount);
+        final String format = formatHelper(amount);
+        final TextColor color = amount >= 0 ? denomination.color : DARK_RED;
+        return showText(join(separator(newline()),
+                             text(format + " Coins", color),
+                             text("/money", GRAY)));
     }
 }
