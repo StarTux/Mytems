@@ -10,11 +10,13 @@ import java.util.List;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.FluidCollisionMode;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.World.Environment;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Levelled;
@@ -74,7 +76,9 @@ public final class BingoBukkit implements Mytem {
 
     @Override
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
+        if (player.getGameMode() == GameMode.SPECTATOR) return;
         event.setUseInteractedBlock(Event.Result.DENY);
+        if (player.getWorld().getEnvironment() == Environment.NETHER) return;
         RayTraceResult trace = player.rayTraceBlocks(5.0, FluidCollisionMode.SOURCE_ONLY);
         if (trace == null) return;
         Block block = trace.getHitBlock();
