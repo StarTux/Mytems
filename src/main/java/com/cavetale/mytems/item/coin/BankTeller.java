@@ -24,19 +24,14 @@ import static net.kyori.adventure.text.format.TextColor.color;
 import static net.kyori.adventure.text.format.TextDecoration.*;
 
 public final class BankTeller {
-    private static final TextColor PALE_BLUE = color(0xD7E5F0);
-
     public static void open(Player player) {
-        final int size = 6 * 9;
+        final int size = 5 * 9;
         Gui gui = new Gui().size(size);
-        GuiOverlay.Builder builder = GuiOverlay.BLANK.builder(size, PALE_BLUE)
-            .layer(GuiOverlay.TOP_BAR, color(0xFFFF00))
+        GuiOverlay.Builder builder = GuiOverlay.BLANK.builder(size, color(0xAAAAFF))
+            .layer(GuiOverlay.TITLE_BAR, color(0xFFFF00))
             .title(text("Bank Teller", BLACK, BOLD));
         int index = 0;
-        for (Glyph glyph : Glyph.toGlyphs("withdraw")) {
-            gui.setItem(index++, glyph.mytems.createIcon(List.of()));
-        }
-        int y = 3;
+        int y = 2;
         int dx = 0;
         for (Denomination deno : Denomination.values()) {
             if (!deno.regularCurrency) continue;
