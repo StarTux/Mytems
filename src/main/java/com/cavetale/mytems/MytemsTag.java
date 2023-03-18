@@ -68,8 +68,12 @@ public final class MytemsTag {
         });
     public static final MytemsTag WEAPON = new MytemsTag("weapon", new MytemsCategory[] {
             MytemsCategory.WEAPON,
-            MytemsCategory.DEFLECTOR,
             MytemsCategory.MOBSLAYERS,
+        });
+    public static final MytemsTag COMBAT = new MytemsTag("combat", new MytemsCategory[] {
+            MytemsCategory.WEAPON,
+            MytemsCategory.MOBSLAYERS,
+            MytemsCategory.DEFLECTOR,
         });
     public static final MytemsTag COLLECTIBLES = new MytemsTag("collectibles", new MytemsCategory[] {
             MytemsCategory.COLLECTIBLES,
