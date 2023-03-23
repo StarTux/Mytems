@@ -257,6 +257,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     RED_WITCH_HAT(WardrobeItem.class, RED_SHULKER_BOX, 175, (char) 0, WITCH_HAT),
     BLACK_WITCH_HAT(WardrobeItem.class, BLACK_SHULKER_BOX, 176, (char) 0, WITCH_HAT),
     CUPID_WINGS(WardrobeItem.class, FEATHER, 0xF258, WARDROBE_OFFHAND),
+    BUTTERFLY_WINGS(DummyMytem.class, FEATHER, 0xF269, WARDROBE_OFFHAND, Animation.BUTTERFLY_WINGS),
     VOTE_CANDY(VoteCandy.class, COOKIE, 9073001, (char) 0xE21E, VOTE),
     VOTE_FIREWORK(VoteFirework.class, FIREWORK_ROCKET, 9073002, (char) 0xE21F, VOTE),
     LUCID_LILY(Ingredient.class, AZURE_BLUET, 849001, (char) 0xE201, MAYPOLE),

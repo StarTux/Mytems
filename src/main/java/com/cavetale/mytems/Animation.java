@@ -177,4 +177,23 @@ public final class Animation {
                 new Frame(0, 1),
                 new Frame(2, 4),
             }));
+
+    public static final Animation BUTTERFLY_WINGS = new Animation("BUTTERFLY_WINGS", false, 0, 0, 1, List.of(new Frame[] {
+                new Frame(0, 20),
+                new Frame(1),
+                new Frame(0),
+                new Frame(2),
+                new Frame(3),
+                new Frame(4),
+                new Frame(5),
+                new Frame(6),
+                new Frame(7),
+                new Frame(6),
+                new Frame(5),
+                new Frame(4),
+                new Frame(3),
+                new Frame(2),
+                new Frame(0),
+                new Frame(1),
+            }));
 }
