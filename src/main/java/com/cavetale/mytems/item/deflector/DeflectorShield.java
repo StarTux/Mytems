@@ -11,6 +11,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Sound;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Fireball;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
@@ -94,6 +95,9 @@ public final class DeflectorShield implements Mytem {
             }
         }
         proj.setShooter(player);
+        if (proj instanceof AbstractArrow arrow) {
+            arrow.setPickupStatus(AbstractArrow.PickupStatus.CREATIVE_ONLY);
+        }
         player.setCooldown(Material.SHIELD, (int) (type.cooldown.toSeconds() * 20L));
         player.playSound(player.getLocation(), Sound.ITEM_SHIELD_BLOCK, 1.0f, 1.0f);
     }
