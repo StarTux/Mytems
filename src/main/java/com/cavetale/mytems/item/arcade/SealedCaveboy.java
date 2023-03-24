@@ -4,6 +4,7 @@ import com.cavetale.core.font.Unicode;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Items;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.Getter;
@@ -60,8 +61,10 @@ public final class SealedCaveboy implements Mytem {
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, SoundCategory.MASTER, 1.0f, 0.5f);
             return;
         }
-        ArcadeGame[] games = ArcadeGame.values();
-        ArcadeGame game = games[ThreadLocalRandom.current().nextInt(games.length)];
+        List<ArcadeGame> games = new ArrayList<>();
+        for (var it : ArcadeGame.values()) games.add(it);
+        games.remove(ArcadeGame.TIC_TAC_TOE);
+        ArcadeGame game = games.get(ThreadLocalRandom.current().nextInt(games.size()));
         plugin().getLogger().info("[" + key + "] " + player.getName() + " unwrapped " + game);
         game.mytems.setItem(item);
         player.playSound(player.getLocation(), Sound.UI_LOOM_TAKE_RESULT, SoundCategory.MASTER, 1.0f, 2.0f);

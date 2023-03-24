@@ -13,6 +13,7 @@ public enum ArcadeGame {
     TIC_TAC_TOE(Mytems.CAVEBOY_TICTACTOE, ArcadeTicTacToe::start, text("Tic Tac Toe", LIGHT_PURPLE)),
     TNT_SWEEPER(Mytems.CAVEBOY_TNTSWEEP, ArcadeTNTSweeper::start, text("TNT Sweeper", BLUE)),
     MEMORY(Mytems.CAVEBOY_MEMORY, ArcadeMemory::start, text("Memory", GRAY)),
+    GEMS(Mytems.CAVEBOY_GEMS, ArcadeGems::start, text("Gems", AQUA)),
     ;
 
     public final Mytems mytems;

@@ -723,6 +723,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     CAVEBOY_TICTACTOE(Caveboy.class, IRON_SHOVEL, 746, (char) 0xF158, CAVEBOY),
     CAVEBOY_TNTSWEEP(Caveboy.class, IRON_SHOVEL, 747, (char) 0xF159, CAVEBOY),
     CAVEBOY_MEMORY(Caveboy.class, IRON_SHOVEL, 0xF254, CAVEBOY),
+    CAVEBOY_GEMS(Caveboy.class, IRON_SHOVEL, 0xF26A, CAVEBOY),
     COLORFALL_HOURGLASS(Hourglass.class, CLOCK, 0xF24E, (char) 0xF24E, chrarr(0xF24E, 0xF25B, 0xF25C, 0xF25D, 0xF25E, 0xF25F, 0xF260, 0xF261, 0xF262, 0xF263, 0xF264, 0xF265), HOURGLASS, Animation.HOURGLASS),
     MOONLIGHT_HOURGLASS(Hourglass.class, CLOCK, 0xF24F, HOURGLASS, Animation.HOURGLASS),
     ATMOSPHERE_HOURGLASS(Hourglass.class, CLOCK, 0xF250, HOURGLASS, Animation.HOURGLASS),
