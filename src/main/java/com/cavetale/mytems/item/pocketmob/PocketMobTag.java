@@ -29,6 +29,7 @@ import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fox;
 import org.bukkit.entity.Frog;
+import org.bukkit.entity.Goat;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Mob;
@@ -230,6 +231,10 @@ public final class PocketMobTag extends MytemTag {
                 if (spellcaster.getSpell() != Spellcaster.Spell.NONE) {
                     text.add(prop("Spell", Text.toCamelCase(spellcaster.getSpell())));
                 }
+            }
+        } else if (entity instanceof Goat goat) {
+            if (goat.isScreaming()) {
+                nameComponents.add(0, "Screaming");
             }
         }
         if (entity instanceof Tameable tameable) {
