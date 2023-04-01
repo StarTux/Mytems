@@ -1007,6 +1007,8 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     TRANS_PRIDE_FLAG(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE11A, (char) 0xE11A, FLAG),
     UKRAINE(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE166, (char) 0xE166, FLAG),
     USA(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE109, (char) 0xE109, FLAG),
+    // April
+    APRIL_FOOLS(ForbiddenMytem.class, CARROT, 0xF26B, JOKE),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
