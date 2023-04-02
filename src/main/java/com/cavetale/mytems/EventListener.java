@@ -137,10 +137,15 @@ public final class EventListener implements Listener {
             setBonus.onPlayerInteractEntity(event, player);
         }
         if (event.isCancelled()) return;
-        if (event.getRightClicked() instanceof ZombieHorse zhorse && !zhorse.isTamed()
-            && zhorse.getPassengers().isEmpty() && PlayerEntityAbilityQuery.Action.MOUNT.query(player, zhorse)
-            && (!player.isInsideVehicle() || player.leaveVehicle())) {
-            zhorse.addPassenger(player);
+        if (event.getHand() == EquipmentSlot.HAND && event.getRightClicked() instanceof ZombieHorse zhorse && !zhorse.isTamed()
+            && zhorse.getPassengers().isEmpty() && PlayerEntityAbilityQuery.Action.MOUNT.query(player, zhorse)) {
+            if (item != null && !item.getType().isAir()) {
+                zhorse.getWorld().playSound(zhorse.getEyeLocation(), Sound.ENTITY_HORSE_ANGRY, 1.0f, 1.0f);
+            } else {
+                if (!player.isInsideVehicle() || player.leaveVehicle()) {
+                    zhorse.addPassenger(player);
+                }
+            }
         }
     }
 
