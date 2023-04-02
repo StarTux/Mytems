@@ -74,6 +74,7 @@ import com.cavetale.mytems.item.santa.SantaHat;
 import com.cavetale.mytems.item.santa.SantaJacket;
 import com.cavetale.mytems.item.santa.SantaPants;
 import com.cavetale.mytems.item.scarlet.ScarletItem;
+import com.cavetale.mytems.item.spleef.SpleefShovel;
 import com.cavetale.mytems.item.swampy.SwampyItem;
 import com.cavetale.mytems.item.tree.TreeSeed;
 import com.cavetale.mytems.item.treechopper.TreeChopper;
@@ -703,10 +704,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     SILVER_VOTE_TROPHY(Trophy.class, IRON_INGOT, 330, (char) 0xF144, TROPHY),
     BRONZE_VOTE_TROPHY(Trophy.class, COPPER_INGOT, 331, (char) 0xF145, TROPHY),
     PART_VOTE_TROPHY(Trophy.class, BLUE_CONCRETE, 332, (char) 0xF146, TROPHY),
-    GOLDEN_SPLEEF_SHOVEL(Trophy.class, GOLDEN_SHOVEL, 341, (char) 0xF147, TROPHY),
-    SILVER_SPLEEF_SHOVEL(Trophy.class, IRON_SHOVEL, 342, (char) 0xF148, TROPHY),
-    BRONZE_SPLEEF_SHOVEL(Trophy.class, STONE_SHOVEL, 343, (char) 0xF149, TROPHY),
-    BLUE_SPLEEF_SHOVEL(Trophy.class, WOODEN_SHOVEL, 344, (char) 0xF14A, TROPHY),
+    GOLDEN_SPLEEF_TROPHY(Trophy.class, GOLDEN_SHOVEL, 341, (char) 0xF147, TROPHY),
+    SILVER_SPLEEF_TROPHY(Trophy.class, IRON_SHOVEL, 342, (char) 0xF148, TROPHY),
+    BRONZE_SPLEEF_TROPHY(Trophy.class, STONE_SHOVEL, 343, (char) 0xF149, TROPHY),
+    BLUE_SPLEEF_TROPHY(Trophy.class, WOODEN_SHOVEL, 344, (char) 0xF14A, TROPHY),
     GOLDEN_END_FIGHT_TROPHY(Trophy.class, GOLDEN_SWORD, 588, (char) 0xF14B, TROPHY),
     SILVER_END_FIGHT_TROPHY(Trophy.class, GOLDEN_SWORD, 589, (char) 0xF14C, TROPHY),
     BRONZE_END_FIGHT_TROPHY(Trophy.class, GOLDEN_SWORD, 590, (char) 0xF14D, TROPHY),
@@ -1009,6 +1010,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     USA(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE109, (char) 0xE109, FLAG),
     // April
     APRIL_FOOLS(ForbiddenMytem.class, CARROT, 0xF26B, JOKE),
+    // Spleef
+    COPPER_SPLEEF_SHOVEL(SpleefShovel.class, IRON_SHOVEL, 0xEF26C, SPLEEF_SHOVEL),
+    IRON_SPLEEF_SHOVEL(SpleefShovel.class, IRON_SHOVEL, 0xEF26D, SPLEEF_SHOVEL),
+    GOLDEN_SPLEEF_SHOVEL(SpleefShovel.class, IRON_SHOVEL, 0xEF26E, SPLEEF_SHOVEL),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
