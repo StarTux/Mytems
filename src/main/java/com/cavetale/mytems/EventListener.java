@@ -1,5 +1,6 @@
 package com.cavetale.mytems;
 
+import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
 import com.cavetale.mytems.event.combat.DamageCalculation;
 import com.cavetale.mytems.event.combat.DamageCalculationEvent;
 import com.cavetale.mytems.gear.SetBonus;
@@ -33,6 +34,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Trident;
+import org.bukkit.entity.ZombieHorse;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -133,6 +135,12 @@ public final class EventListener implements Listener {
         }
         for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
             setBonus.onPlayerInteractEntity(event, player);
+        }
+        if (event.isCancelled()) return;
+        if (event.getRightClicked() instanceof ZombieHorse zhorse && !zhorse.isTamed()
+            && zhorse.getPassengers().isEmpty() && PlayerEntityAbilityQuery.Action.MOUNT.query(player, zhorse)
+            && (!player.isInsideVehicle() || player.leaveVehicle())) {
+            zhorse.addPassenger(player);
         }
     }
 
