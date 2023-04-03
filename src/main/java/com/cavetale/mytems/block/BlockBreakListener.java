@@ -26,13 +26,13 @@ public final class BlockBreakListener implements Listener {
      * Check the PlayerBreakBlockEvent, break the block, and apply the
      * callback to all drop events.
      */
-    public boolean breakBlock(Player player, ItemStack tool, Block block, Consumer<ItemSpawnEvent> dropCallback) {
+    public boolean breakBlock(Player player, ItemStack tool, Block block, final Consumer<ItemSpawnEvent> dropCallback) {
         if (!new PlayerBreakBlockEvent(player, block).callEvent()) return false;
         this.storedDropCallback = dropCallback;
         try {
             block.breakNaturally(tool);
         } finally {
-            dropCallback = null;
+            this.storedDropCallback = null;
         }
         return true;
     }
