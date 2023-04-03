@@ -4,6 +4,7 @@ import com.cavetale.core.connect.ServerCategory;
 import com.cavetale.core.font.Emoji;
 import com.cavetale.core.font.GlyphPolicy;
 import com.cavetale.core.item.ItemFinder;
+import com.cavetale.mytems.block.BlockBreakListener;
 import com.cavetale.mytems.item.photo.Photo;
 import com.cavetale.mytems.loot.LootTableListener;
 import com.cavetale.mytems.session.Session;
@@ -46,6 +47,8 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
     @Getter private static MytemsPlugin instance;
     final MytemsCommand mytemsCommand = new MytemsCommand(this);
     final EventListener eventListener = new EventListener(this);
+    final ShulkerBoxListener shulkerBoxListener = new ShulkerBoxListener(this);
+    final BlockBreakListener blockBreakListener = new BlockBreakListener(this);
     final Sessions sessions = new Sessions(this);
     private Map<Mytems, Mytem> mytems = new EnumMap<>(Mytems.class);
     private List<CustomMytemSlot> customMytemSlots = new ArrayList<>();
@@ -61,7 +64,8 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
         instance = this;
         mytemsCommand.enable();
         eventListener.enable();
-        new ShulkerBoxListener(this).enable();
+        shulkerBoxListener.enable();
+        blockBreakListener.enable();
         enableItems();
         fixAllPlayerInventoriesLater();
         sessions.enable();
@@ -310,5 +314,9 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
 
     public static MytemsPlugin plugin() {
         return instance;
+    }
+
+    public static BlockBreakListener blockBreakListener() {
+        return instance.blockBreakListener;
     }
 }
