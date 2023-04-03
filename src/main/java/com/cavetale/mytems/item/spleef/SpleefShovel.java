@@ -11,6 +11,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Particle;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.enchantments.Enchantment;
@@ -68,6 +69,7 @@ public final class SpleefShovel implements Mytem {
     @Override
     public void onBlockDamage(BlockDamageEvent event, Player player, ItemStack item) {
         if (event.isCancelled()) return;
+        if (!Tag.MINEABLE_SHOVEL.isTagged(event.getBlock().getType())) return;
         if (!event.getBlock().isPreferredTool(item)) return;
         if (player.getGameMode() != GameMode.CREATIVE && player.getFoodLevel() == 0) {
             player.sendActionBar(text("You are exhausted", RED));
@@ -83,6 +85,7 @@ public final class SpleefShovel implements Mytem {
                     Block block = event.getBlock().getRelative(dx, dy, dz);
                     if (dx * dx + dy * dy + dz * dz > r * r) continue;
                     if (block.isEmpty() || block.isLiquid()) continue;
+                    if (!Tag.MINEABLE_SHOVEL.isTagged(block.getType())) continue;
                     if (!block.isPreferredTool(item)) continue;
                     if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) continue;
                     BlockData blockData = block.getBlockData();
