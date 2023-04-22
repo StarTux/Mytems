@@ -1011,9 +1011,17 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     // April
     APRIL_FOOLS(ForbiddenMytem.class, CARROT, 0xF26B, JOKE),
     // Spleef
-    COPPER_SPLEEF_SHOVEL(SpleefShovel.class, IRON_SHOVEL, 0xEF26C, SPLEEF_SHOVEL),
-    IRON_SPLEEF_SHOVEL(SpleefShovel.class, IRON_SHOVEL, 0xEF26D, SPLEEF_SHOVEL),
-    GOLDEN_SPLEEF_SHOVEL(SpleefShovel.class, IRON_SHOVEL, 0xEF26E, SPLEEF_SHOVEL),
+    COPPER_SPLEEF_SHOVEL(SpleefShovel.class, IRON_SHOVEL, 0xF26C, SPLEEF_SHOVEL),
+    IRON_SPLEEF_SHOVEL(SpleefShovel.class, IRON_SHOVEL, 0xF26D, SPLEEF_SHOVEL),
+    GOLDEN_SPLEEF_SHOVEL(SpleefShovel.class, IRON_SHOVEL, 0xF26E, SPLEEF_SHOVEL),
+    // Butterfly
+    BLUE_BUTTERFLY(WardrobeItem.class, FEATHER, 0xF26F, (char) 0xF26F, chrarr(0xF26F, 0xF270, 0xF271, 0xF272, 0xF273, 0xF274), BUTTERFLY, Animation.BUTTERFLY),
+    CYAN_BUTTERFLY(WardrobeItem.class, FEATHER, 0xF275, (char) 0xF275, chrarr(0xF275, 0xF276, 0xF277, 0xF278, 0xF279, 0xF27A), BUTTERFLY, Animation.BUTTERFLY),
+    GREEN_BUTTERFLY(WardrobeItem.class, FEATHER, 0xF27B, (char) 0xF27B, chrarr(0xF27B, 0xF27C, 0xF27D, 0xF27E, 0xF27F, 0xF280), BUTTERFLY, Animation.BUTTERFLY),
+    ORANGE_BUTTERFLY(WardrobeItem.class, FEATHER, 0xF281, (char) 0xF281, chrarr(0xF281, 0xF282, 0xF283, 0xF284, 0xF285, 0xF286), BUTTERFLY, Animation.BUTTERFLY),
+    PINK_BUTTERFLY(WardrobeItem.class, FEATHER, 0xF287, (char) 0xF287, chrarr(0xF287, 0xF288, 0xF289, 0xF28A, 0xF28B, 0xF28C), BUTTERFLY, Animation.BUTTERFLY),
+    PURPLE_BUTTERFLY(WardrobeItem.class, FEATHER, 0xF28D, (char) 0xF28D, chrarr(0xF28D, 0xF28E, 0xF28F, 0xF290, 0xF291, 0xF292), BUTTERFLY, Animation.BUTTERFLY),
+    YELLOW_BUTTERFLY(WardrobeItem.class, FEATHER, 0xF293, (char) 0xF293, chrarr(0xF293, 0xF294, 0xF295, 0xF296, 0xF297, 0xF298), BUTTERFLY, Animation.BUTTERFLY),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();

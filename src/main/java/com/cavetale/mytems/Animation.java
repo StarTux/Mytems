@@ -196,4 +196,17 @@ public final class Animation {
                 new Frame(0),
                 new Frame(1),
             }));
+
+    public static final Animation BUTTERFLY = new Animation("BUTTERFLY", false, 0, 0, 1, List.of(new Frame[] {
+                new Frame(0, 3),
+                new Frame(1),
+                new Frame(2),
+                new Frame(3),
+                new Frame(4),
+                new Frame(5, 3),
+                new Frame(4),
+                new Frame(3),
+                new Frame(2),
+                new Frame(1),
+            }));
 }
