@@ -65,6 +65,7 @@ public final class MytemsTag {
     public static final MytemsTag UTILITY = new MytemsTag("utility", new MytemsCategory[] {
             MytemsCategory.UTILITY,
             MytemsCategory.BINGO_BUKKITS,
+            MytemsCategory.SPLEEF_SHOVEL,
         });
     public static final MytemsTag WEAPON = new MytemsTag("weapon", new MytemsCategory[] {
             MytemsCategory.WEAPON,
