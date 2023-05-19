@@ -23,6 +23,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.AbstractHorse;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.Animals;
+import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.Cat;
 import org.bukkit.entity.Creeper;
@@ -236,6 +237,8 @@ public final class PocketMobTag extends MytemTag {
             if (goat.isScreaming()) {
                 nameComponents.add(0, "Screaming");
             }
+        } else if (entity instanceof Axolotl axolotl) {
+            nameComponents.add(Text.toCamelCase(axolotl.getVariant()));
         }
         if (entity instanceof Tameable tameable) {
             if (tameable.isTamed()) {
