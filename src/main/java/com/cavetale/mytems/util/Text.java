@@ -8,7 +8,7 @@ import java.util.stream.Stream;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.ChatColor;
+import static net.kyori.adventure.text.Component.text;
 
 /**
  * Convenience functions to format text. Primarily for item tooltips.
@@ -23,15 +23,13 @@ public final class Text {
         if (words.length == 0) return List.of();
         List<String> lines = new ArrayList<>();
         StringBuilder line = new StringBuilder(words[0]);
-        int lineLength = ChatColor.stripColor(words[0]).length();
-        String lastColors = "";
+        int lineLength = words[0].length();
         for (int i = 1; i < words.length; ++i) {
             String word = words[i];
-            int wordLength = ChatColor.stripColor(word).length();
+            int wordLength = word.length();
             if (lineLength + wordLength + 1 > maxLineLength) {
-                String lineStr = lastColors + line.toString();
+                String lineStr = line.toString();
                 lines.add(lineStr);
-                lastColors = ChatColor.getLastColors(lineStr);
                 line = new StringBuilder(word);
                 lineLength = wordLength;
             } else {
@@ -40,7 +38,7 @@ public final class Text {
                 lineLength += wordLength + 1;
             }
         }
-        if (line.length() > 0) lines.add(lastColors + line.toString());
+        if (line.length() > 0) lines.add(line.toString());
         return lines;
     }
 
@@ -71,7 +69,7 @@ public final class Text {
     public static List<Component> toComponents(List<String> in) {
         List<Component> out = new ArrayList<>(in.size());
         for (String ins : in) {
-            out.add(Component.text(ins));
+            out.add(text(ins));
         }
         return out;
     }
@@ -79,7 +77,7 @@ public final class Text {
     public static List<Component> toComponents(List<String> in, Function<Component, Component> lineCallback) {
         List<Component> result = new ArrayList<>(in.size());
         for (String line : in) {
-            Component component = Component.text(line);
+            Component component = text(line);
             component = lineCallback.apply(component);
             result.add(component);
         }
@@ -98,8 +96,13 @@ public final class Text {
         return comps;
     }
 
-    public static String colorize(String in) {
-        return ChatColor.translateAlternateColorCodes('&', in);
+    public static List<Component> wrapLore2(String txt, Function<String, Component> lineCallback) {
+        List<String> lines = wrapMultiline(txt, ITEM_LORE_WIDTH);
+        List<Component> comps = new ArrayList<>();
+        for (String line : lines) {
+            comps.add(lineCallback.apply(line));
+        }
+        return comps;
     }
 
     public static String toCamelCase(String in) {
@@ -127,7 +130,7 @@ public final class Text {
     public static Component gradient(String name, TextColor... colors) {
         if (colors == null) throw new IllegalArgumentException("colors = null");
         final int len = name.length();
-        TextComponent.Builder comps = Component.text();
+        TextComponent.Builder comps = text();
         for (int i = 0; i < len; i += 1) {
             String d = "" + name.charAt(i);
             double percentage = (double) i / (double) (len - 1);
@@ -148,7 +151,7 @@ public final class Text {
             TextColor color = TextColor.color(clampRGB((int) Math.round(r)),
                                               clampRGB((int) Math.round(g)),
                                               clampRGB((int) Math.round(b)));
-            comps.append(Component.text(d, color));
+            comps.append(text(d, color));
         }
         return comps.build();
     }

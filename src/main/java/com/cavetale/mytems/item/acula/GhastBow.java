@@ -1,8 +1,9 @@
 package com.cavetale.mytems.item.acula;
 
 import com.cavetale.mytems.Mytems;
+import java.util.List;
 import lombok.Getter;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -15,17 +16,17 @@ import org.bukkit.entity.SmallFireball;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionType;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.textOfChildren;
+import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 @Getter
 public final class GhastBow extends AculaItem {
     private final String rawDisplayName = "Ghast Bow";
     private final String description = ""
-        + ChatColor.RED + "Legend has it the bowstring of this unique item was soaked in ghast tears."
+        + "Legend has it the bowstring of this unique item was soaked in ghast tears."
         + " They say it's the only weapon which may lower a vampire's guard...";
-    private final String usage = ""
-        + ChatColor.RED + "Shoot"
-        + ChatColor.DARK_GRAY + "\u2013"
-        + ChatColor.GRAY + "Launch fireball";
+    private final List<Component> usage = List.of(textOfChildren(Mytems.GHAST_BOW, text(" Launch fireball", GRAY)));
 
     public GhastBow(final Mytems key) {
         super(key);

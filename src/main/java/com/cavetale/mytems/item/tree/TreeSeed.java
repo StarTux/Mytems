@@ -12,7 +12,6 @@ import lombok.Getter;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -43,9 +42,7 @@ public final class TreeSeed implements Mytem {
         text.add(displayName);
         String treeName = Text.toCamelCase(customTreeType, " ");
         String description = "Plant on a patch of tilled soil"
-            + " to grow into a magnificent "
-            + ChatColor.GREEN + treeName + ChatColor.RESET
-            + " tree.";
+            + " to grow into a magnificent " + treeName + " tree.";
         description = Unicode.subscript(description.toLowerCase());
         text.addAll(Text.wrapLore(description,
                                   s -> s.color(GRAY)));

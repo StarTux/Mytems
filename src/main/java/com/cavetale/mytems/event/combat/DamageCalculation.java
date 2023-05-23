@@ -6,7 +6,6 @@ import com.cavetale.mytems.util.Text;
 import java.util.logging.Logger;
 import lombok.Data;
 import lombok.NonNull;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.AbstractArrow;
@@ -322,19 +321,7 @@ public final class DamageCalculation {
             double my = getFlatDamageReduction(it);
             double its = event.getDamage(it.damageModifier);
             double value = get(it);
-            ChatColor color;
-            if (value >= 1.0) {
-                color = ChatColor.DARK_GRAY;
-            } else if (value >= 0.75) {
-                color = ChatColor.DARK_RED;
-            } else if (value >= 0.5) {
-                color = ChatColor.RED;
-            } else if (value >= 0.25) {
-                color = ChatColor.GOLD;
-            } else {
-                color = ChatColor.AQUA;
-            }
-            logger.info(color + (Math.abs(my + its) < 0.001 ? "OK" : "WRONG")
+            logger.info((Math.abs(my + its) < 0.001 ? "OK" : "WRONG")
                         + " " + Text.toCamelCase(it, "")
                         + " " + fmt(Math.round(value * 100.0)) + "%"
                         + " => " + fmt(getFlatDamage(it))

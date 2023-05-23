@@ -4,7 +4,7 @@ import com.cavetale.mytems.Mytems;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
-import org.bukkit.ChatColor;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -18,6 +18,10 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.Vector;
+import static com.cavetale.core.font.Unicode.tiny;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.textOfChildren;
+import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 @Getter
 public final class Stompers extends AculaItem {
@@ -27,11 +31,10 @@ public final class Stompers extends AculaItem {
     private final double radius = 3.0;
     private final String radiusStr = "3";
     private final String description = "\n\n"
-        + ChatColor.RED + "When first discovered, my clumsy assistant managed to drop these shoes to the ground.";
-    private final String usage = ""
-        + ChatColor.RED + "Stomp"
-        + ChatColor.DARK_GRAY + "\u2013"
-        + ChatColor.GRAY + "Deal " + damageFactorStr + "x base damage to enemies within " + radiusStr + " blocks";
+        + "When first discovered, my clumsy assistant managed to drop these shoes to the ground.";
+    private final List<Component> usage = List.of(textOfChildren(text(tiny("stomp"), RED), text(" Trigger area damage", GRAY)),
+                                                  textOfChildren(text(tiny("radius"), GRAY), text(" " + radiusStr, WHITE)),
+                                                  textOfChildren(text(tiny("damage"), GRAY), text(" Base fall damage", WHITE)));
 
     public Stompers(final Mytems key) {
         super(key);

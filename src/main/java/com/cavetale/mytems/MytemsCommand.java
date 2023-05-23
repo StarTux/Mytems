@@ -30,7 +30,6 @@ import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -232,7 +231,7 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
     protected boolean fixall(CommandSender sender, String[] args) {
         if (args.length != 0) return false;
         plugin.fixAllPlayerInventoriesLater();
-        sender.sendMessage(ChatColor.YELLOW + "Fixing all player inventories");
+        sender.sendMessage(text("Fixing all player inventories", YELLOW));
         return true;
     }
 
@@ -283,18 +282,19 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         }
         itemStack = itemStack.clone();
         String serialized = mytems.serializeItem(itemStack);
-        player.sendMessage(ChatColor.YELLOW + "Testing: " + serialized);
+        player.sendMessage(text("Testing: " + serialized, YELLOW));
         for (int i = 0; i < 3; i += 1) {
             ItemStack itemStack2 = Mytems.deserializeItem(serialized);
             String serialized2 = mytems.serializeItem(itemStack2);
             boolean sameItem = Objects.equals(itemStack, itemStack2);
             boolean sameText = Objects.equals(serialized, serialized2);
             if (sameItem && sameText) {
-                player.sendMessage(ChatColor.YELLOW + "Step " + (i + 1) + ": " + ChatColor.GREEN + "OK");
+                player.sendMessage(textOfChildren(text("Step " + (i + 1) + ": ", YELLOW),
+                                                  text("OK", GREEN)));
             } else {
-                player.sendMessage(ChatColor.YELLOW + "Step " + (i + 1) + ":" + ChatColor.RED
-                                   + " sameItem=" + sameItem + " sameText=" + sameText
-                                   + " serial=" + serialized2);
+                player.sendMessage(textOfChildren(text("Step " + (i + 1) + ":", YELLOW),
+                                                  text(" sameItem=" + sameItem + " sameText=" + sameText
+                                                       + " serial=" + serialized2, RED)));
             }
             if (itemStack2 == null || serialized2 == null) break;
             itemStack = itemStack2;
@@ -330,7 +330,8 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
             throw new CommandWarn("No Mytem in your hand!");
         }
         String serialized = mytems.serializeItem(itemStack);
-        player.sendMessage(ChatColor.YELLOW + "Serialized item in hand: " + ChatColor.RESET + serialized);
+        player.sendMessage(textOfChildren(text("Serialized item in hand: ", YELLOW),
+                                          text(serialized)));
         plugin.getLogger().info(serialized);
         return true;
     }

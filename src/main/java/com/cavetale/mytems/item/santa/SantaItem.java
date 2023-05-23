@@ -22,6 +22,9 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.Repairable;
+import static net.kyori.adventure.text.Component.empty;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 @RequiredArgsConstructor
 abstract class SantaItem implements GearItem {
@@ -29,14 +32,14 @@ abstract class SantaItem implements GearItem {
     protected static final String SKULL_TEXTURE = "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMTRlNDI0YjE2NzZmZWVjM2EzZjhlYmFkZTllN2Q2YTZmNzFmNzc1NmE4NjlmMzZmN2RmMGZjMTgyZDQzNmUifX19";
     @Getter protected final Mytems key;
     @Getter protected Component displayName;
-    protected List<Component> baseLore;
+    @Getter protected List<Component> baseLore;
     protected ItemStack prototype;
 
     @Override
     public void enable() {
         displayName = xmasify(getRawDisplayName(), false);
         prototype = getBaseItemStack();
-        baseLore = Text.wrapLore(Text.colorize("\n\n" + getDescription()));
+        baseLore = Text.wrapLore(getDescription(), t -> t.color(RED));
         prototype.editMeta(meta -> {
                 Items.text(meta, createTooltip());
                 getKey().markItemMeta(meta);
@@ -62,11 +65,11 @@ abstract class SantaItem implements GearItem {
     protected Component xmasify(String in, boolean bold) {
         int len = in.length();
         int iter = 255 / len;
-        Component component = Component.empty();
+        Component component = empty();
         if (bold) component = component.decorate(TextDecoration.BOLD);
         for (int i = 0; i < len; i += 1) {
             int white = 255 - (i * 255) / len;
-            component = component.append(Component.text(in.substring(i, i + 1))
+            component = component.append(text(in.substring(i, i + 1))
                                          .color(TextColor.color(255, white, white)));
         }
         return component;

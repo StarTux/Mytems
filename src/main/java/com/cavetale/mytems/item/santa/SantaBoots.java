@@ -7,9 +7,9 @@ import org.bukkit.inventory.ItemStack;
 public final class SantaBoots extends SantaItem {
     public static final Mytems KEY = Mytems.SANTA_BOOTS;
     @Getter private final String description = ""
-        + "&c&oIn a one-horse open sleigh, hey!"
+        + "In a one-horse open sleigh, hey!"
         + "\n\n"
-        + "&cJumping off a sleigh at maximum velocity, just to land in a searing hot fireplace is not easy. With these boots however, it is quite manageable.";
+        + "Jumping off a sleigh at maximum velocity, just to land in a searing hot fireplace is not easy. With these boots however, it is quite manageable.";
 
     public SantaBoots(final Mytems key) {
         super(key);

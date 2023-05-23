@@ -1,6 +1,5 @@
 package com.cavetale.mytems.item.acula;
 
-import com.cavetale.core.font.Unicode;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
@@ -16,6 +15,10 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Repairable;
+import static com.cavetale.core.font.Unicode.tiny;
+import static net.kyori.adventure.text.Component.empty;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 /**
  * Implementors must set displayName, baseLore, and prototype within
@@ -33,10 +36,10 @@ abstract class AculaItem implements GearItem {
     public final void enable() {
         displayName = creepify(getRawDisplayName());
         prototype = getRawItemStack();
-        baseLore.addAll(Text.wrapLore(Unicode.tiny(getDescription().toLowerCase())));
-        if (!getUsage().isEmpty()) {
-            baseLore.add(Component.empty());
-            baseLore.addAll(Text.wrapLore(getUsage()));
+        baseLore.addAll(Text.wrapLore(tiny(getDescription().toLowerCase()), t -> t.color(RED)));
+        if (getUsage() != null) {
+            baseLore.add(empty());
+            baseLore.addAll(getUsage());
         }
         prototype.editMeta(meta -> {
                 Items.text(meta, createTooltip());
@@ -51,8 +54,8 @@ abstract class AculaItem implements GearItem {
 
     protected abstract String getDescription();
 
-    protected String getUsage() {
-        return "";
+    protected List<Component> getUsage() {
+        return null;
     }
 
     protected abstract String getRawDisplayName();
@@ -67,9 +70,9 @@ abstract class AculaItem implements GearItem {
     protected Component creepify(String in) {
         int len = in.length();
         int iter = 255 / len * 3 / 4;
-        TextComponent.Builder cb = Component.text();
+        TextComponent.Builder cb = text();
         for (int i = 0; i < len; i += 1) {
-            cb.append(Component.text(in.substring(i, i + 1), TextColor.color(255 - iter * i, 0, 0)));
+            cb.append(text(in.substring(i, i + 1), TextColor.color(255 - iter * i, 0, 0)));
         }
         return cb.build();
     }

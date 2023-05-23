@@ -4,7 +4,6 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Skull;
 import java.util.UUID;
 import lombok.Getter;
-import org.bukkit.ChatColor;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.EquipmentSlot;
@@ -14,7 +13,7 @@ import org.bukkit.inventory.ItemStack;
 public final class BatMask extends AculaItem {
     private final String rawDisplayName = "Bat Mask";
     private final String description = ""
-        + ChatColor.RED + "It is unknown who made this mask or for what purpose it was worn,"
+        + "It is unknown who made this mask or for what purpose it was worn,"
         + " but a team of specialists on the occult and vampirism has determined that it resembles a bat.";
 
     public BatMask(final Mytems key) {

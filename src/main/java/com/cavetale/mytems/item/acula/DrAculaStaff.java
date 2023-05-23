@@ -5,12 +5,11 @@ import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.worldmarker.entity.EntityMarker;
 import java.time.Duration;
+import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -26,6 +25,9 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.textOfChildren;
+import static net.kyori.adventure.text.format.NamedTextColor.*;
 import static org.bukkit.attribute.AttributeModifier.Operation.*;
 import static org.bukkit.inventory.EquipmentSlot.*;
 
@@ -35,11 +37,9 @@ public final class DrAculaStaff extends AculaItem {
     private static final Duration COOLDOWN = Duration.ofSeconds(60);
     private final String rawDisplayName = "Dr. Acula's Staff";
     private final String description = ""
-        + ChatColor.RED + "This staff was found among the mysterious doctor's belongings in the inn he stayed at, long after he had fled town.";
-    private final String usage = ""
-        + ChatColor.RED + "Right click"
-        + ChatColor.DARK_GRAY + "\u2013"
-        + ChatColor.GRAY + "Disappear for " + durationSeconds + "s";
+        + "This staff was found among the mysterious doctor's belongings"
+        + " in the inn he stayed at, long after he had fled town.";
+    private final List<Component> usage = List.of(textOfChildren(Mytems.MOUSE_RIGHT, text(" Disappear for " + durationSeconds + "s", GRAY)));
 
     public DrAculaStaff(final Mytems key) {
         super(key);
@@ -72,13 +72,13 @@ public final class DrAculaStaff extends AculaItem {
         Session session = MytemsPlugin.getInstance().getSessions().of(player);
         long cooldown = session.getCooldown(key).toSeconds();
         if (cooldown > 0) {
-            player.sendActionBar(Component.text("Cooldown " + cooldown + "s", NamedTextColor.DARK_RED));
+            player.sendActionBar(text("Cooldown " + cooldown + "s", DARK_RED));
             player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.5f, 2.0f);
             return;
         }
         PotionEffect effect = player.getPotionEffect(PotionEffectType.INVISIBILITY);
         if (effect != null && effect.getDuration() >= durationSeconds * 20) {
-            player.sendActionBar(Component.text("Already invisible!", NamedTextColor.DARK_RED));
+            player.sendActionBar(text("Already invisible!", DARK_RED));
             player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, SoundCategory.MASTER, 0.5f, 2.0f);
             return;
         }

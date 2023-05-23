@@ -4,7 +4,6 @@ import com.cavetale.mytems.Mytems;
 import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Banner;
@@ -22,7 +21,7 @@ import static org.bukkit.inventory.EquipmentSlot.*;
 public final class FlameShield extends AculaItem {
     private final String rawDisplayName = "Flame Shield";
     private final String description = ""
-        + ChatColor.RED + "After the castle was completely burned down to the ground, this item remained intact."
+        + "After the castle was completely burned down to the ground, this item remained intact."
         + " For years it was kept in a secret vault, until one day, when it vanished.";
 
     public FlameShield(final Mytems key) {

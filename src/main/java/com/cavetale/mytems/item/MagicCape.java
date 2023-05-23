@@ -18,7 +18,6 @@ import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -31,8 +30,10 @@ import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Repairable;
 import static java.awt.Color.HSBtoRGB;
+import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 import static net.kyori.adventure.text.format.TextDecoration.*;
@@ -44,13 +45,6 @@ public final class MagicCape implements Mytem, Listener {
     public static final Duration COOLDOWN = Duration.ofSeconds(20);
     public static final int MAX_DISTANCE = 32;
     @Getter private Component displayName;
-    private final String description = ""
-        + ChatColor.AQUA + "Woven with the rare membrane dropped by a phantom boss."
-        + "\n\n"
-        + ChatColor.AQUA + "USE"
-        + ChatColor.GRAY + " Float like a butterfly. Start gliding with this cape equipped and you will fly instead."
-        + "\n\n"
-        + ChatColor.AQUA + "Distance " + ChatColor.GRAY + MAX_DISTANCE + " blocks";
     private ItemStack prototype;
 
     protected static Component rainbowify(String in) {
@@ -69,7 +63,11 @@ public final class MagicCape implements Mytem, Listener {
         displayName = rainbowify("Magic Cape");
         List<Component> tooltip = new ArrayList<>();
         tooltip.add(displayName);
-        tooltip.addAll(Text.wrapLore(description));
+        tooltip.addAll(Text.wrapLore2("Woven with the rare membrane dropped by a phantom boss.", t -> text(t, AQUA)));
+        tooltip.add(empty());
+        tooltip.addAll(Text.wrapLore2("Float like a butterfly. Start gliding with this cape equipped and you will fly instead.", t -> text(t, GRAY)));
+        tooltip.add(empty());
+        tooltip.add(textOfChildren(text("Distance ", AQUA), text(MAX_DISTANCE + " blocks", GRAY)));
         prototype = new ItemStack(Material.ELYTRA).ensureServerConversions();
         prototype.editMeta(meta -> {
                 if (meta instanceof Repairable) {

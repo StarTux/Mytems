@@ -7,9 +7,9 @@ import org.bukkit.inventory.ItemStack;
 public final class SantaJacket extends SantaItem {
     public static final Mytems KEY = Mytems.SANTA_JACKET;
     @Getter private final String description = ""
-        + "&c&oJingle all the way"
+        + "Jingle all the way"
         + "\n\n"
-        + "&cSoaring through the air without a windshield gets cold. This jacket will help with that.";
+        + "Soaring through the air without a windshield gets cold. This jacket will help with that.";
 
     public SantaJacket(final Mytems key) {
         super(key);
