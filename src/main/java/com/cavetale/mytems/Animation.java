@@ -37,6 +37,8 @@ public final class Animation {
         return new Animation("frametime(" + frametime + ")", false, 0, 0, frametime, null);
     }
 
+    public static final Animation NONE = null;
+
     public static final Animation MAGIC_MAP = new Animation("MAGIC_MAP",
                                                             false, 0, 0, 6, List.of(new Frame(0, 60),
                                                                                     new Frame(1),

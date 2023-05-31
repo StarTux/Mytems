@@ -159,7 +159,8 @@ public final class MytemsTest {
                                + ", " + mytems.category
                                + (mytems.animation != null
                                   ? ", Animation." + mytems.animation.name
-                                  : "")
+                                  : ", null")
+                               + ", " + mytems.pixelWidth
                                + "),");
         }
     }

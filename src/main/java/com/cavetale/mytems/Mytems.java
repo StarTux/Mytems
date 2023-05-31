@@ -981,33 +981,33 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     RED_JESTER_SHOES(EquipmentItem.class, LEATHER_BOOTS, 586, (char) 0xF24B, EQUIP_RED_JESTER_SET),
     RED_JESTER_PANTS(EquipmentItem.class, LEATHER_LEGGINGS, 587, (char) 0xF24C, EQUIP_RED_JESTER_SET),
     // Flags, ids transferred from Core
-    ARGENTINA(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE1A8, (char) 0xE1A8, FLAG),
-    AUSTRALIA(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE164, (char) 0xE164, FLAG),
-    AUSTRIA(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE10B, (char) 0xE10B, FLAG),
-    BELGIUM(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE10C, (char) 0xE10C, FLAG),
-    BI_FLAG(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE1A5, (char) 0xE1A5, FLAG),
-    BRITAIN(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE106, (char) 0xE106, FLAG),
-    CANADA(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE163, (char) 0xE163, FLAG),
-    DENMARK(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE10D, (char) 0xE10D, FLAG),
-    ENGLAND(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE11B, (char) 0xE11B, FLAG),
-    EUROPE(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE10E, (char) 0xE10E, FLAG),
-    FINLAND(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE1A6, (char) 0xE1A6, FLAG),
-    FRANCE(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE10F, (char) 0xE10F, FLAG),
-    GERMANY(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE110, (char) 0xE110, FLAG),
-    IRELAND(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE111, (char) 0xE111, FLAG),
-    ITALY(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE112, (char) 0xE112, FLAG),
-    JAPAN(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE1A7, (char) 0xE1A7, FLAG),
-    MEXICO(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE108, (char) 0xE108, FLAG),
-    NETHERLANDS(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE165, (char) 0xE165, FLAG),
-    NORWAY(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE113, (char) 0xE113, FLAG),
-    POLAND(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE114, (char) 0xE114, FLAG),
-    PRIDE_FLAG(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE119, (char) 0xE119, FLAG),
-    SPAIN(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE107, (char) 0xE107, FLAG),
-    SWEDEN(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE115, (char) 0xE115, FLAG),
-    SWITZERLAND(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE116, (char) 0xE116, FLAG),
-    TRANS_PRIDE_FLAG(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE11A, (char) 0xE11A, FLAG),
-    UKRAINE(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE166, (char) 0xE166, FLAG),
-    USA(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE109, (char) 0xE109, FLAG),
+    ARGENTINA(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE1A8, FLAG, 32),
+    AUSTRALIA(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE164, FLAG, 32),
+    AUSTRIA(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE10B, FLAG, 32),
+    BELGIUM(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE10C, FLAG, 32),
+    BI_FLAG(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE1A5, FLAG, 32),
+    BRITAIN(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE106, FLAG, 32),
+    CANADA(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE163, FLAG, 32),
+    DENMARK(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE10D, FLAG, 32),
+    ENGLAND(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE11B, FLAG, 32),
+    EUROPE(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE10E, FLAG, 32),
+    FINLAND(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE1A6, FLAG, 32),
+    FRANCE(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE10F, FLAG, 32),
+    GERMANY(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE110, FLAG, 32),
+    IRELAND(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE111, FLAG, 32),
+    ITALY(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE112, FLAG, 32),
+    JAPAN(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE1A7, FLAG, 32),
+    MEXICO(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE108, FLAG, 32),
+    NETHERLANDS(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE165, FLAG, 32),
+    NORWAY(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE113, FLAG, 32),
+    POLAND(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE114, FLAG, 32),
+    PRIDE_FLAG(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE119, FLAG, 32),
+    SPAIN(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE107, FLAG, 32),
+    SWEDEN(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE115, FLAG, 32),
+    SWITZERLAND(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE116, FLAG, 16),
+    TRANS_PRIDE_FLAG(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE11A, FLAG, 32),
+    UKRAINE(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE166, FLAG, 32),
+    USA(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xE109, FLAG, 32),
     // April
     APRIL_FOOLS(ForbiddenMytem.class, CARROT, 0xF26B, JOKE),
     // Spleef
@@ -1035,6 +1035,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     public final MytemsCategory category;
     public final Animation animation;
     private char[] animationFrames;
+    public final int pixelWidth;
 
     static {
         for (Mytems it : Mytems.values()) {
@@ -1052,11 +1053,14 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
         ID_MAP.put("fireman_helmet", FIREFIGHTER_HELMET);
     }
 
+    /**
+     * General purpose constructor.
+     */
     Mytems(final Class<? extends Mytem> mytemClass, final Material material,
-           final Integer customModelData,
-           final char character, final char[] characters,
+           final Integer customModelData, final char character, final char[] characters,
            final MytemsCategory category,
-           final Animation animation) {
+           final Animation animation,
+           final int pixelWidth) {
         this.mytemClass = mytemClass;
         this.id = name().toLowerCase();
         this.material = material;
@@ -1071,13 +1075,28 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
             : Component.empty();
         this.category = category;
         this.animation = animation;
+        this.pixelWidth = pixelWidth;
+    }
+
+    /**
+     * Flag constructor.
+     * Model data are indentical.  No animation, but a pixel width.
+     */
+    Mytems(final Class<? extends Mytem> mytemClass, final Material material, final int model, final MytemsCategory category, final int pixelWidth) {
+        this(mytemClass, material, model, (char) model, chrarr(model), category, Animation.NONE, pixelWidth);
+    }
+
+    Mytems(final Class<? extends Mytem> mytemClass, final Material material,
+           final Integer customModelData, final char character, final char[] characters,
+           final MytemsCategory category, final Animation animation) {
+        this(mytemClass, material, customModelData, character, characters, category, animation, 16);
     }
 
     Mytems(final Class<? extends Mytem> mytemClass, final Material material,
            final Integer customModelData,
            final char character, final char[] characters,
            final MytemsCategory category) {
-        this(mytemClass, material, customModelData, character, characters, category, null);
+        this(mytemClass, material, customModelData, character, characters, category, Animation.NONE);
     }
 
     Mytems(final Class<? extends Mytem> mytemClass, final Material material,

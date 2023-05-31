@@ -76,7 +76,8 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
             if (it.component.equals(Component.empty())) continue;
             String name = it.name().toLowerCase();
             Emoji.addEmoji(name, it.component, it.getMytem().getDisplayName(),
-                           GlyphPolicy.PUBLIC, it, toCamelCase(" ", it.category));
+                           GlyphPolicy.PUBLIC, it, toCamelCase(" ", it.category),
+                           it.pixelWidth);
         }
         for (Player player : Bukkit.getOnlinePlayers()) {
             fixPlayerInventory(player);
