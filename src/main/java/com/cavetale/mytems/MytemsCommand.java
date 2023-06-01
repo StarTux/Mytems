@@ -6,6 +6,7 @@ import com.cavetale.core.command.CommandContext;
 import com.cavetale.core.command.CommandNode;
 import com.cavetale.core.command.CommandWarn;
 import com.cavetale.core.util.Json;
+import com.cavetale.mytems.custom.NetheriteParity;
 import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.item.coin.BankTeller;
 import com.cavetale.mytems.item.font.Glyph;
@@ -123,6 +124,12 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         rootNode.addChild("atm").arguments("<player>")
             .description("Open the bank teller")
             .senderCaller(this::bankTeller);
+        // Custom
+        rootNode.addChild("upgradetonetherite").denyTabCompletion()
+            .playerCaller(player -> {
+                    boolean res = NetheriteParity.upgradeItem(player.getInventory().getItemInHand());
+                    player.sendMessage(text("Upgrade: " + res, YELLOW));
+                });
     }
 
     protected boolean list(CommandSender sender, String[] args) {
