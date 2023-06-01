@@ -3,12 +3,12 @@ package com.cavetale.mytems.item.captain;
 import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
 import com.cavetale.core.event.player.PluginPlayerEvent;
+import com.cavetale.core.text.LineWrap;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Items;
-import com.cavetale.mytems.util.Text;
 import com.cavetale.worldmarker.util.Tags;
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import java.time.Duration;
@@ -20,7 +20,6 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.FluidCollisionMode;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -47,18 +46,21 @@ public final class Blunderbuss implements Mytem {
     private final Mytems key;
     private ItemStack prototype;
     private Component displayName;
-    private final String description = "Use the mighty blunderbuss t' hit yer enemies from afar.";
+    private final String description = "Use the mighty watergun t' hit yer enemies from afar.";
     private static final Duration COOLDOWN = Duration.ofSeconds(5);
     @Getter private static NamespacedKey singleUseKey;
+    private static final int COLOR = 0x6060FF;
 
     @Override
     public void enable() {
-        displayName = text("Blunderbuss", color(0xFDC426));
+        displayName = text("Pirate Watergun", color(COLOR));
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
                 List<Component> txt = new ArrayList<>();
                 txt.add(displayName);
-                txt.addAll(Text.wrapLore(tiny(description), c -> c.color(color(0xFDC426))));
+                txt.addAll(new LineWrap()
+                           .componentMaker(str -> text(str, color(COLOR)))
+                           .wrap(tiny(description)));
                 txt.add(empty());
                 txt.add(textOfChildren(Mytems.MOUSE_LEFT, text(" Pull Trigger", GRAY)));
                 Items.text(meta, txt);
@@ -105,7 +107,7 @@ public final class Blunderbuss implements Mytem {
         long cooldown = session.getCooldown(key).toSeconds();
         if (cooldown > 0) {
             player.sendActionBar(text("Cooldown " + cooldown + "s", DARK_RED));
-            player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, 0.5f, 2.0f);
+            player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, 1.0f, 0.5f);
             return false;
         }
         session.cooldown(key).duration(COOLDOWN);
@@ -125,19 +127,20 @@ public final class Blunderbuss implements Mytem {
                 }
                 return true;
             });
-        playerLocation.getWorld().playSound(playerLocation, Sound.ENTITY_GENERIC_EXPLODE, SoundCategory.PLAYERS, 1.0f, 2.0f);
-        final Vector smokeStart = eyeLocation.toVector().add(gunDirection);
+        playerLocation.getWorld().playSound(playerLocation, Sound.BLOCK_BREWING_STAND_BREW, SoundCategory.PLAYERS, 1.0f, 2.0f);
+        playerLocation.getWorld().playSound(playerLocation, Sound.ITEM_BUCKET_FILL, SoundCategory.PLAYERS, 1.0f, 2.0f);
+        final Vector smokeStart = eyeLocation.toVector().add(gunDirection.clone().multiply(0.5));
         final Vector smokeEnd = rayTraceResult != null
             ? rayTraceResult.getHitPosition()
-            : eyeLocation.toVector().add(gunDirection.multiply(10));
+            : eyeLocation.toVector().add(gunDirection.clone().multiply(10));
         final double smokeLength = smokeEnd.clone().subtract(smokeStart).length();
         for (double i = 0; i < smokeLength; i += 0.25) {
             Vector smokeVector = smokeStart.clone().multiply(i)
                 .add(smokeEnd.clone().multiply(smokeLength - i))
                 .multiply(1.0 / smokeLength);
-            world.spawnParticle(Particle.SPELL_MOB, smokeVector.toLocation(world), 1, 0.0, 0.0, 0.0, 1.0);
+            world.spawnParticle(Particle.WATER_DROP, smokeVector.toLocation(world), 1, 0.0, 0.0, 0.0, 1.0);
         }
-        world.spawnParticle(Particle.SMOKE_NORMAL, smokeStart.toLocation(world), 16, 0.25, 0.25, 0.25, 0.01);
+        world.spawnParticle(Particle.WATER_WAKE, smokeStart.toLocation(world), 16, 0.0, 0.0, 0.0, 0.15);
         if (rayTraceResult == null) return true;
         Entity targetEntity = rayTraceResult.getHitEntity();
         if (targetEntity == null) return false;
@@ -166,8 +169,8 @@ public final class Blunderbuss implements Mytem {
             vehicle.removePassenger(target);
         }
         target.setVelocity(target.getVelocity().add(direction.normalize().multiply(3.0)));
-        target.getWorld().spawnParticle(Particle.BLOCK_DUST, target.getLocation(), 24, .25, .25, .25, 0,
-                                        Material.OAK_PLANKS.createBlockData());
+        target.getWorld().spawnParticle(Particle.WATER_WAKE, target.getLocation(), 32, 0.1, 0.1, 0.1, 0.15);
+        target.getWorld().playSound(target.getLocation(), Sound.ENTITY_GENERIC_SPLASH, SoundCategory.PLAYERS, 1.0f, 2.0f);
         return true;
     }
 
