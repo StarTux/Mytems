@@ -82,6 +82,10 @@ public final class MytemsTag {
             MytemsCategory.COLLECTIBLES,
             MytemsCategory.CAVEBOY,
         });
+    public static final MytemsTag FLAG = new MytemsTag("flag", new MytemsCategory[] {
+            MytemsCategory.COUNTRY_FLAG,
+            MytemsCategory.PRIDE_FLAGS,
+        });
     public static final MytemsTag EQUIPMENT = new MytemsTag("equipment", new MytemsCategory[] {
             MytemsCategory.EQUIP_AXE,
             MytemsCategory.EQUIP_BASIC_IRON_SET,
