@@ -127,7 +127,7 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         // Custom
         rootNode.addChild("upgradetonetherite").denyTabCompletion()
             .playerCaller(player -> {
-                    boolean res = NetheriteParity.upgradeItem(player.getInventory().getItemInHand());
+                    boolean res = NetheriteParity.upgradeItem(player.getInventory().getItemInMainHand());
                     player.sendMessage(text("Upgrade: " + res, YELLOW));
                 });
     }
