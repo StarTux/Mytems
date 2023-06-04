@@ -1,5 +1,6 @@
 package com.cavetale.mytems.item.captain;
 
+import com.cavetale.core.connect.NetworkServer;
 import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
 import com.cavetale.core.event.player.PluginPlayerEvent;
@@ -153,8 +154,10 @@ public final class Blunderbuss implements Mytem {
      */
     public boolean boostHitEntity(Player shooter, Entity target, Vector direction) {
         if (target instanceof Player player) {
-            ItemStack hand = player.getEquipment().getItemInMainHand();
-            if (hand == null || !key.isItem(hand)) return false;
+            if (!NetworkServer.OVERBOARD.isThisServer()) {
+                ItemStack hand = player.getEquipment().getItemInMainHand();
+                if (hand == null || !key.isItem(hand)) return false;
+            }
             // Temporary solution
             if (!PlayerBlockAbilityQuery.Action.FLY.query(player, player.getLocation().getBlock())) {
                 return false;
