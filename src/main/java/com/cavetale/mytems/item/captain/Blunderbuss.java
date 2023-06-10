@@ -83,6 +83,7 @@ public final class Blunderbuss implements Mytem {
 
     @Override
     public void onPlayerLeftClick(PlayerInteractEvent event, Player player, ItemStack item) {
+        if (player.getGameMode() == GameMode.SPECTATOR) return;
         event.setCancelled(true);
         boolean result = pullTheTrigger(player);
         if (result && Tags.getInt(item.getItemMeta().getPersistentDataContainer(), singleUseKey) != null) {
@@ -92,6 +93,7 @@ public final class Blunderbuss implements Mytem {
 
     @Override
     public void onPrePlayerAttackEntity(PrePlayerAttackEntityEvent event, Player player, ItemStack item) {
+        if (player.getGameMode() == GameMode.SPECTATOR) return;
         event.setCancelled(true);
         boolean result = pullTheTrigger(player);
         if (result && Tags.getInt(item.getItemMeta().getPersistentDataContainer(), singleUseKey) != null) {
