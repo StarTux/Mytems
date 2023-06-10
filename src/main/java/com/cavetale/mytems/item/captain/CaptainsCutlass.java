@@ -70,7 +70,7 @@ public final class CaptainsCutlass implements Mytem {
         Vector horizontal = new Vector(velo.getX(), 0.0, velo.getZ());
         if (horizontal.length() < 0.1) return;
         horizontal = horizontal.normalize();
-        Vector vertical = new Vector(0.0, 1.0f, 0.0);
+        Vector vertical = new Vector(0.0, 2.0f, 0.0);
         Vector hit = horizontal.multiply(player.isSprinting() ? 4.0 : 3.0).add(vertical);
         target.setVelocity(target.getVelocity().add(hit));
         target.getWorld().playSound(target.getLocation(), Sound.ENTITY_ARMOR_STAND_BREAK, SoundCategory.PLAYERS, 1.0f, 0.75f);
