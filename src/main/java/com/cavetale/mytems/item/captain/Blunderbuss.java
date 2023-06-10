@@ -173,7 +173,8 @@ public final class Blunderbuss implements Mytem {
             if (vehicle.getType() == EntityType.ARMOR_STAND) return false;
             vehicle.removePassenger(target);
         }
-        target.setVelocity(target.getVelocity().add(direction.normalize().multiply(3.0)));
+        Vector velocity = direction.normalize().multiply(3.0).add(new Vector(0.0, 1.0, 0.0));
+        target.setVelocity(target.getVelocity().add(velocity));
         target.getWorld().spawnParticle(Particle.WATER_WAKE, target.getLocation(), 32, 0.1, 0.1, 0.1, 0.15);
         target.getWorld().playSound(target.getLocation(), Sound.ENTITY_GENERIC_SPLASH, SoundCategory.PLAYERS, 1.0f, 2.0f);
         return true;
