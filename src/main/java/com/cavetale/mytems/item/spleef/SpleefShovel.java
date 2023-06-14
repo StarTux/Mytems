@@ -57,7 +57,7 @@ public final class SpleefShovel implements Mytem {
                 Items.text(meta, text);
                 key.markItemMeta(meta);
             });
-        this.silkTouch = new ItemStack(Material.NETHERITE_PICKAXE);
+        this.silkTouch = new ItemStack(Material.NETHERITE_SHOVEL);
         silkTouch.editMeta(meta -> meta.addEnchant(Enchantment.SILK_TOUCH, 1, true));
     }
 
