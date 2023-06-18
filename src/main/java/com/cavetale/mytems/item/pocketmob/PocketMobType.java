@@ -63,6 +63,7 @@ public enum PocketMobType {
     SKELETON(Mytems.POCKET_SKELETON, EntityType.SKELETON),
     SKELETON_HORSE(Mytems.POCKET_SKELETON_HORSE, EntityType.SKELETON_HORSE),
     SLIME(Mytems.POCKET_SLIME, EntityType.SLIME),
+    SNIFFER(Mytems.POCKET_SNIFFER, EntityType.SNIFFER),
     SNOWMAN(Mytems.POCKET_SNOWMAN, EntityType.SNOWMAN),
     SPIDER(Mytems.POCKET_SPIDER, EntityType.SPIDER),
     SQUID(Mytems.POCKET_SQUID, EntityType.SQUID),
@@ -85,7 +86,8 @@ public enum PocketMobType {
     ZOMBIE(Mytems.POCKET_ZOMBIE, EntityType.ZOMBIE),
     ZOMBIE_HORSE(Mytems.POCKET_ZOMBIE_HORSE, EntityType.ZOMBIE_HORSE),
     ZOMBIE_VILLAGER(Mytems.POCKET_ZOMBIE_VILLAGER, EntityType.ZOMBIE_VILLAGER),
-    ZOMBIFIED_PIGLIN(Mytems.POCKET_ZOMBIFIED_PIGLIN, EntityType.ZOMBIFIED_PIGLIN);
+    ZOMBIFIED_PIGLIN(Mytems.POCKET_ZOMBIFIED_PIGLIN, EntityType.ZOMBIFIED_PIGLIN),
+    ;
 
     protected static final Map<Mytems, PocketMobType> MYTEMS_MAP = new EnumMap<>(Mytems.class);
 

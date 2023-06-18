@@ -335,6 +335,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     POCKET_SKELETON(PocketMob.class, SKELETON_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_SKELETON_HORSE(PocketMob.class, SKELETON_HORSE_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_SLIME(PocketMob.class, SLIME_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
+    POCKET_SNIFFER(PocketMob.class, SNIFFER_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_SNOWMAN(PocketMob.class, POLAR_BEAR_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_SPIDER(PocketMob.class, SPIDER_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_SQUID(PocketMob.class, SQUID_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
