@@ -34,7 +34,7 @@ public final class NetheriteParityGui {
 
     private void onClick(InventoryClickEvent event) {
         if (!event.getClick().isLeftClick()) return;
-        System.out.println(event.getEventName() + " " + event.getClickedInventory().equals(player.getInventory()));
+        if (event.getClickedInventory() == null) return;
         if (!event.getClickedInventory().equals(player.getInventory())) return;
         ItemStack item = event.getCurrentItem();
         if (item == null || item.getType().isAir()) return;
