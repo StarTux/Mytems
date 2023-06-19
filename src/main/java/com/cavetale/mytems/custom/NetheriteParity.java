@@ -1,6 +1,7 @@
 package com.cavetale.mytems.custom;
 
 import com.destroystokyo.paper.MaterialTags;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Map;
@@ -32,11 +33,8 @@ public final class NetheriteParity {
         return item.getItemMeta().getPersistentDataContainer().has(getItemTagKey(), PersistentDataType.INTEGER);
     }
 
-    public static List<Material> getUpgradableMaterials() {
-        return List.of(// Stone Tools
-                       Material.STONE_SWORD,
-                       Material.STONE_AXE,
-                       // Leather
+    public static List<Material> getUpgradableArmor() {
+        return List.of(// Leather
                        Material.LEATHER_HELMET,
                        Material.LEATHER_CHESTPLATE,
                        Material.LEATHER_LEGGINGS,
@@ -46,17 +44,11 @@ public final class NetheriteParity {
                        Material.IRON_CHESTPLATE,
                        Material.IRON_LEGGINGS,
                        Material.IRON_BOOTS,
-                       // Iron Tools
-                       Material.IRON_SWORD,
-                       Material.IRON_AXE,
                        // Gold
                        Material.GOLDEN_HELMET,
                        Material.GOLDEN_CHESTPLATE,
                        Material.GOLDEN_LEGGINGS,
                        Material.GOLDEN_BOOTS,
-                       // Gold Tools
-                       Material.GOLDEN_SWORD,
-                       Material.GOLDEN_AXE,
                        // Chainmail
                        Material.CHAINMAIL_HELMET,
                        Material.CHAINMAIL_CHESTPLATE,
@@ -67,11 +59,30 @@ public final class NetheriteParity {
                        Material.DIAMOND_CHESTPLATE,
                        Material.DIAMOND_LEGGINGS,
                        Material.DIAMOND_BOOTS,
-                       // Diamond Tools
-                       Material.DIAMOND_SWORD,
-                       Material.DIAMOND_AXE,
                        // Elytra
                        Material.ELYTRA);
+    }
+
+    public static List<Material> getUpgradableTools() {
+        return List.of(// Stone
+                       Material.STONE_SWORD,
+                       Material.STONE_AXE,
+                       // Iron
+                       Material.IRON_SWORD,
+                       Material.IRON_AXE,
+                       // Gold
+                       Material.GOLDEN_SWORD,
+                       Material.GOLDEN_AXE,
+                       // Diamond
+                       Material.DIAMOND_SWORD,
+                       Material.DIAMOND_AXE);
+    }
+
+    public static List<Material> getUpgradableMaterials() {
+        List<Material> result = new ArrayList<>();
+        result.addAll(getUpgradableArmor());
+        result.addAll(getUpgradableTools());
+        return result;
     }
 
     public static Material getNetheriteCounterpart(Material mat) {

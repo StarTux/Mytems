@@ -6,7 +6,7 @@ import com.cavetale.core.command.CommandContext;
 import com.cavetale.core.command.CommandNode;
 import com.cavetale.core.command.CommandWarn;
 import com.cavetale.core.util.Json;
-import com.cavetale.mytems.custom.NetheriteParity;
+import com.cavetale.mytems.custom.NetheriteParityGui;
 import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.item.coin.BankTeller;
 import com.cavetale.mytems.item.font.Glyph;
@@ -125,11 +125,10 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
             .description("Open the bank teller")
             .senderCaller(this::bankTeller);
         // Custom
-        rootNode.addChild("upgradetonetherite").denyTabCompletion()
-            .playerCaller(player -> {
-                    boolean res = NetheriteParity.upgradeItem(player.getInventory().getItemInMainHand());
-                    player.sendMessage(text("Upgrade: " + res, YELLOW));
-                });
+        rootNode.addChild("netheriteparity").arguments("[player]")
+            .description("Open the Netherite Parity crafting GUI")
+            .completers(CommandArgCompleter.NULL)
+            .senderCaller(this::netheriteParity);
     }
 
     protected boolean list(CommandSender sender, String[] args) {
@@ -464,6 +463,24 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
                              Stream.of(MytemsTag.values()).map(t -> "#" + t.name()))
             .filter(s -> s.contains(arg))
             .collect(Collectors.toList());
+    }
+
+    private boolean netheriteParity(CommandSender sender, String[] args) {
+        if (args.length == 0) {
+            if (!(sender instanceof Player player)) {
+                throw new CommandWarn("[mytems:netheriteparity] player expected");
+            }
+            new NetheriteParityGui(player).open();
+            sender.sendMessage(text("Netherite parity crafting GUI opened"));
+            return true;
+        } else if (args.length == 1) {
+            Player target = CommandArgCompleter.requirePlayer(args[0]);
+            new NetheriteParityGui(target).open();
+            sender.sendMessage(text("Netherite parity crafting GUI opened for " + target.getName(), YELLOW));
+            return true;
+        } else {
+            return false;
+        }
     }
 
     public CommandNode registerItemCommand(Mytems key) {
