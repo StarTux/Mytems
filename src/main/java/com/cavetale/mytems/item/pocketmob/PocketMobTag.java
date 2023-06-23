@@ -34,6 +34,7 @@ import org.bukkit.entity.Goat;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Mob;
+import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Parrot;
 import org.bukkit.entity.PufferFish;
 import org.bukkit.entity.Rabbit;
@@ -239,6 +240,8 @@ public final class PocketMobTag extends MytemTag {
             }
         } else if (entity instanceof Axolotl axolotl) {
             nameComponents.add(Text.toCamelCase(axolotl.getVariant()));
+        } else if (entity instanceof MushroomCow mushroomCow) {
+            nameComponents.add(Text.toCamelCase(mushroomCow.getVariant()));
         }
         if (entity instanceof Tameable tameable) {
             if (tameable.isTamed()) {
