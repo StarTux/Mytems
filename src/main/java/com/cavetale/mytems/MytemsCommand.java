@@ -12,6 +12,7 @@ import com.cavetale.mytems.item.coin.BankTeller;
 import com.cavetale.mytems.item.font.Glyph;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Blocks;
+import com.cavetale.mytems.util.Entities;
 import com.cavetale.mytems.util.JavaItem;
 import com.cavetale.mytems.util.Skull;
 import java.io.File;
@@ -31,11 +32,13 @@ import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.ArmorStand;
+import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import static net.kyori.adventure.text.Component.empty;
@@ -46,6 +49,7 @@ import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
 import static net.kyori.adventure.text.JoinConfiguration.separator;
+import static net.kyori.adventure.text.event.ClickEvent.suggestCommand;
 import static net.kyori.adventure.text.event.HoverEvent.showText;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 
@@ -83,6 +87,12 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
                         CommandArgCompleter.enumLowerList(BlockFace.class),
                         CommandArgCompleter.BOOLEAN)
             .playerCaller(this::placeBlock);
+        rootNode.addChild("placeitemdisplay").arguments("<mytems> transient")
+            .description("Place a Mytem as display item")
+            .completers(CommandArgCompleter.enumLowerList(Mytems.class),
+                        CommandArgCompleter.list("transient", "center"),
+                        CommandArgCompleter.REPEAT)
+            .playerCaller(this::placeItemDisplay);
         rootNode.addChild("glyph").arguments("<text...>")
             .description("Turn text into glyphs")
             .senderCaller(this::glyph);
@@ -481,6 +491,39 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         } else {
             return false;
         }
+    }
+
+    protected boolean placeItemDisplay(Player player, String[] args) {
+        if (args.length < 1) return false;
+        Mytems mytems = Mytems.forId(args[0]);
+        if (mytems == null) throw new CommandWarn("Invalid id: " + args[0]);
+        boolean transientEntity = false;
+        boolean doCenter = false;
+        for (int i = 1; i < args.length; i += 1) {
+            switch (args[i]) {
+            case "transient": transientEntity = true; break;
+            case "center": doCenter = true; break;
+            default: throw new CommandWarn("Unknown flag: " + args[i]);
+            }
+        }
+        Location location = player.getLocation();
+        if (doCenter) {
+            location.setX(Math.floor(location.getX()) + 0.5);
+            location.setY(Math.floor(location.getY()) + 0.5);
+            location.setZ(Math.floor(location.getZ()) + 0.5);
+        }
+        ItemDisplay is = Blocks.place(mytems, location, e -> { });
+        if (transientEntity) {
+            is.setPersistent(false);
+            Entities.setTransient(is);
+        }
+        if (is == null) throw new CommandWarn("Item display could not be spawned!");
+        player.sendMessage(textOfChildren(text("Placed ", YELLOW), mytems,
+                                          text(" at" + " " + location.getBlockX() + " " + location.getBlockY() + " " + location.getBlockZ(), GRAY))
+                           .hoverEvent(showText(text(is.getUniqueId().toString(), GRAY)))
+                           .clickEvent(suggestCommand("/kill " + is.getUniqueId().toString()))
+                           .insertion(is.getUniqueId().toString()));
+        return true;
     }
 
     public CommandNode registerItemCommand(Mytems key) {
