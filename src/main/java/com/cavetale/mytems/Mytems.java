@@ -31,6 +31,7 @@ import com.cavetale.mytems.item.bingo.BingoBukkit;
 import com.cavetale.mytems.item.captain.Blunderbuss;
 import com.cavetale.mytems.item.captain.CaptainsCutlass;
 import com.cavetale.mytems.item.coin.Coin;
+import com.cavetale.mytems.item.craft.NetheriteParityTable;
 import com.cavetale.mytems.item.deflector.DeflectorShield;
 import com.cavetale.mytems.item.dividers.Dividers;
 import com.cavetale.mytems.item.dune.DuneItem;
@@ -1033,6 +1034,8 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     PINK_BUTTERFLY(WardrobeItem.class, FEATHER, 0xF287, (char) 0xF287, chrarr(0xF287, 0xF288, 0xF289, 0xF28A, 0xF28B, 0xF28C), BUTTERFLY, Animation.BUTTERFLY),
     PURPLE_BUTTERFLY(WardrobeItem.class, FEATHER, 0xF28D, (char) 0xF28D, chrarr(0xF28D, 0xF28E, 0xF28F, 0xF290, 0xF291, 0xF292), BUTTERFLY, Animation.BUTTERFLY),
     YELLOW_BUTTERFLY(WardrobeItem.class, FEATHER, 0xF293, (char) 0xF293, chrarr(0xF293, 0xF294, 0xF295, 0xF296, 0xF297, 0xF298), BUTTERFLY, Animation.BUTTERFLY),
+    // Block
+    NETHERITE_PARITY_TABLE(NetheriteParityTable.class, NETHERITE_INGOT, 0xF308, BLOCKS),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();

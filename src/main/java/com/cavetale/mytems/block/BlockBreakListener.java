@@ -30,11 +30,22 @@ public final class BlockBreakListener implements Listener {
         if (!new PlayerBreakBlockEvent(player, block).callEvent()) return false;
         this.storedDropCallback = dropCallback;
         try {
-            block.breakNaturally(tool);
+            if (tool != null) {
+                block.breakNaturally(tool);
+            } else {
+                block.breakNaturally();
+            }
         } finally {
             this.storedDropCallback = null;
         }
         return true;
+    }
+
+    public boolean breakBlockAndPickup(Player player, ItemStack tool, Block block) {
+        return breakBlock(player, tool, block, itemSpawnEvent -> {
+                itemSpawnEvent.getEntity().teleport(player.getLocation());
+                itemSpawnEvent.getEntity().setPickupDelay(0);
+            });
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -42,5 +53,9 @@ public final class BlockBreakListener implements Listener {
         if (storedDropCallback != null) {
             storedDropCallback.accept(event);
         }
+    }
+
+    public static BlockBreakListener blockBreakListener() {
+        return MytemsPlugin.blockBreakListener();
     }
 }

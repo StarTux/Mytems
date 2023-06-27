@@ -5,6 +5,7 @@ import com.cavetale.core.font.Emoji;
 import com.cavetale.core.font.GlyphPolicy;
 import com.cavetale.core.item.ItemFinder;
 import com.cavetale.mytems.block.BlockBreakListener;
+import com.cavetale.mytems.block.BlockRegistry;
 import com.cavetale.mytems.item.photo.Photo;
 import com.cavetale.mytems.loot.LootTableListener;
 import com.cavetale.mytems.session.Session;
@@ -53,6 +54,7 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
     private Map<Mytems, Mytem> mytems = new EnumMap<>(Mytems.class);
     private List<CustomMytemSlot> customMytemSlots = new ArrayList<>();
     private boolean fixAllPlayerInventoriesScheduled = false;
+    private final BlockRegistry blockRegistry = new BlockRegistry();
 
     @Override
     public void onLoad() {
@@ -70,6 +72,7 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
         fixAllPlayerInventoriesLater();
         sessions.enable();
         Gui.enable();
+        blockRegistry.enable();
         new MytemsBlockMarkerHook(this).enable();
         for (Mytems it : Mytems.values()) {
             it.preprocessAnimationFrames();

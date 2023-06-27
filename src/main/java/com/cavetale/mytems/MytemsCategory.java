@@ -6,6 +6,7 @@ public enum MytemsCategory {
     ARROWS,
     BEE_COSTUME,
     BINGO_BUKKITS,
+    BLOCKS,
     BUTTERFLY,
     CACTUS_COSTUME,
     CAT_EARS,
