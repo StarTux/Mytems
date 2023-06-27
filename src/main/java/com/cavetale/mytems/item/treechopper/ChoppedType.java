@@ -20,6 +20,7 @@ public enum ChoppedType {
            new MaterialSetTag(null, List.of(Material.AZALEA_LEAVES, Material.FLOWERING_AZALEA_LEAVES)),
            new MaterialSetTag(null, List.of(Material.AZALEA, Material.FLOWERING_AZALEA)),
            VanillaItems.AZALEA),
+    CHERRY(Tag.CHERRY_LOGS, Material.CHERRY_LEAVES, Material.CHERRY_SAPLING, VanillaItems.CHERRY_SAPLING),
     // MANGROVE(Tag.MANGROVE_LOGS, Material.MANGROVE_LEAVES, Material.MANGROVE_PROPAGULE),
     ;
 
