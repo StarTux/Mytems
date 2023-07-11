@@ -1414,4 +1414,85 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
         int frame = (int) (tick % (long) getAnimationFrameCount());
         return getAnimationFrame(frame);
     }
+
+    public boolean isEssential() {
+        switch (this) {
+        case EASTER_EGG:
+        case EASTER_TOKEN:
+        case KITTY_COIN:
+        case EARTH:
+        case BRITAIN:
+        case USA:
+        case SPAIN:
+        case MEXICO:
+        case AUSTRIA:
+        case BELGIUM:
+        case DENMARK:
+        case EUROPE:
+        case FRANCE:
+        case GERMANY:
+        case IRELAND:
+        case ITALY:
+        case NORWAY:
+        case POLAND:
+        case SWEDEN:
+        case SWITZERLAND:
+        case PRIDE_FLAG:
+        case TRANS_PRIDE_FLAG:
+        case EAGLE:
+        case ENGLAND:
+        case STAR:
+        case HEART:
+        case TRAFFIC_LIGHT:
+        case HALLOWEEN_TOKEN:
+        case MOON:
+        case CANADA:
+        case AUSTRALIA:
+        case NETHERLANDS:
+        case UKRAINE:
+        case GREEN_MOON:
+        case BI_FLAG:
+        case FINLAND:
+        case GOLDEN_COIN:
+        case JAPAN:
+        case COPPER_COIN:
+        case SILVER_COIN:
+        case DIAMOND_COIN:
+        case RUBY_COIN:
+        case GOLDEN_HOOP:
+        case RAINBOW_BUTTERFLY:
+        case ARGENTINA:
+        case SNOWFLAKE:
+        case MAGIC_CAPE:
+        case MAGIC_MAP:
+        case DICE_ROLL:
+        case LIGHTNING:
+        case TETRIS_L:
+        case TETRIS_Z:
+        case TETRIS_T:
+        case TETRIS_I:
+        case TETRIS_J:
+        case TETRIS_S:
+        case TETRIS_O:
+        case PINK_BUTTERFLY:
+        case BLUE_BUTTERFLY:
+        case CYAN_BUTTERFLY:
+        case GREEN_BUTTERFLY:
+        case ORANGE_BUTTERFLY:
+        case PURPLE_BUTTERFLY:
+        case YELLOW_BUTTERFLY:
+        case AGENDER_PRIDE:
+        case AROMANTIC_PRIDE:
+        case ASEXUAL_PRIDE:
+        case GAY_MALE_PRIDE:
+        case GENDERFLUID_PRIDE:
+        case INTERSEX_PRIDE:
+        case NONBINARY_PRIDE:
+        case LESBIAN_PRIDE:
+        case PANSEXUAL_PRIDE:
+        case NO:
+            return true;
+        default: return false;
+        }
+    }
 }
