@@ -1494,6 +1494,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
         case LESBIAN_PRIDE:
         case PANSEXUAL_PRIDE:
         case NO:
+        case PIRATE_FLAG:
             return true;
         default: return false;
         }
