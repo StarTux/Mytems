@@ -32,6 +32,7 @@ public enum MytemsCategory {
     FINDER,
     FOX_COSTUME,
     FRIENDS,
+    FUN_FLAGS,
     FURNITURE,
     GARDENING,
     HALLOWEEN,

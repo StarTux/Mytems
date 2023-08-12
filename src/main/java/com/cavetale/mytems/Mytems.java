@@ -204,6 +204,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     WHITE_BUNNY_EARS(WardrobeItem.class, IRON_BOOTS, 3919001, (char) 0, WARDROBE_HAT),
     RED_LIGHTSABER(WardrobeItem.class, END_ROD, 3919002, (char) 0, WARDROBE_HANDHELD),
     BLUE_LIGHTSABER(WardrobeItem.class, END_ROD, 3919003, (char) 0, WARDROBE_HANDHELD),
+    HOOK_HAND(WardrobeItem.class, TRIPWIRE_HOOK, 0xF309, (char) 0, WARDROBE_HANDHELD),
     PIRATE_HAT(WardrobeItem.class, BLACK_DYE, 3919004, (char) 0, WARDROBE_HAT),
     COWBOY_HAT(WardrobeItem.class, BROWN_DYE, 3919005, (char) 0, WARDROBE_HAT),
     ANGEL_HALO(WardrobeItem.class, LIGHT_WEIGHTED_PRESSURE_PLATE, 111, (char) 0, WARDROBE_HAT),
@@ -1020,6 +1021,8 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     NONBINARY_PRIDE(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xF305, PRIDE_FLAGS, 32),
     LESBIAN_PRIDE(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xF306, PRIDE_FLAGS, 32),
     PANSEXUAL_PRIDE(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xF307, PRIDE_FLAGS, 32),
+    // Fun Flags
+    PIRATE_FLAG(WardrobeItem.class, MOJANG_BANNER_PATTERN, 0xF30A, FUN_FLAGS, 32),
     // April
     APRIL_FOOLS(ForbiddenMytem.class, CARROT, 0xF26B, JOKE),
     // Spleef
