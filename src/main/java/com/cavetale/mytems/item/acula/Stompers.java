@@ -44,7 +44,6 @@ public final class Stompers extends AculaItem {
     protected ItemStack getRawItemStack() {
         ItemStack item = new ItemStack(Material.NETHERITE_BOOTS);
         item.editMeta(meta -> {
-                meta.addEnchant(Enchantment.PROTECTION_ENVIRONMENTAL, 4, true);
                 meta.addEnchant(Enchantment.PROTECTION_FALL, 4, true);
             });
         return item;
