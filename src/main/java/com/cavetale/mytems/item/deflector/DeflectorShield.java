@@ -6,6 +6,7 @@ import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.ThreadLocalRandom;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
@@ -73,6 +74,7 @@ public final class DeflectorShield implements Mytem {
         if (player.getCooldown(Material.SHIELD) > 0) return;
         Projectile proj = event.getEntity();
         if (player.equals(proj.getShooter())) return;
+        if (proj.getShooter() instanceof Player && ThreadLocalRandom.current().nextInt(3) == 0) return;
         PersistentDataContainer tag = proj.getPersistentDataContainer();
         if (tag.has(DEFLECTED)) return;
         tag.set(DEFLECTED, PersistentDataType.BYTE, (byte) 1);
