@@ -22,7 +22,7 @@ public final class MytemsTag {
     public static final MytemsTag MUSIC_ALL = new MytemsTag("music_all", new MytemsCategory[] {
             MytemsCategory.MUSIC, MytemsCategory.MUSIC_HYRULE,
         });
-    public static final MytemsTag WARDROBE_HAT = new MytemsTag("wardtobe_hat", new MytemsCategory[] {
+    public static final MytemsTag WARDROBE_HAT = new MytemsTag("wardrobe_hat", new MytemsCategory[] {
             MytemsCategory.WITCH_HAT, MytemsCategory.SUNGLASSES,
         });
     public static final MytemsTag WARDROBE = new MytemsTag("wardrobe", new MytemsCategory[] {
