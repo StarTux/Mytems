@@ -25,6 +25,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.font.Unicode.tiny;
+import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
@@ -41,19 +42,20 @@ public final class Yardstick implements Mytem {
         this.key = key;
     }
 
-    private static final String TOOLTIP = """
-        Draw lines and measure distances.
-
-        :mouse_left: Set point A
-        :mouse_right: Set point B
-        """;
+    private static final String TOOLTIP = "Draw lines and measure distances.";
 
     @Override
     public void enable() {
         this.displayName = text("Yardstick", color(0xE1C16E));
         this.prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.text(meta, displayName, new LineWrap().emoji(true).componentMaker(str -> text(str, WHITE)).wrap(TOOLTIP));
+                List<Component> text = new ArrayList<>();
+                text.add(displayName);
+                text.addAll(new LineWrap().emoji(true).componentMaker(str -> text(str, WHITE)).wrap(TOOLTIP));
+                text.add(empty());
+                text.add(textOfChildren(Mytems.MOUSE_LEFT, text(" Set point A")));
+                text.add(textOfChildren(Mytems.MOUSE_RIGHT, text(" Set point B")));
+                Items.text(meta, text);
                 meta.setUnbreakable(true);
                 meta.addItemFlags(ItemFlag.values());
                 key.markItemMeta(meta);

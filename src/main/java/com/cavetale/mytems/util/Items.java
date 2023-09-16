@@ -38,7 +38,7 @@ public final class Items {
     }
 
     public static void text(ItemMeta meta, Component displayName, List<Component> lore) {
-        meta.displayName(displayName);
+        meta.displayName(nonItalic(displayName));
         meta.lore(nonItalic(lore));
     }
 
