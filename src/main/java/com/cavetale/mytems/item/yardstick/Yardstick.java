@@ -53,8 +53,8 @@ public final class Yardstick implements Mytem {
                 text.add(displayName);
                 text.addAll(new LineWrap().emoji(true).componentMaker(str -> text(str, WHITE)).wrap(TOOLTIP));
                 text.add(empty());
-                text.add(textOfChildren(Mytems.MOUSE_LEFT, text(" Set point A")));
-                text.add(textOfChildren(Mytems.MOUSE_RIGHT, text(" Set point B")));
+                text.add(textOfChildren(Mytems.MOUSE_LEFT, text(" Set point A", GRAY)));
+                text.add(textOfChildren(Mytems.MOUSE_RIGHT, text(" Set point B", GRAY)));
                 Items.text(meta, text);
                 meta.setUnbreakable(true);
                 meta.addItemFlags(ItemFlag.values());
