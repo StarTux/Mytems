@@ -88,6 +88,7 @@ import com.cavetale.mytems.item.vote.VoteFirework;
 import com.cavetale.mytems.item.wateringcan.EmptyWateringCan;
 import com.cavetale.mytems.item.wateringcan.WateringCan;
 import com.cavetale.mytems.item.wrench.MonkeyWrench;
+import com.cavetale.mytems.item.yardstick.Yardstick;
 import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Skull;
 import com.cavetale.worldmarker.item.ItemMarker;
@@ -197,6 +198,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     EMPTY_GOLDEN_WATERING_CAN(EmptyWateringCan.class, STONE_HOE, 335, (char) 0xF025, GARDENING),
     MONKEY_WRENCH(MonkeyWrench.class, STONE_HOE, 79, (char) 0xF026, UTILITY),
     DIVIDERS(Dividers.class, WOODEN_HOE, 593, (char) 0xF027, UTILITY),
+    YARDSTICK(Yardstick.class, WOODEN_HOE, 0xF30B,  UTILITY),
     SLIME_FINDER(SlimeFinder.class, SLIME_BALL, 594, (char) 0xF028, UTILITY),
     BLIND_EYE(BlindEye.class, CARROT, 596, (char) 0xF029, UTILITY),
     SCISSORS(Scissors.class, SHEARS, 652, (char) 0xF02A, GARDENING),

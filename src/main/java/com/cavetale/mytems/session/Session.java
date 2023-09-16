@@ -23,6 +23,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import static com.cavetale.core.font.Unicode.subscript;
 import static com.cavetale.core.font.Unicode.tiny;
+import static com.cavetale.mytems.MytemsPlugin.sessionOf;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
@@ -193,5 +194,9 @@ public final class Session {
             }
         }
         return false;
+    }
+
+    public static Session of(Player player) {
+        return sessionOf(player);
     }
 }

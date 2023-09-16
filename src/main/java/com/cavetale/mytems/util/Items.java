@@ -1,5 +1,6 @@
 package com.cavetale.mytems.util;
 
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +18,14 @@ public final class Items {
         return Component.text().append(in).decoration(TextDecoration.ITALIC, false).build();
     }
 
+    public static List<Component> nonItalic(List<Component> in) {
+        List<Component> out = new ArrayList<>(in.size());
+        for (Component i : in) {
+            out.add(nonItalic(i));
+        }
+        return out;
+    }
+
     public static ItemStack text(ItemStack item, List<Component> text) {
         item.editMeta(meta -> text(meta, text));
         return item;
@@ -26,6 +35,11 @@ public final class Items {
         meta.displayName(text.isEmpty() ? Component.empty() : nonItalic(text.get(0)));
         meta.lore(text.isEmpty() ? List.of() : text.subList(1, text.size())
                   .stream().map(Items::nonItalic).collect(Collectors.toList()));
+    }
+
+    public static void text(ItemMeta meta, Component displayName, List<Component> lore) {
+        meta.displayName(displayName);
+        meta.lore(nonItalic(lore));
     }
 
     public static ItemStack deserialize(String base64) {
