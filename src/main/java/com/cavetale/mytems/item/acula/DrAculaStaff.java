@@ -6,7 +6,6 @@ import com.cavetale.mytems.session.Session;
 import com.cavetale.worldmarker.entity.EntityMarker;
 import java.time.Duration;
 import java.util.List;
-import java.util.UUID;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -19,12 +18,14 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Bat;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import static java.util.UUID.randomUUID;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
@@ -33,7 +34,7 @@ import static org.bukkit.inventory.EquipmentSlot.*;
 
 @Getter
 public final class DrAculaStaff extends AculaItem {
-    private final int durationSeconds = 30;
+    private final int durationSeconds = 10;
     private static final Duration COOLDOWN = Duration.ofSeconds(60);
     private final String rawDisplayName = "Dr. Acula's Staff";
     private final String description = ""
@@ -49,11 +50,8 @@ public final class DrAculaStaff extends AculaItem {
     protected ItemStack getRawItemStack() {
         ItemStack item = new ItemStack(Material.NETHERITE_SWORD);
         item.editMeta(meta -> {
-                AttributeModifier attr;
-                attr = new AttributeModifier(UUID.randomUUID(), key.id, 12.0, ADD_NUMBER, HAND);
-                meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, attr);
-                attr = new AttributeModifier(UUID.randomUUID(), key.id, 1.6, ADD_NUMBER, HAND);
-                meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, attr);
+                meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(randomUUID(), key.id, 13.0, ADD_NUMBER, HAND));
+                meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(randomUUID(), key.id, -0.7, ADD_SCALAR, HAND));
             });
         return item;
     }
@@ -82,7 +80,7 @@ public final class DrAculaStaff extends AculaItem {
             player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, SoundCategory.MASTER, 0.5f, 2.0f);
             return;
         }
-        effect = new PotionEffect(PotionEffectType.INVISIBILITY, durationSeconds * 20, 0, false, false, true);
+        effect = new PotionEffect(PotionEffectType.INVISIBILITY, durationSeconds * 10, 0, false, false, true);
         player.addPotionEffect(effect);
         session.cooldown(key).duration(COOLDOWN);
         Location base = player.getLocation().add(0, 1, 0);
@@ -103,5 +101,10 @@ public final class DrAculaStaff extends AculaItem {
         }
         base.getWorld().playSound(base, Sound.ENTITY_BAT_LOOP, SoundCategory.MASTER, 0.5f, 2.0f);
         base.getWorld().spawnParticle(Particle.SMOKE_LARGE, base, 16, 0.5, 0.7, 0.5, 0.05);
+        for (var entity : player.getNearbyEntities(32.0, 32.0, 32.0)) {
+            if (!(entity instanceof Mob mob)) continue;
+            if (!player.equals(mob.getTarget())) continue;
+            mob.setTarget(null);
+        }
     }
 }

@@ -5,6 +5,7 @@ import com.cavetale.mytems.util.Skull;
 import java.util.UUID;
 import lombok.Getter;
 import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
@@ -27,13 +28,8 @@ public final class BatMask extends AculaItem {
                                       "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjc2NjE5NjUyZmFmZWM5MGNlOThkZjUwMTNjNjNkYzZhNzc3NzZhYjI3ODczYjczZGFmYjJiNmJkZWIxODUifX19",
                                       null);
         item.editMeta(meta -> {
-                AttributeModifier attr;
-                attr = new AttributeModifier(UUID.randomUUID(), key.id, 10.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD);
-                meta.addAttributeModifier(Attribute.GENERIC_MAX_HEALTH, attr);
-                attr = new AttributeModifier(UUID.randomUUID(), key.id, 2.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD);
-                meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, attr);
-                attr = new AttributeModifier(UUID.randomUUID(), key.id, 3.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlot.HEAD);
-                meta.addAttributeModifier(Attribute.GENERIC_ARMOR, attr);
+                meta.addAttributeModifier(Attribute.GENERIC_ARMOR, new AttributeModifier(UUID.randomUUID(), key.id, 3.0, Operation.ADD_NUMBER, EquipmentSlot.HEAD));
+                meta.addAttributeModifier(Attribute.GENERIC_ARMOR_TOUGHNESS, new AttributeModifier(UUID.randomUUID(), key.id, 3.0, Operation.ADD_NUMBER, EquipmentSlot.HEAD));
             });
         return item;
     }

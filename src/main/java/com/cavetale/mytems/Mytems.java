@@ -19,7 +19,9 @@ import com.cavetale.mytems.item.Toilet;
 import com.cavetale.mytems.item.UnicornHorn;
 import com.cavetale.mytems.item.WardrobeItem;
 import com.cavetale.mytems.item.WeddingRing;
+import com.cavetale.mytems.item.acula.BatCape;
 import com.cavetale.mytems.item.acula.BatMask;
+import com.cavetale.mytems.item.acula.BatPants;
 import com.cavetale.mytems.item.acula.DrAculaStaff;
 import com.cavetale.mytems.item.acula.FlameShield;
 import com.cavetale.mytems.item.acula.GhastBow;
@@ -122,6 +124,8 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     STOMPERS(Stompers.class, NETHERITE_BOOTS, 741304, (char) 0xE235, ACULA),
     GHAST_BOW(GhastBow.class, BOW, 741305, (char) 0xE236, ACULA),
     BAT_MASK(BatMask.class, PLAYER_HEAD, 741306, (char) 0xE237, ACULA),
+    BAT_CAPE(BatCape.class, ELYTRA, 0xF30C, ACULA),
+    BAT_PANTS(BatPants.class, NETHERITE_LEGGINGS, 0xF30D, ACULA),
     UNICORN_HORN(UnicornHorn.class, END_ROD, 7413003, (char) 0, UTILITY),
     MAGIC_CAPE(MagicCape.class, ELYTRA, 7413006, (char) 0xE238, chrarr(0xE238, 0xF001, 0xF002, 0xF003, 0xF004), UTILITY, Animation.MAGIC_CAPE),
     SNEAKERS(Sneakers.class, LEATHER_BOOTS, 333, (char) 0xF005, UTILITY),
