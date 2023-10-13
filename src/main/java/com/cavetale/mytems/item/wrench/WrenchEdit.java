@@ -14,6 +14,7 @@ import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.AnaloguePowerable;
+import org.bukkit.block.data.Attachable;
 import org.bukkit.block.data.Bisected;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
@@ -323,6 +324,22 @@ public enum WrenchEdit {
                 wall.setUp(true);
             }
             return join(separator(space()), blockFaceText(face), text(toCamelCase(" ", newHeight)));
+        }
+    },
+    ATTACHED {
+        @Override public Component getDisplayName() {
+            return join(noSeparators(), VanillaItems.CHAIN, text("Attached", BLUE));
+        }
+
+        @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
+            return blockData instanceof Attachable;
+        }
+
+        @Override public Component edit(Player player, Block block, BlockData blockData, PlayerInteractEvent event) {
+            if (!(blockData instanceof Attachable attachable)) return null;
+            final boolean value = !attachable.isAttached();
+            attachable.setAttached(value);
+            return text(value ? "Attached" : "Detached");
         }
     },
     ATTACHMENT {
