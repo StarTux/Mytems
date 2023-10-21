@@ -7,11 +7,13 @@ import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
+import static net.kyori.adventure.text.Component.empty;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
 
 @RequiredArgsConstructor @Getter
 public final class HalloweenToken2 implements Mytem {
@@ -22,13 +24,17 @@ public final class HalloweenToken2 implements Mytem {
 
     @Override
     public void enable() {
-        this.displayName = Component.text("Fancy Halloween Token", COLOR);
+        this.displayName = text("Fancy Halloween Token", COLOR);
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
                 Items.text(meta, List.of(displayName,
-                                         Component.text("Exchange for the", NamedTextColor.GRAY),
-                                         Component.text("most valuable", NamedTextColor.GRAY),
-                                         Component.text("Halloween goodies!", NamedTextColor.GRAY)));
+                                         text("Exchange for the", GRAY),
+                                         text("most valuable", GRAY),
+                                         text("Halloween goodies!", GRAY),
+                                         empty(),
+                                         text("There is a limited", GRAY),
+                                         text("quantity of these,", GRAY),
+                                         text("so choose wisely!", GRAY)));
                 key.markItemMeta(meta);
             });
     }

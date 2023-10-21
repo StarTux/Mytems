@@ -26,9 +26,9 @@ public final class HalloweenToken implements Mytem {
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
                 Items.text(meta, List.of(displayName,
-                                         Component.text("Your ticket to", NamedTextColor.GRAY),
-                                         Component.text("join Halloween", NamedTextColor.GRAY),
-                                         Component.text("Mob Arena!", NamedTextColor.GRAY)));
+                                         Component.text("Play Halloween", NamedTextColor.GRAY),
+                                         Component.text("games to earn", NamedTextColor.GRAY),
+                                         Component.text("more of these!", NamedTextColor.GRAY)));
                 key.markItemMeta(meta);
             });
     }
