@@ -6,6 +6,7 @@ import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
 import java.util.List;
 import lombok.Getter;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.potion.PotionEffectType;
 
 @Getter
@@ -36,6 +37,7 @@ public final class AculaItemSet implements ItemSet {
             @Override
             public void onAttackingDamageCalculation(DamageCalculationEvent event) {
                 if (!event.getAttacker().hasPotionEffect(PotionEffectType.INVISIBILITY)) return;
+                if (event.getCalculation().getEvent().getCause() != DamageCause.ENTITY_ATTACK) return;
                 final double damage = event.getCalculation().getBaseDamage();
                 event.getCalculation().setBaseDamage(damage * damageFactor);
                 event.setHandled(true);
