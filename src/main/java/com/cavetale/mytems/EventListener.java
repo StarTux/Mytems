@@ -54,6 +54,7 @@ import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.entity.ProjectileLaunchEvent;
+import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
@@ -698,5 +699,12 @@ public final class EventListener implements Listener {
             event.setCancelled(true);
             entity.remove();
         }
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    private void onFurnaceBurn(FurnaceBurnEvent event) {
+        ItemStack fuel = event.getFuel();
+        Mytems mytems = Mytems.forItem(fuel);
+        if (mytems != null) event.setCancelled(true);
     }
 }
