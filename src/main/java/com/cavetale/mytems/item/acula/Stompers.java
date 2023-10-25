@@ -1,5 +1,6 @@
 package com.cavetale.mytems.item.acula;
 
+import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
 import com.cavetale.mytems.Mytems;
 import java.util.ArrayList;
 import java.util.List;
@@ -64,6 +65,7 @@ public final class Stompers extends AculaItem {
             }
             if (entity instanceof Player && !entity.getWorld().getPVP()) continue;
             if (center.distanceSquared(entity.getLocation()) > rads) continue;
+            if (!PlayerEntityAbilityQuery.Action.DAMAGE.query(player, entity)) continue;
             targets.add(entity);
         }
         int particles = (int) (radius * Math.PI * 2.0 / 3.0); // circumference / 3
