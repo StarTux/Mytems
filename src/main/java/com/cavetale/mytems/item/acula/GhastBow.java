@@ -1,5 +1,6 @@
 package com.cavetale.mytems.item.acula;
 
+import com.cavetale.core.connect.NetworkServer;
 import com.cavetale.mytems.Mytems;
 import java.util.List;
 import lombok.Getter;
@@ -39,6 +40,11 @@ public final class GhastBow extends AculaItem {
 
     @Override
     public void onPlayerShootBow(EntityShootBowEvent event, Player player, ItemStack item) {
+        if (event.isCancelled()) return;
+        if (NetworkServer.current() == NetworkServer.FESTIVAL) {
+            event.setCancelled(true);
+            return;
+        }
         if (event.getConsumable() != null && event.getConsumable().getType() == Material.ARROW) {
             event.setConsumeItem(false);
         }
