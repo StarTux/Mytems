@@ -24,6 +24,7 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.core.font.Unicode.MULTIPLICATION;
 import static com.cavetale.core.font.Unicode.tiny;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
@@ -97,15 +98,19 @@ public final class Yardstick implements Mytem {
             if (session.point2 == null) {
                 draw(player, List.of(session.point1), false);
             }
-            player.sendActionBar(textOfChildren(text("Point A ", GRAY),
-                                                text(session.point1.x + " " + session.point1.y + " " + session.point1.z, GOLD)));
+            if (session.point1 == null) {
+                player.sendActionBar(textOfChildren(text("Point A ", GRAY),
+                                                    text(session.point1.x + " " + session.point1.y + " " + session.point1.z, GOLD)));
+            }
         } else if (num == 2) {
             session.point2 = Vec3i.of(block);
             if (session.point1 == null) {
                 draw(player, List.of(session.point1), false);
             }
-            player.sendActionBar(textOfChildren(text("Point B ", GRAY),
-                                                text(session.point2.x + " " + session.point2.y + " " + session.point2.z, GOLD)));
+            if (session.point2 == null) {
+                player.sendActionBar(textOfChildren(text("Point B ", GRAY),
+                                                    text(session.point2.x + " " + session.point2.y + " " + session.point2.z, GOLD)));
+            }
         }
         if (session.point1 != null && session.point2 != null) {
             drawLine(player, session, session.point1, session.point2);
@@ -121,16 +126,15 @@ public final class Yardstick implements Mytem {
         var boundingBoxes = voxelShape.getBoundingBoxes();
         if (boundingBoxes.size() != 1) return false;
         var bb = boundingBoxes.iterator().next();
-        return bb.getWidthX() == 1.0
-            && bb.getHeight() == 1.0
-            && bb.getWidthZ() == 1.0;
+        return bb.getWidthX() == 1.0 && bb.getWidthZ() == 1.0
+            && (bb.getHeight() == 1.0 || bb.getHeight() == 0.9375);
     }
 
     private boolean drawLine(Player player, YardstickSession session, Vec3i a, Vec3i b) {
         World world = player.getWorld();
-        final double dx = (double) a.x - (double) b.x;
-        final double dy = (double) a.y - (double) b.y;
-        final double dz = (double) a.z - (double) b.z;
+        final double dx = (double) (Math.abs(a.x - b.x) + 1);
+        final double dy = (double) (Math.abs(a.y - b.y) + 1);
+        final double dz = (double) (Math.abs(a.z - b.z) + 1);
         session.horizontalLength = (int) Math.round(Math.sqrt(dx * dx + dz * dz));
         if (session.horizontalLength > MAX_LENGTH) {
             player.sendActionBar(text("Line span too long: " + session.horizontalLength, RED));
@@ -139,27 +143,7 @@ public final class Yardstick implements Mytem {
         }
         session.length = (int) Math.round(Math.sqrt(dx * dx + dy * dy + dz * dz));
         List<Vec2i> horizontalLine = makeLine(Vec2i.of(a.x, a.z), Vec2i.of(b.x, b.z));
-        List<Vec3i> blocks = new ArrayList<>();
-        final int cy = (a.y + b.y) / 2;
-        LOOP:
-        for (Vec2i base : horizontalLine) {
-            if (!world.isChunkLoaded(base.x >> 4, base.z >> 4)) continue;
-            Block block = world.getBlockAt(base.x, cy, base.z);
-            // Move up
-            while (isFullBlock(block) && block.getY() < world.getMaxHeight()) {
-                Block above = block.getRelative(0, 1, 0);
-                if (!isFullBlock(above)) break;
-                block = above;
-            }
-            // Move down
-            while (!isFullBlock(block)) {
-                if (block.getY() <= world.getMinHeight()) continue LOOP;
-                block = block.getRelative(0, -1, 0);
-            }
-            Vec3i vec = Vec3i.of(block);
-            if (blocks.contains(vec)) continue;
-            blocks.add(vec);
-        }
+        List<Vec3i> blocks = makeBlocks(world, horizontalLine, a, b);
         draw(player, blocks, true);
         return true;
     }
@@ -218,6 +202,31 @@ public final class Yardstick implements Mytem {
         return line;
     }
 
+    private List<Vec3i> makeBlocks(World world, List<Vec2i> horizontalLine, Vec3i a, Vec3i b) {
+        final List<Vec3i> blocks = new ArrayList<>();
+        final int cy = (a.y + b.y) / 2;
+        LOOP:
+        for (Vec2i base : horizontalLine) {
+            if (!world.isChunkLoaded(base.x >> 4, base.z >> 4)) continue;
+            Block block = world.getBlockAt(base.x, cy, base.z);
+            // Move up
+            while (isFullBlock(block) && block.getY() < world.getMaxHeight()) {
+                Block above = block.getRelative(0, 1, 0);
+                if (!isFullBlock(above)) break;
+                block = above;
+            }
+            // Move down
+            while (!isFullBlock(block)) {
+                if (block.getY() <= world.getMinHeight()) continue LOOP;
+                block = block.getRelative(0, -1, 0);
+            }
+            Vec3i vec = Vec3i.of(block);
+            if (blocks.contains(vec)) continue;
+            blocks.add(vec);
+        }
+        return blocks;
+    }
+
     private void draw(Player player, List<Vec3i> blocks, boolean feedback) {
         YardstickSession session = YardstickSession.of(player);
         if (session.drawing) return;
@@ -244,23 +253,27 @@ public final class Yardstick implements Mytem {
                 }
                 if (feedback) {
                     player.sendMessage(textOfChildren(key, text(" Line drawn from "),
-                                                      text(session.point1.x + " " + session.point1.y + " " + session.point2.z, GOLD),
+                                                      text(session.point1.x + " " + session.point1.y + " " + session.point1.z, GOLD),
                                                       text(" to "),
                                                       text(session.point2.x + " " + session.point2.y + " " + session.point2.z, GOLD))
                                        .color(GRAY));
-                    if (session.length == session.horizontalLength) {
-                        player.sendMessage(textOfChildren(key,
-                                                          text(tiny(" Distance ")),
-                                                          text(session.length, GOLD))
-                                           .color(GRAY));
-                    } else {
-                        player.sendMessage(textOfChildren(key,
-                                                          text(tiny(" Distance ")),
-                                                          text(session.length, GOLD),
-                                                          text(tiny(" Horizontal ")),
-                                                          text(session.horizontalLength, GOLD))
-                                           .color(GRAY));
-                    }
+                    final int dx = Math.abs(session.point1.x - session.point2.x) + 1;
+                    final int dy = Math.abs(session.point1.y - session.point2.y) + 1;
+                    final int dz = Math.abs(session.point1.z - session.point2.z) + 1;
+                    player.sendMessage(textOfChildren(key,
+                                                      text(tiny(" distance")),
+                                                      text(session.length, GOLD),
+                                                      text(tiny(" horizontal")),
+                                                      text(session.horizontalLength, GOLD),
+                                                      text(tiny(" blocks")),
+                                                      text(blocks.size(), GOLD),
+                                                      text(tiny(" size")),
+                                                      text(dx, GOLD),
+                                                      text(MULTIPLICATION.string),
+                                                      text(dy, GOLD),
+                                                      text(MULTIPLICATION.string),
+                                                      text(dz, GOLD))
+                                       .color(GRAY));
                 }
                 session.blocks = blocks;
             }, 2L);
