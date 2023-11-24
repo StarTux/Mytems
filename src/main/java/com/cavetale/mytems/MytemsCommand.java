@@ -12,6 +12,7 @@ import com.cavetale.mytems.item.coin.BankTeller;
 import com.cavetale.mytems.item.font.Glyph;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Blocks;
+import com.cavetale.mytems.util.Collision;
 import com.cavetale.mytems.util.Entities;
 import com.cavetale.mytems.util.JavaItem;
 import com.cavetale.mytems.util.Skull;
@@ -41,6 +42,7 @@ import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.BoundingBox;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.newline;
@@ -139,6 +141,9 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
             .description("Open the Netherite Parity crafting GUI")
             .completers(CommandArgCompleter.NULL)
             .senderCaller(this::netheriteParity);
+        rootNode.addChild("collisiontest").denyTabCompletion()
+            .description("Test block collisions")
+            .playerCaller(this::collisionTest);
     }
 
     protected boolean list(CommandSender sender, String[] args) {
@@ -528,5 +533,36 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
 
     public CommandNode registerItemCommand(Mytems key) {
         return itemNode.addChild(key.id);
+    }
+
+    private static String dToString(double d) {
+        String result = "" + d;
+        return result.endsWith(".0")
+            ? "" + ((int) d)
+            : result;
+    }
+
+    private static String bbToString(BoundingBox bb) {
+        return "(" + dToString(bb.getMinX()) + " " + dToString(bb.getMinY()) + " " + dToString(bb.getMinZ())
+            + "|" + dToString(bb.getMaxX()) + " " + dToString(bb.getMaxY()) + " " + dToString(bb.getMaxZ()) + ")";
+    }
+
+    protected void collisionTest(Player player) {
+        BoundingBox bb = player.getBoundingBox();
+        List<Block> blocks = Collision.getCollidingBlocks(player.getWorld(), bb);
+        if (blocks.isEmpty()) {
+            player.sendMessage(text("Nothing collides with your BB: " + bbToString(bb), GREEN));
+            return;
+        }
+        player.sendMessage(text(blocks.size() + " collision(s) with your BB: " + bbToString(bb), YELLOW));
+        for (Block block : blocks) {
+            List<Component> line = new ArrayList<>();
+            line.add(text(block.getX() + " " + block.getY() + " " + block.getY(), YELLOW));
+            line.add(text("(" + block.getType().getKey().getKey() + ")", GRAY));
+            for (BoundingBox box : block.getCollisionShape().getBoundingBoxes()) {
+                if (box.overlaps(bb)) line.add(text("" + bbToString(box), RED));
+            }
+            player.sendMessage(join(separator(space()), line));
+        }
     }
 }
