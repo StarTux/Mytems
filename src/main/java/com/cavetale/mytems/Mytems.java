@@ -1502,6 +1502,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
         case PANSEXUAL_PRIDE:
         case NO:
         case PIRATE_FLAG:
+        case CHRISTMAS_TREE:
             return true;
         default: return false;
         }
