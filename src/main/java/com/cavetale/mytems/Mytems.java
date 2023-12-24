@@ -132,6 +132,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     KITTY_COIN(KittyCoin.class, PLAYER_HEAD, 7413001, (char) 0xE200, CURRENCY),
     RAINBOW_KITTY_COIN(KittyCoin.class, PLAYER_HEAD, 7413007, (char) 0xE243, CURRENCY),
     CHRISTMAS_TOKEN(ChristmasToken.class, PLAYER_HEAD, 221, (char) 0xF006, CHRISTMAS),
+    CHRISTMAS_TREE(ForbiddenMytem.class, SPRUCE_SAPLING, 0xF30E, CHRISTMAS),
     SANTA_HAT(SantaHat.class, PLAYER_HEAD, 7413101, (char) 0xE221, SANTA),
     SANTA_JACKET(SantaJacket.class, LEATHER_CHESTPLATE, 4713102, (char) 0xE222, SANTA),
     SANTA_PANTS(SantaPants.class, LEATHER_LEGGINGS, 4713103, (char) 0xE223, SANTA),
