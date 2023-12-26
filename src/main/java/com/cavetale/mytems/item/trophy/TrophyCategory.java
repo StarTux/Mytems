@@ -14,6 +14,7 @@ public enum TrophyCategory {
     VOTE,
     SPLEEF,
     END_FIGHT,
+    ENDERBALL,
 
     SHOVEL,
     SWORD,
