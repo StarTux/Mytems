@@ -58,7 +58,7 @@ public final class Fertilizer implements Mytem {
                                              Material.GRASS_BLOCK,
                                              Material.PODZOL,
                                              Material.COARSE_DIRT);
-        growList.add(new FertilizerFlower(Material.GRASS));
+        growList.add(new FertilizerFlower(Material.SHORT_GRASS));
         growList.add(new FertilizerBisectedFlower(Material.TALL_GRASS));
         growList.add(new FertilizerFlower(Material.FERN));
         growList.add(new FertilizerBisectedFlower(Material.LARGE_FERN));

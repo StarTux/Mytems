@@ -67,7 +67,7 @@ public final class MytemsTest {
         System.out.println("// CustomModelData Next: " + (max + 1));
         testCharacters();
         testCore(DefaultFont.class);
-        testCore(VanillaEffects.class);
+        // testCore(VanillaEffects.class); // Requires Bukkit.server
         testCore(VanillaPaintings.class);
         testCore(VanillaItems.class);
     }
