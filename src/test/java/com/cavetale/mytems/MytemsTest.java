@@ -1,8 +1,8 @@
 package com.cavetale.mytems;
 
+//import com.cavetale.core.font.VanillaEffects;
 import com.cavetale.core.font.DefaultFont;
 import com.cavetale.core.font.Font;
-import com.cavetale.core.font.VanillaEffects;
 import com.cavetale.core.font.VanillaItems;
 import com.cavetale.core.font.VanillaPaintings;
 import java.util.ArrayList;
