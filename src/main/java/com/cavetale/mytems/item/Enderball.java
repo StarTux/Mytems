@@ -131,7 +131,9 @@ public final class Enderball implements Mytem, Listener {
         Location ballLocation = block.getLocation().add(0.5, 0.0, 0.5);
         Vector vec = ballLocation.toVector().subtract(player.getLocation().toVector());
         vec.setY(0.0).normalize().setY(height).multiply(strength);
-        FallingBlock fallingBlock = block.getWorld().spawnFallingBlock(ballLocation, Material.DRAGON_EGG.createBlockData());
+        final FallingBlock fallingBlock = block.getWorld().spawn(ballLocation, FallingBlock.class, fb -> {
+                fb.setBlockData(Material.DRAGON_EGG.createBlockData());
+            });
         if (fallingBlock == null) return;
         EntityMarker.setId(fallingBlock, key.id);
         block.setType(Material.AIR, false);

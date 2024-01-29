@@ -66,7 +66,7 @@ public final class NetheriteParityTableBlock implements MytemBlock {
             id.remove();
         }
         block.getWorld().playSound(block.getLocation(), Sound.BLOCK_NETHERITE_BLOCK_BREAK, 1.0f, 0.5f);
-        block.getWorld().spawnParticle(Particle.BLOCK_DUST, block.getLocation().add(0.5, 0.5, 0.5), 32, 0.25, 0.25, 0.25, 0.0,
+        block.getWorld().spawnParticle(Particle.BLOCK_CRACK, block.getLocation().add(0.5, 0.5, 0.5), 32, 0.25, 0.25, 0.25, 0.0,
                                        Material.NETHERITE_BLOCK.createBlockData());
     }
 

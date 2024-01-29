@@ -19,6 +19,7 @@ import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.block.sign.Side;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -93,17 +94,17 @@ public final class Magnifier implements Mytem {
         if (!(block.getState() instanceof Sign sign)) return;
         Vec3i vec = Vec3i.of(block);
         Favorite fav = sessionOf(player).getFavorites().getOrSet(Favorite.class, Favorite::new);
-        List<Component> lines = new ArrayList<>(sign.lines());
+        final List<Component> lines = List.copyOf(sign.getSide(Side.FRONT).lines());
         if (!vec.equals(fav.vec)) {
             fav.vec = vec;
             for (int i = 0; i < lines.size(); i += 1) {
                 Component line = lines.get(i);
                 if (!(line instanceof TextComponent textLine)) continue;
                 textLine = textLine.content(rot13(textLine.content()));
-                lines.set(i, textLine);
+                sign.getSide(Side.FRONT).line(i, textLine);
             }
             Bukkit.getScheduler().runTask(plugin(), () -> {
-                    player.sendSignChange(block.getLocation(), lines, sign.getColor(), sign.isGlowingText());
+                    player.sendBlockUpdate(block.getLocation(), sign);
                     player.sendActionBar(text("Sign scrambled", BLUE2));
                 });
             Location location = block.getLocation().add(0.5, 0.5, 0.5);
@@ -112,7 +113,7 @@ public final class Magnifier implements Mytem {
         } else {
             fav.vec = null;
             Bukkit.getScheduler().runTask(plugin(), () -> {
-                    player.sendSignChange(block.getLocation(), lines, sign.getColor(), sign.isGlowingText());
+                    player.sendBlockUpdate(block.getLocation(), sign);
                     player.sendActionBar(text("Sign unscrambled", BLUE2));
                 });
             Location location = block.getLocation().add(0.5, 0.5, 0.5);

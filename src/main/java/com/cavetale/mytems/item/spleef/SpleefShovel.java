@@ -96,7 +96,7 @@ public final class SpleefShovel implements Mytem {
                             })) {
                         continue;
                     }
-                    block.getWorld().spawnParticle(Particle.BLOCK_DUST, block.getLocation().add(0.5, 0.5, 0.5),
+                    block.getWorld().spawnParticle(Particle.BLOCK_CRACK, block.getLocation().add(0.5, 0.5, 0.5),
                                                    8, 0.0, 0.25, 0.25, 0.25, blockData);
                     count += 1;
                 }

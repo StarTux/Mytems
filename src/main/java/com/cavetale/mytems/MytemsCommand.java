@@ -38,7 +38,6 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -428,26 +427,16 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
     }
 
     protected boolean placeBlock(Player player, String[] args) {
-        if (args.length != 2 && args.length != 3) return false;
+        if (args.length != 2) return false;
         Mytems mytems = Mytems.forId(args[0]);
         if (mytems == null) throw new CommandWarn("Invalid id: " + args[0]);
-        BlockFace blockFace;
-        try {
-            blockFace = BlockFace.valueOf(args[1].toUpperCase());
-        } catch (IllegalArgumentException iae) {
-            throw new CommandWarn("Invalid block face: " + args[1]);
-        }
-        boolean small = args.length >= 3
-            ? CommandArgCompleter.requireBoolean(args[2])
-            : true;
-        Block block = player.getLocation().getBlock();
-        ArmorStand as = Blocks.place(mytems, block, blockFace, small);
-        if (as == null) throw new CommandWarn("Armor stand could not be spawned!");
-        player.sendMessage(textOfChildren(text("Placed ", YELLOW),
-                                          mytems,
-                                          text(" at" + " " + block.getX() + " " + block.getY() + " " + block.getZ(), GRAY))
-                           .hoverEvent(showText(text(as.getUniqueId().toString(), GRAY)))
-                           .insertion(as.getUniqueId().toString()));
+        final Location location = player.getLocation();
+        final ItemDisplay itemDisplay = Blocks.place(mytems, location, id -> { });
+        if (itemDisplay == null) throw new CommandWarn("Item Display could not be spawned!");
+        player.sendMessage(textOfChildren(text("Placed ", YELLOW), mytems,
+                                          text(" at" + " " + location.getBlockX() + " " + location.getBlockY() + " " + location.getBlockZ(), GRAY))
+                           .hoverEvent(showText(text(itemDisplay.getUniqueId().toString(), GRAY)))
+                           .insertion(itemDisplay.getUniqueId().toString()));
         return true;
     }
 

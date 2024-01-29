@@ -254,7 +254,7 @@ public final class HyruleInstrument implements Mytem {
             }
             break;
         case WOODS:
-            player.spawnParticle(Particle.BLOCK_DUST, player.getEyeLocation(), 32, 0.6, 0.6, 0.6, 0.0,
+            player.spawnParticle(Particle.BLOCK_CRACK, player.getEyeLocation(), 32, 0.6, 0.6, 0.6, 0.0,
                                  Material.OAK_LEAVES.createBlockData());
             for (Entity entity : player.getNearbyEntities(16.0, 16.0, 16.0)) {
                 if (entity instanceof Animals && !(entity instanceof AbstractHorse)) {
@@ -273,7 +273,7 @@ public final class HyruleInstrument implements Mytem {
             }
             break;
         case TIME:
-            player.spawnParticle(Particle.BLOCK_DUST, player.getEyeLocation(), 32, 0.6, 0.6, 0.6, 0.0,
+            player.spawnParticle(Particle.BLOCK_CRACK, player.getEyeLocation(), 32, 0.6, 0.6, 0.6, 0.0,
                                  Material.COBWEB.createBlockData());
             break;
         case RAIN:

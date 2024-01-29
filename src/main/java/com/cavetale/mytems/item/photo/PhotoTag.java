@@ -63,7 +63,6 @@ public final class PhotoTag extends MytemTag {
                 meta.setColor(Color.fromRGB(hexColor));
                 meta.setScaling(false);
                 meta.setColor(Color.fromRGB(data.color()));
-                meta.setLocationName(data.name());
                 List<Component> tooltip = new ArrayList<>();
                 tooltip.add(text((data.name() != null ? data.name() : "Photo"), color(hexColor)));
                 if (data.name() != null) {
