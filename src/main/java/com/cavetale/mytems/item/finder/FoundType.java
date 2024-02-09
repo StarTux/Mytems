@@ -33,6 +33,7 @@ public enum FoundType {
     CAVETALE_DUNGEON(FinderType.MYSTIC, List.of("dungeons:dungeon"), Mytems.CAVETALE_DUNGEON::createIcon),
     STRONGHOLD(FinderType.MYSTIC, List.of("minecraft:stronghold"), () -> new ItemStack(Material.ENDER_EYE)),
     WOODLAND_MANSION(FinderType.MYSTIC, List.of("minecraft:mansion"), Mytems.VEX_FACE::createIcon),
+    TRAIL_RUINS(FinderType.MYSTIC, List.of("minecraft:trail_ruins"), () -> new ItemStack(Material.BRUSH)),
     ;
 
     public final FinderType type;
