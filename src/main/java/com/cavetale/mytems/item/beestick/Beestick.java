@@ -134,4 +134,9 @@ public final class Beestick implements Mytem {
             bee.setTarget(enemy);
         }
     }
+
+    @Override
+    public int getMaxStackSize() {
+        return 1;
+    }
 }
