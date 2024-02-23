@@ -91,9 +91,7 @@ public final class Coin implements Mytem {
         String message = Tags.getString(itemStack.getItemMeta().getPersistentDataContainer(),
                                         MytemsPlugin.namespacedKey("message"));
         if (message == null) {
-            message = amount == 1
-                ? "Pick up " + rawDisplayName
-                : "Pick up " + amount + " " + rawDisplayName + "s";
+            message = "Pick up " + rawDisplayName;
         }
         Money.get().give(player.getUniqueId(),
                          (double) value,
