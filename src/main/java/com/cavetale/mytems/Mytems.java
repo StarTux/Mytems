@@ -1050,6 +1050,19 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     YELLOW_BUTTERFLY(WardrobeItem.class, FEATHER, 0xF293, (char) 0xF293, chrarr(0xF293, 0xF294, 0xF295, 0xF296, 0xF297, 0xF298), BUTTERFLY, Animation.BUTTERFLY),
     // Block
     NETHERITE_PARITY_TABLE(NetheriteParityTable.class, NETHERITE_INGOT, 0xF308, BLOCKS),
+    // Chess
+    WHITE_PAWN(DummyMytem.class, WHITE_CONCRETE, 0xF315, CHESS),
+    WHITE_KNIGHT(DummyMytem.class, WHITE_CONCRETE, 0xF316, CHESS),
+    WHITE_BISHOP(DummyMytem.class, WHITE_CONCRETE, 0xF317, CHESS),
+    WHITE_ROOK(DummyMytem.class, WHITE_CONCRETE, 0xF318, CHESS),
+    WHITE_QUEEN(DummyMytem.class, WHITE_CONCRETE, 0xF319, CHESS),
+    WHITE_KING(DummyMytem.class, WHITE_CONCRETE, 0xF31A, CHESS),
+    BLACK_PAWN(DummyMytem.class, BLACK_CONCRETE, 0xF31B, CHESS),
+    BLACK_KNIGHT(DummyMytem.class, BLACK_CONCRETE, 0xF31C, CHESS),
+    BLACK_BISHOP(DummyMytem.class, BLACK_CONCRETE, 0xF31D, CHESS),
+    BLACK_ROOK(DummyMytem.class, BLACK_CONCRETE, 0xF31E, CHESS),
+    BLACK_QUEEN(DummyMytem.class, BLACK_CONCRETE, 0xF31F, CHESS),
+    BLACK_KING(DummyMytem.class, BLACK_CONCRETE, 0xF320, CHESS),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
