@@ -11,6 +11,7 @@ public enum MytemsCategory {
     CACTUS_COSTUME,
     CAT_EARS,
     CAVEBOY,
+    CHESS,
     CHICKEN_COSTUME,
     CHRISTMAS,
     COIN,
