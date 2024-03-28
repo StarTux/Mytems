@@ -26,18 +26,33 @@ public final class Items {
         return out;
     }
 
+    @Deprecated
     public static ItemStack text(ItemStack item, List<Component> text) {
+        return tooltip(item, text);
+    }
+
+    @Deprecated
+    public static void text(ItemMeta meta, List<Component> text) {
+        tooltip(meta, text);
+    }
+
+    @Deprecated
+    public static void text(ItemMeta meta, Component displayName, List<Component> lore) {
+        tooltip(meta, displayName, lore);
+    }
+
+    public static ItemStack tooltip(ItemStack item, List<Component> text) {
         item.editMeta(meta -> text(meta, text));
         return item;
     }
 
-    public static void text(ItemMeta meta, List<Component> text) {
+    public static void tooltip(ItemMeta meta, List<Component> text) {
         meta.displayName(text.isEmpty() ? Component.empty() : nonItalic(text.get(0)));
         meta.lore(text.isEmpty() ? List.of() : text.subList(1, text.size())
                   .stream().map(Items::nonItalic).collect(Collectors.toList()));
     }
 
-    public static void text(ItemMeta meta, Component displayName, List<Component> lore) {
+    public static void tooltip(ItemMeta meta, Component displayName, List<Component> lore) {
         meta.displayName(nonItalic(displayName));
         meta.lore(nonItalic(lore));
     }
