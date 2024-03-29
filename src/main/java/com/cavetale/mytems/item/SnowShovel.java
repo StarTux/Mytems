@@ -68,7 +68,7 @@ public final class SnowShovel implements Mytem {
     private void breakBlock(Player player, Block block, ItemStack itemStack) {
         if (block.getType() != Material.SNOW) return;
         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return;
-        PlayerBreakBlockEvent.call(player, block);
+        if (!new PlayerBreakBlockEvent(player, block, itemStack).callEvent()) return;
         SoundGroup snd = block.getBlockSoundGroup();
         block.getWorld().playSound(block.getLocation(), snd.getBreakSound(), snd.getVolume(), snd.getPitch());
         block.breakNaturally(itemStack, true);

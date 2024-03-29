@@ -52,10 +52,12 @@ import com.cavetale.mytems.item.garden.Scythe;
 import com.cavetale.mytems.item.halloween.HalloweenCandy;
 import com.cavetale.mytems.item.halloween.HalloweenToken2;
 import com.cavetale.mytems.item.halloween.HalloweenToken;
+import com.cavetale.mytems.item.hastypickaxe.HastyPickaxe;
 import com.cavetale.mytems.item.hourglass.Hourglass;
 import com.cavetale.mytems.item.luminator.Luminator;
 import com.cavetale.mytems.item.magnifier.Magnifier;
 import com.cavetale.mytems.item.medieval.WitchBroom;
+import com.cavetale.mytems.item.miner.MinerHelmet;
 import com.cavetale.mytems.item.mobcostume.BeeCostume;
 import com.cavetale.mytems.item.mobcostume.CactusCostume;
 import com.cavetale.mytems.item.mobcostume.ChickenCostume;
@@ -77,6 +79,7 @@ import com.cavetale.mytems.item.santa.SantaHat;
 import com.cavetale.mytems.item.santa.SantaJacket;
 import com.cavetale.mytems.item.santa.SantaPants;
 import com.cavetale.mytems.item.scarlet.ScarletItem;
+import com.cavetale.mytems.item.scuba.ScubaHelmet;
 import com.cavetale.mytems.item.spleef.SpleefShovel;
 import com.cavetale.mytems.item.swampy.SwampyItem;
 import com.cavetale.mytems.item.tree.TreeSeed;
@@ -193,7 +196,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     WEDDING_RING(WeddingRing.class, PLAYER_HEAD, 7413002, (char) 0xE21C, FRIENDS),
     MAGIC_MAP(MagicMap.class, FILLED_MAP, 7413005, (char) 0xE21D, chrarr(0xE21D, 0xF00E, 0xF00F, 0xF010, 0xF011, 0xF012, 0xF013, 0xF014, 0xF015, 0xF016, 0xF017, 0xF018, 0xF019, 0xF01A, 0xF01B, 0xF01C), UTILITY, Animation.MAGIC_MAP),
     SNOW_SHOVEL(SnowShovel.class, IRON_SHOVEL, 220, (char) 0xF01D, UTILITY),
-    HASTY_PICKAXE(ForbiddenMytem.class, GOLDEN_PICKAXE, 223, (char) 0xF01E, UTILITY),
+    HASTY_PICKAXE(HastyPickaxe.class, GOLDEN_PICKAXE, 223, (char) 0xF01E, HASTY_PICKAXES),
+    GOLDEN_HASTY_PICKAXE(HastyPickaxe.class, GOLDEN_PICKAXE, 0xF313, (char) 0xF313, HASTY_PICKAXES),
+    DIAMOND_HASTY_PICKAXE(HastyPickaxe.class, GOLDEN_PICKAXE, 0xF314, (char) 0xF314, HASTY_PICKAXES),
     TREE_CHOPPER(TreeChopper.class, GOLDEN_AXE, 242, (char) 0xF01F, UTILITY),
     ARMOR_STAND_EDITOR(ArmorStandEditor.class, FLINT, 241, (char) 0xF020, UTILITY),
     FERTILIZER(Fertilizer.class, BONE_MEAL, 285, (char) 0xF021, UTILITY),
@@ -1063,6 +1068,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     BLACK_ROOK(DummyMytem.class, BLACK_CONCRETE, 0xF31E, CHESS),
     BLACK_QUEEN(DummyMytem.class, BLACK_CONCRETE, 0xF31F, CHESS),
     BLACK_KING(DummyMytem.class, BLACK_CONCRETE, 0xF320, CHESS),
+    //
+    SCUBA_HELMET(ScubaHelmet.class, PLAYER_HEAD, null, (char) 0, UTILITY),
+    MINER_HELMET(MinerHelmet.class, PLAYER_HEAD, null, (char) 0, UTILITY),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
@@ -1304,11 +1312,11 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     }
 
     public ItemStack createIcon(List<Component> text) {
-        return Items.text(createIcon(1), text);
+        return Items.tooltip(createIcon(1), text);
     }
 
     public ItemStack createIcon(int amount, List<Component> text) {
-        return Items.text(createIcon(amount), text);
+        return Items.tooltip(createIcon(amount), text);
     }
 
     public boolean isItem(ItemStack item) {

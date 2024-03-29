@@ -141,7 +141,7 @@ public final class MonkeyWrench implements Mytem {
         }
         Component result = session.edit.edit(player, block, blockData, event);
         if (result != null) {
-            new PlayerChangeBlockEvent(player, block, blockData).callEvent();
+            new PlayerChangeBlockEvent(player, block, blockData, item).callEvent();
             if (blockData instanceof Rail) {
                 // Rails do not like changes if their old state is
                 // invalid.  Or both; not sure.

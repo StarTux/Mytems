@@ -81,7 +81,7 @@ public final class Fertilizer implements Mytem {
         if (player.isSneaking()) {
             openGui(player);
         } else if (event.hasBlock()) {
-            if (fertilize(player, event.getClickedBlock()) && player.getGameMode() != GameMode.CREATIVE) {
+            if (fertilize(player, event.getClickedBlock(), item) && player.getGameMode() != GameMode.CREATIVE) {
                 item.subtract(1);
             }
         }
@@ -109,7 +109,7 @@ public final class Fertilizer implements Mytem {
         gui.open(player);
     }
 
-    private boolean fertilize(Player player, Block clickedBlock) {
+    private boolean fertilize(Player player, Block clickedBlock, ItemStack itemStack) {
         if (clickedBlock.getType() != Material.GRASS_BLOCK) return false;
         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, clickedBlock)) return false;
         PlayerData playerData = playerData(player);
@@ -130,7 +130,7 @@ public final class Fertilizer implements Mytem {
                     Block block = clickedBlock.getRelative(dx, dy, dz);
                     FertilizerGrowth growth = selectedGrowList.get(growIndex);
                     if (growth.canGrow(player, block)) {
-                        growth.grow(player, block);
+                        growth.grow(player, block, itemStack);
                         growIndex += 1;
                         if (growIndex >= selectedGrowList.size()) growIndex = 0;
                     }

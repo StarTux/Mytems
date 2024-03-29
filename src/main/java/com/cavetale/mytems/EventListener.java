@@ -1,5 +1,7 @@
 package com.cavetale.mytems;
 
+import com.cavetale.core.event.block.PlayerBreakBlockEvent;
+import com.cavetale.core.event.block.PlayerChangeBlockEvent;
 import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
 import com.cavetale.mytems.event.combat.DamageCalculation;
 import com.cavetale.mytems.event.combat.DamageCalculationEvent;
@@ -42,6 +44,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.enchantment.PrepareItemEnchantEvent;
+import org.bukkit.event.entity.EntityAirChangeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDamageEvent;
@@ -352,12 +355,12 @@ public final class EventListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGH)
     private void onBlockBreak(BlockBreakEvent event) {
-        Player player = event.getPlayer();
-        ItemStack itemStack = player.getInventory().getItemInMainHand();
-        if (itemStack != null) {
-            Mytems mytems = Mytems.forItem(itemStack);
+        final Player player = event.getPlayer();
+        final ItemStack itemInHand = player.getInventory().getItemInMainHand();
+        if (itemInHand != null) {
+            final Mytems mytems = Mytems.forItem(itemInHand);
             if (mytems != null) {
-                mytems.getMytem().onBlockBreak(event, player, itemStack);
+                mytems.getMytem().onBlockBreak(event, player, itemInHand);
             }
         }
     }
@@ -706,5 +709,33 @@ public final class EventListener implements Listener {
         ItemStack fuel = event.getFuel();
         Mytems mytems = Mytems.forItem(fuel);
         if (mytems != null) event.setCancelled(true);
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    private void onEntityAirChange(EntityAirChangeEvent event) {
+        if (!(event.getEntity() instanceof Player player)) return;
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            final ItemStack item = player.getInventory().getItem(slot);
+            if (item == null) continue;
+            final Mytems mytems = Mytems.forItem(item);
+            if (mytems == null) continue;
+            plugin.getMytem(mytems).onPlayerAirChange(event, player, item, slot);
+        }
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    private void onPlayerBreakBlock(PlayerBreakBlockEvent event) {
+        if (!event.hasItem()) return;
+        final Mytems mytems = Mytems.forItem(event.getItemStack());
+        if (mytems == null) return;
+        mytems.getMytem().onPlayerBreakBlock(event, event.getPlayer(), event.getItemStack());
+    }
+
+    @EventHandler(priority = EventPriority.HIGH)
+    private void onPlayerChangeBlock(PlayerChangeBlockEvent event) {
+        if (!event.hasItem()) return;
+        final Mytems mytems = Mytems.forItem(event.getItemStack());
+        if (mytems == null) return;
+        mytems.getMytem().onPlayerChangeBlock(event, event.getPlayer(), event.getItemStack());
     }
 }

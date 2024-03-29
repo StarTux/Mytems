@@ -19,6 +19,7 @@ import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import static com.cavetale.core.font.Unicode.subscript;
@@ -80,6 +81,13 @@ public final class Session {
             for (var it : setBonus.getPotionEffects(has)) {
                 player.addPotionEffect(it);
             }
+        }
+        for (EquipmentSlot slot : EquipmentSlot.values()) {
+            final ItemStack item = player.getInventory().getItem(slot);
+            if (item == null) continue;
+            final Mytems mytems = Mytems.forItem(item);
+            if (mytems == null) continue;
+            plugin.getMytem(mytems).onTick(player, item, slot);
         }
     }
 

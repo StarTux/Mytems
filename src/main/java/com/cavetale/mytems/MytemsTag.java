@@ -86,6 +86,9 @@ public final class MytemsTag {
             MytemsCategory.COUNTRY_FLAG,
             MytemsCategory.PRIDE_FLAGS,
         });
+    public static final MytemsTag MINING = new MytemsTag("mining", new MytemsCategory[] {
+            MytemsCategory.HASTY_PICKAXES,
+        });
     public static final MytemsTag EQUIPMENT = new MytemsTag("equipment", new MytemsCategory[] {
             MytemsCategory.EQUIP_AXE,
             MytemsCategory.EQUIP_BASIC_IRON_SET,

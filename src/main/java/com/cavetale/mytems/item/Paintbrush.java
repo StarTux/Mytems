@@ -142,7 +142,7 @@ public final class Paintbrush implements Mytem {
             return;
         }
         Block block = rayTraceResult.getHitBlock();
-        paintBlock(player, block, rayTraceResult.getHitBlockFace());
+        paintBlock(player, block, rayTraceResult.getHitBlockFace(), item);
     }
 
     /**
@@ -152,7 +152,7 @@ public final class Paintbrush implements Mytem {
      * @param face the BlockFace that will display particle effects
      * @return true if the block was updated in any way, false otherwise
      */
-    private boolean paintBlock(Player player, Block targetBlock, BlockFace face) {
+    private boolean paintBlock(Player player, Block targetBlock, BlockFace face, ItemStack itemStack) {
         if (!PlayerBlockAbilityQuery.Action.USE.query(player, targetBlock)) return false;
         BlockColor targetBlockColor = BlockColor.of(targetBlock.getType());
         if (targetBlockColor == null) return false;
@@ -172,7 +172,7 @@ public final class Paintbrush implements Mytem {
             : newMaterial.createBlockData();
         if (BlockMarker.hasId(targetBlock, "paintbrush_canvas")) {
             if (targetBlock.getType() == newBlockData.getMaterial()) return false;
-            new PlayerChangeBlockEvent(player, targetBlock, newBlockData).callEvent();
+            new PlayerChangeBlockEvent(player, targetBlock, newBlockData, itemStack).callEvent();
             targetBlock.setBlockData(newBlockData);
         } else {
             final int maxDist = targetBlock.getWorld().getViewDistance();

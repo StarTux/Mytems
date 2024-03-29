@@ -28,15 +28,15 @@ public final class FertilizerBisectedFlower implements FertilizerGrowth {
     }
 
     @Override
-    public void grow(Player player, Block block) {
+    public void grow(Player player, Block block, ItemStack itemStack) {
         Block above = block.getRelative(0, 1, 0);
         Block abov2 = block.getRelative(0, 2, 0);
         Bisected bdata = (Bisected) material.createBlockData();
         Bisected bdat2 = (Bisected) material.createBlockData();
         bdata.setHalf(Bisected.Half.BOTTOM);
         bdat2.setHalf(Bisected.Half.TOP);
-        new PlayerChangeBlockEvent(player, above, bdata).callEvent();
-        new PlayerChangeBlockEvent(player, abov2, bdat2).callEvent();
+        new PlayerChangeBlockEvent(player, above, bdata, itemStack).callEvent();
+        new PlayerChangeBlockEvent(player, abov2, bdat2, itemStack).callEvent();
         above.setBlockData(bdata, false);
         abov2.setBlockData(bdat2, false);
     }

@@ -155,7 +155,7 @@ public final class TreeChopper implements Mytem {
         default: return;
         }
         event.setCancelled(true);
-        chop.chop(player);
+        chop.chop(player, itemStack);
         session.x = block.getX();
         session.y = block.getY();
         session.z = block.getZ();

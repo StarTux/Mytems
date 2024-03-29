@@ -37,6 +37,7 @@ public enum MytemsCategory {
     FURNITURE,
     GARDENING,
     HALLOWEEN,
+    HASTY_PICKAXES,
     HOURGLASS,
     JOKE,
     KEY,

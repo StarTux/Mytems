@@ -17,6 +17,7 @@ import org.bukkit.block.data.type.Campfire;
 import org.bukkit.block.data.type.Candle;
 import org.bukkit.block.data.type.Light;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 /**
  * Represents a block which light can be drawn from.
@@ -34,11 +35,11 @@ public final class Luminance {
         return drawLightFunc.get();
     }
 
-    public static Luminance of(Player player, Block block) {
+    public static Luminance of(Player player, Block block, ItemStack itemStack) {
         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return null;
         return switch (block.getType()) {
         case FIRE -> new Luminance(15 / 5, () -> {
-                if (!PlayerBreakBlockEvent.call(player, block)) return false;
+                if (!new PlayerBreakBlockEvent(player, block, itemStack).callEvent()) return false;
                 block.setType(Material.AIR);
                 return true;
         });
@@ -52,7 +53,7 @@ public final class Luminance {
             if (!campfire.isLit()) yield null;
             yield new Luminance(15, () -> {
                     campfire.setLit(false);
-                    if (!new PlayerChangeBlockEvent(player, block, campfire).callEvent()) return false;
+                    if (!new PlayerChangeBlockEvent(player, block, campfire, itemStack).callEvent()) return false;
                     block.setBlockData(campfire);
                     return true;
             });
@@ -62,7 +63,7 @@ public final class Luminance {
             if (!campfire.isLit()) yield null;
             yield new Luminance(10, () -> {
                     campfire.setLit(false);
-                    if (!new PlayerChangeBlockEvent(player, block, campfire).callEvent()) return false;
+                    if (!new PlayerChangeBlockEvent(player, block, campfire, itemStack).callEvent()) return false;
                     block.setBlockData(campfire);
                     return true;
             });

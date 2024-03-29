@@ -1,5 +1,6 @@
 package com.cavetale.mytems.util;
 
+import com.cavetale.core.font.GuiOverlay;
 import com.cavetale.mytems.MytemsPlugin;
 import java.util.HashMap;
 import java.util.Map;
@@ -10,6 +11,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -43,6 +45,7 @@ public final class Gui implements InventoryHolder {
     @Getter @Setter private InventoryType inventoryType = null;
     protected boolean locked = false;
     private static final Map<UUID, Gui> GUI_MAP = new HashMap<>();
+    private GuiOverlay.Builder overlayBuilder;
 
     @RequiredArgsConstructor @AllArgsConstructor
     private static final class Slot {
@@ -89,8 +92,8 @@ public final class Gui implements InventoryHolder {
     public Inventory getInventory() {
         if (inventory == null) {
             inventory = inventoryType == null
-                ? Bukkit.getServer().createInventory(this, size, title)
-                : Bukkit.getServer().createInventory(this, inventoryType, title);
+                ? Bukkit.getServer().createInventory(this, size, buildTitle())
+                : Bukkit.getServer().createInventory(this, inventoryType, buildTitle());
             for (int i = 0; i < size; i += 1) {
                 Slot slot = slots.get(i);
                 if (slot != null) {
@@ -201,7 +204,7 @@ public final class Gui implements InventoryHolder {
         }
     }
 
-    void onInventoryDrag(InventoryDragEvent event) {
+    private void onInventoryDrag(InventoryDragEvent event) {
         if (!editable) {
             event.setCancelled(true);
         }
@@ -294,5 +297,33 @@ public final class Gui implements InventoryHolder {
             Gui gui = Gui.of(player);
             if (gui != null) player.closeInventory();
         }
+    }
+
+    private GuiOverlay.Builder getOverlayBuilder() {
+        if (overlayBuilder == null) {
+            overlayBuilder = new GuiOverlay.Builder(size);
+        }
+        return overlayBuilder;
+    }
+
+    public Gui layer(GuiOverlay overlay, TextColor color) {
+        getOverlayBuilder().layer(overlay, color);
+        return this;
+    }
+
+    public Gui highlight(int slot, TextColor color) {
+        getOverlayBuilder().highlightSlot(slot, color);
+        return this;
+    }
+
+    public Gui highlight(int x, int y, TextColor color) {
+        getOverlayBuilder().highlightSlot(x, y, color);
+        return this;
+    }
+
+    public Component buildTitle() {
+        return overlayBuilder != null
+            ? overlayBuilder.title(title).build()
+            : title;
     }
 }

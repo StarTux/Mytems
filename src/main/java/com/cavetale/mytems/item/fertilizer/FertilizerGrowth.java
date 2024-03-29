@@ -9,5 +9,5 @@ public interface FertilizerGrowth {
 
     boolean canGrow(Player player, Block block);
 
-    void grow(Player player, Block block);
+    void grow(Player player, Block block, ItemStack itemStack);
 }

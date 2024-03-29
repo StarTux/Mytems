@@ -57,7 +57,7 @@ public final class NetheriteParityTable implements Mytem {
                 if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) {
                     return;
                 }
-                if (!new PlayerChangeBlockEvent(player, block, Material.BARRIER.createBlockData()).callEvent()) {
+                if (!new PlayerChangeBlockEvent(player, block, Material.BARRIER.createBlockData(), item).callEvent()) {
                     return;
                 }
                 block.setBlockData(Material.BARRIER.createBlockData());

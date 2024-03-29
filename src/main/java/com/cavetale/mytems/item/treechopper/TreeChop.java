@@ -219,7 +219,7 @@ public final class TreeChop {
         return result;
     }
 
-    public void chop(Player player) {
+    public void chop(Player player, ItemStack itemStack) {
         ItemStack axeItem = new ItemStack(Material.NETHERITE_AXE);
         int fortune = tag.getStat(TreeChopperStat.FORTUNE);
         int silk = tag.getStat(TreeChopperStat.SILK);
@@ -245,7 +245,7 @@ public final class TreeChop {
                     for (Block vineBlock : leafBlocks) {
                         if (vineBlock.getType() != Material.VINE) continue;
                         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, vineBlock)) continue;
-                        PlayerBreakBlockEvent.call(player, vineBlock);
+                        if (!new PlayerBreakBlockEvent(player, vineBlock, itemStack).callEvent()) continue;
                         if (pickup > 0) TreeChopListener.target = player.getLocation();
                         vineBlock.breakNaturally(shears, true);
                         TreeChopListener.target = null;
@@ -257,7 +257,7 @@ public final class TreeChop {
                         Block logBlock = logBlocks.get(logBlockIndex++);
                         if (!Tag.LOGS.isTagged(logBlock.getType())) continue;
                         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, logBlock)) continue;
-                        PlayerBreakBlockEvent.call(player, logBlock);
+                        if (!new PlayerBreakBlockEvent(player, logBlock, itemStack).callEvent()) continue;
                         if (pickup > 0) TreeChopListener.target = player.getLocation();
                         logBlock.breakNaturally(axeItem, true);
                         TreeChopListener.target = null;
@@ -282,7 +282,7 @@ public final class TreeChop {
                         Block leafBlock = leafBlocks.get(leafBlockIndex++);
                         if (!Tag.LEAVES.isTagged(leafBlock.getType())) continue;
                         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, leafBlock)) continue;
-                        PlayerBreakBlockEvent.call(player, leafBlock);
+                        if (!new PlayerBreakBlockEvent(player, leafBlock, itemStack).callEvent()) continue;
                         if (pickup > 0) TreeChopListener.target = player.getLocation();
                         leafBlock.breakNaturally(axeItem, true);
                         TreeChopListener.target = null;
@@ -303,7 +303,7 @@ public final class TreeChop {
                         Material saplingType = saplingTypes.size() > 1
                             ? saplingTypes.get(ThreadLocalRandom.current().nextInt(saplingTypes.size()))
                             : saplingTypes.get(0);
-                        new PlayerChangeBlockEvent(player, saplingBlock, saplingType.createBlockData()).callEvent();
+                        if (!new PlayerChangeBlockEvent(player, saplingBlock, saplingType.createBlockData(), itemStack).callEvent()) continue;
                         saplingBlock.setType(saplingType);
                         saplingBlocksPlaced += 1;
                         if (saplingBlocksPlaced >= leafBlocks.size()) break;

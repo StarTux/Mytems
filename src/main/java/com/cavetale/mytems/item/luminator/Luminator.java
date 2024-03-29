@@ -119,7 +119,7 @@ public final class Luminator implements Mytem {
         final int lightAmount = Math.min(light.getMaximumLevel(), tag.light);
         light.setLevel(Math.max(light.getMinimumLevel(), Math.min(light.getMaximumLevel(), lightAmount + oldLight)));
         light.setWaterlogged(water);
-        if (!new PlayerChangeBlockEvent(player, block, light).callEvent()) return;
+        if (!new PlayerChangeBlockEvent(player, block, light, item).callEvent()) return;
         block.setBlockData(light);
         if (player.getGameMode() != GameMode.CREATIVE) {
             tag.light = Math.max(0, tag.light - lightAmount);
@@ -150,10 +150,10 @@ public final class Luminator implements Mytem {
         Block block = event.getClickedBlock();
         LuminatorTag tag = serializeTag(item);
         if (tag.light >= MAX_LIGHT && player.getGameMode() != GameMode.CREATIVE) return;
-        Luminance luminance = Luminance.of(player, block);
+        Luminance luminance = Luminance.of(player, block, item);
         if (luminance == null) {
             block = block.getRelative(event.getBlockFace());
-            luminance = Luminance.of(player, block);
+            luminance = Luminance.of(player, block, item);
             if (luminance == null) return;
         }
         if (!luminance.drawLight()) return;

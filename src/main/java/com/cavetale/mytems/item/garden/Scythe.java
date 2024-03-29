@@ -115,7 +115,7 @@ public final class Scythe implements Mytem, Listener {
         if (player.getGameMode() == GameMode.SPECTATOR) return;
         if (!event.hasBlock()) return;
         event.setUseInteractedBlock(Event.Result.DENY);
-        click(player, event.getClickedBlock());
+        click(player, event.getClickedBlock(), item);
     }
 
     @Override
@@ -124,10 +124,10 @@ public final class Scythe implements Mytem, Listener {
         if (!event.hasBlock()) return;
         event.setUseInteractedBlock(Event.Result.DENY);
         if (!leftClickAllowed) return;
-        click(player, event.getClickedBlock());
+        click(player, event.getClickedBlock(), item);
     }
 
-    private void click(Player player, Block block) {
+    private void click(Player player, Block block, ItemStack itemStack) {
         if (player.getGameMode() != GameMode.CREATIVE && player.getFoodLevel() == 0) {
             player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_BURP, 0.5f, 0.75f);
             player.sendActionBar(text("You are exhausted", RED));
@@ -139,7 +139,7 @@ public final class Scythe implements Mytem, Listener {
                 for (int z = -radius; z <= radius; z += 1) {
                     for (int x = -radius; x <= radius; x += 1) {
                         for (int y = -radius; y <= radius; y += 1) {
-                            if (harvestBlock(player, block.getRelative(x, 0, z))) {
+                            if (harvestBlock(player, block.getRelative(x, 0, z), itemStack)) {
                                 count += 1;
                             }
                         }
@@ -185,7 +185,7 @@ public final class Scythe implements Mytem, Listener {
         }
     }
 
-    private boolean harvestBlock(Player player, Block block) {
+    private boolean harvestBlock(Player player, Block block, ItemStack itemStack) {
         final CropType cropType = CropType.of(block);
         if (cropType == null) return false;
         BlockData data = block.getBlockData();
@@ -193,7 +193,7 @@ public final class Scythe implements Mytem, Listener {
         Ageable ageable = (Ageable) data;
         if (ageable.getAge() != ageable.getMaximumAge()) return false;
         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return false;
-        PlayerBreakBlockEvent.call(player, block);
+        if (!new PlayerBreakBlockEvent(player, block, itemStack).callEvent()) return false;
         SoundGroup snd = block.getBlockSoundGroup();
         block.getWorld().playSound(block.getLocation(), snd.getBreakSound(), snd.getVolume(), snd.getPitch());
         if (player.getGameMode() != GameMode.CREATIVE) {
@@ -206,7 +206,7 @@ public final class Scythe implements Mytem, Listener {
         }
         block.getWorld().spawnParticle(SWEEP_ATTACK, block.getLocation().add(0.5, 0.5, 0.5), 1, 0.0, 0.0, 0.0, 0.0);
         ageable.setAge(0);
-        new PlayerChangeBlockEvent(player, block, ageable).callEvent();
+        new PlayerChangeBlockEvent(player, block, ageable, itemStack).callEvent();
         block.setBlockData(ageable, true);
         return true;
     }

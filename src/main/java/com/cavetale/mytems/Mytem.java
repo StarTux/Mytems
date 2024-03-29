@@ -1,5 +1,7 @@
 package com.cavetale.mytems;
 
+import com.cavetale.core.event.block.PlayerBreakBlockEvent;
+import com.cavetale.core.event.block.PlayerChangeBlockEvent;
 import com.cavetale.mytems.event.combat.DamageCalculationEvent;
 import com.cavetale.mytems.util.Json;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
@@ -9,6 +11,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.entity.EntityAirChangeEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
@@ -105,6 +108,14 @@ public interface Mytem {
     default void onPlayerToggleSneak(PlayerToggleSneakEvent event, Player player, ItemStack item, EquipmentSlot slot) { }
 
     default void onProjectileHitPlayer(ProjectileHitEvent event, Player player, ItemStack item, EquipmentSlot slot) { }
+
+    default void onPlayerAirChange(EntityAirChangeEvent event, Player player, ItemStack item, EquipmentSlot slot) { }
+
+    default void onPlayerBreakBlock(PlayerBreakBlockEvent event, Player player, ItemStack item) { }
+
+    default void onPlayerChangeBlock(PlayerChangeBlockEvent event, Player player, ItemStack item) { }
+
+    default void onTick(Player player, ItemStack item, EquipmentSlot slot) { }
 
     /**
      * These can be overridden entirely.

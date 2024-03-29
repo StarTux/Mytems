@@ -25,9 +25,9 @@ public final class FertilizerFlower implements FertilizerGrowth {
     }
 
     @Override
-    public void grow(Player player, Block block) {
+    public void grow(Player player, Block block, ItemStack itemStack) {
         Block above = block.getRelative(0, 1, 0);
-        new PlayerChangeBlockEvent(player, above, material.createBlockData()).callEvent();
+        new PlayerChangeBlockEvent(player, above, material.createBlockData(), itemStack).callEvent();
         above.setBlockData(material.createBlockData());
     }
 }
