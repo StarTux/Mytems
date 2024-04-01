@@ -42,7 +42,7 @@ import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 @RequiredArgsConstructor @Getter
 public final class WitchBroom implements Mytem, Listener {
-    public static final long MAX_LIFE_TICKS = 20L * 60L * 2L;
+    public static final long MAX_LIFE_TICKS = 20L * 60L * 60L;
     public static final double FLY_SPEED = 0.4;
     private final Mytems key;
     private ItemStack prototype;
