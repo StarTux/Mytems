@@ -101,8 +101,8 @@ public final class MytemsTest {
                                    + "..." + strint((int) max)
                                    + " (" + ((int) max - (int) min + 1) + ")");
                 min = chr;
-                max = chr;
                 System.out.println("GAP " + ((int) chr - (int) max - 1));
+                max = chr;
             }
         }
         System.out.println("Character Range " + strint((int) min)
