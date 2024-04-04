@@ -444,6 +444,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     MOUSE_RIGHT(ForbiddenMytem.class, RED_CONCRETE, 338, (char) 0xF047, UI),
     SHIFT_KEY(ForbiddenMytem.class, LIGHT_GRAY_CONCRETE, 339, (char) 0xF048, UI),
     THUMBS_UP(ForbiddenMytem.class, GREEN_CONCRETE, 340, (char) 0xF049, UI),
+    THUMBS_DOWN(ForbiddenMytem.class, RED_CONCRETE, (char) 0xE24D, UI),
     EYES(ForbiddenMytem.class, ENDER_EYE, 595, (char) 0xF04A, UI),
     CAVETALE_DUNGEON(ForbiddenMytem.class, SPAWNER, 706, (char) 0xF04B, UI),
     RAINBOW_BUTTERFLY(ForbiddenMytem.class, FEATHER, 633, (char) 0xF04C, chrarr(0xF04C, 0xF04D, 0xF04E, 0xF04F, 0xF050, 0xF051, 0xF052, 0xF053), UI, Animation.frametime(8)),
