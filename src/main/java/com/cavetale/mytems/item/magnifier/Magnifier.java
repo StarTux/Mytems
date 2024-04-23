@@ -3,7 +3,6 @@ package com.cavetale.mytems.item.magnifier;
 import com.cavetale.core.struct.Vec3i;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +26,7 @@ import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.font.Unicode.subscript;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
 import static com.cavetale.mytems.MytemsPlugin.sessionOf;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
@@ -51,7 +51,7 @@ public final class Magnifier implements Mytem {
                 text.addAll(Text.wrapLore(line, c -> c.color(GRAY)));
                 text.add(empty());
                 text.add(textOfChildren(Mytems.MOUSE_RIGHT, text(" (Un)scramble sign", GRAY)));
-                Items.text(meta, text);
+                tooltip(meta, text);
                 key.markItemMeta(meta);
             });
     }

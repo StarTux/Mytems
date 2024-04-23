@@ -7,7 +7,6 @@ import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Attr;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import java.time.Duration;
@@ -36,6 +35,8 @@ import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
+import static com.cavetale.mytems.util.Items.deserialize;
+import static com.cavetale.mytems.util.Items.tooltip;
 
 /**
  * Easter equipment.
@@ -54,13 +55,13 @@ public abstract class EasterGear implements GearItem {
     public final void enable() {
         displayName = fancify(getRawDisplayName());
         if (getSerialized() != null) {
-            prototype = Items.deserialize(getSerialized());
+            prototype = deserialize(getSerialized());
         } else {
             prototype = new ItemStack(key.material);
         }
         baseLore = Text.wrapLore("\n\n" + getDescription(), cb -> cb.color(PINK_CHAT_COLOR));
         prototype.editMeta(meta -> {
-                Items.text(meta, createTooltip());
+                tooltip(meta, createTooltip());
                 if (meta instanceof Repairable) {
                     ((Repairable) meta).setRepairCost(9999);
                     meta.setUnbreakable(true);

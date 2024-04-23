@@ -12,7 +12,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import static com.cavetale.core.font.Unicode.tiny;
-import static com.cavetale.mytems.util.Items.text;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
@@ -59,7 +59,7 @@ public final class WateringCanTag extends MytemTag {
                 if (waterLeft > 0) {
                     tooltip.add(join(noSeparators(), text(tiny("water "), GRAY), text(waterLeft, BLUE)));
                 }
-                text(meta, tooltip);
+                tooltip(meta, tooltip);
                 int maxDamage = itemStack.getType().getMaxDurability();
                 if (maxDamage > 0 && meta instanceof Damageable damageable) {
                     damageable.setDamage((water * maxDamage) / maxWater);

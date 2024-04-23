@@ -2,7 +2,6 @@ package com.cavetale.mytems.item;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +12,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static com.cavetale.mytems.util.Text.toCamelCase;
 import static net.kyori.adventure.text.Component.text;
 
@@ -28,7 +28,7 @@ public final class Ingredient implements Mytem {
         displayName = text(toCamelCase(key, " "), COLOR);
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.text(meta, List.of(displayName));
+                tooltip(meta, List.of(displayName));
                 meta.addItemFlags(ItemFlag.values());
                 key.markItemMeta(meta);
             });

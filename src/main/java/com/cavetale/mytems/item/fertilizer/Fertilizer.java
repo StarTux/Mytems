@@ -6,7 +6,6 @@ import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Gui;
-import com.cavetale.mytems.util.Items;
 import com.destroystokyo.paper.MaterialSetTag;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -23,6 +22,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
@@ -41,7 +41,7 @@ public final class Fertilizer implements Mytem {
         this.displayName = text("Fertilizer", GREEN);
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.text(meta, List.of(new Component[] {
+                tooltip(meta, List.of(new Component[] {
                             displayName,
                             join(noSeparators(),
                                  Mytems.SHIFT_KEY.component,

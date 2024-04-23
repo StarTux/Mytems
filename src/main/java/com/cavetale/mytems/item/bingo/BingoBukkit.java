@@ -5,7 +5,6 @@ import com.cavetale.core.event.block.PlayerChangeBlockEvent;
 import com.cavetale.core.util.Json;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import java.util.List;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -27,6 +26,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.RayTraceResult;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static java.util.Objects.requireNonNull;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
@@ -55,7 +55,7 @@ public final class BingoBukkit implements Mytem {
                            textOfChildren(Mytems.MOUSE_RIGHT, text(" Fill or place", GRAY)),
                            textOfChildren(Mytems.SHIFT_KEY, Mytems.MOUSE_RIGHT, text(" Place", GRAY)));
         prototype.editMeta(meta -> {
-                Items.text(meta, baseText);
+                tooltip(meta, baseText);
                 meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES);
                 key.markItemMeta(meta);
             });

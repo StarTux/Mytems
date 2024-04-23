@@ -18,7 +18,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.font.Unicode.tiny;
-import static com.cavetale.mytems.util.Items.text;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 import static org.bukkit.Particle.*;

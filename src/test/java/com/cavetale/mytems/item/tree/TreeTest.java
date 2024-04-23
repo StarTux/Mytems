@@ -2,8 +2,8 @@ package com.cavetale.mytems.item.tree;
 
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsCategory;
-import static org.junit.Assert.assertNotNull;
 import org.junit.Test;
+import static org.junit.Assert.assertNotNull;
 
 public final class TreeTest {
     @Test

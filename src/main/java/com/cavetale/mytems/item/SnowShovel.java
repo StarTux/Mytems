@@ -4,7 +4,6 @@ import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.event.block.PlayerBreakBlockEvent;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.util.List;
 import lombok.Getter;
@@ -20,6 +19,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.mytems.util.Items.tooltip;
+import static com.cavetale.mytems.util.Items.unbreakable;
 import static org.bukkit.Particle.*;
 
 @RequiredArgsConstructor @Getter
@@ -37,11 +38,11 @@ public final class SnowShovel implements Mytem {
                 meta.setUnbreakable(true);
                 meta.displayName(displayName);
                 meta.addItemFlags(ItemFlag.values());
-                Items.text(meta,
+                tooltip(meta,
                            List.of(displayName,
                                    Component.text("Plow snow in a", NamedTextColor.GRAY),
                                    Component.text(RADIUS + " block radius!", NamedTextColor.GRAY)));
-                Items.unbreakable(meta);
+                unbreakable(meta);
                 key.markItemMeta(meta);
             });
     }

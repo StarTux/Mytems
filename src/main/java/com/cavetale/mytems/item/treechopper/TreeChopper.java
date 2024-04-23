@@ -9,7 +9,6 @@ import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Gui;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.util.ArrayList;
 import java.util.List;
@@ -36,6 +35,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.exploits.PlayerPlacedBlocks.isPlayerPlaced;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
@@ -57,7 +57,7 @@ public final class TreeChopper implements Mytem {
         this.displayName = text("Tree Chopper", ALLGREEN);
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.text(meta, makeItemTooltip(new TreeChopperTag()));
+                tooltip(meta, makeItemTooltip(new TreeChopperTag()));
                 meta.setUnbreakable(true);
                 meta.addItemFlags(ItemFlag.values());
                 key.markItemMeta(meta);
@@ -174,7 +174,7 @@ public final class TreeChopper implements Mytem {
             xp = Math.min(upgradeCost, xp + xpBonus);
             tag.setStat(TreeChopperStat.XP, xp);
             tag.store(itemStack);
-            Items.text(itemStack, makeItemTooltip(tag));
+            tooltip(itemStack, makeItemTooltip(tag));
         }
         if (xp >= upgradeCost) {
             Component msg = join(noSeparators(),
@@ -307,7 +307,7 @@ public final class TreeChopper implements Mytem {
         ItemStack itemStack = createItemStack();
         TreeChopperTag tag = Json.deserialize(serialized, TreeChopperTag.class, TreeChopperTag::new);
         tag.store(itemStack);
-        Items.text(itemStack, makeItemTooltip(tag));
+        tooltip(itemStack, makeItemTooltip(tag));
         return itemStack;
     }
 
@@ -327,7 +327,7 @@ public final class TreeChopper implements Mytem {
         int oldValue = tag.getStat(stat);
         tag.setStat(stat, value);
         tag.store(itemStack);
-        Items.text(itemStack, makeItemTooltip(tag));
+        tooltip(itemStack, makeItemTooltip(tag));
         int newValue = tag.getStat(stat);
         player.sendMessage(text(stat.displayName + " changed from " + oldValue + " to " + newValue, YELLOW));
         return true;
@@ -345,7 +345,7 @@ public final class TreeChopper implements Mytem {
             tag.setStat(stat, stat.maxLevel);
         }
         tag.store(itemStack);
-        Items.text(itemStack, makeItemTooltip(tag));
+        tooltip(itemStack, makeItemTooltip(tag));
         player.sendMessage(text("Your Tree Chopper was maxed out", YELLOW));
         return true;
     }
@@ -390,7 +390,7 @@ public final class TreeChopper implements Mytem {
             ItemStack icon = maxLevelExceeded
                 ? Mytems.STAR.createIcon()
                 : locked ? Mytems.COPPER_KEYHOLE.createIcon() : stat.icon.get();
-            Items.text(icon, tooltip);
+            tooltip(icon, tooltip);
             int itemIndex = i++;
             gui.setItem(itemIndex, icon, click -> {
                     if (!click.isLeftClick()) return;
@@ -424,7 +424,7 @@ public final class TreeChopper implements Mytem {
         level += 1;
         tag.setStat(stat, level);
         tag.store(itemStack);
-        Items.text(itemStack, makeItemTooltip(tag));
+        tooltip(itemStack, makeItemTooltip(tag));
         player.showTitle(Title.title(text(stat.displayName, ALLGREEN),
                                      text("Level " + level, WHITE)));
         player.playSound(player.getLocation(),

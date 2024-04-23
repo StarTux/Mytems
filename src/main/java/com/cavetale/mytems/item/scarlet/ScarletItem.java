@@ -7,7 +7,6 @@ import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Skull;
 import com.cavetale.mytems.util.Text;
 import java.util.List;
@@ -24,8 +23,8 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.block.Banner;
 import org.bukkit.block.banner.Pattern;
 import org.bukkit.block.banner.PatternType;
@@ -43,6 +42,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 import static com.cavetale.mytems.util.Attr.of;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static org.bukkit.attribute.Attribute.*;
 import static org.bukkit.attribute.AttributeModifier.Operation.*;
 
@@ -65,7 +65,7 @@ public abstract class ScarletItem implements GearItem {
     public final void enable() {
         baseLore = Text.wrapLore(description, c -> c.color(NamedTextColor.GRAY));
         prototype.editMeta(meta -> {
-                Items.text(meta, createTooltip());
+                tooltip(meta, createTooltip());
                 if (meta instanceof Repairable) {
                     ((Repairable) meta).setRepairCost(9999);
                     meta.setUnbreakable(true);

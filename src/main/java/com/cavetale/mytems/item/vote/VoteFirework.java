@@ -2,7 +2,6 @@ package com.cavetale.mytems.item.vote;
 
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
-import com.cavetale.mytems.util.Items;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -24,6 +23,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.FireworkMeta;
+import static com.cavetale.mytems.util.Items.tooltip;
 
 public final class VoteFirework extends VoteItem implements Listener {
     private UUID fireworkUser;
@@ -45,7 +45,7 @@ public final class VoteFirework extends VoteItem implements Listener {
         text.add(Component.text("magical effects!").color(NamedTextColor.GRAY));
         text.add(Component.empty());
         text.addAll(baseLore);
-        Items.text(meta, text);
+        tooltip(meta, text);
         meta.addEffect(FireworkEffect.builder().withColor(Color.RED).build());
         meta.addItemFlags(ItemFlag.values());
         meta.addItemFlags(ItemFlag.values());

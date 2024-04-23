@@ -3,7 +3,6 @@ package com.cavetale.mytems.item;
 import com.cavetale.core.font.Unicode;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Skull;
 import java.util.List;
 import java.util.Objects;
@@ -20,6 +19,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
@@ -67,7 +67,7 @@ public final class DiceItem implements Mytem {
                        text("to announce the", DARK_GRAY),
                        text("result locally", DARK_GRAY));
         prototype.editMeta(meta -> {
-                Items.text(meta, text);
+                tooltip(meta, text);
                 key.markItemMeta(meta);
             });
     }

@@ -3,7 +3,6 @@ package com.cavetale.mytems.item.hourglass;
 import com.cavetale.core.font.Unicode;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.font.Unicode.tiny;
 import static com.cavetale.core.util.CamelCase.toCamelCase;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static java.util.Objects.requireNonNull;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.space;
@@ -48,7 +48,7 @@ public final class Hourglass implements Mytem {
                 txt.addAll(Text.wrapLore(tiny(type.description), c -> c.color(GRAY)));
                 txt.add(empty());
                 txt.add(textOfChildren(Mytems.MOUSE_RIGHT, text(" " + type.rightClickLine, GRAY)));
-                Items.text(meta, txt);
+                tooltip(meta, txt);
                 key.markItemMeta(meta);
             });
     }

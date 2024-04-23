@@ -2,7 +2,6 @@ package com.cavetale.mytems.item.halloween;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.util.List;
 import lombok.Getter;
@@ -11,6 +10,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.mytems.util.Items.tooltip;
 
 @RequiredArgsConstructor @Getter
 public final class HalloweenCandy implements Mytem {
@@ -24,9 +24,9 @@ public final class HalloweenCandy implements Mytem {
         this.displayName = Component.text(Text.toCamelCase(key, " "), COLOR);
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.text(meta, List.of(displayName,
-                                         Component.text("Trade in for", NamedTextColor.GRAY),
-                                         Component.text("Halloween Tokens!", NamedTextColor.GRAY)));
+                tooltip(meta, List.of(displayName,
+                                      Component.text("Trade in for", NamedTextColor.GRAY),
+                                      Component.text("Halloween Tokens!", NamedTextColor.GRAY)));
                 key.markItemMeta(meta);
             });
     }

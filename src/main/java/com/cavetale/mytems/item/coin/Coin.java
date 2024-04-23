@@ -6,7 +6,6 @@ import com.cavetale.core.money.Money;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.worldmarker.util.Tags;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
@@ -27,6 +26,7 @@ import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.util.CamelCase.toCamelCase;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.newline;
@@ -56,12 +56,12 @@ public final class Coin implements Mytem {
     public void enable() {
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.text(meta, List.of(displayName,
-                                         text("Worth " + formatHelper(denomination.value) + " Coins", denomination.color),
-                                         empty(),
-                                         textOfChildren(Mytems.MOUSE_RIGHT, text(" or pick up", GRAY)),
-                                         textOfChildren(text("to deposit ", GRAY), key, text(" to", GRAY)),
-                                         text("your account", GRAY)));
+                tooltip(meta, List.of(displayName,
+                                      text("Worth " + formatHelper(denomination.value) + " Coins", denomination.color),
+                                      empty(),
+                                      textOfChildren(Mytems.MOUSE_RIGHT, text(" or pick up", GRAY)),
+                                      textOfChildren(text("to deposit ", GRAY), key, text(" to", GRAY)),
+                                      text("your account", GRAY)));
                 key.markItemMeta(meta);
             });
     }

@@ -6,7 +6,6 @@ import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
 import com.cavetale.core.font.VanillaPaintings;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -30,6 +29,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.util.CamelCase.toCamelCase;
 import static com.cavetale.mytems.MytemsPlugin.sessionOf;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
@@ -46,12 +46,12 @@ public final class MonkeyWrench implements Mytem {
         this.key = key;
         this.prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.text(meta, List.of(displayName,
-                                         text("Modify blocks without", GRAY),
-                                         text("picking them up.", GRAY),
-                                         empty(),
-                                         textOfChildren(Mytems.MOUSE_LEFT, text(" Switch mode", GRAY)),
-                                         textOfChildren(Mytems.MOUSE_RIGHT, text(" Change block", GRAY))));
+                tooltip(meta, List.of(displayName,
+                                      text("Modify blocks without", GRAY),
+                                      text("picking them up.", GRAY),
+                                      empty(),
+                                      textOfChildren(Mytems.MOUSE_LEFT, text(" Switch mode", GRAY)),
+                                      textOfChildren(Mytems.MOUSE_RIGHT, text(" Change block", GRAY))));
                 meta.setUnbreakable(true);
                 meta.addItemFlags(ItemFlag.values());
                 key.markItemMeta(meta);

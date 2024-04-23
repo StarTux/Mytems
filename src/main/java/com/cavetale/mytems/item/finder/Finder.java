@@ -9,7 +9,6 @@ import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Gui;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -32,6 +31,7 @@ import org.bukkit.inventory.meta.CompassMeta;
 import static com.cavetale.core.font.Unicode.tiny;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
 import static com.cavetale.mytems.MytemsPlugin.sessionOf;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static java.util.Objects.requireNonNull;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.space;
@@ -72,7 +72,7 @@ public final class Finder implements Mytem {
                 txt.add(empty());
                 txt.add(textOfChildren(text(tiny("range "), GRAY), text(type.range + " blocks", type.color)));
                 txt.add(textOfChildren(Mytems.MOUSE_RIGHT, text(" Find Structures", GRAY)));
-                Items.text(meta, txt);
+                tooltip(meta, txt);
                 key.markItemMeta(meta);
             });
     }
@@ -141,7 +141,7 @@ public final class Finder implements Mytem {
                 : 9 + (nextSlot++);
             ItemStack icon = found.type().iconSupplier.get();
             icon.editMeta(meta -> {
-                    Items.text(meta, List.of(text(found.type().displayName, found.type().type.color),
+                    tooltip(meta, List.of(text(found.type().displayName, found.type().type.color),
                                              textOfChildren(text(tiny("distance ca"), GRAY), text(" " + found.distance() + " blocks", WHITE)),
                                              textOfChildren(Mytems.MOUSE_LEFT, text(" Locate", GRAY))));
                     meta.addItemFlags(ItemFlag.values());
@@ -157,7 +157,7 @@ public final class Finder implements Mytem {
                                 meta.displayName(text(found.type().displayName, type.color));
                             }
                         });
-                    gui.setItem(4, Items.text(item.clone(), info));
+                    gui.setItem(4, tooltip(item.clone(), info));
                     player.sendActionBar(textOfChildren(displayName, text(" points toward " + found.type().displayName)));
                     player.playSound(location, Sound.BLOCK_LEVER_CLICK, SoundCategory.MASTER, 1.0f, 1.0f);
                 });

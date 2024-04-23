@@ -5,7 +5,6 @@ import com.cavetale.core.font.VanillaItems;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.item.font.Glyph;
 import com.cavetale.mytems.util.Gui;
-import com.cavetale.mytems.util.Items;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -19,6 +18,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.font.Unicode.subscript;
 import static com.cavetale.core.font.Unicode.superscript;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
@@ -79,15 +79,15 @@ public final class ArcadeTNTSweeper {
                                                               textOfChildren(Mytems.MOUSE_RIGHT, text(" Mark", GRAY))));
                 } else if (cell == TNT) {
                     if (state == State.LOSE) {
-                        icon = Items.text(new ItemStack(Material.TNT),
-                                          List.of(text("Boom! You lost.", RED)));
+                        icon = tooltip(new ItemStack(Material.TNT),
+                                       List.of(text("Boom! You lost.", RED)));
                     } else {
                         icon = Mytems.CHECKBOX.createIcon(List.of(textOfChildren(Mytems.MOUSE_LEFT, text(" Reveal", GRAY)),
                                                                   textOfChildren(Mytems.MOUSE_RIGHT, text(" Mark", GRAY))));
                     }
                 } else if (cell == BOOM) {
-                    icon = Items.text(new ItemStack(Material.TNT),
-                                      List.of(text("Boom! You lost.", RED)));
+                    icon = tooltip(new ItemStack(Material.TNT),
+                                   List.of(text("Boom! You lost.", RED)));
                 } else if (cell == MARKED_EMPTY || cell == MARKED_TNT) {
                     icon = Mytems.CROSSED_CHECKBOX.createIcon(List.of(textOfChildren(Mytems.MOUSE_RIGHT, text(" Unmark", GRAY))));
                 } else {

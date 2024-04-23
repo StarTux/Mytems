@@ -2,13 +2,13 @@ package com.cavetale.mytems.item.easter;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.util.List;
 import java.util.Objects;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.text;
 
 @Getter
@@ -29,7 +29,7 @@ public final class EasterBasket implements Mytem {
         displayName = text(name, color.textColor);
         prototype = color.getBaseItemStack();
         prototype.editMeta(meta -> {
-                Items.text(meta, List.of(displayName));
+                tooltip(meta, List.of(displayName));
                 key.markItemMeta(meta);
             });
     }

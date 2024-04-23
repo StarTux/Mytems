@@ -5,8 +5,8 @@ import com.cavetale.mytems.util.Skull;
 import java.util.UUID;
 import lombok.Getter;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 

@@ -1,14 +1,13 @@
 package com.cavetale.mytems.item.music;
 
 import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
-import com.cavetale.core.event.player.PluginPlayerEvent.Detail;
 import com.cavetale.core.event.player.PluginPlayerEvent;
+import com.cavetale.core.event.player.PluginPlayerEvent.Detail;
 import com.cavetale.core.font.DefaultFont;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.util.Gui;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.util.EnumMap;
 import java.util.List;
@@ -40,6 +39,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import static com.cavetale.core.font.Unicode.tiny;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
@@ -80,7 +80,7 @@ public final class HyruleInstrument implements Mytem {
                                                      text(" Play the " + Text.toCamelCase(type, " ") + "!", GRAY)));
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.text(meta, tooltip);
+                tooltip(meta, tooltip);
                 meta.addItemFlags(ItemFlag.values());
                 key.markItemMeta(meta);
             });
@@ -166,7 +166,7 @@ public final class HyruleInstrument implements Mytem {
                    .build());
         for (Button button : Button.values()) {
             ItemStack icon = button.mytems.createItemStack();
-            Items.text(icon, List.of(join(noSeparators(),
+            tooltip(icon, List.of(join(noSeparators(),
                                           text(button.tone.name(), GOLD),
                                           Mytems.MOUSE_LEFT),
                                      join(noSeparators(),

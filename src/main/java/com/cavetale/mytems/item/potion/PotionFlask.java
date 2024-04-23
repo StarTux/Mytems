@@ -2,7 +2,6 @@ package com.cavetale.mytems.item.potion;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -14,6 +13,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerItemConsumeEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.PotionMeta;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static java.awt.Color.HSBtoRGB;
 import static org.bukkit.Color.fromRGB;
 
@@ -28,7 +28,7 @@ public final class PotionFlask implements Mytem {
         this.displayName = Component.text(Text.toCamelCase(key, " "));
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.text(meta, List.of(displayName));
+                tooltip(meta, List.of(displayName));
                 key.markItemMeta(meta);
             });
     }

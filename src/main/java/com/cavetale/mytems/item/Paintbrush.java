@@ -7,7 +7,6 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.BlockColor;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import com.cavetale.worldmarker.block.BlockMarker;
 import java.time.Duration;
@@ -32,6 +31,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.RayTraceResult;
 import static com.cavetale.core.font.Unicode.tiny;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
@@ -114,7 +114,7 @@ public final class Paintbrush implements Mytem {
                                  text(" Paint", GRAY)));
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.text(meta, text);
+                tooltip(meta, text);
                 meta.addItemFlags(ItemFlag.values());
                 key.markItemMeta(meta);
             });

@@ -5,7 +5,6 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Skull;
 import com.cavetale.mytems.util.Text;
 import java.util.List;
@@ -27,6 +26,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static com.cavetale.mytems.util.LeatherArmor.leatherArmor;
 import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
@@ -107,7 +107,7 @@ public abstract class BeeCostume implements GearItem {
     @Override
     public final void enable() {
         prototype.editMeta(meta -> {
-                Items.text(meta, createTooltip());
+                tooltip(meta, createTooltip());
                 key.markItemMeta(meta);
             });
     }

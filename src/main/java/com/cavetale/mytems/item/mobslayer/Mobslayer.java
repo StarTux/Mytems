@@ -3,7 +3,6 @@ package com.cavetale.mytems.item.mobslayer;
 import com.cavetale.core.font.Unicode;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +11,7 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.font.Unicode.tiny;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static com.cavetale.mytems.util.Text.roman;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
@@ -50,11 +50,11 @@ public final class Mobslayer implements Mytem {
                     meta.addEnchant(Enchantment.SWEEPING_EDGE, 3, true);
                     meta.addEnchant(Enchantment.FIRE_ASPECT, 2, true);
                 }
-                Items.text(meta, List.of(displayName,
-                                         empty(),
-                                         text(tiny("Neither living nor dead"), red),
-                                         text(tiny("may escape the wrath"), red),
-                                         text(tiny("of this blade."), red)));
+                tooltip(meta, List.of(displayName,
+                                      empty(),
+                                      text(tiny("Neither living nor dead"), red),
+                                      text(tiny("may escape the wrath"), red),
+                                      text(tiny("of this blade."), red)));
                 meta.setUnbreakable(true);
                 key.markItemMeta(meta);
             });

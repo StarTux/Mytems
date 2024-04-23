@@ -4,7 +4,6 @@ import com.cavetale.core.connect.Connect;
 import com.cavetale.core.util.Json;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +11,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
@@ -34,7 +34,7 @@ public final class FarawayMap implements Mytem {
                                        text("be revealed when", GRAY),
                                        text("you return there.", GRAY));
         prototype.editMeta(meta -> {
-                Items.text(meta, text);
+                tooltip(meta, text);
                 key.markItemMeta(meta);
             });
     }

@@ -3,7 +3,6 @@ package com.cavetale.mytems.item.upgradable;
 import com.cavetale.core.struct.Vec2i;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Gui;
-import com.cavetale.mytems.util.Items;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
@@ -13,6 +12,7 @@ import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
@@ -42,8 +42,8 @@ public final class UpgradableItemMenu {
                 // Cannot have because it requires higher tier
                 final UpgradableItemTier requiredTier = upgradableItem.getTier(stat.getLevel(1).getRequiredTier());
                 final Mytems mytems = requiredTier.getMytems();
-                icon = Items.text(Mytems.QUESTION_MARK.createIcon(),
-                                  List.of(textOfChildren(text("Requires ", DARK_GRAY), mytems.component, mytems.getMytem().getDisplayName())));
+                icon = tooltip(Mytems.QUESTION_MARK.createIcon(),
+                               List.of(textOfChildren(text("Requires ", DARK_GRAY), mytems.component, mytems.getMytem().getDisplayName())));
             } else if (level == null && tag.hasConflicts(stat)) {
                 // Conflicts with unlocked stat
                 final List<UpgradableStat> conflicts = tag.getUnlockedConflicts(stat);
@@ -51,9 +51,9 @@ public final class UpgradableItemMenu {
                 for (UpgradableStat conflict : conflicts) {
                     names.add(conflict.getTitle());
                 }
-                icon = Items.text(Mytems.NO.createIcon(),
-                                  List.of(text("Conflicts with ", DARK_GRAY),
-                                          join(separator(text(", ", DARK_GRAY)), names)));
+                icon = tooltip(Mytems.NO.createIcon(),
+                               List.of(text("Conflicts with ", DARK_GRAY),
+                                       join(separator(text(", ", DARK_GRAY)), names)));
             } else if (level == null) {
                 // Not unlocked but unlockable
                 List<Component> tooltip = new ArrayList<>();
@@ -61,7 +61,7 @@ public final class UpgradableItemMenu {
                 tooltip.addAll(stat.getLevel(1).getDescription());
                 tooltip.add(textOfChildren(Mytems.MOUSE_RIGHT,
                                            text(" Unlock Upgrade")));
-                icon = Items.text(stat.getIcon(), tooltip);
+                icon = tooltip(stat.getIcon(), tooltip);
             } else {
                 // Level != null
                 List<Component> tooltip = new ArrayList<>();
@@ -85,7 +85,7 @@ public final class UpgradableItemMenu {
                                                    text(" Unlock Level " + nextLevel.getLevel(), GRAY)));
                     }
                 }
-                icon = Items.text(stat.getIcon(), tooltip);
+                icon = tooltip(stat.getIcon(), tooltip);
             }
             final Vec2i slot = stat.getGuiSlot();
             gui.setItem(slot.x, slot.z, icon, click -> {

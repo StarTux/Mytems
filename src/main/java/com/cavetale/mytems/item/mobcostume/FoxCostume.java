@@ -6,7 +6,6 @@ import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.item.music.PlayerPlayInstrumentEvent;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Skull;
 import com.cavetale.mytems.util.Text;
 import java.util.List;
@@ -24,6 +23,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static com.cavetale.mytems.util.LeatherArmor.leatherArmor;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
@@ -93,7 +93,7 @@ public abstract class FoxCostume implements GearItem {
     @Override
     public final void enable() {
         prototype.editMeta(meta -> {
-                Items.text(meta, createTooltip());
+                tooltip(meta, createTooltip());
                 key.markItemMeta(meta);
             });
     }

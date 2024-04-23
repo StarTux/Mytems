@@ -2,7 +2,6 @@ package com.cavetale.mytems.item.deflector;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +25,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 import static com.cavetale.core.font.Unicode.tiny;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
@@ -54,7 +54,7 @@ public final class DeflectorShield implements Mytem {
                 txt.addAll(Text.wrapLore(type.description, c -> c.color(GRAY)));
                 txt.add(empty());
                 txt.add(textOfChildren(text(tiny("cooldown"), GRAY), text(" " + type.cooldown.toSeconds() + "s", WHITE)));
-                Items.text(meta, txt);
+                tooltip(meta, txt);
                 meta.addItemFlags(ItemFlag.values());
                 ((Repairable) meta).setUnbreakable(true);
                 key.markItemMeta(meta);

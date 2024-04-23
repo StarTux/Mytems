@@ -3,8 +3,8 @@ package com.cavetale.mytems.item.bingo;
 import com.cavetale.mytems.Mytems;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
-import static net.kyori.adventure.text.Component.text;
 import net.kyori.adventure.text.format.NamedTextColor;
+import static net.kyori.adventure.text.Component.text;
 
 @RequiredArgsConstructor
 public enum BingoBukkitType {

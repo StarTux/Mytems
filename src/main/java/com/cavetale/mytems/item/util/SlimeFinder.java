@@ -4,7 +4,6 @@ import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.font.VanillaItems;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import java.util.List;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -17,6 +16,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
@@ -39,15 +39,15 @@ public final class SlimeFinder implements Mytem {
         assert key.material == Material.SLIME_BALL;
         this.prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.text(meta, List.of(displayName,
-                                         text("Gloopert", DARK_GRAY, ITALIC),
-                                         text("Find chunks which are", GRAY),
-                                         text("able to spawn slimes.", GRAY),
-                                         empty(),
-                                         text("Slime chunks can spawn", GRAY),
-                                         text("slimes below Y level " + MAX_HEIGHT + ".", GRAY),
-                                         empty(),
-                                         join(noSeparators(), Mytems.MOUSE_RIGHT, text(" Check chunk", GRAY))));
+                tooltip(meta, List.of(displayName,
+                                      text("Gloopert", DARK_GRAY, ITALIC),
+                                      text("Find chunks which are", GRAY),
+                                      text("able to spawn slimes.", GRAY),
+                                      empty(),
+                                      text("Slime chunks can spawn", GRAY),
+                                      text("slimes below Y level " + MAX_HEIGHT + ".", GRAY),
+                                      empty(),
+                                      join(noSeparators(), Mytems.MOUSE_RIGHT, text(" Check chunk", GRAY))));
                 key.markItemMeta(meta);
             });
     }

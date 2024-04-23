@@ -3,7 +3,6 @@ package com.cavetale.mytems.item.spleef;
 import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.Getter;
@@ -21,6 +20,8 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.font.Unicode.tiny;
 import static com.cavetale.mytems.MytemsPlugin.blockBreakListener;
+import static com.cavetale.mytems.util.Items.tooltip;
+import static com.cavetale.mytems.util.Items.unbreakable;
 import static java.util.Objects.requireNonNull;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
@@ -52,9 +53,9 @@ public final class SpleefShovel implements Mytem {
                                                text(tiny("a little extra hunger"), GRAY),
                                                empty(),
                                                textOfChildren(text(tiny("range "), GRAY), text(type.range, type.color)));
-                Items.unbreakable(meta);
+                unbreakable(meta);
                 meta.addItemFlags(ItemFlag.values());
-                Items.text(meta, text);
+                tooltip(meta, text);
                 key.markItemMeta(meta);
             });
         this.silkTouch = new ItemStack(Material.NETHERITE_SHOVEL);

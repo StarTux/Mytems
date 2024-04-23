@@ -7,7 +7,6 @@ import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.util.BlockColor;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Skull;
 import com.cavetale.mytems.util.Text;
 import java.util.List;
@@ -26,6 +25,7 @@ import org.bukkit.event.player.PlayerShearEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static com.cavetale.mytems.util.LeatherArmor.leatherArmor;
 import static java.awt.Color.HSBtoRGB;
 import static net.kyori.adventure.text.Component.text;
@@ -107,7 +107,7 @@ public abstract class SheepCostume implements GearItem {
     @Override
     public final void enable() {
         prototype.editMeta(meta -> {
-                Items.text(meta, createTooltip());
+                tooltip(meta, createTooltip());
                 key.markItemMeta(meta);
             });
     }

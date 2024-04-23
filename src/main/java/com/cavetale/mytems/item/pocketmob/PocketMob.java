@@ -4,7 +4,6 @@ import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsCategory;
 import com.cavetale.mytems.MytemsPlugin;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Json;
 import com.cavetale.mytems.util.Text;
 import io.papermc.paper.event.block.BlockPreDispenseEvent;
@@ -24,6 +23,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import static com.cavetale.mytems.util.Items.tooltip;
 
 @Getter
 public final class PocketMob implements Mytem, Listener {
@@ -52,7 +52,7 @@ public final class PocketMob implements Mytem, Listener {
         displayName = Component.text(Text.toCamelCase(key, " "));
         prototype = new ItemStack(key.material).ensureServerConversions();
         ItemMeta meta = prototype.getItemMeta();
-        Items.text(meta, List.of(displayName));
+        tooltip(meta, List.of(displayName));
         key.markItemMeta(meta);
         prototype.setItemMeta(meta);
         Bukkit.getPluginManager().registerEvents(this, MytemsPlugin.getInstance());

@@ -4,7 +4,6 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.util.List;
 import lombok.Getter;
@@ -22,6 +21,8 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import static com.cavetale.mytems.util.Items.deserialize;
+import static com.cavetale.mytems.util.Items.tooltip;
 
 @RequiredArgsConstructor @Getter
 public abstract class SwampyItem implements GearItem {
@@ -34,10 +35,10 @@ public abstract class SwampyItem implements GearItem {
     @Override
     public final void enable() {
         displayName = fancify(getRawDisplayName());
-        prototype = Items.deserialize(getSerialized());
+        prototype = deserialize(getSerialized());
         baseLore = Text.wrapLore("\n\n" + getDescription(), c -> c.color(NamedTextColor.DARK_GREEN));
         prototype.editMeta(meta -> {
-                Items.text(meta, createTooltip());
+                tooltip(meta, createTooltip());
                 if (meta instanceof Repairable repairable) {
                     repairable.setRepairCost(9999);
                     meta.setUnbreakable(true);

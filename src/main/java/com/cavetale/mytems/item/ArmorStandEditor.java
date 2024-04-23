@@ -3,12 +3,12 @@ package com.cavetale.mytems.item;
 import com.cavetale.core.font.VanillaItems;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
@@ -41,7 +41,7 @@ public final class ArmorStandEditor implements Mytem {
             });
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.text(meta, text);
+                tooltip(meta, text);
                 key.markItemMeta(meta);
             });
     }

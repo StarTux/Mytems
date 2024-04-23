@@ -3,7 +3,6 @@ package com.cavetale.mytems.item.acula;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +15,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Repairable;
 import static com.cavetale.core.font.Unicode.tiny;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
@@ -42,7 +42,7 @@ abstract class AculaItem implements GearItem {
             baseLore.addAll(getUsage());
         }
         prototype.editMeta(meta -> {
-                Items.text(meta, createTooltip());
+                tooltip(meta, createTooltip());
                 meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
                 if (meta instanceof Repairable repairable) {
                     repairable.setRepairCost(9999);

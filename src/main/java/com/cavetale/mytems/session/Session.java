@@ -9,7 +9,6 @@ import com.cavetale.mytems.gear.Equipped;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.gear.Slot;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.time.Duration;
 import java.util.ArrayList;
@@ -25,6 +24,7 @@ import org.bukkit.inventory.PlayerInventory;
 import static com.cavetale.core.font.Unicode.subscript;
 import static com.cavetale.core.font.Unicode.tiny;
 import static com.cavetale.mytems.MytemsPlugin.sessionOf;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
@@ -100,7 +100,7 @@ public final class Session {
         equipment.loadPlayer(player);
         if (!equipment.isEmpty()) {
             for (Equipped equipped : equipment.getItems()) {
-                Items.text(equipped.itemStack, equipped.gearItem.createTooltip(equipment, equipped));
+                tooltip(equipped.itemStack, equipped.gearItem.createTooltip(equipment, equipped));
             }
         }
         PlayerInventory inventory = player.getInventory();
@@ -123,7 +123,7 @@ public final class Session {
         Mytems mytems = Mytems.forItem(itemStack);
         if (mytems == null) return;
         if (!(mytems.getMytem() instanceof GearItem gearItem)) return;
-        Items.text(itemStack, gearItem.createTooltip());
+        tooltip(itemStack, gearItem.createTooltip());
     }
 
     public void equipmentDidChange() {

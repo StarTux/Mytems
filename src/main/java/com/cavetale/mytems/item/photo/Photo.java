@@ -3,7 +3,6 @@ package com.cavetale.mytems.item.photo;
 import com.cavetale.core.util.Json;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import java.util.List;
 import java.util.function.Function;
 import lombok.Getter;
@@ -13,6 +12,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.MapMeta;
 import org.bukkit.map.MapView;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.TextColor.color;
 
@@ -33,7 +33,7 @@ public final class Photo implements Mytem {
         displayName = text("Photo", color(SEPIA));
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.text(meta, List.of(displayName));
+                tooltip(meta, List.of(displayName));
                 key.markItemMeta(meta);
             });
     }

@@ -6,7 +6,6 @@ import com.cavetale.core.event.player.PluginPlayerQuery;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
-import com.cavetale.mytems.util.Items;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -34,6 +33,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 import static com.cavetale.mytems.MytemsPlugin.sessionOf;
+import static com.cavetale.mytems.util.Items.tooltip;
+import static com.cavetale.mytems.util.Items.unbreakable;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
@@ -64,8 +65,8 @@ public final class WitchBroom implements Mytem, Listener {
                                             text(" Lift off!", GRAY)));
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.unbreakable(meta);
-                Items.text(meta, text);
+                unbreakable(meta);
+                tooltip(meta, text);
                 meta.addItemFlags(ItemFlag.values());
                 key.markItemMeta(meta);
             });

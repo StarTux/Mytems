@@ -3,7 +3,6 @@ package com.cavetale.mytems.item.photo;
 import com.cavetale.core.playercache.PlayerCache;
 import com.cavetale.mytems.MytemTag;
 import com.cavetale.mytems.MytemsPlugin;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.worldmarker.util.Tags;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,6 +17,7 @@ import org.bukkit.map.MapView;
 import org.bukkit.persistence.PersistentDataContainer;
 import static com.cavetale.core.font.Unicode.tiny;
 import static com.cavetale.mytems.item.photo.Photo.SEPIA;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
@@ -75,7 +75,7 @@ public final class PhotoTag extends MytemTag {
                     }
                 }
                 tooltip.add(join(noSeparators(), text(tiny("see "), GRAY), text("/photo", color(SEPIA))));
-                Items.text(meta, tooltip);
+                tooltip(meta, tooltip);
             });
     }
 

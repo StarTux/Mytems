@@ -3,7 +3,6 @@ package com.cavetale.mytems.item.tree;
 import com.cavetale.core.font.Unicode;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,6 +15,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 import static net.kyori.adventure.text.format.TextColor.color;
@@ -47,7 +47,7 @@ public final class TreeSeed implements Mytem {
         text.addAll(Text.wrapLore(description,
                                   s -> s.color(GRAY)));
         prototype.editMeta(meta -> {
-                Items.text(meta, text);
+                tooltip(meta, text);
                 key.markItemMeta(meta);
             });
     }

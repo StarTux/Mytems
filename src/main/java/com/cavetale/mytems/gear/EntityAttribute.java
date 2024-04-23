@@ -8,8 +8,8 @@ import lombok.NoArgsConstructor;
 import org.bukkit.attribute.Attributable;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
-import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.AttributeModifier.Operation;
 import static com.cavetale.mytems.session.Attributes.PREFIX;
 
 /**

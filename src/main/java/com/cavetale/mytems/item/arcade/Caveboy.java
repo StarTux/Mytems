@@ -3,7 +3,6 @@ package com.cavetale.mytems.item.arcade;
 import com.cavetale.core.font.Unicode;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import java.util.List;
 import java.util.Objects;
 import lombok.Getter;
@@ -16,6 +15,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.font.Unicode.tiny;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
@@ -41,14 +41,14 @@ public final class Caveboy implements Mytem {
     public void enable() {
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.text(meta, List.of(displayName,
-                                         text("Caveboy" + Unicode.TRADEMARK.string, DARK_GRAY, ITALIC),
-                                         text("this futuristic handheld", GRAY),
-                                         text("fits into your pocket.", GRAY),
-                                         text(tiny("AA Batteries sold"), GRAY),
-                                         text(tiny("separately."), GRAY),
-                                         empty(),
-                                         textOfChildren(Mytems.MOUSE_LEFT, text(" Play ", GRAY), game.displayName)));
+                tooltip(meta, List.of(displayName,
+                                      text("Caveboy" + Unicode.TRADEMARK.string, DARK_GRAY, ITALIC),
+                                      text("this futuristic handheld", GRAY),
+                                      text("fits into your pocket.", GRAY),
+                                      text(tiny("AA Batteries sold"), GRAY),
+                                      text(tiny("separately."), GRAY),
+                                      empty(),
+                                      textOfChildren(Mytems.MOUSE_LEFT, text(" Play ", GRAY), game.displayName)));
                 meta.addItemFlags(ItemFlag.values());
                 key.markItemMeta(meta);
             });

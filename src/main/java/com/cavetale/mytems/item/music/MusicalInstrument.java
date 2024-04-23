@@ -1,7 +1,7 @@
 package com.cavetale.mytems.item.music;
 
-import com.cavetale.core.event.player.PluginPlayerEvent.Detail;
 import com.cavetale.core.event.player.PluginPlayerEvent;
+import com.cavetale.core.event.player.PluginPlayerEvent.Detail;
 import com.cavetale.core.font.DefaultFont;
 import com.cavetale.core.util.Json;
 import com.cavetale.mytems.Mytem;
@@ -13,7 +13,6 @@ import com.cavetale.mytems.event.music.PlayerMelodyCompleteEvent;
 import com.cavetale.mytems.event.music.PlayerOpenMusicalInstrumentEvent;
 import com.cavetale.mytems.item.font.Glyph;
 import com.cavetale.mytems.util.Gui;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import com.cavetale.worldmarker.util.Tags;
 import java.util.ArrayList;
@@ -47,6 +46,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.scheduler.BukkitTask;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.space;
@@ -99,7 +99,7 @@ public final class MusicalInstrument implements Mytem {
                                text(" Play the " + Text.toCamelCase(type, " ") + "!", GRAY)));
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.text(meta, tooltip);
+                tooltip(meta, tooltip);
                 key.markItemMeta(meta);
             });
     }
@@ -379,7 +379,7 @@ public final class MusicalInstrument implements Mytem {
         Touch touch = privateData.touchOf(button.tone, button.octave);
         if (privateData.hero != null) {
             // Shorten this in hero mode!
-            return Items.text(TONE_MYTEMS_MAP.get(button.tone).createIcon(),
+            return tooltip(TONE_MYTEMS_MAP.get(button.tone).createIcon(),
                               List.of(text(touch.toString(), COLOR)));
         }
         List<Component> text = new ArrayList<>();
@@ -410,7 +410,7 @@ public final class MusicalInstrument implements Mytem {
         }
         text.add(text("Keyboard", COLOR)
                  .append(text(" 1...9", GRAY)));
-        return Items.text(TONE_MYTEMS_MAP.get(button.tone).createIcon(), text);
+        return tooltip(TONE_MYTEMS_MAP.get(button.tone).createIcon(), text);
     }
 
     protected ItemStack makeSemitoneButton(Button button, GuiPrivateData privateData) {
@@ -424,7 +424,7 @@ public final class MusicalInstrument implements Mytem {
         text.add(join(noSeparators(),
                       text("Flatten", COLOR),
                       Mytems.MOUSE_RIGHT));
-        ItemStack icon = Items.text(semitone.mytems.createIcon(), text);
+        ItemStack icon = tooltip(semitone.mytems.createIcon(), text);
         return icon;
     }
 
@@ -564,7 +564,7 @@ public final class MusicalInstrument implements Mytem {
         if (!line.isEmpty()) {
             text.add(join(separator(space()), line));
         }
-        Items.text(meta, text);
+        tooltip(meta, text);
     }
 
     @Override

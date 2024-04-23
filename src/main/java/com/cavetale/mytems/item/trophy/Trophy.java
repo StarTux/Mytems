@@ -2,7 +2,6 @@ package com.cavetale.mytems.item.trophy;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.util.List;
 import lombok.Getter;
@@ -15,6 +14,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 
@@ -35,8 +35,8 @@ public final class Trophy implements Mytem {
     public void enable() {
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.text(meta, List.of(displayName,
-                                         text("Trophy", DARK_GRAY)));
+                tooltip(meta, List.of(displayName,
+                                      text("Trophy", DARK_GRAY)));
                 key.markItemMeta(meta);
             });
     }

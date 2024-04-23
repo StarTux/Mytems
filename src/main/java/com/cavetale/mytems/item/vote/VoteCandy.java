@@ -1,7 +1,6 @@
 package com.cavetale.mytems.item.vote;
 
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import java.util.ArrayList;
 import java.util.List;
 import net.kyori.adventure.text.Component;
@@ -15,6 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import static com.cavetale.mytems.util.Items.tooltip;
 
 public final class VoteCandy extends VoteItem {
     public static final int TIME = 3 * 20 * 60;
@@ -57,7 +57,7 @@ public final class VoteCandy extends VoteItem {
         text.add(Component.text("effects when eaten.").color(NamedTextColor.GRAY));
         text.add(Component.empty());
         text.addAll(baseLore);
-        Items.text(meta, text);
+        tooltip(meta, text);
         prototype.setItemMeta(meta);
         meta.addItemFlags(ItemFlag.values());
         key.markItemMeta(meta);

@@ -3,7 +3,6 @@ package com.cavetale.mytems.item.arcade;
 import com.cavetale.core.font.Unicode;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
@@ -18,6 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
@@ -35,15 +35,15 @@ public final class SealedCaveboy implements Mytem {
         displayName = text("Sealed Caveboy", GRAY);
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.text(meta, List.of(displayName,
-                                         text("Caveboy" + Unicode.TRADEMARK.string, DARK_GRAY, ITALIC),
-                                         text("Mint in the box. This", GRAY),
-                                         text("could be worth something", GRAY),
-                                         text("some day. Or you could", GRAY),
-                                         text("open and play it.", GRAY),
-                                         text("What game could it be?", GRAY),
-                                         empty(),
-                                         textOfChildren(Mytems.MOUSE_LEFT, text(" Unwrap", GRAY))));
+                tooltip(meta, List.of(displayName,
+                                      text("Caveboy" + Unicode.TRADEMARK.string, DARK_GRAY, ITALIC),
+                                      text("Mint in the box. This", GRAY),
+                                      text("could be worth something", GRAY),
+                                      text("some day. Or you could", GRAY),
+                                      text("open and play it.", GRAY),
+                                      text("What game could it be?", GRAY),
+                                      empty(),
+                                      textOfChildren(Mytems.MOUSE_LEFT, text(" Unwrap", GRAY))));
                 meta.addItemFlags(ItemFlag.values());
                 key.markItemMeta(meta);
             });

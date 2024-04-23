@@ -2,7 +2,6 @@ package com.cavetale.mytems.item;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +12,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import static com.cavetale.mytems.util.Items.deserialize;
 
 @RequiredArgsConstructor
 public final class WeddingRing implements Mytem {
@@ -30,7 +30,7 @@ public final class WeddingRing implements Mytem {
 
     @Override
     public void enable() {
-        prototype = Items.deserialize(serialized);
+        prototype = deserialize(serialized);
         ItemMeta meta = prototype.getItemMeta();
         displayName = Component.text("Wedding Ring").color(pink).decoration(TextDecoration.ITALIC, false);
         meta.displayName(displayName);

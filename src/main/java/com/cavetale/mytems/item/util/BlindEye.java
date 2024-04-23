@@ -3,7 +3,6 @@ package com.cavetale.mytems.item.util;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.session.Session;
-import com.cavetale.mytems.util.Items;
 import java.util.List;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
@@ -15,6 +14,7 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.mytems.MytemsPlugin.sessionOf;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
@@ -32,11 +32,11 @@ public final class BlindEye implements Mytem {
         this.displayName = text("Blind Eye", GOLD);
         this.prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Items.text(meta, List.of(displayName,
-                                         text("Hide or show all", GRAY),
-                                         text("other players.", GRAY),
-                                         empty(),
-                                         join(noSeparators(), Mytems.MOUSE_RIGHT, text(" Toggle", GRAY))));
+                tooltip(meta, List.of(displayName,
+                                      text("Hide or show all", GRAY),
+                                      text("other players.", GRAY),
+                                      empty(),
+                                      join(noSeparators(), Mytems.MOUSE_RIGHT, text(" Toggle", GRAY))));
                 key.markItemMeta(meta);
             });
     }

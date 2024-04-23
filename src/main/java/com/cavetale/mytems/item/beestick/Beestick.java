@@ -5,7 +5,6 @@ import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Entities;
-import com.cavetale.mytems.util.Items;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -26,6 +25,7 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.font.Unicode.tiny;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static com.cavetale.mytems.util.Text.wrapLore;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
@@ -54,7 +54,7 @@ public final class Beestick implements Mytem {
         lore.add(empty());
         lore.add(join(noSeparators(), text(tiny("cost "), GRAY), text(hunger + " hunger", GOLD)));
         prototype.editMeta(meta -> {
-                Items.text(meta, lore);
+                tooltip(meta, lore);
                 key.markItemMeta(meta);
             });
     }

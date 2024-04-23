@@ -1,7 +1,6 @@
 package com.cavetale.mytems.item.bingo;
 
 import com.cavetale.mytems.MytemTag;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.worldmarker.util.Tags;
 import java.util.ArrayList;
 import java.util.List;
@@ -12,6 +11,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import static com.cavetale.core.font.Unicode.tiny;
 import static com.cavetale.mytems.MytemsPlugin.namespacedKey;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
@@ -62,7 +62,7 @@ public final class BingoBukkitTag extends MytemTag {
                 }
                 List<Component> text = new ArrayList<>(type.instance.baseText);
                 text.add(textOfChildren(text(tiny("water "), GRAY), text(water + "/" + type.capacity, BLUE)));
-                Items.text(meta, text);
+                tooltip(meta, text);
             });
     }
 

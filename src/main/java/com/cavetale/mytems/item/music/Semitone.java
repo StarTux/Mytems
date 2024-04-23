@@ -2,8 +2,8 @@ package com.cavetale.mytems.item.music;
 
 import com.cavetale.mytems.Mytems;
 import lombok.RequiredArgsConstructor;
-import org.bukkit.Note.Tone;
 import org.bukkit.Note;
+import org.bukkit.Note.Tone;
 
 @RequiredArgsConstructor
 public enum Semitone {

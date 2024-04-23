@@ -4,7 +4,6 @@ import com.cavetale.core.font.GuiOverlay;
 import com.cavetale.core.struct.Vec2i;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Gui;
-import com.cavetale.mytems.util.Items;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -19,6 +18,7 @@ import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.font.Unicode.tiny;
 import static com.cavetale.core.util.CamelCase.toCamelCase;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
@@ -113,11 +113,11 @@ public final class ArcadeGems {
                     swappable = true;
                 }
                 if (swappable) {
-                    icon = Items.text(icon, List.of(text(toCamelCase(" ", gem), AQUA),
-                                                    textOfChildren(Mytems.MOUSE_LEFT, text(" Swap", GRAY))));
+                    icon = tooltip(icon, List.of(text(toCamelCase(" ", gem), AQUA),
+                                                 textOfChildren(Mytems.MOUSE_LEFT, text(" Swap", GRAY))));
                 } else {
-                    icon = Items.text(icon, List.of(text(toCamelCase(" ", gem), AQUA),
-                                                    textOfChildren(Mytems.NO, text(" Cannot swap", RED))));
+                    icon = tooltip(icon, List.of(text(toCamelCase(" ", gem), AQUA),
+                                                 textOfChildren(Mytems.NO, text(" Cannot swap", RED))));
                 }
                 final Vec2i vec = new Vec2i(x, y);
                 gui.setItem(x, y, icon, click -> {

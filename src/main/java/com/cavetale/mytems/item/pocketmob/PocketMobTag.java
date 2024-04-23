@@ -4,7 +4,6 @@ import com.cavetale.mytems.MytemTag;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.BlockColor;
 import com.cavetale.mytems.util.Entities;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import com.cavetale.worldmarker.util.Tags;
 import java.util.ArrayList;
@@ -54,6 +53,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Colorable;
 import org.bukkit.persistence.PersistentDataContainer;
 import static com.cavetale.core.font.Unicode.tiny;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
@@ -114,7 +114,7 @@ public final class PocketMobTag extends MytemTag {
     public void store(ItemMeta meta, PocketMob pocketMob) {
         PersistentDataContainer tag = meta.getPersistentDataContainer();
         if (mob == null) {
-            Items.text(meta, List.of(pocketMob.getDisplayName()));
+            tooltip(meta, List.of(pocketMob.getDisplayName()));
             tag.remove(KEY_MOB);
             return;
         }
@@ -259,7 +259,7 @@ public final class PocketMobTag extends MytemTag {
         } else {
             text.add(1, text(String.join(" ", nameComponents), COLOR_BG));
         }
-        Items.text(meta, text);
+        tooltip(meta, text);
     }
 
     @SuppressWarnings("deprecation")

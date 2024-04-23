@@ -7,7 +7,6 @@ import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.session.Session;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import java.time.Duration;
@@ -29,6 +28,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Repairable;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static java.awt.Color.HSBtoRGB;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
@@ -76,7 +76,7 @@ public final class MagicCape implements Mytem, Listener {
                 }
                 meta.setUnbreakable(true);
                 meta.displayName(displayName);
-                Items.text(meta, tooltip);
+                tooltip(meta, tooltip);
                 key.markItemMeta(meta);
             });
         Bukkit.getPluginManager().registerEvents(this, MytemsPlugin.getInstance());

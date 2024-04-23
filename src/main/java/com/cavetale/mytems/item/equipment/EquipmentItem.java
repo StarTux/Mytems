@@ -2,7 +2,6 @@ package com.cavetale.mytems.item.equipment;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -17,6 +16,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static java.util.Objects.requireNonNull;
 import static net.kyori.adventure.text.Component.text;
 
@@ -48,7 +48,7 @@ public final class EquipmentItem implements Mytem {
                 }
                 meta.setUnbreakable(true);
                 meta.addItemFlags(ItemFlag.values());
-                Items.text(meta, tooltip);
+                tooltip(meta, tooltip);
                 key.markItemMeta(meta);
             });
     }

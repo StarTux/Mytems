@@ -6,7 +6,6 @@ import com.cavetale.mytems.gear.EntityAttribute;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Text;
 import java.util.List;
 import java.util.UUID;
@@ -30,6 +29,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Repairable;
+import static com.cavetale.mytems.util.Items.deserialize;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 
@@ -44,10 +45,10 @@ public abstract class DuneItem implements GearItem {
     @Override
     public final void enable() {
         displayName = fancify(getRawDisplayName());
-        prototype = Items.deserialize(getSerialized());
+        prototype = deserialize(getSerialized());
         baseLore = Text.wrapLore2("\n\n" + getDescription(), DuneItem::fancify);
         prototype.editMeta(meta -> {
-                Items.text(meta, createTooltip());
+                tooltip(meta, createTooltip());
                 if (meta instanceof Repairable repairable) {
                     repairable.setRepairCost(9999);
                     meta.setUnbreakable(true);

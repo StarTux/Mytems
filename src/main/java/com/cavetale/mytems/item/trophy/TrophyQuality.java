@@ -1,8 +1,8 @@
 package com.cavetale.mytems.item.trophy;
 
+import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.format.TextColor;
 import static net.kyori.adventure.text.format.TextColor.color;
-import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public enum TrophyQuality {

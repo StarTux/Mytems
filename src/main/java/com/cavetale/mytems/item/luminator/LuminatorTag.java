@@ -2,13 +2,13 @@ package com.cavetale.mytems.item.luminator;
 
 import com.cavetale.mytems.MytemTag;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.worldmarker.util.Tags;
 import lombok.Getter;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.persistence.PersistentDataContainer;
 import static com.cavetale.mytems.MytemsPlugin.namespacedKey;
+import static com.cavetale.mytems.util.Items.tooltip;
 
 @Getter
 public final class LuminatorTag extends MytemTag {
@@ -48,7 +48,7 @@ public final class LuminatorTag extends MytemTag {
                         damageable.setDamage(Math.max(1, Math.min(max - 1, max - filled)));
                     }
                 }
-                Items.text(meta, ((Luminator) Mytems.LUMINATOR.getMytem()).baseTextWithLight(light));
+                tooltip(meta, ((Luminator) Mytems.LUMINATOR.getMytem()).baseTextWithLight(light));
             });
     }
 

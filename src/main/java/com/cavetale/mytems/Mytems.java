@@ -50,8 +50,8 @@ import com.cavetale.mytems.item.font.GlyphItem;
 import com.cavetale.mytems.item.garden.Scissors;
 import com.cavetale.mytems.item.garden.Scythe;
 import com.cavetale.mytems.item.halloween.HalloweenCandy;
-import com.cavetale.mytems.item.halloween.HalloweenToken2;
 import com.cavetale.mytems.item.halloween.HalloweenToken;
+import com.cavetale.mytems.item.halloween.HalloweenToken2;
 import com.cavetale.mytems.item.hastypickaxe.HastyPickaxe;
 import com.cavetale.mytems.item.hourglass.Hourglass;
 import com.cavetale.mytems.item.luminator.Luminator;
@@ -94,7 +94,6 @@ import com.cavetale.mytems.item.wateringcan.EmptyWateringCan;
 import com.cavetale.mytems.item.wateringcan.WateringCan;
 import com.cavetale.mytems.item.wrench.MonkeyWrench;
 import com.cavetale.mytems.item.yardstick.Yardstick;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Skull;
 import com.cavetale.worldmarker.item.ItemMarker;
 import java.util.ArrayList;
@@ -113,6 +112,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import static com.cavetale.mytems.MytemsCategory.*;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText;
 import static org.bukkit.Material.*;
 
@@ -1313,11 +1313,11 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     }
 
     public ItemStack createIcon(List<Component> text) {
-        return Items.tooltip(createIcon(1), text);
+        return tooltip(createIcon(1), text);
     }
 
     public ItemStack createIcon(int amount, List<Component> text) {
-        return Items.tooltip(createIcon(amount), text);
+        return tooltip(createIcon(amount), text);
     }
 
     public boolean isItem(ItemStack item) {

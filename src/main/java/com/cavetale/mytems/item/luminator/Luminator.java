@@ -5,7 +5,6 @@ import com.cavetale.core.event.block.PlayerChangeBlockEvent;
 import com.cavetale.core.util.Json;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
@@ -27,6 +26,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.font.Unicode.tiny;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
@@ -60,7 +60,7 @@ public final class Luminator implements Mytem {
                                 textOfChildren(Mytems.MOUSE_RIGHT, text(" Draw Light", GRAY)),
                                 textOfChildren(Mytems.SHIFT_KEY, text(" View Light Blocks", GRAY))));
         prototype.editMeta(meta -> {
-                Items.text(meta, baseText);
+                tooltip(meta, baseText);
                 meta.addItemFlags(ItemFlag.values());
                 key.markItemMeta(meta);
             });

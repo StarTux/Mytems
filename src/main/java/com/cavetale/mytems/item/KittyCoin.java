@@ -2,13 +2,13 @@ package com.cavetale.mytems.item;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.Skull;
 import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.TextColor.color;
 import static net.kyori.adventure.text.format.TextDecoration.BOLD;
@@ -29,7 +29,7 @@ public final class KittyCoin implements Mytem {
         this.displayName = text("Kitty Coin", color(0xFFD700), BOLD);
         this.prototype = SKULL.create();
         prototype.editMeta(meta -> {
-                Items.text(meta, List.of(displayName));
+                tooltip(meta, List.of(displayName));
                 key.markItemMeta(meta);
             });
     }

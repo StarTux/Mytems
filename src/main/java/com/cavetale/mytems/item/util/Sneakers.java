@@ -11,7 +11,7 @@ import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import static com.cavetale.core.font.Unicode.tiny;
-import static com.cavetale.mytems.util.Items.text;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 import static org.bukkit.Color.fromRGB;
@@ -41,7 +41,7 @@ public final class Sneakers implements Mytem {
                 if (meta instanceof LeatherArmorMeta meta2) {
                     meta2.setColor(fromRGB(0xffffff));
                 }
-                text(meta, tooltip);
+                tooltip(meta, tooltip);
                 meta.addItemFlags(HIDE_DYE);
                 key.markItemMeta(meta);
             });

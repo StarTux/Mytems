@@ -3,8 +3,8 @@ package com.cavetale.mytems.item.music;
 import lombok.Value;
 import org.bukkit.Instrument;
 import org.bukkit.Location;
-import org.bukkit.Note.Tone;
 import org.bukkit.Note;
+import org.bukkit.Note.Tone;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 
