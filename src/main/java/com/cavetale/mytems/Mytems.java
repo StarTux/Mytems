@@ -1072,6 +1072,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     //
     SCUBA_HELMET(ScubaHelmet.class, PLAYER_HEAD, null, (char) 0, UTILITY),
     MINER_HELMET(MinerHelmet.class, PLAYER_HEAD, null, (char) 0, UTILITY),
+    //
+    MOM(DummyMytem.class, HEART_OF_THE_SEA, 0x3021, MOTHERS_DAY),
+    MOTHER(DummyMytem.class, HEART_OF_THE_SEA, 0x3022, MOTHERS_DAY, 64),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
@@ -1529,6 +1532,8 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
         case NO:
         case PIRATE_FLAG:
         case CHRISTMAS_TREE:
+        case MOTHER:
+        case MOM:
             return true;
         default: return false;
         }

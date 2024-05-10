@@ -49,6 +49,7 @@ public enum MytemsCategory {
     MOBSLAYERS,
     MOB_CATCHERS,
     MOB_FACE,
+    MOTHERS_DAY,
     MUSIC,
     MUSICAL,
     MUSIC_HYRULE,
