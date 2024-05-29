@@ -17,6 +17,7 @@ import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
@@ -212,7 +213,7 @@ public final class EventListener implements Listener {
         for (SetBonus setBonus : plugin.sessions.of(player).getEquipment().getSetBonuses()) {
             setBonus.onPlayerDamage(event, player);
         }
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
+        for (EquipmentSlot slot : List.of(EquipmentSlot.HAND, EquipmentSlot.OFF_HAND, EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET)) {
             ItemStack item = player.getInventory().getItem(slot);
             if (item == null) continue;
             Mytems mytems = Mytems.forItem(item);
@@ -607,7 +608,7 @@ public final class EventListener implements Listener {
             }
         }
         if (event.getTarget() != null) {
-            for (EquipmentSlot slot : EquipmentSlot.values()) {
+            for (EquipmentSlot slot : List.of(EquipmentSlot.HAND, EquipmentSlot.OFF_HAND, EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET)) {
                 ItemStack itemStack = event.getTarget().getEquipment().getItem(slot);
                 Mytems mytems = Mytems.forItem(itemStack);
                 if (mytems == null) continue;
@@ -622,7 +623,7 @@ public final class EventListener implements Listener {
             }
         }
         if (event.getAttacker() != null) {
-            for (EquipmentSlot slot : EquipmentSlot.values()) {
+            for (EquipmentSlot slot : List.of(EquipmentSlot.HAND, EquipmentSlot.OFF_HAND, EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET)) {
                 ItemStack itemStack = event.getAttacker().getEquipment().getItem(slot);
                 Mytems mytems = Mytems.forItem(itemStack);
                 if (mytems == null) continue;
@@ -714,7 +715,7 @@ public final class EventListener implements Listener {
     @EventHandler(priority = EventPriority.LOW)
     private void onEntityAirChange(EntityAirChangeEvent event) {
         if (!(event.getEntity() instanceof Player player)) return;
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
+        for (EquipmentSlot slot : List.of(EquipmentSlot.HAND, EquipmentSlot.OFF_HAND, EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET)) {
             final ItemStack item = player.getInventory().getItem(slot);
             if (item == null) continue;
             final Mytems mytems = Mytems.forItem(item);

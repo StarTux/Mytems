@@ -82,7 +82,7 @@ public final class Session {
                 player.addPotionEffect(it);
             }
         }
-        for (EquipmentSlot slot : EquipmentSlot.values()) {
+        for (EquipmentSlot slot : List.of(EquipmentSlot.HAND, EquipmentSlot.OFF_HAND, EquipmentSlot.HEAD, EquipmentSlot.CHEST, EquipmentSlot.LEGS, EquipmentSlot.FEET)) {
             final ItemStack item = player.getInventory().getItem(slot);
             if (item == null) continue;
             final Mytems mytems = Mytems.forItem(item);
