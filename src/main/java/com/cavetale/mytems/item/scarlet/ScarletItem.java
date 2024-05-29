@@ -88,7 +88,7 @@ public abstract class ScarletItem implements GearItem {
     public static final class Helmet extends ScarletItem {
         @SuppressWarnings("LineLength")
         static final Skull SKULL = new
-            Skull("Scarlet Helmet",
+            Skull("ScarletHelmet",
                   UUID.fromString("d460ea5d-bb08-4796-8e11-bd3e8fcda0a1"),
                   "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvN2Q0Njc5M2JkYmNlNWNhZDVmMzdiMTI0ZWFmMWUzNjg5YmJhMThkNTlhODA2ODU2N2M3NGY0ZmYxYTE4In19fQ==",
                   null);

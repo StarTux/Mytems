@@ -51,7 +51,7 @@ public final class ChristmasToken implements Mytem {
             + "Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUv"
             + "ZjU2MTJkYzdiODZkNzFhZmMxMTk3MzAxYzE1ZmQ5Nzll"
             + "OWYzOWU3YjFmNDFkOGYxZWJkZjgxMTU1NzZlMmUifX19";
-        prototype = Skull.create("Christmas Token",
+        prototype = Skull.create("ChristmasToken",
                                  UUID.fromString("6d46f5a1-a833-414c-ba0d-9842cb59316e"),
                                  texture,
                                  null);

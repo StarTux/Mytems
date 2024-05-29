@@ -5,12 +5,14 @@ import com.destroystokyo.paper.profile.ProfileProperty;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Level;
 import lombok.Data;
 import lombok.NonNull;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
+import static com.cavetale.mytems.MytemsPlugin.plugin;
 
 @Data
 public final class Skull {
@@ -85,7 +87,13 @@ public final class Skull {
     }
 
     public static void apply(@NonNull SkullMeta meta, String name, UUID uuid, @NonNull String texture, String signature) {
-        PlayerProfile profile = Bukkit.createProfile(uuid, name);
+        PlayerProfile profile;
+        try {
+            profile = Bukkit.createProfile(uuid, name);
+        } catch (IllegalArgumentException iae) {
+            plugin().getLogger().log(Level.SEVERE, "uuid:" + uuid + " name:'" + name + "'", iae);
+            profile = Bukkit.createProfile(uuid, "");
+        }
         ProfileProperty property = new ProfileProperty("textures", texture, signature);
         profile.setProperty(property);
         meta.setPlayerProfile(profile);

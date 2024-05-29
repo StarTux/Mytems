@@ -119,7 +119,7 @@ public abstract class SpiderCostume implements GearItem {
     public static final class SpiderHelmet extends SpiderCostume {
         @SuppressWarnings("LineLength")
         private static final Skull SKULL = Skull
-            .of("Spider Mask",
+            .of("SpiderMask",
                 UUID.fromString("8bdb71d0-4724-48b2-9344-000000e79480"),
                 "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvY2Q1NDE1NDFkYWFmZjUwODk2Y2QyNThiZGJkZDRjZjgwYzNiYTgxNjczNTcyNjA3OGJmZTM5MzkyN2U1N2YxIn19fQ==",
                 "");

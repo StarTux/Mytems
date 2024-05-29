@@ -22,7 +22,7 @@ public final class GlyphItem implements Mytem {
         Glyph glyph = Objects.requireNonNull(Glyph.MYTEMS_MAP.get(key));
         displayName = Component.text(glyph.string.toUpperCase(), NamedTextColor.WHITE);
         ItemStack item = key.material == Material.PLAYER_HEAD
-            ? Skull.create(glyph.string.toUpperCase(), glyph.uuid, glyph.texture, null)
+            ? Skull.create(glyph.name().toLowerCase(), glyph.uuid, glyph.texture, null)
             : new ItemStack(key.material);
         key.markItemStack(item);
         prototype = item;

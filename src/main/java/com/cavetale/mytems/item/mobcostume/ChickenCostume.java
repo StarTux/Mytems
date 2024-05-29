@@ -120,7 +120,7 @@ public abstract class ChickenCostume implements GearItem {
     public static final class ChickenHelmet extends ChickenCostume {
         @SuppressWarnings("LineLength")
         private static final Skull SKULL = Skull
-            .of("Chicken Mask",
+            .of("ChickenMask",
                 UUID.fromString("3ec599c3-9fe9-4741-8b83-c4caec2aaa0e"),
                 "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjQ4YzczZGJhMjE5NTE3NjZmMTQ0YmRlMmMwZjAyODI2MDYwM2FjOTQ1NGRlM2Q2NzE3MmQ3ZThlY2ZkZmY2OCJ9fX0=",
                 "");
