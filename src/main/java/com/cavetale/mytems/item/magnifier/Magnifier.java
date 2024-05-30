@@ -109,7 +109,7 @@ public final class Magnifier implements Mytem {
                 });
             Location location = block.getLocation().add(0.5, 0.5, 0.5);
             player.playSound(location, Sound.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 0.5f, 2.0f);
-            player.spawnParticle(Particle.ENCHANTMENT_TABLE, location, 32, .35f, .35f, .35f, 0.75);
+            player.spawnParticle(Particle.ENCHANT, location, 32, .35f, .35f, .35f, 0.75);
         } else {
             fav.vec = null;
             Bukkit.getScheduler().runTask(plugin(), () -> {
@@ -118,7 +118,7 @@ public final class Magnifier implements Mytem {
                 });
             Location location = block.getLocation().add(0.5, 0.5, 0.5);
             player.playSound(location, Sound.BLOCK_ENCHANTMENT_TABLE_USE, SoundCategory.BLOCKS, 1.0f, 0.5f);
-            player.spawnParticle(Particle.ENCHANTMENT_TABLE, location, 32, .35f, .35f, .35f, 0.0);
+            player.spawnParticle(Particle.ENCHANT, location, 32, .35f, .35f, .35f, 0.0);
         }
     }
 

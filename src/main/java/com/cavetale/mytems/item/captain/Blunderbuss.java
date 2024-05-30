@@ -141,9 +141,8 @@ public final class Blunderbuss implements Mytem {
             Vector smokeVector = smokeStart.clone().multiply(i)
                 .add(smokeEnd.clone().multiply(smokeLength - i))
                 .multiply(1.0 / smokeLength);
-            world.spawnParticle(Particle.WATER_DROP, smokeVector.toLocation(world), 1, 0.0, 0.0, 0.0, 1.0);
+            world.spawnParticle(Particle.SPLASH, smokeVector.toLocation(world), 1, 0.0, 0.0, 0.0, 1.0);
         }
-        world.spawnParticle(Particle.WATER_WAKE, smokeStart.toLocation(world), 16, 0.0, 0.0, 0.0, 0.15);
         if (rayTraceResult == null) return true;
         Entity targetEntity = rayTraceResult.getHitEntity();
         if (targetEntity == null) return false;
@@ -175,7 +174,6 @@ public final class Blunderbuss implements Mytem {
         }
         Vector velocity = direction.normalize().multiply(3.0).add(new Vector(0.0, 1.0, 0.0));
         target.setVelocity(target.getVelocity().add(velocity));
-        target.getWorld().spawnParticle(Particle.WATER_WAKE, target.getLocation(), 32, 0.1, 0.1, 0.1, 0.15);
         target.getWorld().playSound(target.getLocation(), Sound.ENTITY_GENERIC_SPLASH, SoundCategory.PLAYERS, 1.0f, 2.0f);
         return true;
     }

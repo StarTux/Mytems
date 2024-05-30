@@ -74,7 +74,7 @@ public final class CaptainsCutlass implements Mytem {
         Vector hit = horizontal.multiply(player.isSprinting() ? 4.0 : 3.0).add(vertical);
         target.setVelocity(target.getVelocity().add(hit));
         target.getWorld().playSound(target.getLocation(), Sound.ENTITY_ARMOR_STAND_BREAK, SoundCategory.PLAYERS, 1.0f, 0.75f);
-        target.getWorld().spawnParticle(Particle.BLOCK_DUST, target.getLocation(), 24, .25, .25, .25, 0,
+        target.getWorld().spawnParticle(Particle.BLOCK, target.getLocation(), 24, .25, .25, .25, 0,
                                         Material.OAK_PLANKS.createBlockData());
     }
 }

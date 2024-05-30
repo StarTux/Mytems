@@ -39,11 +39,11 @@ public final class Mobslayer implements Mytem {
             : text(Unicode.SKULL.string + "Mobslayer", red);
         this.prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                meta.addEnchant(Enchantment.DAMAGE_ARTHROPODS, 3, true);
-                meta.addEnchant(Enchantment.DAMAGE_ALL, 3 + tier, true);
-                meta.addEnchant(Enchantment.DAMAGE_UNDEAD, 3 + tier, true);
+                meta.addEnchant(Enchantment.BANE_OF_ARTHROPODS, 3, true);
+                meta.addEnchant(Enchantment.SHARPNESS, 3 + tier, true);
+                meta.addEnchant(Enchantment.SMITE, 3 + tier, true);
                 if (tier >= 1) {
-                    meta.addEnchant(Enchantment.LOOT_BONUS_MOBS, 3, true);
+                    meta.addEnchant(Enchantment.LOOTING, 3, true);
                     meta.addEnchant(Enchantment.KNOCKBACK, 2, true);
                 }
                 if (tier >= 2) {

@@ -208,7 +208,7 @@ public abstract class ScarletItem implements GearItem {
                     banner.setPatterns(List.of(new Pattern(DyeColor.LIGHT_GRAY, PatternType.STRIPE_DOWNLEFT),
                                                new Pattern(DyeColor.LIGHT_GRAY, PatternType.STRIPE_DOWNRIGHT),
                                                new Pattern(DyeColor.LIGHT_GRAY, PatternType.STRAIGHT_CROSS),
-                                               new Pattern(DyeColor.RED, PatternType.RHOMBUS_MIDDLE)));
+                                               new Pattern(DyeColor.RED, PatternType.RHOMBUS)));
                     blockStateMeta.setBlockState(banner);
                     meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS); // hides banner patterns
                     final EquipmentSlot slot = EquipmentSlot.OFF_HAND;
@@ -421,7 +421,7 @@ public abstract class ScarletItem implements GearItem {
             protected final String name = "Resistance I";
             protected final String description = "";
             protected final List<PotionEffect> potionEffects = List.of(new PotionEffect[] {
-                    new PotionEffect(PotionEffectType.DAMAGE_RESISTANCE, 39, 0, true, false, true),
+                    new PotionEffect(PotionEffectType.RESISTANCE, 39, 0, true, false, true),
                 });
         }
 
@@ -432,7 +432,7 @@ public abstract class ScarletItem implements GearItem {
             protected final String name = "Strength I";
             protected final String description = "";
             protected final List<PotionEffect> potionEffects = List.of(new PotionEffect[] {
-                    new PotionEffect(PotionEffectType.INCREASE_DAMAGE, 39, 0, true, false, true),
+                    new PotionEffect(PotionEffectType.STRENGTH, 39, 0, true, false, true),
                 });
         }
     }

@@ -195,7 +195,7 @@ public abstract class EasterGear implements GearItem {
                 Player player = (Player) living;
                 int duration = 20 + 19;
                 int amplifier = 2;
-                PotionEffectType type = PotionEffectType.JUMP;
+                PotionEffectType type = PotionEffectType.JUMP_BOOST;
                 PotionEffect potionEffect = player.getPotionEffect(type);
                 if (potionEffect != null) {
                     if (potionEffect.getAmplifier() > amplifier) return;
@@ -210,7 +210,7 @@ public abstract class EasterGear implements GearItem {
                 if (event.getCause() == EntityDamageEvent.DamageCause.FALL) {
                     event.setCancelled(true);
                     Particle.DustOptions dust = new Particle.DustOptions(PINK_COLOR, 2.0f);
-                    player.getWorld().spawnParticle(Particle.REDSTONE, player.getLocation(), 16, 0.35, 0.1, 0.35, 0.2, dust);
+                    player.getWorld().spawnParticle(Particle.DUST, player.getLocation(), 16, 0.35, 0.1, 0.35, 0.2, dust);
                 }
             }
         }
@@ -238,7 +238,7 @@ public abstract class EasterGear implements GearItem {
                     });
                 player.getWorld().playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BANJO, SoundCategory.PLAYERS, 1.5f, 1.5f);
                 Particle.DustOptions dust = new Particle.DustOptions(PINK_COLOR, 2.0f);
-                player.getWorld().spawnParticle(Particle.REDSTONE, player.getLocation(), 16, 0.35, 0.1, 0.35, 0.2, dust);
+                player.getWorld().spawnParticle(Particle.DUST, player.getLocation(), 16, 0.35, 0.1, 0.35, 0.2, dust);
             }
         }
     }

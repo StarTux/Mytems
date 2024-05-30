@@ -3,7 +3,6 @@ package com.cavetale.mytems;
 import com.cavetale.worldmarker.util.Tags;
 import java.util.Objects;
 import java.util.UUID;
-import javax.annotation.Nullable;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,18 +21,15 @@ public final class MytemOwner {
     @NonNull protected UUID uuid;
     @NonNull protected String name;
 
-    @Nullable
     public static MytemOwner ofItemStack(ItemStack itemStack) {
         if (!itemStack.hasItemMeta()) return null;
         return ofItemMeta(itemStack.getItemMeta());
     }
 
-    @Nullable
     public static MytemOwner ofItemMeta(ItemMeta itemMeta) {
         return ofTag(itemMeta.getPersistentDataContainer());
     }
 
-    @Nullable
     public static MytemOwner ofTag(PersistentDataContainer tag) {
         PersistentDataContainer ownerTag = Tags.getTag(tag, OWNER_KEY);
         if (ownerTag == null) return null;

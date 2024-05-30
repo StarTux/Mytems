@@ -47,7 +47,7 @@ public final class FlameShield extends AculaItem {
                 banner.setBaseColor(DyeColor.BLACK);
                 banner.setPatterns(List.of(new Pattern(DyeColor.ORANGE, MOJANG),
                                            new Pattern(DyeColor.ORANGE, TRIANGLE_BOTTOM),
-                                           new Pattern(DyeColor.BLACK, RHOMBUS_MIDDLE),
+                                           new Pattern(DyeColor.BLACK, RHOMBUS),
                                            new Pattern(DyeColor.RED, GRADIENT_UP)));
                 blockStateMeta.setBlockState(banner);
                 meta.addAttributeModifier(GENERIC_ARMOR,

@@ -80,7 +80,7 @@ public final class EmptyWateringCan implements Mytem {
                 block.setBlockData(levelled);
             }
             Location location = block.getLocation().add(0.5, 1.0, 0.5);
-            block.getWorld().spawnParticle(WATER_SPLASH, location, 38, 0.2, 0.2, 0.2, 0.0);
+            block.getWorld().spawnParticle(SPLASH, location, 38, 0.2, 0.2, 0.2, 0.0);
             block.getWorld().playSound(location, ITEM_BUCKET_FILL, BLOCKS, 0.5f, 2.0f);
         }
     }

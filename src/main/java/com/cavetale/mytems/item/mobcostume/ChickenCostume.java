@@ -176,7 +176,7 @@ public abstract class ChickenCostume implements GearItem {
         case GOAT:
         case PIG:
         case SHEEP:
-        case MUSHROOM_COW:
+        case MOOSHROOM:
         case RABBIT:
             return true;
         default: return false;

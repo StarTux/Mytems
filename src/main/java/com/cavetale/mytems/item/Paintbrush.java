@@ -187,7 +187,7 @@ public final class Paintbrush implements Mytem {
         }
         targetBlock.getWorld().playSound(targetBlock.getLocation(),
                                          Sound.ITEM_BUCKET_FILL, SoundCategory.MASTER, 0.5f, 2.0f);
-        targetBlock.getWorld().spawnParticle(Particle.REDSTONE,
+        targetBlock.getWorld().spawnParticle(Particle.DUST,
                                              targetBlock.getRelative(face).getLocation().add(0.5, 0.5, 0.5),
                                              16,
                                              0.25f, 0.25f, 0.25f, 0.0f,
@@ -222,7 +222,7 @@ public final class Paintbrush implements Mytem {
         Brush newBrush = Brush.of(blockColor);
         player.getEquipment().setItem(event.getHand(), newBrush.mytems.createItemStack());
         player.playSound(player.getLocation(), Sound.ENTITY_GENERIC_DRINK, SoundCategory.MASTER, 0.5f, 1.5f);
-        player.spawnParticle(Particle.REDSTONE,
+        player.spawnParticle(Particle.DUST,
                              block.getRelative(face).getLocation().add(0.5, 0.5, 0.5),
                              16,
                              0.25f, 0.25f, 0.25f, 0.0f,

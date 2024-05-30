@@ -513,7 +513,7 @@ public final class EventListener implements Listener {
         player.setCooldown(itemStack.getType(), Math.max(0, (4 - loy) * 20));
         player.playSound(player.getLocation(), Sound.ITEM_TRIDENT_THROW, SoundCategory.PLAYERS, 1.0f, 1.0f);
         if (player.getGameMode() != GameMode.CREATIVE) {
-            final int unbreaking = itemStack.getEnchantmentLevel(Enchantment.DURABILITY);
+            final int unbreaking = itemStack.getEnchantmentLevel(Enchantment.UNBREAKING);
             if (unbreaking > 0) {
                 float chance = 1.0f / (float) (unbreaking + 1);
                 float roll = (float) ThreadLocalRandom.current().nextDouble();

@@ -2,7 +2,6 @@ package com.cavetale.mytems.gear;
 
 import java.util.ArrayList;
 import java.util.List;
-import javax.annotation.Nullable;
 import net.kyori.adventure.text.Component;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.text;
@@ -28,7 +27,7 @@ public interface ItemSet {
         return createTooltip(0);
     }
 
-    default List<Component> createTooltip(@Nullable Equipment equipment) {
+    default List<Component> createTooltip(Equipment equipment) {
         return createTooltip(equipment != null ? equipment.countSetItems(this) : 0);
     }
 

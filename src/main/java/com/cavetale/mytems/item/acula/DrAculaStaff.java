@@ -100,7 +100,7 @@ public final class DrAculaStaff extends AculaItem {
             Bukkit.getScheduler().runTaskLater(MytemsPlugin.getInstance(), bat::remove, 40L + (long) i);
         }
         base.getWorld().playSound(base, Sound.ENTITY_BAT_LOOP, SoundCategory.MASTER, 0.5f, 2.0f);
-        base.getWorld().spawnParticle(Particle.SMOKE_LARGE, base, 16, 0.5, 0.7, 0.5, 0.05);
+        base.getWorld().spawnParticle(Particle.SMOKE, base, 16, 0.5, 0.7, 0.5, 0.05);
         for (var entity : player.getNearbyEntities(32.0, 32.0, 32.0)) {
             if (!(entity instanceof Mob mob)) continue;
             if (!player.equals(mob.getTarget())) continue;

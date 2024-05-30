@@ -49,7 +49,8 @@ public final class GhastBow extends AculaItem {
             event.setConsumeItem(false);
         }
         if (!(event.getProjectile() instanceof Arrow arrow)) return;
-        if (!arrow.hasCustomEffects() && arrow.getBasePotionType() == PotionType.UNCRAFTABLE) {
+        // TODO TEST THIS
+        if (!arrow.hasCustomEffects() && arrow.getBasePotionType() == PotionType.AWKWARD) {
             // Normal arrow, not tipped. The interface TippedArrow is deprecated.
             arrow.setFireTicks(200);
         }

@@ -45,7 +45,7 @@ public final class Stompers extends AculaItem {
     protected ItemStack getRawItemStack() {
         ItemStack item = new ItemStack(Material.NETHERITE_BOOTS);
         item.editMeta(meta -> {
-                meta.addEnchant(Enchantment.PROTECTION_FALL, 4, true);
+                meta.addEnchant(Enchantment.FEATHER_FALLING, 4, true);
             });
         return item;
     }
@@ -80,7 +80,7 @@ public final class Stompers extends AculaItem {
             double dx = Math.cos(Math.PI * 2.0 * angle);
             double dz = Math.sin(Math.PI * 2.0 * angle);
             Location loc = center.clone().add(dx * radius, 0.5, dz * radius);
-            loc.getWorld().spawnParticle((small ? Particle.EXPLOSION_NORMAL : Particle.EXPLOSION_LARGE), loc, 1, 0.0, 0.0, 0.0, 0.0);
+            loc.getWorld().spawnParticle((small ? Particle.WHITE_SMOKE : Particle.EXPLOSION), loc, 1, 0.0, 0.0, 0.0, 0.0);
         }
         center.getWorld().playSound(center, Sound.BLOCK_ANVIL_LAND, SoundCategory.PLAYERS, (small ? 0.25f : 0.5f), 0.5f);
     }

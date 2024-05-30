@@ -68,7 +68,7 @@ public final class Enderball implements Mytem, Listener {
                                 + " Earned by event participation."
                                 + " Signed by StarTux in black and purple ink."
                                 + " Place it on the ground and kick it!"));
-        meta.addEnchant(Enchantment.DURABILITY, 1, true);
+        meta.addEnchant(Enchantment.UNBREAKING, 1, true);
         meta.addItemFlags(ItemFlag.values());
         key.markItemMeta(meta);
         prototype.setItemMeta(meta);

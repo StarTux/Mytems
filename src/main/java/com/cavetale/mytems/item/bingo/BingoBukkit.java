@@ -145,13 +145,13 @@ public final class BingoBukkit implements Mytem {
     private void fillEffect(Block block) {
         Location location = block.getLocation().add(0.5, 0.5, 0.5);
         location.getWorld().playSound(location, Sound.ITEM_BUCKET_FILL, SoundCategory.BLOCKS, 1.0f, 1.0f);
-        location.getWorld().spawnParticle(Particle.WATER_SPLASH, location, 32, 0.25, 0.25, 0.25, 1.0);
+        location.getWorld().spawnParticle(Particle.SPLASH, location, 32, 0.25, 0.25, 0.25, 1.0);
     }
 
     private void placeEffect(Block block) {
         Location location = block.getLocation().add(0.5, 0.5, 0.5);
         location.getWorld().playSound(location, Sound.ITEM_BUCKET_EMPTY, SoundCategory.BLOCKS, 1.0f, 1.0f);
-        location.getWorld().spawnParticle(Particle.WATER_SPLASH, location, 32, 0.25, 0.25, 0.25, 1.0);
+        location.getWorld().spawnParticle(Particle.SPLASH, location, 32, 0.25, 0.25, 0.25, 1.0);
     }
 
     @Override

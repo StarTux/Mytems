@@ -147,7 +147,7 @@ public abstract class DwarvenItem implements GearItem {
                 Player player = (Player) living;
                 int duration = 20 + 19;
                 int amplifier = 0;
-                PotionEffectType type = PotionEffectType.FAST_DIGGING;
+                PotionEffectType type = PotionEffectType.HASTE;
                 PotionEffect potionEffect = player.getPotionEffect(type);
                 if (potionEffect != null) {
                     if (potionEffect.getAmplifier() > amplifier) return;

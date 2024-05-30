@@ -329,7 +329,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     POCKET_LLAMA(PocketMob.class, LLAMA_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_MAGMA_CUBE(PocketMob.class, MAGMA_CUBE_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_MULE(PocketMob.class, MULE_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
-    POCKET_MUSHROOM_COW(PocketMob.class, MOOSHROOM_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
+    POCKET_MOOSHROOM(PocketMob.class, MOOSHROOM_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_OCELOT(PocketMob.class, OCELOT_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_PANDA(PocketMob.class, PANDA_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_PARROT(PocketMob.class, PARROT_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
@@ -350,7 +350,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     POCKET_SKELETON_HORSE(PocketMob.class, SKELETON_HORSE_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_SLIME(PocketMob.class, SLIME_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_SNIFFER(PocketMob.class, SNIFFER_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
-    POCKET_SNOWMAN(PocketMob.class, POLAR_BEAR_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
+    POCKET_SNOW_GOLEM(PocketMob.class, SNOW_GOLEM_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_SPIDER(PocketMob.class, SPIDER_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_SQUID(PocketMob.class, SQUID_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_STRAY(PocketMob.class, STRAY_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
@@ -1104,6 +1104,8 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
         ID_MAP.put("corroded_drum", OLD_OVEN_LID);
         ID_MAP.put("brittle_barrel", SOOTY_STOVE_PIPE);
         ID_MAP.put("fireman_helmet", FIREFIGHTER_HELMET);
+        ID_MAP.put("pocket_mushroom_cow", POCKET_MOOSHROOM); // 1.20.6
+        ID_MAP.put("pocket_snowman", POCKET_SNOW_GOLEM); // 1.20.6
     }
 
     /**

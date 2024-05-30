@@ -18,6 +18,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.function.Function;
+import java.util.logging.Level;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -204,9 +205,13 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
         if (entity instanceof LivingEntity livingEntity) {
             EntityEquipment entityEquipment = livingEntity.getEquipment();
             for (EquipmentSlot slot : EquipmentSlot.values()) {
-                ItemStack itemStack = fixItemStack(entityEquipment.getItem(slot));
-                if (itemStack != null) {
-                    entityEquipment.setItem(slot, itemStack);
+                try {
+                    ItemStack itemStack = fixItemStack(entityEquipment.getItem(slot));
+                    if (itemStack != null) {
+                        entityEquipment.setItem(slot, itemStack);
+                    }
+                } catch (Exception e) {
+                    getLogger().log(Level.SEVERE, "slot=" + slot, e);
                 }
             }
         }

@@ -223,7 +223,7 @@ public final class TreeChop {
         ItemStack axeItem = new ItemStack(Material.NETHERITE_AXE);
         int fortune = tag.getStat(TreeChopperStat.FORTUNE);
         int silk = tag.getStat(TreeChopperStat.SILK);
-        if (fortune > 0) axeItem.addUnsafeEnchantments(Map.of(Enchantment.LOOT_BONUS_BLOCKS, fortune));
+        if (fortune > 0) axeItem.addUnsafeEnchantments(Map.of(Enchantment.FORTUNE, fortune));
         if (silk > 0) axeItem.addUnsafeEnchantments(Map.of(Enchantment.SILK_TOUCH, silk));
         // Determine the primary tree type.
         // If replant is not unlocked, we skip this!
