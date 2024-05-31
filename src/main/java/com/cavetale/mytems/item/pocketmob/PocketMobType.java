@@ -9,10 +9,13 @@ import org.bukkit.entity.EntityType;
 @RequiredArgsConstructor
 public enum PocketMobType {
     ALLAY(Mytems.POCKET_ALLAY, EntityType.ALLAY),
+    ARMADILLO(Mytems.POCKET_ARMADILLO, EntityType.ARMADILLO),
     AXOLOTL(Mytems.POCKET_AXOLOTL, EntityType.AXOLOTL),
     BAT(Mytems.POCKET_BAT, EntityType.BAT),
     BEE(Mytems.POCKET_BEE, EntityType.BEE),
     BLAZE(Mytems.POCKET_BLAZE, EntityType.BLAZE),
+    BOGGED(Mytems.POCKET_BOGGED, EntityType.BOGGED),
+    BREEZE(Mytems.POCKET_BREEZE, EntityType.BREEZE),
     CAMEL(Mytems.POCKET_CAMEL, EntityType.CAMEL),
     CAT(Mytems.POCKET_CAT, EntityType.CAT),
     CAVE_SPIDER(Mytems.POCKET_CAVE_SPIDER, EntityType.CAVE_SPIDER),
@@ -42,8 +45,8 @@ public enum PocketMobType {
     IRON_GOLEM(Mytems.POCKET_IRON_GOLEM, EntityType.IRON_GOLEM),
     LLAMA(Mytems.POCKET_LLAMA, EntityType.LLAMA),
     MAGMA_CUBE(Mytems.POCKET_MAGMA_CUBE, EntityType.MAGMA_CUBE),
-    MULE(Mytems.POCKET_MULE, EntityType.MULE),
     MOOSHROOM(Mytems.POCKET_MOOSHROOM, EntityType.MOOSHROOM),
+    MULE(Mytems.POCKET_MULE, EntityType.MULE),
     OCELOT(Mytems.POCKET_OCELOT, EntityType.OCELOT),
     PANDA(Mytems.POCKET_PANDA, EntityType.PANDA),
     PARROT(Mytems.POCKET_PARROT, EntityType.PARROT),
