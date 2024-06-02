@@ -110,6 +110,9 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         serializeNode.addChild("minecraft").denyTabCompletion()
             .description("Serialize to Minecraft JSON")
             .playerCaller(this::serializeMinecraft);
+        serializeNode.addChild("component").denyTabCompletion()
+            .description("Serialize to Component String")
+            .playerCaller(this::serializeComponent);
         serializeNode.addChild("mytems").denyTabCompletion()
             .description("Serialize hand via mytems")
             .playerCaller(this::serializeMytems);
@@ -119,10 +122,11 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         serializeNode.addChild("skull").denyTabCompletion()
             .description("Serialize player head in hand")
             .playerCaller(this::serializeSkull);
-        serializeNode.addChild("java").arguments("item")
+        serializeNode.addChild("java").arguments("<item>")
             .completers(CommandArgCompleter.enumLowerList(Mytems.class))
             .description("Serialize item to Java")
             .senderCaller(this::serializeJava);
+        // Item
         itemNode = rootNode.addChild("item")
             .description("Item specific commands");
         // Damage Calculation
@@ -337,6 +341,18 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
                                 text("Serialized item: ", YELLOW),
                                 text(serialized).insertion(serialized)));
         return true;
+    }
+
+    private void serializeComponent(Player player) {
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        if (itemStack == null || itemStack.isEmpty()) {
+            throw new CommandWarn("No item in your hand!");
+        }
+        final String serialized = itemStack.getType().getKey()
+            + itemStack.getItemMeta().getAsComponentString();
+        player.sendMessage(textOfChildren(text("Component string of item: ", YELLOW),
+                                          text(serialized))
+                           .insertion(serialized));
     }
 
     protected boolean serializeMytems(Player player, String[] args) {
