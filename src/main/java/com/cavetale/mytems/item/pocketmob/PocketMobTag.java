@@ -182,6 +182,7 @@ public final class PocketMobTag extends MytemTag {
                 nameComponents.add(0, "Angry");
             }
             text.add(prop("Collar", BlockColor.of(wolf.getCollarColor())));
+            nameComponents.add(Text.toCamelCase(wolf.getVariant().getKey().getKey()));
         } else if (entity instanceof Bee bee) {
             if (bee.getAnger() > 0) {
                 nameComponents.add(0, "Angry");
