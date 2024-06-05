@@ -1,8 +1,8 @@
 package com.cavetale.mytems;
 
-//import com.cavetale.core.font.VanillaEffects;
 import com.cavetale.core.font.DefaultFont;
 import com.cavetale.core.font.Font;
+import com.cavetale.core.font.VanillaEffects;
 import com.cavetale.core.font.VanillaItems;
 import com.cavetale.core.font.VanillaPaintings;
 import java.util.ArrayList;
@@ -67,7 +67,7 @@ public final class MytemsTest {
         System.out.println("// CustomModelData Next: " + (max + 1));
         testCharacters();
         testCore(DefaultFont.class);
-        // testCore(VanillaEffects.class); // Requires Bukkit.server
+        testCore(VanillaEffects.class);
         testCore(VanillaPaintings.class);
         testCore(VanillaItems.class);
     }
@@ -82,6 +82,7 @@ public final class MytemsTest {
             if (characterSet.contains(value)) {
                 throw new IllegalStateException("Core Clash: " + clazz.getSimpleName() + "." + font.name() + ": " + strint((int) value));
             }
+            characterSet.add(value);
         }
     }
 
@@ -111,11 +112,7 @@ public final class MytemsTest {
     }
 
     private String strint(int in) {
-        if (in < 0xE000 || in > 0xF8FF) {
-            return "" + in;
-        } else {
-            return "0x" + Integer.toHexString(in).toUpperCase();
-        }
+        return "0x" + Integer.toHexString(in).toUpperCase();
     }
 
     /**
