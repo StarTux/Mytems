@@ -18,14 +18,24 @@ commands:
     aliases: []
     description: Mytems Command
     permission: mytems.mytems
-    usage: |-
-      /mytems
+    usage: /mytems
+
+  openshulker:
+    aliases: []
+    description: Open shulker box in hand
+    permission: mytems.openshulker
+    usage: /openshulker
+
 
 permissions:
 
   mytems.mytems:
     description: Use /mytems
     default: op
+
+  mytems.openshulker:
+    description: Use /openshulker
+    default: false
 
   mytems.openshulker.click:
     description: Open shulker boxes by right clicking them in your inventory

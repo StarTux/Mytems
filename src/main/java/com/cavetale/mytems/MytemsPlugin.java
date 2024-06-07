@@ -10,6 +10,7 @@ import com.cavetale.mytems.item.photo.Photo;
 import com.cavetale.mytems.loot.LootTableListener;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.session.Sessions;
+import com.cavetale.mytems.shulker.OpenShulkerCommand;
 import com.cavetale.mytems.shulker.ShulkerBoxListener;
 import com.cavetale.mytems.util.Gui;
 import java.util.ArrayList;
@@ -47,11 +48,12 @@ import static com.cavetale.core.util.CamelCase.toCamelCase;
 @Getter
 public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
     @Getter private static MytemsPlugin instance;
-    final MytemsCommand mytemsCommand = new MytemsCommand(this);
-    final EventListener eventListener = new EventListener(this);
-    final ShulkerBoxListener shulkerBoxListener = new ShulkerBoxListener(this);
-    final BlockBreakListener blockBreakListener = new BlockBreakListener(this);
-    final Sessions sessions = new Sessions(this);
+    private final MytemsCommand mytemsCommand = new MytemsCommand(this);
+    private final EventListener eventListener = new EventListener(this);
+    private final ShulkerBoxListener shulkerBoxListener = new ShulkerBoxListener(this);
+    private final OpenShulkerCommand openShulkerCommand = new OpenShulkerCommand(this);
+    private final BlockBreakListener blockBreakListener = new BlockBreakListener(this);
+    protected final Sessions sessions = new Sessions(this);
     private Map<Mytems, Mytem> mytems = new EnumMap<>(Mytems.class);
     private List<CustomMytemSlot> customMytemSlots = new ArrayList<>();
     private boolean fixAllPlayerInventoriesScheduled = false;
@@ -68,6 +70,7 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
         mytemsCommand.enable();
         eventListener.enable();
         shulkerBoxListener.enable();
+        openShulkerCommand.enable();
         blockBreakListener.enable();
         enableItems();
         fixAllPlayerInventoriesLater();

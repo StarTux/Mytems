@@ -64,29 +64,33 @@ public final class ShulkerBoxListener implements Listener {
         if (player.getGameMode() == GameMode.SPECTATOR) {
             return;
         }
-        final int heldItemSlot = event.getSlot();
-        final ItemStack itemStack = player.getInventory().getItem(heldItemSlot);
-        if (itemStack == null || !Tag.SHULKER_BOXES.isTagged(itemStack.getType())) {
+        final int clickedSlot = event.getSlot();
+        final ItemStack clickedItem = player.getInventory().getItem(clickedSlot);
+        if (clickedItem == null || !Tag.SHULKER_BOXES.isTagged(clickedItem.getType())) {
             return;
         }
-        final BlockStateMeta shulkerMeta = (BlockStateMeta) itemStack.getItemMeta();
-        final ShulkerBox shulkerBox = (ShulkerBox) shulkerMeta.getBlockState();
         // No return
         event.setCancelled(true);
         player.closeInventory();
-        final Inventory shulkerInventory = shulkerBox.getInventory();
+        openShulkerBox(player, clickedSlot, clickedItem);
+    }
+
+    protected void openShulkerBox(Player player, final int shulkerBoxSlot, ItemStack shulkerBoxItem) {
         final Gui gui = new Gui();
-        player.getInventory().setItem(heldItemSlot, null);
+        player.getInventory().setItem(shulkerBoxSlot, null);
+        final BlockStateMeta shulkerMeta = (BlockStateMeta) shulkerBoxItem.getItemMeta();
+        final ShulkerBox shulkerBox = (ShulkerBox) shulkerMeta.getBlockState();
+        final Inventory shulkerInventory = shulkerBox.getInventory();
         gui.onClose(closeEvent -> {
                 player.playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_CLOSE, SoundCategory.BLOCKS, 1.0f, 1.0f);
                 shulkerMeta.setBlockState(shulkerBox);
-                itemStack.setItemMeta(shulkerMeta);
-                ItemStack slotItem = player.getInventory().getItem(heldItemSlot);
+                shulkerBoxItem.setItemMeta(shulkerMeta);
+                ItemStack slotItem = player.getInventory().getItem(shulkerBoxSlot);
                 if (slotItem == null || slotItem.getType().isAir()) {
-                    player.getInventory().setItem(heldItemSlot, itemStack);
+                    player.getInventory().setItem(shulkerBoxSlot, shulkerBoxItem);
                     return;
                 } else {
-                    PlayerReceiveItemsEvent evt = new PlayerReceiveItemsEvent(player, List.of(itemStack));
+                    PlayerReceiveItemsEvent evt = new PlayerReceiveItemsEvent(player, List.of(shulkerBoxItem));
                     evt.giveItems();
                     boolean drop = false;
                     if (!evt.isEmpty()) {
