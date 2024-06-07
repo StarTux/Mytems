@@ -26,3 +26,7 @@ permissions:
   mytems.mytems:
     description: Use /mytems
     default: op
+
+  mytems.openshulker.click:
+    description: Open shulker boxes by right clicking them in your inventory
+    default: false

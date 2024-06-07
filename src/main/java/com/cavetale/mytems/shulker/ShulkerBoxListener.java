@@ -7,7 +7,6 @@ import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.Tag;
@@ -16,9 +15,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryType;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
@@ -34,35 +32,47 @@ public final class ShulkerBoxListener implements Listener {
     }
 
     /**
-     * A shulker box in hand is opened when right clicking under the
-     * following conditions.
-     * - Player not in spectator mode
-     * - Not sneaking
-     * - Not facing interactable block
-     * - Uses main hand
+     * A shulker box in hand is opened when right clicking in your
+     * inventory.
+     *
+     * Opening a GUI after right clicking your inventory must happen
+     * on the next tick, or else a ghost item will appear on the
+     * cursor next time they open the inventory.
      */
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = false)
-    protected void onPlayerClickShulkerBox(PlayerInteractEvent event) {
-        switch (event.getAction()) {
-        case RIGHT_CLICK_BLOCK:
-        case RIGHT_CLICK_AIR: break;
-        default: return;
+    @EventHandler(ignoreCancelled = false, priority = EventPriority.LOW)
+    protected void onInventoryClick(InventoryClickEvent event) {
+        if (!event.isRightClick()) {
+            return;
         }
-        if (event.getHand() != EquipmentSlot.HAND) return;
-        if (!event.hasItem()) return;
-        Player player = event.getPlayer();
-        if (player.isSneaking()) return;
-        if (player.getGameMode() == GameMode.SPECTATOR) return;
-        if (event.hasBlock() && event.getClickedBlock().getType().isInteractable()) return;
-        final int heldItemSlot = player.getInventory().getHeldItemSlot();
+        if (!(event.getWhoClicked() instanceof Player player)) {
+            return;
+        }
+        if (!player.hasPermission("mytems.openshulker.click")) {
+            return;
+        }
+        // Player inventory
+        // In creative mode, this will not work because inventory
+        // click events are not fired inside the creative inventory.
+        if (event.getView().getType() != InventoryType.CRAFTING) {
+            return;
+        }
+        // Empty cursor
+        if (event.getCursor() != null && !event.getCursor().isEmpty()) {
+            return;
+        }
+        // Disallow in spectator mode.  This would otherwise work!
+        if (player.getGameMode() == GameMode.SPECTATOR) {
+            return;
+        }
+        final int heldItemSlot = event.getSlot();
         final ItemStack itemStack = player.getInventory().getItem(heldItemSlot);
-        if (itemStack == null) return;
-        final Material itemType = itemStack.getType();
-        if (!Tag.SHULKER_BOXES.isTagged(itemType)) return;
-        if (!(itemStack.getItemMeta() instanceof BlockStateMeta shulkerMeta)) return;
-        if (!(shulkerMeta.getBlockState() instanceof ShulkerBox shulkerBox)) return;
+        if (itemStack == null || !Tag.SHULKER_BOXES.isTagged(itemStack.getType())) {
+            return;
+        }
+        final BlockStateMeta shulkerMeta = (BlockStateMeta) itemStack.getItemMeta();
+        final ShulkerBox shulkerBox = (ShulkerBox) shulkerMeta.getBlockState();
+        // No return
         event.setCancelled(true);
-        if (player.getOpenInventory().getType() != InventoryType.CRAFTING) return;
         player.closeInventory();
         final Inventory shulkerInventory = shulkerBox.getInventory();
         final Gui gui = new Gui();
@@ -94,10 +104,11 @@ public final class ShulkerBoxListener implements Listener {
                         player.playSound(player.getLocation(), Sound.ENTITY_ITEM_PICKUP, SoundCategory.MASTER, 0.2f, 0.9f);
                     }
                 }
+                player.sendActionBar(text("Shulker Box Closed"));
             });
         gui.setEditable(true);
-        gui.open(player, shulkerInventory);
-        player.sendActionBar(text("Sneak to Place Shulker Box"));
+        Bukkit.getScheduler().runTask(plugin, () -> gui.open(player, shulkerInventory));
+        player.sendActionBar(text("Shulker Box Opened"));
         player.playSound(player.getLocation(), Sound.BLOCK_SHULKER_BOX_OPEN, SoundCategory.BLOCKS, 1.0f, 1.0f);
     }
 }
