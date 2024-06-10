@@ -14,7 +14,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
 import static net.kyori.adventure.text.Component.text;
@@ -49,10 +49,13 @@ public final class HastyPickaxe implements Mytem {
     }
 
     @Override
-    public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
+    public void onPlayerInventoryClick(InventoryClickEvent event, Player player, ItemStack item) {
+        if (!event.isRightClick()) return;
+        event.setCancelled(true);
         final var tag = tier.createTag();
         tag.load(item);
-        new UpgradableItemMenu(player, item, tag, HastyPickaxeItem.hastyPickaxeItem()).open();
+        final var menu = new UpgradableItemMenu(player, item, tag, HastyPickaxeItem.hastyPickaxeItem());
+        Bukkit.getScheduler().runTask(plugin(), menu::open);
     }
 
     @Override
@@ -84,13 +87,27 @@ public final class HastyPickaxe implements Mytem {
     private int getXp(Block block) {
         if (PlayerPlacedBlocks.isPlayerPlaced(block)) return 0;
         final var mat = block.getType();
-        if (mat.name().endsWith("_ORE")) return 2;
         return switch (mat) {
         case STONE -> 1;
         case ANDESITE -> 1;
         case DIORITE -> 1;
         case GRANITE -> 1;
-        case DEEPSLATE -> 1;
+        case DEEPSLATE -> 2;
+        case COAL_ORE -> 3;
+        case DEEPSLATE_COAL_ORE -> 3;
+        case IRON_ORE -> 3;
+        case DEEPSLATE_IRON_ORE -> 3;
+        case COPPER_ORE -> 3;
+        case DEEPSLATE_COPPER_ORE -> 3;
+        case GOLD_ORE -> 3;
+        case DEEPSLATE_GOLD_ORE -> 3;
+        case NETHER_GOLD_ORE -> 3;
+        case LAPIS_ORE -> 5;
+        case DEEPSLATE_LAPIS_ORE -> 5;
+        case DIAMOND_ORE -> 10;
+        case DEEPSLATE_DIAMOND_ORE -> 10;
+        case EMERALD_ORE -> 10;
+        case DEEPSLATE_EMERALD_ORE -> 10;
         default -> 0;
         };
     }

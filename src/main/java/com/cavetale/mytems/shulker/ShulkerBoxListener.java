@@ -65,6 +65,9 @@ public final class ShulkerBoxListener implements Listener {
             return;
         }
         final int clickedSlot = event.getSlot();
+        if (clickedSlot < 0) {
+            return;
+        }
         final ItemStack clickedItem = player.getInventory().getItem(clickedSlot);
         if (clickedItem == null || !Tag.SHULKER_BOXES.isTagged(clickedItem.getType())) {
             return;

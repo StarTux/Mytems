@@ -51,7 +51,7 @@ public abstract class HastyPickaxeTag extends UpgradableItemTag {
                         List.of(tier.getDisplayName(),
                                 text(tiny("tier " + tier.getRomanTier().toLowerCase()), LIGHT_PURPLE),
                                 textOfChildren(text(tiny("level "), GRAY), text(getLevel(), WHITE)),
-                                textOfChildren(text(tiny("xp "), GRAY), text(getXp(), WHITE)),
+                                textOfChildren(text(tiny("xp "), GRAY), text(getXp(), WHITE), text("/", GRAY), text(getRequiredXp(), WHITE)),
                                 empty(),
                                 textOfChildren(Mytems.MOUSE_RIGHT, text(" Open menu", GRAY))));
             });

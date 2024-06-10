@@ -18,6 +18,7 @@ import org.bukkit.event.entity.EntityPickupItemEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
@@ -114,6 +115,8 @@ public interface Mytem {
     default void onPlayerBreakBlock(PlayerBreakBlockEvent event, Player player, ItemStack item) { }
 
     default void onPlayerChangeBlock(PlayerChangeBlockEvent event, Player player, ItemStack item) { }
+
+    default void onPlayerInventoryClick(InventoryClickEvent event, Player player, ItemStack item) { }
 
     default void onTick(Player player, ItemStack item, EquipmentSlot slot) { }
 

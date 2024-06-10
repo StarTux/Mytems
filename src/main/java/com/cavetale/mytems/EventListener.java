@@ -61,6 +61,7 @@ import org.bukkit.event.entity.ProjectileLaunchEvent;
 import org.bukkit.event.inventory.FurnaceBurnEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryPickupItemEvent;
+import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.event.inventory.PrepareItemCraftEvent;
 import org.bukkit.event.player.PlayerAttemptPickupItemEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
@@ -284,6 +285,29 @@ public final class EventListener implements Listener {
         if (event.getClickedInventory() instanceof PlayerInventory) {
             plugin.sessions.of(player).equipmentDidChange();
         }
+    }
+
+    /**
+     * If a player right clicks an item in their inventory with an
+     * empty cursor.
+     */
+    @EventHandler(ignoreCancelled = false, priority = EventPriority.LOW)
+    private void onPlayerInventoryRightClick(InventoryClickEvent event) {
+        if (!(event.getWhoClicked() instanceof Player player)) {
+            return;
+        }
+        // Player inventory
+        if (event.getView().getType() != InventoryType.CRAFTING) {
+            return;
+        }
+        // Empty cursor
+        if (event.getCursor() != null && !event.getCursor().isEmpty()) {
+            return;
+        }
+        final ItemStack item = event.getCurrentItem();
+        final Mytems mytems = Mytems.forItem(item);
+        if (mytems == null) return;
+        mytems.getMytem().onPlayerInventoryClick(event, player, item);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
