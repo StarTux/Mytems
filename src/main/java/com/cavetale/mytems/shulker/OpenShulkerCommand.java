@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 public final class OpenShulkerCommand extends AbstractCommand<MytemsPlugin> {
-    public OpenShulkerCommand(MytemsPlugin plugin) {
+    public OpenShulkerCommand(final MytemsPlugin plugin) {
         super(plugin, "openshulker");
     }
 
