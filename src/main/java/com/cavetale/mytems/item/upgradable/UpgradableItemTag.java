@@ -40,7 +40,7 @@ public abstract class UpgradableItemTag extends MytemTag {
     /**
      * Get the tier of this tag, starting at 1.
      */
-    public abstract UpgradableItemTier getTier();
+    public abstract UpgradableItemTier getUpgradableItemTier();
 
     /**
      * Load the xp and all stats from the item.
@@ -54,7 +54,12 @@ public abstract class UpgradableItemTag extends MytemTag {
         final var pdc = itemStack.getItemMeta().getPersistentDataContainer();
         this.xp = Tags.getInt(pdc, namespacedKey(XP), 0);
         this.level = Tags.getInt(pdc, namespacedKey(LEVEL), 0);
-        this.upgrades = getUpgradableItem().getUpgradeLevels(pdc);
+        this.upgrades = new HashMap<>();
+        for (var stat : getUpgradableItem().getStats()) {
+            final int upgradeLevel = Tags.getInt(pdc, stat.getNamespacedKey(), 0);
+            if (upgradeLevel == 0) continue;
+            upgrades.put(stat.getKey(), upgradeLevel);
+        }
     }
 
     /**
@@ -67,8 +72,17 @@ public abstract class UpgradableItemTag extends MytemTag {
                 final var pdc = meta.getPersistentDataContainer();
                 Tags.set(pdc, namespacedKey(XP), xp);
                 Tags.set(pdc, namespacedKey(LEVEL), level);
-                if (upgrades != null) {
-                    getUpgradableItem().setUpgradeLevels(pdc, upgrades);
+                for (UpgradableStat stat : getUpgradableItem().getStats()) {
+                    final int upgradeLevel = upgrades != null
+                        ? upgrades.getOrDefault(stat.getKey(), 0)
+                        : 0;
+                    if (upgradeLevel == 0) {
+                        pdc.remove(stat.getNamespacedKey());
+                        stat.removeFromItem(meta);
+                    } else {
+                        Tags.set(pdc, stat.getNamespacedKey(), 1);
+                        stat.applyToItem(meta, upgradeLevel);
+                    }
                 }
             });
     }
@@ -89,29 +103,40 @@ public abstract class UpgradableItemTag extends MytemTag {
         return upgrades.getOrDefault(stat.getKey(), 0);
     }
 
-    public final void setUpgradeLevel(UpgradableStat stat, int newLevel) {
-        if (upgrades == null) upgrades = new HashMap<>();
-        if (newLevel == 0) {
-            upgrades.remove(stat.getKey());
-        } else {
-            upgrades.put(stat.getKey(), newLevel);
+    public final void setUpgradeLevel(UpgradableStat stat, int upgradeLevel) {
+        if (upgradeLevel <= 0) {
+            throw new IllegalArgumentException("stat=" + stat + " level=" + upgradeLevel);
         }
+        upgrades = upgrades == null
+            ? new HashMap<>()
+            : new HashMap<>(upgrades);
+        upgrades.put(stat.getKey(), upgradeLevel);
     }
 
-    public final boolean hasConflicts(UpgradableStat stat) {
+    public final boolean hasUnlockedConflictsWith(UpgradableStat stat) {
         for (UpgradableStat conflict : stat.getConflicts()) {
             if (getUpgradeLevel(conflict) > 0) return true;
         }
         return false;
     }
 
-    public final List<UpgradableStat> getUnlockedConflicts(UpgradableStat stat) {
+    public final List<UpgradableStat> getUnlockedConflictsWith(UpgradableStat stat) {
         final List<? extends UpgradableStat> conflicts = stat.getConflicts();
         if (conflicts.isEmpty()) return List.of();
         final List<UpgradableStat> result = new ArrayList<>(conflicts.size());
         for (UpgradableStat conflict : conflicts) {
             if (getUpgradeLevel(conflict) > 0) {
                 result.add(conflict);
+            }
+        }
+        return result;
+    }
+
+    public final List<UpgradableStat> getMissingDependenciesFor(UpgradableStat stat) {
+        final List<UpgradableStat> result = new ArrayList<>();
+        for (UpgradableStat dependency : stat.getDependencies()) {
+            if (getUpgradeLevel(dependency) == 0) {
+                result.add(dependency);
             }
         }
         return result;
@@ -126,25 +151,43 @@ public abstract class UpgradableItemTag extends MytemTag {
         return result;
     }
 
-    public final UpgradableStatStatus canUpgradeStat(UpgradableStat stat) {
-        final UpgradableItemTier itemTier = getTier();
-        final UpgradableStatLevel theLevel = stat.getLevel(getUpgradeLevel(stat));
-        if (theLevel == null) {
-            if (itemTier.getTier() < stat.getLevel(1).getRequiredTier()) {
-                return UpgradableStatStatus.TIER_TOO_LOW;
-            } else if (hasConflicts(stat)) {
-                return UpgradableStatStatus.STAT_CONFLICT;
-            } else {
-                return UpgradableStatStatus.UPGRADABLE;
+    public final UpgradableStatStatus getUpgradeStatus(UpgradableStat stat) {
+        final UpgradableItemTier itemTier = getUpgradableItemTier();
+        final List<UpgradableStat> missingDependencies = getMissingDependenciesFor(stat);
+        if (!missingDependencies.isEmpty()) {
+            return new UpgradableStatStatus.UnmetDependencies(stat.getFirstLevel(), missingDependencies);
+        }
+        final UpgradableStatLevel currentLevel = stat.getLevel(getUpgradeLevel(stat));
+        if (currentLevel == null) {
+            final UpgradableStatLevel firstLevel = stat.getLevel(1);
+            final UpgradableItemTier requiredTier = firstLevel.getRequiredTier();
+            if (requiredTier != null && itemTier.getTier() < requiredTier.getTier()) {
+                return new UpgradableStatStatus.TierTooLow(null, firstLevel, itemTier, requiredTier);
             }
+            final List<UpgradableStat> conflicts = getUnlockedConflictsWith(stat);
+            if (conflicts != null && !conflicts.isEmpty()) {
+                return new UpgradableStatStatus.StatConflict(firstLevel, conflicts);
+            }
+            final int totalUpgradeCount = countTotalUpgrades();
+            if (level <= totalUpgradeCount) {
+                return new UpgradableStatStatus.ItemLevelTooLow(null, firstLevel, level, totalUpgradeCount + 1);
+            }
+            return new UpgradableStatStatus.Upgradable(null, firstLevel);
         } else {
-            if (theLevel.getLevel() >= stat.getMaxLevel()) {
-                return UpgradableStatStatus.MAX_LEVEL;
-            } else if (itemTier.getTier() < stat.getLevel(theLevel.getLevel() + 1).getRequiredTier()) {
-                return UpgradableStatStatus.TIER_TOO_LOW;
-            } else {
-                return UpgradableStatStatus.UPGRADABLE;
+            final UpgradableStatLevel maxLevel = stat.getMaxLevel();
+            if (currentLevel.getLevel() >= maxLevel.getLevel()) {
+                return new UpgradableStatStatus.MaxLevel(maxLevel);
             }
+            final UpgradableStatLevel nextLevel = stat.getLevel(currentLevel.getLevel() + 1);
+            final UpgradableItemTier requiredTier = nextLevel.getRequiredTier();
+            if (itemTier.getTier() < requiredTier.getTier()) {
+                return new UpgradableStatStatus.TierTooLow(currentLevel, nextLevel, itemTier, requiredTier);
+            }
+            final int totalUpgradeCount = countTotalUpgrades();
+            if (level <= totalUpgradeCount) {
+                return new UpgradableStatStatus.ItemLevelTooLow(currentLevel, nextLevel, level, totalUpgradeCount + 1);
+            }
+            return new UpgradableStatStatus.Upgradable(currentLevel, nextLevel);
         }
     }
 

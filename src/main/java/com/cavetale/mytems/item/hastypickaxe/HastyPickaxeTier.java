@@ -6,6 +6,7 @@ import java.util.function.Supplier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.TextColor.color;
 
@@ -13,11 +14,11 @@ import static net.kyori.adventure.text.format.TextColor.color;
 @RequiredArgsConstructor
 public enum HastyPickaxeTier implements UpgradableItemTier {
     COPPER(1, Mytems.HASTY_PICKAXE, HastyPickaxeTag.Copper.class, HastyPickaxeTag.Copper::new,
-           text("Hasty Pickaxe", color(0xE77C56))),
+           text("Hasty Pickaxe", color(0xE77C56)), color(0xE77C56)),
     GOLD(2, Mytems.GOLDEN_HASTY_PICKAXE, HastyPickaxeTag.Gold.class, HastyPickaxeTag.Gold::new,
-         text("Golden Hasty Pickaxe", color(0xF7C940))),
+         text("Golden Hasty Pickaxe", color(0xF7C940)), color(0xF7C940)),
     DIAMOND(3, Mytems.DIAMOND_HASTY_PICKAXE, HastyPickaxeTag.Diamond.class, HastyPickaxeTag.Diamond::new,
-            text("Diamond Hasty Pickaxe", color(0x27B29A))),
+            text("Diamond Hasty Pickaxe", color(0x27B29A)), color(0x27B29A)),
     ;
 
     private final int tier;
@@ -25,6 +26,7 @@ public enum HastyPickaxeTier implements UpgradableItemTier {
     private final Class<? extends HastyPickaxeTag> tagClass;
     private final Supplier<HastyPickaxeTag> tagSupplier;
     private final Component displayName;
+    private final TextColor menuColor;
 
     public static HastyPickaxeTier of(int tier) {
         return values()[tier - 1];

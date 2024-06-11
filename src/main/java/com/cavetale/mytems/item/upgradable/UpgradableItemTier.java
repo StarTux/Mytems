@@ -2,6 +2,7 @@ package com.cavetale.mytems.item.upgradable;
 
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Text;
+import net.kyori.adventure.text.format.TextColor;
 
 public interface UpgradableItemTier {
     /**
@@ -17,4 +18,6 @@ public interface UpgradableItemTier {
     default String getRomanTier() {
         return Text.roman(getTier());
     }
+
+    TextColor getMenuColor();
 }

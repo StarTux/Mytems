@@ -1,11 +1,11 @@
 package com.cavetale.mytems.item.upgradable;
 
 import com.cavetale.core.struct.Vec2i;
-import com.cavetale.worldmarker.util.Tags;
 import java.util.List;
 import net.kyori.adventure.text.Component;
+import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.inventory.meta.ItemMeta;
 import static com.cavetale.mytems.MytemsPlugin.namespacedKey;
 
 public interface UpgradableStat {
@@ -15,6 +15,10 @@ public interface UpgradableStat {
      * other custom item property starting with 'mytems:'.
      */
     String getKey();
+
+    default NamespacedKey getNamespacedKey() {
+        return namespacedKey(getKey());
+    }
 
     /**
      * Get the slot where this stat goes in the GUI.
@@ -40,8 +44,13 @@ public interface UpgradableStat {
             : levels.get(levels.size() - 1);
     }
 
-    default int getMaxLevel() {
-        return getLevels().size();
+    default UpgradableStatLevel getFirstLevel() {
+        return getLevel(1);
+    }
+
+    default UpgradableStatLevel getMaxLevel() {
+        final var levels = getLevels();
+        return levels.get(levels.size() - 1);
     }
 
     /**
@@ -67,43 +76,14 @@ public interface UpgradableStat {
      */
     List<? extends UpgradableStat> getConflicts();
 
-    /**
-     * Get the upgrade level from an item.
-     *
-     * @param item the item
-     * @return the level or 0
-     */
-    default int getUpgradeLevel(ItemStack item) {
-        if (!item.hasItemMeta()) {
-            return 0;
-        }
-        return getUpgradeLevel(item.getItemMeta().getPersistentDataContainer());
-    }
+    default void removeFromItem(ItemMeta meta) { }
 
     /**
-     * Get the upgrade level from an item tag.
-     *
-     * @tag the item tag
-     * @return the level or 0
+     * Override either this method or the corresponding method in the
+     * stat level in order to implement upgrade behavior such as
+     * enchantments.
      */
-    default int getUpgradeLevel(PersistentDataContainer tag) {
-        final Integer value = Tags.getInt(tag, namespacedKey(getKey()));
-        return value != null
-            ? value
-            : 0;
-    }
-
-    /**
-     * Set an upgrade level on an item tag.
-     *
-     * @param tag the item tag
-     * @param level the level
-     */
-    default void setUpgradeLevel(PersistentDataContainer tag, int level) {
-        if (level == 0) {
-            tag.remove(namespacedKey(getKey()));
-        } else {
-            Tags.set(tag, namespacedKey(getKey()), 1);
-        }
+    default void applyToItem(ItemMeta meta, int upgradeLevel) {
+        getLevel(upgradeLevel).applyToItem(meta);
     }
 }

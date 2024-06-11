@@ -2,8 +2,6 @@ package com.cavetale.mytems.item.hastypickaxe;
 
 import com.cavetale.mytems.item.upgradable.UpgradableItem;
 import java.util.List;
-import net.kyori.adventure.text.Component;
-import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 public final class HastyPickaxeItem implements UpgradableItem {
@@ -28,11 +26,6 @@ public final class HastyPickaxeItem implements UpgradableItem {
 
     @Override
     public int getMenuSize() {
-        return 3 * 9;
-    }
-
-    @Override
-    public Component getMenuTitle() {
-        return text("Hasty Pickaxe", BLACK);
+        return 5 * 9;
     }
 }

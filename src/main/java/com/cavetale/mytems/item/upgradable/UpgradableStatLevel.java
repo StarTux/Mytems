@@ -3,6 +3,7 @@ package com.cavetale.mytems.item.upgradable;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 
 /**
  * Represent one upgrade level of a stat.  Each stat must have at
@@ -28,8 +29,9 @@ public interface UpgradableStatLevel {
     /**
      * Get the required tier.
      */
-    default int getRequiredTier() {
-        return 0;
+    default UpgradableItemTier getRequiredTier() {
+        return null;
     }
-}
 
+    default void applyToItem(ItemMeta meta) { }
+}
