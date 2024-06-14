@@ -65,11 +65,11 @@ public final class MytemsTest {
         System.out.println("// CustomModelData Range: " + min + "..." + max);
         System.out.println("// CustomModelData Gaps: " + gaps);
         System.out.println("// CustomModelData Next: " + (max + 1));
-        testCharacters();
         testCore(DefaultFont.class);
         testCore(VanillaEffects.class);
         testCore(VanillaPaintings.class);
         testCore(VanillaItems.class);
+        testCharacters();
     }
 
     /**
