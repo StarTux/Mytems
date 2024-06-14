@@ -1,6 +1,7 @@
 package com.cavetale.mytems.item.upgradable;
 
 import java.util.List;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Value;
@@ -47,7 +48,7 @@ public abstract class UpgradableStatStatus {
     /**
      * Stat can be upgraded from one level to the next.
      */
-    @Value
+    @Value @EqualsAndHashCode(callSuper = true)
     public static final class Upgradable extends UpgradableStatStatus {
         public Upgradable(final UpgradableStatLevel currentLevel, final UpgradableStatLevel nextLevel) {
             super(Type.UPGRADABLE, currentLevel, nextLevel);
@@ -62,7 +63,7 @@ public abstract class UpgradableStatStatus {
      * getCurrentLevel() may yield null.  hasCurrentLevel() may be
      * checked first.
      */
-    @Value
+    @Value @EqualsAndHashCode(callSuper = true)
     public static final class TierTooLow extends UpgradableStatStatus {
         private final UpgradableItemTier currentTier;
         private final UpgradableItemTier requiredTier;
@@ -78,7 +79,7 @@ public abstract class UpgradableStatStatus {
      * Missing dependencies render the entire stat unobtainable until
      * the dependencies are fulfilled.
      */
-    @Value
+    @Value @EqualsAndHashCode(callSuper = true)
     public static final class UnmetDependencies extends UpgradableStatStatus {
         private final List<UpgradableStat> missingDependencies;
 
@@ -91,7 +92,7 @@ public abstract class UpgradableStatStatus {
     /**
      * Conflicts render the entire stat permanently unobtainable.
      */
-    @Value
+    @Value @EqualsAndHashCode(callSuper = true)
     public static final class StatConflict extends UpgradableStatStatus {
         private final List<UpgradableStat> conflictingStats;
 
@@ -101,7 +102,7 @@ public abstract class UpgradableStatStatus {
         }
     }
 
-    @Value
+    @Value @EqualsAndHashCode(callSuper = true)
     public static final class MaxLevel extends UpgradableStatStatus {
         public MaxLevel(final UpgradableStatLevel maxLevel) {
             super(Type.MAX_LEVEL, maxLevel, null);
@@ -113,7 +114,7 @@ public abstract class UpgradableStatStatus {
      * that any given stat could be unlocked if there were enough
      * points.
      */
-    @Value
+    @Value @EqualsAndHashCode(callSuper = true)
     public static final class ItemLevelTooLow extends UpgradableStatStatus {
         private final int currentItemLevel;
         private final int requiredItemLevel;
