@@ -5,9 +5,11 @@ import com.cavetale.core.command.CommandArgCompleter;
 import com.cavetale.core.command.CommandContext;
 import com.cavetale.core.command.CommandNode;
 import com.cavetale.core.command.CommandWarn;
+import com.cavetale.core.struct.Cuboid;
 import com.cavetale.core.util.Json;
 import com.cavetale.mytems.custom.NetheriteParityGui;
 import com.cavetale.mytems.gear.Equipment;
+import com.cavetale.mytems.item.axis.CuboidOutline;
 import com.cavetale.mytems.item.coin.BankTeller;
 import com.cavetale.mytems.item.font.Glyph;
 import com.cavetale.mytems.session.Session;
@@ -147,6 +149,10 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         rootNode.addChild("collisiontest").denyTabCompletion()
             .description("Test block collisions")
             .playerCaller(this::collisionTest);
+        rootNode.addChild("worldedithighlight").denyTabCompletion()
+            .description("Highlight your WorldEdit selection")
+            .alias("wehl")
+            .playerCaller(this::worldEditHighlight);
     }
 
     protected boolean list(CommandSender sender, String[] args) {
@@ -569,5 +575,13 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
             }
             player.sendMessage(join(separator(space()), line));
         }
+    }
+
+    private void worldEditHighlight(Player player) {
+        final var outline = new CuboidOutline(player.getWorld(), Cuboid.requireSelectionOf(player));
+        outline.showOnlyTo(player);
+        outline.spawn();
+        outline.removeLater(100L);
+        player.sendMessage(text("Outlining " + outline.getCuboid(), YELLOW));
     }
 }
