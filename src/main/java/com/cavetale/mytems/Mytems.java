@@ -1076,8 +1076,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     SCUBA_HELMET(ScubaHelmet.class, PLAYER_HEAD, null, (char) 0, UTILITY),
     MINER_HELMET(MinerHelmet.class, PLAYER_HEAD, null, (char) 0, UTILITY),
     //
-    MOM(DummyMytem.class, HEART_OF_THE_SEA, 0x3021, MOTHERS_DAY),
-    MOTHER(DummyMytem.class, HEART_OF_THE_SEA, 0x3022, MOTHERS_DAY, 64),
+    MOM(DummyMytem.class, HEART_OF_THE_SEA, 0xF321, MOTHERS_DAY),
+    MOTHER(DummyMytem.class, HEART_OF_THE_SEA, 0xF322, MOTHERS_DAY, 64),
+    DAD(DummyMytem.class, HEART_OF_THE_SEA, 0xF323, FATHERS_DAY),
+    FATHER(DummyMytem.class, HEART_OF_THE_SEA, 0xF324, FATHERS_DAY, 64),
     //
     AXIS_MODEL(DummyMytem.class, END_ROD, 0xE027, (char) 0, TECHNICAL),
     ;

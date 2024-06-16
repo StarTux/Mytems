@@ -30,6 +30,7 @@ public enum MytemsCategory {
     EASTER_TOKENS,
     ENDERMAN_COSTUME,
     ENEMY,
+    FATHERS_DAY,
     FINDER,
     FOX_COSTUME,
     FRIENDS,
