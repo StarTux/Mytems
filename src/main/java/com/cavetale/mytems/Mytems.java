@@ -50,8 +50,8 @@ import com.cavetale.mytems.item.font.GlyphItem;
 import com.cavetale.mytems.item.garden.Scissors;
 import com.cavetale.mytems.item.garden.Scythe;
 import com.cavetale.mytems.item.halloween.HalloweenCandy;
-import com.cavetale.mytems.item.halloween.HalloweenToken;
 import com.cavetale.mytems.item.halloween.HalloweenToken2;
+import com.cavetale.mytems.item.halloween.HalloweenToken;
 import com.cavetale.mytems.item.hastypickaxe.HastyPickaxe;
 import com.cavetale.mytems.item.hourglass.Hourglass;
 import com.cavetale.mytems.item.luminator.Luminator;
@@ -105,6 +105,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.Style;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -197,8 +198,8 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     MAGIC_MAP(MagicMap.class, FILLED_MAP, 7413005, (char) 0xE21D, chrarr(0xE21D, 0xF00E, 0xF00F, 0xF010, 0xF011, 0xF012, 0xF013, 0xF014, 0xF015, 0xF016, 0xF017, 0xF018, 0xF019, 0xF01A, 0xF01B, 0xF01C), UTILITY, Animation.MAGIC_MAP),
     SNOW_SHOVEL(SnowShovel.class, IRON_SHOVEL, 220, (char) 0xF01D, UTILITY),
     HASTY_PICKAXE(HastyPickaxe.class, GOLDEN_PICKAXE, 223, (char) 0xF01E, HASTY_PICKAXES),
-    GOLDEN_HASTY_PICKAXE(HastyPickaxe.class, GOLDEN_PICKAXE, 0xF313, (char) 0xF313, HASTY_PICKAXES),
-    DIAMOND_HASTY_PICKAXE(HastyPickaxe.class, GOLDEN_PICKAXE, 0xF314, (char) 0xF314, HASTY_PICKAXES),
+    GOLDEN_HASTY_PICKAXE(HastyPickaxe.class, DIAMOND_PICKAXE, 0xF313, (char) 0xF313, HASTY_PICKAXES),
+    DIAMOND_HASTY_PICKAXE(HastyPickaxe.class, NETHERITE_PICKAXE, 0xF314, (char) 0xF314, HASTY_PICKAXES),
     TREE_CHOPPER(TreeChopper.class, GOLDEN_AXE, 242, (char) 0xF01F, UTILITY),
     ARMOR_STAND_EDITOR(ArmorStandEditor.class, FLINT, 241, (char) 0xF020, UTILITY),
     FERTILIZER(Fertilizer.class, BONE_MEAL, 285, (char) 0xF021, UTILITY),
@@ -1082,6 +1083,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     FATHER(DummyMytem.class, HEART_OF_THE_SEA, 0xF324, FATHERS_DAY, 64),
     //
     AXIS_MODEL(DummyMytem.class, END_ROD, 0xE027, (char) 0, TECHNICAL),
+    MOUSE_CURSOR(ForbiddenMytem.class, ARROW, 0xE028, (char) 0xE028, UI),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
@@ -1353,6 +1355,14 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     @Override
     public Component asComponent() {
         return component;
+    }
+
+    public Component getComponent() {
+        return component;
+    }
+
+    public Component getColoredComponent(TextColor color) {
+        return component.color(color);
     }
 
     @Override
