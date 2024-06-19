@@ -33,8 +33,10 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -149,7 +151,7 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         rootNode.addChild("collisiontest").denyTabCompletion()
             .description("Test block collisions")
             .playerCaller(this::collisionTest);
-        rootNode.addChild("worldedithighlight").denyTabCompletion()
+        rootNode.addChild("worldedithighlight").arguments("<hexcolor>")
             .description("Highlight your WorldEdit selection")
             .alias("wehl")
             .playerCaller(this::worldEditHighlight);
@@ -577,11 +579,19 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         }
     }
 
-    private void worldEditHighlight(Player player) {
+    private boolean worldEditHighlight(Player player, String[] args) {
+        if (args.length > 1) return false;
         final var outline = new CuboidOutline(player.getWorld(), Cuboid.requireSelectionOf(player));
+        final Color glowColor = args.length >= 1
+            ? Color.fromRGB(TextColor.fromHexString(args[0]).value())
+            : null;
         outline.showOnlyTo(player);
         outline.spawn();
         outline.removeLater(100L);
+        if (glowColor != null) {
+            outline.glow(glowColor);
+        }
         player.sendMessage(text("Outlining " + outline.getCuboid(), YELLOW));
+        return true;
     }
 }

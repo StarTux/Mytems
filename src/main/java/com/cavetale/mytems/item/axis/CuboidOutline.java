@@ -10,6 +10,7 @@ import lombok.Getter;
 import lombok.Value;
 import org.bukkit.Axis;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.ItemDisplay;
@@ -29,7 +30,7 @@ public final class CuboidOutline {
     private Player showOnlyTo;
     private Vec3d center;
     private Vec3i size;
-    private final List<Entry> entries = new ArrayList<>();
+    @Getter private final List<Entry> entries = new ArrayList<>();
 
     @Value
     private static final class Entry {
@@ -61,6 +62,8 @@ public final class CuboidOutline {
                                                                    rotation,
                                                                    scale,
                                                                    ROTATION_ZERO));
+                            e.setBrightness(new ItemDisplay.Brightness(15, 15));
+                            e.setViewRange(1024);
                             if (showOnlyTo != null) {
                                 e.setVisibleByDefault(false);
                             }
@@ -72,6 +75,19 @@ public final class CuboidOutline {
                     entries.add(new Entry(axis, max1, max2, itemDisplay));
                 }
             }
+        }
+    }
+
+    public void glow(Color glowColor) {
+        for (Entry entry : entries) {
+            entry.itemDisplay.setGlowColorOverride(glowColor);
+            entry.itemDisplay.setGlowing(true);
+        }
+    }
+
+    public void unglow() {
+        for (Entry entry : entries) {
+            entry.itemDisplay.setGlowing(false);
         }
     }
 
