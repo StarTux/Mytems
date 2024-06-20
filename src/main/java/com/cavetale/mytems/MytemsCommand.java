@@ -5,6 +5,7 @@ import com.cavetale.core.command.CommandArgCompleter;
 import com.cavetale.core.command.CommandContext;
 import com.cavetale.core.command.CommandNode;
 import com.cavetale.core.command.CommandWarn;
+import com.cavetale.core.item.ItemKinds;
 import com.cavetale.core.struct.Cuboid;
 import com.cavetale.core.util.Json;
 import com.cavetale.mytems.custom.NetheriteParityGui;
@@ -12,6 +13,7 @@ import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.item.axis.CuboidOutline;
 import com.cavetale.mytems.item.coin.BankTeller;
 import com.cavetale.mytems.item.font.Glyph;
+import com.cavetale.mytems.item.upgradable.UpgradableItemTag;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Blocks;
 import com.cavetale.mytems.util.Collision;
@@ -155,6 +157,13 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
             .description("Highlight your WorldEdit selection")
             .alias("wehl")
             .playerCaller(this::worldEditHighlight);
+        // Upgradable
+        final CommandNode upgradableNode = rootNode.addChild("upgradable")
+            .description("Upgradable item commands");
+        upgradableNode.addChild("addxp").arguments("<xp>")
+            .completers(CommandArgCompleter.integer(i -> i > 0))
+            .description("Add xp to upgradable item in hand")
+            .playerCaller(this::upgradableAddXp);
     }
 
     protected boolean list(CommandSender sender, String[] args) {
@@ -592,6 +601,27 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
             outline.glow(glowColor);
         }
         player.sendMessage(text("Outlining " + outline.getCuboid(), YELLOW));
+        return true;
+    }
+
+    private boolean upgradableAddXp(Player player, String[] args) {
+        if (args.length != 1) return false;
+        final int xp = CommandArgCompleter.requireInt(args[0], i -> i > 0);
+        final ItemStack item = player.getInventory().getItemInMainHand();
+        final Mytems mytems = Mytems.forItem(item);
+        if (mytems == null) {
+            throw new CommandWarn("There is no Mytem in your hand");
+        }
+        final MytemTag tag = mytems.getMytem().serializeTag(item);
+        if (!(tag instanceof UpgradableItemTag upgradable)) {
+            throw new CommandWarn(mytems + " is not an upgradable Mytem!");
+        }
+        if (!upgradable.addXp(xp)) {
+            throw new CommandWarn("Adding xp was rejected");
+        }
+        upgradable.store(item);
+        player.sendMessage(textOfChildren(text("Added " + xp + " xp to ", YELLOW),
+                                          ItemKinds.chatDescription(item)));
         return true;
     }
 }

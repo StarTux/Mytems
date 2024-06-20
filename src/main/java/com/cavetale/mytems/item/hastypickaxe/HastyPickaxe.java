@@ -6,6 +6,7 @@ import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.item.upgradable.UpgradableItemMenu;
 import com.cavetale.mytems.util.Json;
+import com.google.common.collect.ImmutableListMultimap;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
@@ -36,7 +37,10 @@ public final class HastyPickaxe implements Mytem {
         }
         prototype = new ItemStack(key.material);
         tier.createTag().store(prototype);
-        prototype.editMeta(meta -> key.markItemMeta(meta));
+        prototype.editMeta(meta -> {
+                meta.setAttributeModifiers(ImmutableListMultimap.of());
+                key.markItemMeta(meta);
+            });
     }
 
     @Override
@@ -76,11 +80,13 @@ public final class HastyPickaxe implements Mytem {
         Bukkit.getScheduler().runTask(plugin(), () -> {
                 final HastyPickaxeTag tag = serializeTag(item);
                 if (tag.addXp(xp)) {
-                    player.sendMessage(textOfChildren(text("Your ", GREEN),
-                                                      key,
-                                                      text(" has leveled up.", GREEN)));
+                    tag.store(item);
                 }
-                tag.store(item);
+                if (tag.hasAvailableUnlocks()) {
+                    player.sendMessage(textOfChildren(text("Your ", GREEN), key, text(" has leveled up.", GREEN)));
+                    player.sendMessage(textOfChildren(Mytems.MOUSE_CURSOR, Mytems.MOUSE_RIGHT,
+                                                      text(" Right click it in your inventory to choose a perk.", GREEN)));
+                }
             });
     }
 

@@ -82,10 +82,12 @@ public abstract class UpgradableStatStatus {
     @Value @EqualsAndHashCode(callSuper = true)
     public static final class UnmetDependencies extends UpgradableStatStatus {
         private final List<UpgradableStat> missingDependencies;
+        private final List<UpgradableStat> missingCompleteDependencies;
 
-        public UnmetDependencies(final UpgradableStatLevel firstLevel, final List<UpgradableStat> missingDependencies) {
+        public UnmetDependencies(final UpgradableStatLevel firstLevel, final List<UpgradableStat> missingDependencies, final List<UpgradableStat> missingCompleteDependencies) {
             super(Type.UNMET_DEPENDENCIES, null, firstLevel);
             this.missingDependencies = missingDependencies;
+            this.missingCompleteDependencies = missingCompleteDependencies;
         }
     }
 

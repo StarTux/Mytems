@@ -66,8 +66,15 @@ public interface UpgradableStat {
 
     /**
      * List all dependencies of this stat.
+     * Each dependency must have one level unlocked.
      */
     List<? extends UpgradableStat> getDependencies();
+
+    /**
+     * List all complete dependencies of this stat.
+     * Complete dependencies must have all levels unlocked.
+     */
+    List<? extends UpgradableStat> getCompleteDependencies();
 
     /**
      * Lis all stats which this stat conflicts with.  This stat cannot
