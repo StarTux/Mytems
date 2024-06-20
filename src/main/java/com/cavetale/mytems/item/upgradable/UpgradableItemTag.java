@@ -161,60 +161,6 @@ public abstract class UpgradableItemTag extends MytemTag {
         return result;
     }
 
-    public final UpgradableStatStatus getUpgradeStatus(UpgradableStat stat) {
-        final UpgradableItemTier itemTier = getUpgradableItemTier();
-        final UpgradableStatLevel currentLevel = stat.getLevel(getUpgradeLevel(stat));
-        if (currentLevel == null) {
-            final UpgradableStatLevel firstLevel = stat.getLevel(1);
-            // Tier
-            final UpgradableItemTier requiredTier = firstLevel.getRequiredTier();
-            if (requiredTier != null && itemTier.getTier() < requiredTier.getTier()) {
-                return new UpgradableStatStatus.TierTooLow(null, firstLevel, itemTier, requiredTier);
-            }
-            // Conflicts
-            final List<UpgradableStat> conflicts = getUnlockedConflictsWith(stat);
-            if (conflicts != null && !conflicts.isEmpty()) {
-                return new UpgradableStatStatus.StatConflict(firstLevel, conflicts);
-            }
-            // Dependencies
-            final List<UpgradableStat> missingDependencies = getMissingDependenciesFor(stat);
-            final List<UpgradableStat> missingCompleteDependencies = getMissingCompleteDependenciesFor(stat);
-            if (!missingDependencies.isEmpty() || !missingCompleteDependencies.isEmpty()) {
-                return new UpgradableStatStatus.UnmetDependencies(stat.getFirstLevel(), missingDependencies, missingCompleteDependencies);
-            }
-            // Level
-            final int totalUpgradeCount = countTotalUpgrades();
-            if (level <= totalUpgradeCount) {
-                return new UpgradableStatStatus.ItemLevelTooLow(null, firstLevel, level, totalUpgradeCount + 1);
-            }
-            return new UpgradableStatStatus.Upgradable(null, firstLevel);
-        } else {
-            // Max Level
-            final UpgradableStatLevel maxLevel = stat.getMaxLevel();
-            if (currentLevel.getLevel() >= maxLevel.getLevel()) {
-                return new UpgradableStatStatus.MaxLevel(maxLevel);
-            }
-            final UpgradableStatLevel nextLevel = stat.getLevel(currentLevel.getLevel() + 1);
-            // Tier
-            final UpgradableItemTier requiredTier = nextLevel.getRequiredTier();
-            if (itemTier.getTier() < requiredTier.getTier()) {
-                return new UpgradableStatStatus.TierTooLow(currentLevel, nextLevel, itemTier, requiredTier);
-            }
-            // Dependencies
-            final List<UpgradableStat> missingDependencies = getMissingDependenciesFor(stat);
-            final List<UpgradableStat> missingCompleteDependencies = getMissingCompleteDependenciesFor(stat);
-            if (!missingDependencies.isEmpty() || !missingCompleteDependencies.isEmpty()) {
-                return new UpgradableStatStatus.UnmetDependencies(stat.getFirstLevel(), missingDependencies, missingCompleteDependencies);
-            }
-            // Level
-            final int totalUpgradeCount = countTotalUpgrades();
-            if (level <= totalUpgradeCount) {
-                return new UpgradableStatStatus.ItemLevelTooLow(currentLevel, nextLevel, level, totalUpgradeCount + 1);
-            }
-            return new UpgradableStatStatus.Upgradable(currentLevel, nextLevel);
-        }
-    }
-
     /**
      * Get the required exp for the next level.
      */
@@ -227,7 +173,7 @@ public abstract class UpgradableItemTag extends MytemTag {
             return false;
         }
         for (UpgradableStat stat : getUpgradableItem().getStats()) {
-            if (getUpgradeStatus(stat).isUpgradable()) {
+            if (new UpgradableStatStatus(this, stat).isUpgradable()) {
                 return true;
             }
         }
