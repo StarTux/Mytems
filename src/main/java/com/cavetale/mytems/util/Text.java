@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
@@ -156,19 +157,41 @@ public final class Text {
         return comps.build();
     }
 
+    @RequiredArgsConstructor
+    private enum Roman {
+        M(1000),
+        D(500),
+        C(100),
+        L(50),
+        X(10),
+        IX(9),
+        VIII(8),
+        VII(7),
+        VI(6),
+        V(5),
+        IV(4),
+        III(3),
+        II(3),
+        I(1);
+        private final int value;
+    }
+
     public static String roman(int value) {
-        switch (value) {
-        case 1: return "I";
-        case 2: return "II";
-        case 3: return "III";
-        case 4: return "IV";
-        case 5: return "V";
-        case 6: return "VI";
-        case 7: return "VII";
-        case 8: return "VIII";
-        case 9: return "IX";
-        case 10: return "X";
-        default: return "" + value;
+        if (value == 0) return "";
+        final StringBuilder sb = new StringBuilder();
+        if (value < 0) {
+            sb.append("-");
+            value = -value;
         }
+        do {
+            for (Roman it : Roman.values()) {
+                if (value >= it.value) {
+                    sb.append(it.name());
+                    value -= it.value;
+                    break;
+                }
+            }
+        } while (value > 0);
+        return sb.toString();
     }
 }
