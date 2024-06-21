@@ -1,6 +1,7 @@
 package com.cavetale.mytems.item.upgradable;
 
 import com.cavetale.mytems.MytemTag;
+import com.cavetale.mytems.Mytems;
 import com.cavetale.worldmarker.util.Tags;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,8 +10,16 @@ import java.util.Map;
 import java.util.Objects;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.core.font.Unicode.subscript;
+import static com.cavetale.core.font.Unicode.superscript;
+import static com.cavetale.core.font.Unicode.tiny;
 import static com.cavetale.mytems.MytemsPlugin.namespacedKey;
+import static com.cavetale.mytems.util.Text.roman;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.textOfChildren;
+import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
@@ -195,5 +204,25 @@ public abstract class UpgradableItemTag extends MytemTag {
             level += 1;
         }
         return true;
+    }
+
+    public final List<Component> getDefaultTooltip() {
+        final List<Component> tooltip = new ArrayList<>();
+        final UpgradableItemTier tier = getUpgradableItemTier();
+        tooltip.add(tier.getMytems().getMytem().getDisplayName());
+        tooltip.add(text(tiny("tier " + tier.getRomanTier().toLowerCase()), LIGHT_PURPLE));
+        for (UpgradableStat stat : getUpgradableItem().getStats()) {
+            final int upgradeLevel = getUpgradeLevel(stat);
+            if (upgradeLevel < 1) continue;
+            if (stat.getLevels().size() > 1) {
+                tooltip.add(textOfChildren(stat.getChatIcon(), stat.getTitle(), text(" " + roman(upgradeLevel))).color(GRAY));
+            } else {
+                tooltip.add(textOfChildren(stat.getChatIcon(), stat.getTitle()));
+            }
+        }
+        tooltip.add(textOfChildren(text(tiny("level "), GRAY), text(getLevel(), WHITE)));
+        tooltip.add(textOfChildren(text(tiny("xp "), GRAY), text(superscript(getXp()), WHITE), text("/", GRAY), text(subscript(getRequiredXp()), WHITE)));
+        tooltip.add(textOfChildren(Mytems.MOUSE_CURSOR, Mytems.MOUSE_RIGHT, text(" Open menu", GRAY)));
+        return tooltip;
     }
 }

@@ -1,5 +1,6 @@
 package com.cavetale.mytems.item.upgradable;
 
+import com.cavetale.core.item.ItemKinds;
 import com.cavetale.core.struct.Vec2i;
 import java.util.List;
 import net.kyori.adventure.text.Component;
@@ -63,6 +64,10 @@ public interface UpgradableStat {
      * been unlocked.
      */
     ItemStack getIcon();
+
+    default Component getChatIcon() {
+        return ItemKinds.icon(getIcon());
+    }
 
     /**
      * List all dependencies of this stat.

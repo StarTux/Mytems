@@ -7,6 +7,8 @@ import com.cavetale.mytems.event.combat.DamageCalculation;
 import com.cavetale.mytems.event.combat.DamageCalculationEvent;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.item.music.PlayerPlayInstrumentEvent;
+import com.cavetale.mytems.item.upgradable.UpgradableItemMenu;
+import com.cavetale.mytems.item.upgradable.UpgradableItemTag;
 import com.cavetale.mytems.util.Entities;
 import com.cavetale.worldmarker.entity.EntityMarker;
 import com.cavetale.worldmarker.util.Tags;
@@ -292,7 +294,7 @@ public final class EventListener implements Listener {
      * empty cursor.
      */
     @EventHandler(ignoreCancelled = false, priority = EventPriority.LOW)
-    private void onPlayerInventoryRightClick(InventoryClickEvent event) {
+    private void onPlayerInventoryClick(InventoryClickEvent event) {
         if (!(event.getWhoClicked() instanceof Player player)) {
             return;
         }
@@ -308,6 +310,15 @@ public final class EventListener implements Listener {
         final Mytems mytems = Mytems.forItem(item);
         if (mytems == null) return;
         mytems.getMytem().onPlayerInventoryClick(event, player, item);
+        if (event.isCancelled()) return;
+        if (event.isRightClick()) {
+            event.setCancelled(true);
+            final MytemTag tag = mytems.getMytem().serializeTag(item);
+            if (tag instanceof UpgradableItemTag upgradableItemTag) {
+                final UpgradableItemMenu menu = new UpgradableItemMenu(player, item, upgradableItemTag);
+                Bukkit.getScheduler().runTask(plugin, menu::open);
+            }
+        }
     }
 
     @EventHandler(priority = EventPriority.LOWEST)

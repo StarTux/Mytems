@@ -1,7 +1,6 @@
 package com.cavetale.mytems.item.upgradable;
 
 import com.cavetale.core.font.GuiOverlay;
-import com.cavetale.core.item.ItemKinds;
 import com.cavetale.core.struct.Vec2i;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Gui;
@@ -26,7 +25,9 @@ import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 import static net.kyori.adventure.text.format.TextColor.color;
-import static net.kyori.adventure.text.format.TextDecoration.*;
+import static net.kyori.adventure.text.format.TextColor.lerp;
+import static net.kyori.adventure.text.format.TextDecoration.BOLD;
+import static net.kyori.adventure.text.format.TextDecoration.STRIKETHROUGH;
 
 @Data
 @RequiredArgsConstructor
@@ -34,13 +35,14 @@ public final class UpgradableItemMenu {
     private final Player player;
     private final ItemStack itemStack;
     private final UpgradableItemTag tag;
-    private final UpgradableItem upgradableItem;
     private Gui gui;
 
-    private static final Component DIVIDER = text(" ".repeat(ITEM_LORE_WIDTH), color(0x28055E), STRIKETHROUGH);
+    private static final Component DIVIDER = text(" ".repeat(ITEM_LORE_WIDTH + 2), color(0x28055E), STRIKETHROUGH);
 
     public void open() {
         final UpgradableItemTier itemTier = tag.getUpgradableItemTier();
+        final TextColor menuColor = itemTier.getMenuColor();
+        final UpgradableItem upgradableItem = tag.getUpgradableItem();
         gui = new Gui()
             .size(upgradableItem.getMenuSize())
             .title(textOfChildren(itemTier.getMytems(),
@@ -52,30 +54,27 @@ public final class UpgradableItemMenu {
                                   text(superscript(tag.getXp()), WHITE),
                                   text("/", GRAY),
                                   text(subscript(tag.getRequiredXp()), WHITE)));
-        gui.layer(GuiOverlay.BLANK, itemTier.getMenuColor());
-        gui.layer(GuiOverlay.TITLE_BAR, itemTier.getMenuColor());
+        gui.layer(GuiOverlay.BLANK, menuColor);
+        gui.layer(GuiOverlay.TITLE_BAR, menuColor);
         for (UpgradableStat stat : upgradableItem.getStats()) {
             final UpgradableStatStatus status = new UpgradableStatStatus(tag, stat);
             final ItemStack icon = status.hasCurrentLevel()
                 ? status.getCurrentLevel().getIcon()
                 : stat.getIcon();
             final List<Component> tooltip = new ArrayList<>();
-            tooltip.add(textOfChildren(ItemKinds.icon(stat.getIcon()), stat.getTitle()));
+            tooltip.add(textOfChildren(stat.getChatIcon(), stat.getTitle()));
             if (status.hasCurrentLevel()) {
                 tooltip.add(DIVIDER);
                 tooltip.add(textOfChildren(Mytems.CHECKED_CHECKBOX,
-                                           text(tiny(" level ") + status.getCurrentLevel().getLevel() + "/" + stat.getMaxLevel().getLevel(), LIGHT_PURPLE, ITALIC)));
+                                           text(tiny("level ") + status.getCurrentLevel().getLevel() + "/" + stat.getMaxLevel().getLevel(), LIGHT_PURPLE)));
                 for (Component line : status.getCurrentLevel().getDescription()) {
                     tooltip.add(textOfChildren(text("  "), line));
                 }
-                tooltip.add(DIVIDER);
             }
-            if (status.hasNextLevel() && !status.isPermanentlyLocked()) {
-                if (!status.hasCurrentLevel()) {
-                    tooltip.add(DIVIDER);
-                }
+            if (status.hasNextLevel()) {
+                tooltip.add(DIVIDER);
                 tooltip.add(textOfChildren((status.isUpgradable() ? Mytems.ARROW_RIGHT : Mytems.CROSSED_CHECKBOX),
-                                           text(tiny("level ") + status.getNextLevel().getLevel() + "/" + stat.getMaxLevel().getLevel(), LIGHT_PURPLE, ITALIC)));
+                                           text(tiny("level ") + status.getNextLevel().getLevel() + "/" + stat.getMaxLevel().getLevel(), LIGHT_PURPLE)));
                 for (Component line : status.getNextLevel().getDescription()) {
                     tooltip.add(textOfChildren(text("  "), line));
                 }
@@ -84,7 +83,7 @@ public final class UpgradableItemMenu {
                         for (UpgradableStat conflict : stat.getConflicts()) {
                             tooltip.add(text(tiny("conflicts with upgrade"), DARK_GRAY));
                             tooltip.add(textOfChildren(text("  "),
-                                                       ItemKinds.icon(conflict.getIcon()),
+                                                       conflict.getChatIcon(),
                                                        conflict.getTitle())
                                         .color(DARK_GRAY));
                         }
@@ -105,14 +104,14 @@ public final class UpgradableItemMenu {
                     for (UpgradableStat dependency : status.getMissingDependencies()) {
                         tooltip.add(textOfChildren(Mytems.CROSSED_CHECKBOX, text(tiny("requires upgrade"), DARK_RED)));
                         tooltip.add(textOfChildren(text("  "),
-                                                   ItemKinds.icon(dependency.getIcon()),
+                                                   dependency.getChatIcon(),
                                                    dependency.getTitle())
                                     .color(DARK_RED));
                     }
                     for (UpgradableStat completeDependency : status.getMissingCompleteDependencies()) {
                         tooltip.add(textOfChildren(Mytems.CROSSED_CHECKBOX, text(tiny("requires upgrade"), DARK_RED)));
                         tooltip.add(textOfChildren(text("  "),
-                                                   ItemKinds.icon(completeDependency.getIcon()),
+                                                   completeDependency.getChatIcon(),
                                                    completeDependency.getTitle(),
                                                    text(roman(completeDependency.getMaxLevel().getLevel())))
                                     .color(DARK_RED));
@@ -125,7 +124,7 @@ public final class UpgradableItemMenu {
                     for (UpgradableStat conflict : status.getConflictingStats()) {
                         tooltip.add(textOfChildren(Mytems.CROSSED_CHECKBOX, text(tiny("conflicts with upgrade"), DARK_RED)));
                         tooltip.add(textOfChildren(text("  "),
-                                                   ItemKinds.icon(conflict.getIcon()),
+                                                   conflict.getChatIcon(),
                                                    textOfChildren(conflict.getTitle()))
                                     .color(DARK_RED));
                     }
@@ -136,17 +135,16 @@ public final class UpgradableItemMenu {
                 highlightColor = BLUE;
             } else if (status.getCurrentLevel() == null) {
                 if (status.isPermanentlyLocked()) {
-                    highlightColor = color(0x600000);
+                    highlightColor = color(0x202020);
                 } else {
                     highlightColor = null;
                 }
             } else if (status.getCurrentLevel() != null) {
                 final float percentage = (float) status.getCurrentLevel().getLevel() / (float) stat.getMaxLevel().getLevel();
-                final float value = (0.5f + percentage) / 1.5f;
-                highlightColor = color(value, value, value);
+                final float value = (0.35f + percentage) / 1.35f;
+                highlightColor = lerp(value, BLACK, menuColor);
             } else {
-                final float value = 0.5f;
-                highlightColor = color(value, value, value);
+                highlightColor = lerp(0.35f, BLACK, menuColor);
             }
             final Vec2i slot = stat.getGuiSlot();
             gui.setItem(slot.x, slot.z, tooltip(icon, tooltip), click -> {
@@ -168,7 +166,7 @@ public final class UpgradableItemMenu {
             player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5f, 5.0f);
             return;
         }
-        tag.setUpgradeLevel(stat, tag.getUpgradeLevel(stat) + 1);
+        tag.setUpgradeLevel(stat, Math.min(stat.getMaxLevel().getLevel(), tag.getUpgradeLevel(stat) + 1));
         tag.store(itemStack);
         open();
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 0.5f, 1.0f);

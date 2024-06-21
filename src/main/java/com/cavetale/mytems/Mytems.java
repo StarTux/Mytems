@@ -197,9 +197,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     WEDDING_RING(WeddingRing.class, PLAYER_HEAD, 7413002, (char) 0xE21C, FRIENDS),
     MAGIC_MAP(MagicMap.class, FILLED_MAP, 7413005, (char) 0xE21D, chrarr(0xE21D, 0xF00E, 0xF00F, 0xF010, 0xF011, 0xF012, 0xF013, 0xF014, 0xF015, 0xF016, 0xF017, 0xF018, 0xF019, 0xF01A, 0xF01B, 0xF01C), UTILITY, Animation.MAGIC_MAP),
     SNOW_SHOVEL(SnowShovel.class, IRON_SHOVEL, 220, (char) 0xF01D, UTILITY),
-    HASTY_PICKAXE(HastyPickaxe.class, GOLDEN_PICKAXE, 223, (char) 0xF01E, HASTY_PICKAXES),
+    HASTY_PICKAXE(HastyPickaxe.class, DIAMOND_PICKAXE, 223, (char) 0xF01E, HASTY_PICKAXES),
     GOLDEN_HASTY_PICKAXE(HastyPickaxe.class, DIAMOND_PICKAXE, 0xF313, (char) 0xF313, HASTY_PICKAXES),
     DIAMOND_HASTY_PICKAXE(HastyPickaxe.class, NETHERITE_PICKAXE, 0xF314, (char) 0xF314, HASTY_PICKAXES),
+    RUBY_HASTY_PICKAXE(HastyPickaxe.class, NETHERITE_PICKAXE, 0xF29A, (char) 0xF29A, HASTY_PICKAXES),
     TREE_CHOPPER(TreeChopper.class, GOLDEN_AXE, 242, (char) 0xF01F, UTILITY),
     ARMOR_STAND_EDITOR(ArmorStandEditor.class, FLINT, 241, (char) 0xF020, UTILITY),
     FERTILIZER(Fertilizer.class, BONE_MEAL, 285, (char) 0xF021, UTILITY),
@@ -1087,6 +1088,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
+    private static final Map<Integer, Mytems> CUSTOM_MODEL_DATA_MAP = new HashMap<>();
     public final String id;
     public final Class<? extends Mytem> mytemClass;
     public final Material material;
@@ -1104,6 +1106,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
             ID_MAP.put(it.id, it);
             if (!it.id.contains(":")) {
                 ID_MAP.put("mytems:" + it.id, it);
+                if (it.customModelData != null) {
+                    CUSTOM_MODEL_DATA_MAP.put(it.customModelData, it);
+                }
             }
         }
         ID_MAP.put("dwarf_axe", DWARVEN_AXE); // legacy
@@ -1205,6 +1210,21 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
         String id = ItemMarker.getId(item);
         if (id == null) return null;
         return forId(id);
+    }
+
+    public static Mytems forCustomModelData(ItemStack item) {
+        if (item == null) return null;
+        if (!item.hasItemMeta()) return null;
+        final ItemMeta meta = item.getItemMeta();
+        if (meta == null) return null;
+        if (!meta.hasCustomModelData()) return null;
+        final Integer customModelData = meta.getCustomModelData();
+        if (customModelData == null) return null;
+        return forCustomModelData(customModelData);
+    }
+
+    public static Mytems forCustomModelData(int customModelData) {
+        return CUSTOM_MODEL_DATA_MAP.get(customModelData);
     }
 
     public Mytem getMytem() {

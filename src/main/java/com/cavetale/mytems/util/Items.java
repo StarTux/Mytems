@@ -7,8 +7,10 @@ import java.util.List;
 import java.util.stream.Collectors;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.Repairable;
 
@@ -99,6 +101,22 @@ public final class Items {
 
     public static ItemStack iconize(ItemStack item) {
         item.editMeta(Items::iconize);
+        return item;
+    }
+
+    public static ItemStack stack(Material material, int size) {
+        return stack(new ItemStack(material), size);
+    }
+
+    public static ItemStack stack(ItemStack item, int size) {
+        if (size < 1) throw new IllegalArgumentException("size=" + size);
+        item.editMeta(meta -> {
+                if (meta instanceof Damageable damageable) {
+                    damageable.setMaxDamage(null);
+                }
+                meta.setMaxStackSize(size);
+            });
+        item.setAmount(size);
         return item;
     }
 

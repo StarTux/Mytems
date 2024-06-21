@@ -10,10 +10,10 @@ import lombok.Value;
 public final class UpgradableStatStatus {
     private final int currentItemLevel;
     private final int requiredItemLevel;
-    private final UpgradableStatLevel currentLevel;
-    private final UpgradableStatLevel nextLevel;
+    private final UpgradableStatLevel currentLevel; // nullable
+    private final UpgradableStatLevel nextLevel; // nullable
     private final UpgradableItemTier currentItemTier;
-    private final UpgradableItemTier requiredItemTier;
+    private final UpgradableItemTier requiredItemTier; // nullable
     private final List<UpgradableStat> missingDependencies;
     private final List<UpgradableStat> missingCompleteDependencies;
     private final List<UpgradableStat> conflictingStats;
@@ -21,7 +21,7 @@ public final class UpgradableStatStatus {
     public UpgradableStatStatus(final UpgradableItemTag tag, final UpgradableStat stat) {
         this.currentItemLevel = tag.getLevel();
         this.requiredItemLevel = tag.countTotalUpgrades() + 1;
-        this.currentLevel = stat.getLevel(tag.getUpgradeLevel(stat)); // may be null
+        this.currentLevel = stat.getLevel(tag.getUpgradeLevel(stat));
         if (currentLevel == null) {
             this.nextLevel = stat.getFirstLevel();
         } else if (currentLevel != stat.getMaxLevel()) {
@@ -30,7 +30,9 @@ public final class UpgradableStatStatus {
             this.nextLevel = null;
         }
         this.currentItemTier = tag.getUpgradableItemTier();
-        this.requiredItemTier = nextLevel.getRequiredTier();
+        this.requiredItemTier = nextLevel != null
+            ? nextLevel.getRequiredTier()
+            : null;
         this.missingDependencies = tag.getMissingDependenciesFor(stat);
         this.missingCompleteDependencies = tag.getMissingCompleteDependenciesFor(stat);
         this.conflictingStats = tag.getUnlockedConflictsWith(stat);
@@ -58,7 +60,8 @@ public final class UpgradableStatStatus {
     }
 
     public boolean isTierTooLow() {
-        return currentItemTier.getTier() < requiredItemTier.getTier();
+        return requiredItemTier == null
+            || currentItemTier.getTier() < requiredItemTier.getTier();
     }
 
     public boolean hasMissingDependencies() {

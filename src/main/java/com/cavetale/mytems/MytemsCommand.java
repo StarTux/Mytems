@@ -164,6 +164,10 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
             .completers(CommandArgCompleter.integer(i -> i > 0))
             .description("Add xp to upgradable item in hand")
             .playerCaller(this::upgradableAddXp);
+        upgradableNode.addChild("setlevel").arguments("<level>")
+            .completers(CommandArgCompleter.integer(i -> i >= 0))
+            .description("Set the level of the upgradable item in hand")
+            .playerCaller(this::upgradableSetLevel);
     }
 
     protected boolean list(CommandSender sender, String[] args) {
@@ -622,6 +626,26 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         upgradable.store(item);
         player.sendMessage(textOfChildren(text("Added " + xp + " xp to ", YELLOW),
                                           ItemKinds.chatDescription(item)));
+        return true;
+    }
+
+    private boolean upgradableSetLevel(Player player, String[] args) {
+        if (args.length != 1) return false;
+        final int level = CommandArgCompleter.requireInt(args[0], i -> i >= 0);
+        final ItemStack item = player.getInventory().getItemInMainHand();
+        final Mytems mytems = Mytems.forItem(item);
+        if (mytems == null) {
+            throw new CommandWarn("There is no Mytem in your hand");
+        }
+        final MytemTag tag = mytems.getMytem().serializeTag(item);
+        if (!(tag instanceof UpgradableItemTag upgradable)) {
+            throw new CommandWarn(mytems + " is not an upgradable Mytem!");
+        }
+        upgradable.setLevel(level);
+        upgradable.store(item);
+        player.sendMessage(textOfChildren(text("Set level of ", YELLOW),
+                                          ItemKinds.chatDescription(item),
+                                          text(" to " + level, YELLOW)));
         return true;
     }
 }

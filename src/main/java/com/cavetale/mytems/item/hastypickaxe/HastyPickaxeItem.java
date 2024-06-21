@@ -4,6 +4,10 @@ import com.cavetale.mytems.item.upgradable.UpgradableItem;
 import java.util.List;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 
+/**
+ * This is the UpgradableItem implementation, whereas the Mytem
+ * resides in HastyPickaxe.
+ */
 public final class HastyPickaxeItem implements UpgradableItem {
     private static HastyPickaxeItem instance;
 
