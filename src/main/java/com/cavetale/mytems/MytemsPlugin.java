@@ -311,9 +311,9 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
 
     @Override
     public Mytems findItem(ItemStack item) {
-        Mytems result = Mytems.forCustomModelData(item);
+        Mytems result = Mytems.forItem(item);
         if (result != null) return result;
-        return Mytems.forItem(item);
+        return Mytems.forCustomModelData(item);
     }
 
     @Override
