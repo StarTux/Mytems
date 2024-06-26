@@ -60,8 +60,9 @@ public final class HastyPickaxe implements Mytem {
         prototype = new ItemStack(key.material);
         tier.createTag().store(prototype);
         prototype.editMeta(meta -> {
-                meta.setAttributeModifiers(ImmutableListMultimap.of());
                 key.markItemMeta(meta);
+                meta.setAttributeModifiers(ImmutableListMultimap.of());
+                meta.setUnbreakable(true);
             });
     }
 
