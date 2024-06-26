@@ -29,6 +29,11 @@ public final class HastyPickaxeItem implements UpgradableItem {
     }
 
     @Override
+    public HastyPickaxeStat statForKey(String key) {
+        return HastyPickaxeStat.forKey(key);
+    }
+
+    @Override
     public int getMenuSize() {
         return 5 * 9;
     }

@@ -27,6 +27,15 @@ public interface UpgradableItem {
      */
     List<? extends UpgradableStat> getStats();
 
+    default UpgradableStat statForKey(String key) {
+        for (UpgradableStat stat : getStats()) {
+            if (key.equals(stat.getKey())) {
+                return stat;
+            }
+        }
+        return null;
+    }
+
     default UpgradableItemTier getTier(int tier) {
         return getTiers().get(tier - 1);
     }

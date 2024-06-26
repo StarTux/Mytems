@@ -5,7 +5,9 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.item.upgradable.UpgradableItemTier;
 import com.cavetale.mytems.item.upgradable.UpgradableStat;
 import com.cavetale.mytems.item.upgradable.UpgradableStatLevel;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.function.Supplier;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -77,17 +79,17 @@ public enum HastyPickaxeStat implements UpgradableStat {
     },
 
     HASTE(Vec2i.of(4, 2), text("Haste", GOLD), () -> new ItemStack(Material.GOLDEN_PICKAXE),
-          List.of(new Level(1, HastyPickaxeTier.GOLD, () -> new ItemStack(Material.GOLDEN_PICKAXE), List.of(text("Get Haste when you"),
-                                                                                                            text("break an ore block"))),
-                  new Level(2, HastyPickaxeTier.DIAMOND, () -> stack(Material.GOLDEN_PICKAXE, 2), List.of(text("Get Haste II when you"),
-                                                                                                          text("break an ore block")))),
+          List.of(new Level(1, HastyPickaxeTier.COPPER, () -> new ItemStack(Material.GOLDEN_PICKAXE), List.of(text("Get Haste when you"),
+                                                                                                              text("break an ore block"))),
+                  new Level(2, HastyPickaxeTier.GOLD, () -> stack(Material.GOLDEN_PICKAXE, 2), List.of(text("Get Haste II when you"),
+                                                                                                       text("break an ore block")))),
           List.of(), List.of(EFFICIENCY)),
 
     HASTE_TIME(Vec2i.of(4, 1), text("Haste Time", color(0xFFFF00)), () -> new ItemStack(Material.CLOCK),
                List.of(new Level(1, HastyPickaxeTier.GOLD, () -> new ItemStack(Material.CLOCK, 1), List.of(text("The Haste effect lasts"),
                                                                                                            text("twice as long"))),
-                       new Level(2, HastyPickaxeTier.GOLD, () -> new ItemStack(Material.CLOCK, 2), List.of(text("The Haste effect lasts"),
-                                                                                                           text("three times as long")))),
+                       new Level(2, HastyPickaxeTier.DIAMOND, () -> new ItemStack(Material.CLOCK, 2), List.of(text("The Haste effect lasts"),
+                                                                                                              text("three times as long")))),
                List.of(HASTE), List.of()),
 
     END_PORTAL(Vec2i.of(5, 2), text("End Relocator", color(0xB3B988)), () -> new ItemStack(Material.END_PORTAL_FRAME),
@@ -142,10 +144,21 @@ public enum HastyPickaxeStat implements UpgradableStat {
     private final List<Level> levels;
     private final List<HastyPickaxeStat> dependencies;
     private final List<HastyPickaxeStat> completeDependencies;
+    private static final Map<String, HastyPickaxeStat> KEY_MAP = new HashMap<>();
+
+    static {
+        for (var it : values()) {
+            KEY_MAP.put(it.getKey(), it);
+        }
+    }
 
     @Override
     public String getKey() {
         return name().toLowerCase();
+    }
+
+    public static HastyPickaxeStat forKey(String key) {
+        return KEY_MAP.get(key);
     }
 
     /**

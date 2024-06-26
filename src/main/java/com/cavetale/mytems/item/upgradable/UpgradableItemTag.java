@@ -5,13 +5,16 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.worldmarker.util.Tags;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
+import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 import static com.cavetale.core.font.Unicode.subscript;
 import static com.cavetale.core.font.Unicode.superscript;
 import static com.cavetale.core.font.Unicode.tiny;
@@ -26,9 +29,11 @@ import static net.kyori.adventure.text.format.NamedTextColor.*;
 public abstract class UpgradableItemTag extends MytemTag {
     private static final String XP = "xp";
     private static final String LEVEL = "level";
+    private static final String DISABLED = "disabled";
     private int xp;
     private int level;
     private Map<String, Integer> upgrades;
+    private Set<String> disabled;
 
     /**
      * Check if all stats are empty and there are no xp, after
@@ -38,7 +43,8 @@ public abstract class UpgradableItemTag extends MytemTag {
     public boolean isEmpty() {
         return super.isEmpty()
             && xp == 0
-            && (upgrades == null || upgrades.isEmpty());
+            && (upgrades == null || upgrades.isEmpty())
+            && (disabled == null || disabled.isEmpty());
     }
 
     /**
@@ -69,6 +75,16 @@ public abstract class UpgradableItemTag extends MytemTag {
             if (upgradeLevel == 0) continue;
             upgrades.put(stat.getKey(), upgradeLevel);
         }
+        final var disabledKey = namespacedKey(DISABLED);
+        if (pdc.has(disabledKey, PersistentDataType.LIST.strings())) {
+            for (String key : pdc.get(disabledKey, PersistentDataType.LIST.strings())) {
+                if (getUpgradableItem().statForKey(key) == null) continue;
+                if (disabled == null) {
+                    disabled = new HashSet<>();
+                }
+                disabled.add(key);
+            }
+        }
     }
 
     /**
@@ -93,6 +109,11 @@ public abstract class UpgradableItemTag extends MytemTag {
                         stat.applyToItem(meta, upgradeLevel);
                     }
                 }
+                if (disabled != null && !disabled.isEmpty()) {
+                    pdc.set(namespacedKey(DISABLED), PersistentDataType.LIST.strings(), List.copyOf(disabled));
+                } else {
+                    pdc.remove(namespacedKey(DISABLED));
+                }
             });
     }
 
@@ -112,6 +133,19 @@ public abstract class UpgradableItemTag extends MytemTag {
         return upgrades.getOrDefault(stat.getKey(), 0);
     }
 
+    /**
+     * Get the upgrade level, provided the stat is not disabled.
+     *
+     * @param stat the stat
+     * @return the upgrade level if the stat is not disabled,
+     *     otherwise always 0.
+     */
+    public final int getEffectiveUpgradeLevel(UpgradableStat stat) {
+        return !isStatDisabled(stat)
+            ? getUpgradeLevel(stat)
+            : 0;
+    }
+
     public final void setUpgradeLevel(UpgradableStat stat, int upgradeLevel) {
         if (upgradeLevel <= 0) {
             throw new IllegalArgumentException("stat=" + stat + " level=" + upgradeLevel);
@@ -120,6 +154,27 @@ public abstract class UpgradableItemTag extends MytemTag {
             ? new HashMap<>()
             : new HashMap<>(upgrades);
         upgrades.put(stat.getKey(), upgradeLevel);
+    }
+
+    public final boolean isStatDisabled(UpgradableStat stat) {
+        return disabled != null && disabled.contains(stat.getKey());
+    }
+
+    public final void setStatDisabled(UpgradableStat stat, boolean value) {
+        if (value) {
+            if (disabled == null) {
+                disabled = new HashSet<>();
+            }
+            disabled.add(stat.getKey());
+        } else {
+            if (disabled == null) {
+                return;
+            }
+            disabled.remove(stat.getKey());
+            if (disabled.isEmpty()) {
+                disabled = null;
+            }
+        }
     }
 
     public final boolean hasUnlockedConflictsWith(UpgradableStat stat) {
@@ -212,7 +267,7 @@ public abstract class UpgradableItemTag extends MytemTag {
         tooltip.add(tier.getMytems().getMytem().getDisplayName());
         tooltip.add(text(tiny("tier " + tier.getRomanTier().toLowerCase()), LIGHT_PURPLE));
         for (UpgradableStat stat : getUpgradableItem().getStats()) {
-            final int upgradeLevel = getUpgradeLevel(stat);
+            final int upgradeLevel = getEffectiveUpgradeLevel(stat);
             if (upgradeLevel < 1) continue;
             if (stat.getLevels().size() > 1) {
                 tooltip.add(textOfChildren(stat.getChatIcon(), stat.getTitle(), text(" " + roman(upgradeLevel))).color(GRAY));

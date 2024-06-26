@@ -80,7 +80,7 @@ public final class HastyPickaxe implements Mytem {
         final Block block = event.getBlock();
         final HastyPickaxeTag tag = serializeTag(item);
         onBreak(player, block, item, tag);
-        final int radius = tag.getUpgradeLevel(HastyPickaxeStat.RADIUS);
+        final int radius = tag.getEffectiveUpgradeLevel(HastyPickaxeStat.RADIUS);
         if (radius > 0 && STONE_TYPES.contains(block.getType())) {
             Bukkit.getScheduler().runTask(plugin(), () -> {
                     final int count = breakRadius(player, block, item,  2 + radius - 1);
@@ -99,7 +99,10 @@ public final class HastyPickaxe implements Mytem {
                                                               Material.DEEPSLATE,
                                                               Material.ANDESITE,
                                                               Material.DIORITE,
-                                                              Material.GRANITE);
+                                                              Material.GRANITE,
+                                                              Material.TUFF,
+                                                              Material.NETHERRACK,
+                                                              Material.BLACKSTONE);
 
     private void onBreak(Player player, Block block, ItemStack item, HastyPickaxeTag tag) {
         if (isPlayerPlaced(block)) {
@@ -121,9 +124,9 @@ public final class HastyPickaxe implements Mytem {
                                                           text(" Right click it in your inventory to choose a perk.", GREEN)));
                     }
                 }
-                final int haste = tag.getUpgradeLevel(HastyPickaxeStat.HASTE);
+                final int haste = tag.getEffectiveUpgradeLevel(HastyPickaxeStat.HASTE);
                 if (haste > 0 && material.name().endsWith("_ORE")) {
-                    final int hasteTime = tag.getUpgradeLevel(HastyPickaxeStat.HASTE_TIME);
+                    final int hasteTime = tag.getEffectiveUpgradeLevel(HastyPickaxeStat.HASTE_TIME);
                     final int duration = 20 * 10 * (hasteTime + 1);
                     final int amplifier = haste - 1;
                     player.addPotionEffect(PotionEffectType.HASTE.createEffect(duration, amplifier)

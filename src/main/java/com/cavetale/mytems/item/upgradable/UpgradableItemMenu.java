@@ -13,6 +13,7 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
+import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.font.Unicode.subscript;
 import static com.cavetale.core.font.Unicode.superscript;
@@ -58,9 +59,16 @@ public final class UpgradableItemMenu {
         gui.layer(GuiOverlay.TITLE_BAR, menuColor);
         for (UpgradableStat stat : upgradableItem.getStats()) {
             final UpgradableStatStatus status = new UpgradableStatStatus(tag, stat);
-            final ItemStack icon = status.hasCurrentLevel()
-                ? status.getCurrentLevel().getIcon()
-                : stat.getIcon();
+            final ItemStack icon;
+            if (status.isDisabled()) {
+                icon = Mytems.NO.createIcon();
+            } else if (status.hasCurrentLevel()) {
+                icon = status.getCurrentLevel().getIcon();
+            } else if (status.isLocked()) {
+                icon = Mytems.SILVER_KEYHOLE.createIcon();
+            } else {
+                icon = stat.getIcon();
+            }
             final List<Component> tooltip = new ArrayList<>();
             tooltip.add(textOfChildren(stat.getChatIcon(), stat.getTitle()));
             if (status.hasCurrentLevel()) {
@@ -129,9 +137,19 @@ public final class UpgradableItemMenu {
                                     .color(DARK_RED));
                     }
                 }
+                if (status.isDisabled()) {
+                    tooltip.add(textOfChildren(Mytems.NO, text(tiny("disabled"), DARK_RED)));
+                    tooltip.add(textOfChildren(text("DROP", GREEN), text(tiny(" to enable"), GRAY)));
+                } else if (status.hasCurrentLevel()) {
+                    tooltip.add(textOfChildren(text("DROP", GREEN), text(tiny(" to disable"), GRAY)));
+                }
             }
             final TextColor highlightColor;
-            if (status.isUpgradable()) {
+            if (status.isDisabled()) {
+                highlightColor = null;
+            } else if (status.isLocked()) {
+                highlightColor = null;
+            } else if (status.isUpgradable()) {
                 highlightColor = BLUE;
             } else if (status.getCurrentLevel() == null) {
                 if (status.isPermanentlyLocked()) {
@@ -152,6 +170,8 @@ public final class UpgradableItemMenu {
                         onClickUnlockStat(stat, status);
                     } else if (click.isLeftClick()) {
                         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5f, 0.5f);
+                    } else if (click.getClick() == ClickType.DROP) {
+                        onDrop(stat, status);
                     }
                 });
             if (highlightColor != null) {
@@ -170,5 +190,16 @@ public final class UpgradableItemMenu {
         tag.store(itemStack);
         open();
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 0.5f, 1.0f);
+    }
+
+    private void onDrop(UpgradableStat stat, UpgradableStatStatus status) {
+        if (!status.hasCurrentLevel()) {
+            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5f, 5.0f);
+            return;
+        }
+        tag.setStatDisabled(stat, !tag.isStatDisabled(stat));
+        tag.store(itemStack);
+        open();
+        player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, SoundCategory.MASTER, 1f, 1f);
     }
 }

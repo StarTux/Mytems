@@ -17,6 +17,7 @@ public final class UpgradableStatStatus {
     private final List<UpgradableStat> missingDependencies;
     private final List<UpgradableStat> missingCompleteDependencies;
     private final List<UpgradableStat> conflictingStats;
+    private final boolean disabled;
 
     public UpgradableStatStatus(final UpgradableItemTag tag, final UpgradableStat stat) {
         this.currentItemLevel = tag.getLevel();
@@ -36,6 +37,7 @@ public final class UpgradableStatStatus {
         this.missingDependencies = tag.getMissingDependenciesFor(stat);
         this.missingCompleteDependencies = tag.getMissingCompleteDependenciesFor(stat);
         this.conflictingStats = tag.getUnlockedConflictsWith(stat);
+        this.disabled = tag.isStatDisabled(stat);
     }
 
     public boolean isUpgradable() {
@@ -43,12 +45,22 @@ public final class UpgradableStatStatus {
             && !hasStatConflict()
             && !isTierTooLow()
             && !isItemLevelTooLow()
-            && !hasMissingDependencies();
+            && !hasMissingDependencies()
+            && !disabled;
     }
 
     public boolean isPermanentlyLocked() {
         return !hasNextLevel()
             || hasStatConflict();
+    }
+
+    /**
+     * Determine whether this upgrade is considered locked and to be
+     * displayed with the lock icon.
+     */
+    public boolean isLocked() {
+        return hasStatConflict()
+            || isTierTooLow();
     }
 
     public boolean hasCurrentLevel() {
