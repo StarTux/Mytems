@@ -668,6 +668,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     BENT_PITCHFORK(ArmorPart.class, LIGHTNING_ROD, 209, (char) 0xF10C, ARMOR_PART),
     TRASH_CAN_LID(ArmorPart.class, NETHERITE_SCRAP, 259, (char) 0xF10D, ARMOR_PART),
     FARAWAY_MAP(FarawayMap.class, PAPER, 249, (char) 0xF10E, TECHNICAL),
+    // Tree Seeds
     OAKNUT(TreeSeed.class, BEETROOT_SEEDS, 251, (char) 0xF10F, TREE_SEED),
     BIRCH_SEED(TreeSeed.class, BEETROOT_SEEDS, 252, (char) 0xF110, TREE_SEED),
     SPRUCE_CONE(TreeSeed.class, BEETROOT_SEEDS, 253, (char) 0xF111, TREE_SEED),
@@ -680,6 +681,14 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     FANCY_OAK_SEED(TreeSeed.class, BEETROOT_SEEDS, 263, (char) 0xF118, TREE_SEED, Animation.frametime(6)),
     FANCY_BIRCH_SEED(TreeSeed.class, BEETROOT_SEEDS, 264, (char) 0xF119, TREE_SEED, Animation.frametime(6)),
     FANCY_SPRUCE_CONE(TreeSeed.class, BEETROOT_SEEDS, 265, (char) 0xF11A, TREE_SEED, Animation.frametime(6)),
+    BROWN_MUSHROOM_SPAWN(TreeSeed.class, BEETROOT_SEEDS, 0xF325, (char) 0xF325, TREE_SEED),
+    CACTUS_SEED(TreeSeed.class, BEETROOT_SEEDS, 0xF326, (char) 0xF326, TREE_SEED),
+    CHERRY_PIT(TreeSeed.class, BEETROOT_SEEDS, 0xF327, (char) 0xF327, TREE_SEED),
+    CRIMSON_SPORE(TreeSeed.class, BEETROOT_SEEDS, 0xF328, (char) 0xF328, TREE_SEED),
+    MYSTERY_SEED(TreeSeed.class, BEETROOT_SEEDS, 0xF329, (char) 0xF329, TREE_SEED),
+    RED_MUSHROOM_SPAWN(TreeSeed.class, BEETROOT_SEEDS, 0xF32A, (char) 0xF32A, TREE_SEED),
+    WARPED_SPORE(TreeSeed.class, BEETROOT_SEEDS, 0xF32B, (char) 0xF32B, TREE_SEED),
+    //
     EMPTY_FLASK(DummyMytem.class, GLASS_BOTTLE, 257, (char) 0xF11B, POTIONS),
     POTION_FLASK(PotionFlask.class, POTION, 258, (char) 0xF11C, POTIONS),
     TETRIS_I(DummyMytem.class, SAND, 276, (char) 0xF11D, TETRIS),

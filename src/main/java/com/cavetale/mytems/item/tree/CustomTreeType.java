@@ -18,7 +18,15 @@ public enum CustomTreeType {
     FIR(Mytems.FIR_CONE, Material.SPRUCE_SAPLING),
     FANCY_OAK(Mytems.FANCY_OAK_SEED, Material.OAK_SAPLING),
     FANCY_BIRCH(Mytems.FANCY_BIRCH_SEED, Material.BIRCH_SAPLING),
-    FANCY_SPRUCE(Mytems.FANCY_SPRUCE_CONE, Material.SPRUCE_SAPLING);
+    FANCY_SPRUCE(Mytems.FANCY_SPRUCE_CONE, Material.SPRUCE_SAPLING),
+    BROWN_MUSHROOM_SPAWN(Mytems.BROWN_MUSHROOM_SPAWN, Material.BROWN_MUSHROOM),
+    CACTUS_SEED(Mytems.CACTUS_SEED, Material.CACTUS),
+    CHERRY_PIT(Mytems.CHERRY_PIT, Material.CHERRY_SAPLING),
+    CRIMSON_SPORE(Mytems.CRIMSON_SPORE, Material.CRIMSON_FUNGUS),
+    MYSTERY_SEED(Mytems.MYSTERY_SEED, Material.SMALL_DRIPLEAF),
+    RED_MUSHROOM_SPAWN(Mytems.RED_MUSHROOM_SPAWN, Material.RED_MUSHROOM),
+    WARPED_SPORE(Mytems.WARPED_SPORE, Material.WARPED_FUNGUS),
+    ;
 
     public final Mytems seedMytems;
     public final Material saplingMaterial;
