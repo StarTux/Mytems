@@ -42,6 +42,7 @@ public abstract class UpgradableItemTag extends MytemTag {
     @Override
     public boolean isEmpty() {
         return super.isEmpty()
+            && level == 0
             && xp == 0
             && (upgrades == null || upgrades.isEmpty())
             && (disabled == null || disabled.isEmpty());
@@ -228,8 +229,20 @@ public abstract class UpgradableItemTag extends MytemTag {
     /**
      * Get the required exp for the next level.
      */
-    public int getRequiredXp() {
-        return 100 * (1 + getLevel());
+    public final int getRequiredXp() {
+        return getRequiredXpFromLevel(level);
+    }
+
+    /**
+     * Get the required xp for any level.  Override this function to
+     * change leveling.
+     *
+     * @param theCurrentLevel the current level
+     * @return the required amount of xp to get from the current level
+     *     to the next.
+     */
+    public int getRequiredXpFromLevel(int theCurrentLevel) {
+        return 100 * (1 + theCurrentLevel);
     }
 
     public final boolean hasAvailableUnlocks() {
@@ -246,6 +259,7 @@ public abstract class UpgradableItemTag extends MytemTag {
 
     /**
      * Try to add some xp which may or may not cause a level up.
+     *
      * @param amount the xp amount to be added
      * @return true if xp were added, false otherwise.
      */
@@ -259,6 +273,24 @@ public abstract class UpgradableItemTag extends MytemTag {
             level += 1;
         }
         return true;
+    }
+
+    public final int getTotalXp() {
+        int result = xp;
+        for (int i = 0; i < level; i += 1) {
+            result += getRequiredXpFromLevel(i);
+        }
+        return result;
+    }
+
+    public final void setTotalXp(final int value) {
+        int remainder = value;
+        level = 0;
+        while (remainder >= getRequiredXp()) {
+            remainder -= getRequiredXp();
+            level += 1;
+        }
+        xp = remainder;
     }
 
     public final List<Component> getDefaultTooltip() {

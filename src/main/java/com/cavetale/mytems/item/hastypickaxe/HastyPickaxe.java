@@ -28,6 +28,7 @@ import org.bukkit.block.data.type.EndPortalFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import static com.cavetale.core.exploits.PlayerPlacedBlocks.isPlayerPlaced;
@@ -63,6 +64,8 @@ public final class HastyPickaxe implements Mytem {
                 key.markItemMeta(meta);
                 meta.setAttributeModifiers(ImmutableListMultimap.of());
                 meta.setUnbreakable(true);
+                meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+                meta.setEnchantmentGlintOverride(false);
             });
     }
 

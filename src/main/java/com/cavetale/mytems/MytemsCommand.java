@@ -12,6 +12,7 @@ import com.cavetale.mytems.custom.NetheriteParityGui;
 import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.item.axis.CuboidOutline;
 import com.cavetale.mytems.item.coin.BankTeller;
+import com.cavetale.mytems.item.combinable.ItemCombinerMenu;
 import com.cavetale.mytems.item.font.Glyph;
 import com.cavetale.mytems.item.upgradable.UpgradableItemTag;
 import com.cavetale.mytems.session.Session;
@@ -168,6 +169,10 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
             .completers(CommandArgCompleter.integer(i -> i >= 0))
             .description("Set the level of the upgradable item in hand")
             .playerCaller(this::upgradableSetLevel);
+        upgradableNode.addChild("combiner").arguments("<player>")
+            .description("Open item combiner")
+            .completers(CommandArgCompleter.ONLINE_PLAYERS)
+            .senderCaller(this::upgradableCombiner);
     }
 
     protected boolean list(CommandSender sender, String[] args) {
@@ -646,6 +651,14 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         player.sendMessage(textOfChildren(text("Set level of ", YELLOW),
                                           ItemKinds.chatDescription(item),
                                           text(" to " + level, YELLOW)));
+        return true;
+    }
+
+    private boolean upgradableCombiner(CommandSender sender, String[] args) {
+        if (args.length != 1) return false;
+        final Player target = CommandArgCompleter.requirePlayer(args[0]);
+        new ItemCombinerMenu(target).open();
+        sender.sendMessage(text("Opened Item Combiner Menu for " + target.getName(), YELLOW));
         return true;
     }
 }
