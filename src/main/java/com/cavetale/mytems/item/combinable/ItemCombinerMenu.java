@@ -1,7 +1,6 @@
 package com.cavetale.mytems.item.combinable;
 
 import com.cavetale.core.font.GuiOverlay;
-import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Gui;
 import java.util.List;
 import lombok.Data;
@@ -11,7 +10,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
-import static net.kyori.adventure.text.format.TextColor.color;
 
 @Data
 public final class ItemCombinerMenu {
@@ -30,13 +28,8 @@ public final class ItemCombinerMenu {
     public void open() {
         gui = new Gui()
             .size(MENU_SIZE)
-            .title(text("Item Combiner", DARK_GRAY));
-        gui.layer(GuiOverlay.BLANK, color(0xf5f5dc));
-        for (InputSlot inputSlot : getInputSlots()) {
-            gui.highlight(inputSlot.getMenuSlotIndex(), GRAY);
-        }
-        gui.highlight(OUTPUT_SLOT, GRAY);
-        gui.setItem(4, 2, Mytems.ARROW_DOWN.createIcon(), null);
+            .title(text("  Item Combiner", GOLD));
+        gui.layer(GuiOverlay.COMBINER, WHITE);
         updateMenuSlots();
         gui.onClick(this::onClickBottomInventory);
         gui.open(player);
