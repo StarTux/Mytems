@@ -19,12 +19,17 @@ public final class UpgradableItemCombinerRecipe implements ItemCombinerRecipe {
 
     @Override
     public boolean doesAcceptInput1(ItemStack input1) {
-        return Mytems.forItem(input1) == inputMytems;
+        return input1 != null
+            && input1.getAmount() == 1
+            && Mytems.forItem(input1) == inputMytems;
+
     }
 
     @Override
     public boolean doesAcceptInput2(ItemStack input2) {
-        return Mytems.forItem(input2) == inputMytems;
+        return input2 != null
+            && input2.getAmount() == 1
+            && Mytems.forItem(input2) == inputMytems;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.cavetale.mytems.item.combinable;
 
+import com.cavetale.core.event.item.PlayerReceiveItemsEvent;
 import com.cavetale.core.font.GuiOverlay;
 import com.cavetale.mytems.util.Gui;
 import java.util.List;
@@ -134,10 +135,51 @@ public final class ItemCombinerMenu {
         if (result == null || result.isEmpty()) return;
         player.getInventory().setItem(input1.getPlayerInventorySlot(), null);
         player.getInventory().setItem(input2.getPlayerInventorySlot(), null);
-        player.getInventory().setItem(input1.getPlayerInventorySlot(), result);
-        player.closeInventory();
-        player.playSound(player.getLocation(), Sound.BLOCK_SMITHING_TABLE_USE, 1f, 0.65f);
+        gui = new Gui();
+        gui.size(MENU_SIZE)
+            .layer(GuiOverlay.COMBINER, WHITE)
+            .onClose(close -> PlayerReceiveItemsEvent.receiveInventory(player, gui.getInventory()))
+            .onClick(this::onClickResultInventory);
+        gui.setItem(OUTPUT_SLOT, result);
+        gui.setEditable(true);
+        gui.open(player);
         player.playSound(player.getLocation(), Sound.BLOCK_ANVIL_USE, 1f, 0.85f);
+        player.playSound(player.getLocation(), Sound.BLOCK_SMITHING_TABLE_USE, 1f, 0.65f);
+    }
+
+    private void onClickResultInventory(InventoryClickEvent event) {
+        if (event.getClickedInventory() == null) {
+            return;
+        } else if (event.getClickedInventory().equals(gui.getInventory())) {
+            final int slot = event.getSlot();
+            if (slot != OUTPUT_SLOT) {
+                event.setCancelled(true);
+                return;
+            }
+            final ItemStack item = event.getCurrentItem();
+            if (item == null || item.isEmpty()) {
+                event.setCancelled(true);
+                return;
+            }
+            switch (event.getAction()) {
+            case COLLECT_TO_CURSOR:
+            case MOVE_TO_OTHER_INVENTORY:
+            case PICKUP_ALL:
+            case PICKUP_HALF:
+            case PICKUP_ONE:
+            case PICKUP_SOME:
+                return;
+            default:
+                event.setCancelled(true);
+            }
+        } else if (event.getClickedInventory().equals(player.getInventory())) {
+            switch (event.getAction()) {
+            case MOVE_TO_OTHER_INVENTORY:
+                event.setCancelled(true);
+            default:
+                break;
+            }
+        }
     }
 
     @Data
