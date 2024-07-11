@@ -18,6 +18,13 @@ public final class UpgradableItemCombinerRecipe implements ItemCombinerRecipe {
     private static List<UpgradableItemCombinerRecipe> all;
 
     @Override
+    public List<ItemStack> getItemPreview() {
+        return List.of(inputMytems.createItemStack(),
+                       inputMytems.createItemStack(),
+                       outputMytems.createItemStack());
+    }
+
+    @Override
     public boolean doesAcceptInput1(ItemStack input1) {
         return input1 != null
             && input1.getAmount() == 1
@@ -68,6 +75,7 @@ public final class UpgradableItemCombinerRecipe implements ItemCombinerRecipe {
         addChain(Mytems.COPPER_SPLEEF_SHOVEL, Mytems.IRON_SPLEEF_SHOVEL, Mytems.GOLDEN_SPLEEF_SHOVEL);
         addChain(Mytems.IRON_SCYTHE, Mytems.GOLDEN_SCYTHE);
         addChain(Mytems.EMPTY_WATERING_CAN, Mytems.EMPTY_GOLDEN_WATERING_CAN);
+        addChain(Mytems.TREE_CHOPPER, Mytems.GOLDEN_TREE_CHOPPER);
         all = List.copyOf(all);
         return all;
     }

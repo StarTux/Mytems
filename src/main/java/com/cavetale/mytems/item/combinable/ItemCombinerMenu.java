@@ -2,15 +2,21 @@ package com.cavetale.mytems.item.combinable;
 
 import com.cavetale.core.event.item.PlayerReceiveItemsEvent;
 import com.cavetale.core.font.GuiOverlay;
+import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Gui;
+import java.util.ArrayList;
 import java.util.List;
 import lombok.Data;
+import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.Merchant;
+import org.bukkit.inventory.MerchantRecipe;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
+import static net.kyori.adventure.text.format.TextColor.color;
 
 @Data
 public final class ItemCombinerMenu {
@@ -32,6 +38,7 @@ public final class ItemCombinerMenu {
             .title(text("  Item Combiner", GOLD));
         gui.layer(GuiOverlay.COMBINER, WHITE);
         updateMenuSlots();
+        gui.setItem(8, 0, Mytems.INFO_BUTTON.createIcon(List.of(text("View all recipes", GRAY))), this::onClickRecipes);
         gui.onClick(this::onClickBottomInventory);
         gui.open(player);
     }
@@ -139,7 +146,8 @@ public final class ItemCombinerMenu {
         gui.size(MENU_SIZE)
             .layer(GuiOverlay.COMBINER, WHITE)
             .onClose(close -> PlayerReceiveItemsEvent.receiveInventory(player, gui.getInventory()))
-            .onClick(this::onClickResultInventory);
+            .onClick(this::onClickResultInventory)
+            .onDrag(drag -> drag.setCancelled(true));
         gui.setItem(OUTPUT_SLOT, result);
         gui.setEditable(true);
         gui.open(player);
@@ -180,6 +188,29 @@ public final class ItemCombinerMenu {
                 break;
             }
         }
+    }
+
+    private void onClickRecipes(InventoryClickEvent event) {
+        if (!event.isLeftClick()) {
+            return;
+        }
+        final Merchant merchant = Bukkit.createMerchant(text("Item Combiner Recipes", color(0xaa6c39)));
+        final List<MerchantRecipe> recipes = new ArrayList<>();
+        for (ItemCombinerRecipe recipe : getRecipes()) {
+            final List<ItemStack> preview = recipe.getItemPreview();
+            MerchantRecipe mrecipe = new MerchantRecipe(preview.get(2), 1);
+            mrecipe.setIngredients(List.of(preview.get(0), preview.get(1)));
+            recipes.add(mrecipe);
+        }
+        merchant.setRecipes(recipes);
+        final Gui listGui = new Gui();
+        listGui.setItem(Gui.OUTSIDE, null, click -> {
+                open();
+                player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1f);
+            });
+        listGui.setEditable(true);
+        listGui.map(player, player.openMerchant(merchant, true).getTopInventory());
+        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1f, 1f);
     }
 
     @Data

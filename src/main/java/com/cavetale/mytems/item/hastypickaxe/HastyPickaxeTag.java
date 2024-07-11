@@ -2,7 +2,6 @@ package com.cavetale.mytems.item.hastypickaxe;
 
 import com.cavetale.mytems.item.upgradable.UpgradableItem;
 import com.cavetale.mytems.item.upgradable.UpgradableItemTag;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.mytems.util.Items.tooltip;
 
@@ -47,7 +46,6 @@ public abstract class HastyPickaxeTag extends UpgradableItemTag {
     public final void store(ItemStack itemStack) {
         super.store(itemStack);
         itemStack.editMeta(meta -> {
-                meta.addItemFlags(ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
                 tooltip(meta, getDefaultTooltip());
             });
     }

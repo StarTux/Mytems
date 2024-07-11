@@ -86,6 +86,10 @@ public final class Items {
         return item;
     }
 
+    public static void clearAttributes(ItemMeta meta) {
+        meta.setAttributeModifiers(ImmutableListMultimap.of());
+    }
+
     public static void iconize(ItemMeta meta) {
         meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP,
                           ItemFlag.HIDE_ARMOR_TRIM,

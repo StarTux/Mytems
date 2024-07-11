@@ -63,11 +63,13 @@ public final class MytemsTag {
             MytemsCategory.SPIDER_COSTUME,
         });
     public static final MytemsTag UTILITY = new MytemsTag("utility", new MytemsCategory[] {
-            MytemsCategory.UTILITY,
             MytemsCategory.BINGO_BUKKITS,
-            MytemsCategory.SPLEEF_SHOVEL,
-            MytemsCategory.HOURGLASS,
             MytemsCategory.FINDER,
+            MytemsCategory.HASTY_PICKAXES,
+            MytemsCategory.HOURGLASS,
+            MytemsCategory.SPLEEF_SHOVEL,
+            MytemsCategory.TREE_CHOPPERS,
+            MytemsCategory.UTILITY,
         });
     public static final MytemsTag WEAPON = new MytemsTag("weapon", new MytemsCategory[] {
             MytemsCategory.WEAPON,
@@ -85,9 +87,6 @@ public final class MytemsTag {
     public static final MytemsTag FLAG = new MytemsTag("flag", new MytemsCategory[] {
             MytemsCategory.COUNTRY_FLAG,
             MytemsCategory.PRIDE_FLAGS,
-        });
-    public static final MytemsTag MINING = new MytemsTag("mining", new MytemsCategory[] {
-            MytemsCategory.HASTY_PICKAXES,
         });
     public static final MytemsTag EQUIPMENT = new MytemsTag("equipment", new MytemsCategory[] {
             MytemsCategory.EQUIP_AXE,

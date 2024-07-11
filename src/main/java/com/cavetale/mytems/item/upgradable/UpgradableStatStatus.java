@@ -72,8 +72,8 @@ public final class UpgradableStatStatus {
     }
 
     public boolean isTierTooLow() {
-        return requiredItemTier == null
-            || currentItemTier.getTier() < requiredItemTier.getTier();
+        return requiredItemTier != null
+            && currentItemTier.getTier() < requiredItemTier.getTier();
     }
 
     public boolean hasMissingDependencies() {

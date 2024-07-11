@@ -201,7 +201,8 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     GOLDEN_HASTY_PICKAXE(HastyPickaxe.class, DIAMOND_PICKAXE, 0xF313, (char) 0xF313, HASTY_PICKAXES),
     DIAMOND_HASTY_PICKAXE(HastyPickaxe.class, NETHERITE_PICKAXE, 0xF314, (char) 0xF314, HASTY_PICKAXES),
     RUBY_HASTY_PICKAXE(HastyPickaxe.class, NETHERITE_PICKAXE, 0xF29A, (char) 0xF29A, HASTY_PICKAXES),
-    TREE_CHOPPER(TreeChopper.class, GOLDEN_AXE, 242, (char) 0xF01F, UTILITY),
+    TREE_CHOPPER(TreeChopper.class, GOLDEN_AXE, 242, (char) 0xF01F, TREE_CHOPPERS),
+    GOLDEN_TREE_CHOPPER(TreeChopper.class, DIAMOND_AXE, 0xF29B, (char) 0xF29B, TREE_CHOPPERS),
     ARMOR_STAND_EDITOR(ArmorStandEditor.class, FLINT, 241, (char) 0xF020, UTILITY),
     FERTILIZER(Fertilizer.class, BONE_MEAL, 285, (char) 0xF021, UTILITY),
     WATERING_CAN(WateringCan.class, STONE_HOE, 297, (char) 0xF022, GARDENING),
@@ -437,6 +438,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     PAINT_PALETTE(ForbiddenMytem.class, STICK, 202, (char) 0xF03B, UI),
     PLUS_BUTTON(ForbiddenMytem.class, EGG, 266, (char) 0xF03C, UI),
     MINUS_BUTTON(ForbiddenMytem.class, SNOWBALL, 267, (char) 0xF03D, UI),
+    INFO_BUTTON(ForbiddenMytem.class, SNOWBALL, 0xF29C, (char) 0xF29C, UI),
     FLOPPY_DISK(ForbiddenMytem.class, MUSIC_DISC_CAT, 268, (char) 0xF03E, UI),
     FOLDER(ForbiddenMytem.class, CHEST, 269, (char) 0xF03F, UI),
     MAGNET(ForbiddenMytem.class, IRON_NUGGET, 270, (char) 0xF040, UI),
@@ -1087,12 +1089,12 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     SCUBA_HELMET(ScubaHelmet.class, PLAYER_HEAD, null, (char) 0, UTILITY),
     MINER_HELMET(MinerHelmet.class, PLAYER_HEAD, null, (char) 0, UTILITY),
     //
-    MOM(DummyMytem.class, HEART_OF_THE_SEA, 0xF321, MOTHERS_DAY),
-    MOTHER(DummyMytem.class, HEART_OF_THE_SEA, 0xF322, MOTHERS_DAY, 64),
-    DAD(DummyMytem.class, HEART_OF_THE_SEA, 0xF323, FATHERS_DAY),
-    FATHER(DummyMytem.class, HEART_OF_THE_SEA, 0xF324, FATHERS_DAY, 64),
+    MOM(ForbiddenMytem.class, HEART_OF_THE_SEA, 0xF321, MOTHERS_DAY),
+    MOTHER(ForbiddenMytem.class, HEART_OF_THE_SEA, 0xF322, MOTHERS_DAY, 64),
+    DAD(ForbiddenMytem.class, HEART_OF_THE_SEA, 0xF323, FATHERS_DAY),
+    FATHER(ForbiddenMytem.class, HEART_OF_THE_SEA, 0xF324, FATHERS_DAY, 64),
     //
-    AXIS_MODEL(DummyMytem.class, END_ROD, 0xE027, (char) 0, TECHNICAL),
+    AXIS_MODEL(ForbiddenMytem.class, END_ROD, 0xE027, (char) 0, TECHNICAL),
     MOUSE_CURSOR(ForbiddenMytem.class, ARROW, 0xE028, (char) 0xE028, UI),
     ;
 

@@ -1,60 +1,51 @@
 package com.cavetale.mytems.item.treechopper;
 
-import com.cavetale.mytems.MytemTag;
-import com.cavetale.mytems.MytemsPlugin;
-import com.cavetale.worldmarker.util.Tags;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
+import com.cavetale.mytems.item.upgradable.UpgradableItemTag;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataContainer;
+import static com.cavetale.mytems.util.Items.tooltip;
 
 @Data @EqualsAndHashCode(callSuper = true)
-public final class TreeChopperTag extends MytemTag {
-    protected Map<String, Integer> stats = new HashMap<>();
-
-    @Override
-    public boolean isEmpty() {
-        return super.isEmpty() && stats.isEmpty();
+public abstract class TreeChopperTag extends UpgradableItemTag {
+    public static final class Iron extends TreeChopperTag {
+        @Override
+        public TreeChopperTier getUpgradableItemTier() {
+            return TreeChopperTier.IRON;
+        }
     }
 
-    @Override
-    public boolean isDismissable() {
-        return isEmpty();
-    }
-
-    @Override
-    public void load(ItemStack itemStack) {
-        super.load(itemStack);
-        PersistentDataContainer tag = itemStack.getItemMeta().getPersistentDataContainer();
-        for (TreeChopperStat stat : TreeChopperStat.values()) {
-            Integer value = Tags.getInt(tag, MytemsPlugin.namespacedKey(stat.key));
-            if (value == null) continue;
-            stats.put(stat.key, value);
+    public static final class Gold extends TreeChopperTag {
+        @Override
+        public TreeChopperTier getUpgradableItemTier() {
+            return TreeChopperTier.GOLD;
         }
     }
 
     @Override
-    public void store(ItemStack itemStack) {
+    public final void load(ItemStack itemStack) {
+        super.load(itemStack);
+        if (getLevel() == 0 && getUpgrades() != null) {
+            // Legacy items did not store the level
+            int nextLevel = 0;
+            for (TreeChopperStat stat : TreeChopperStat.values()) {
+                nextLevel += getUpgradeLevel(stat);
+            }
+            setLevel(nextLevel);
+        }
+    }
+
+    @Override
+    public final void store(ItemStack itemStack) {
         super.store(itemStack);
         itemStack.editMeta(meta -> {
-                PersistentDataContainer tag = meta.getPersistentDataContainer();
-                for (TreeChopperStat stat : TreeChopperStat.values()) {
-                    Integer value = stats.get(stat.key);
-                    if (value == null) continue;
-                    Tags.set(tag, MytemsPlugin.namespacedKey(stat.key), value);
-                }
+                tooltip(meta, getDefaultTooltip());
             });
     }
 
-    public int getStat(TreeChopperStat stat) {
-        return Math.min(stat.maxLevel, Math.max(0, stats.getOrDefault(stat.key, 0)));
-    }
-
-    public void setStat(TreeChopperStat stat, int value) {
-        stats.put(stat.key, Math.min(stat.maxLevel, Math.max(0, value)));
+    @Override
+    public final TreeChopperItem getUpgradableItem() {
+        return TreeChopperItem.treeChopperItem();
     }
 
     public static int getMaxLogBlocks(int level) {
@@ -67,12 +58,12 @@ public final class TreeChopperTag extends MytemTag {
             : 0;
     }
 
-    public int getMaxLogBlocks() {
-        return getMaxLogBlocks(getStat(TreeChopperStat.CHOP));
+    public final int getMaxLogBlocks() {
+        return getMaxLogBlocks(getUpgradeLevel(TreeChopperStat.CHOP));
     }
 
-    public int getMaxLeafBlocks() {
-        return getMaxLeafBlocks(getStat(TreeChopperStat.LEAF));
+    public final int getMaxLeafBlocks() {
+        return getMaxLeafBlocks(getUpgradeLevel(TreeChopperStat.LEAF));
     }
 
     public static int getChoppingSpeed(int speedLevel) {
@@ -81,38 +72,7 @@ public final class TreeChopperTag extends MytemTag {
             : 1;
     }
 
-    public int getChoppingSpeed() {
-        return getChoppingSpeed(getStat(TreeChopperStat.SPEED));
-    }
-
-    public int getLevel() {
-        int result = 0;
-        for (TreeChopperStat stat : TreeChopperStat.values()) {
-            if (stat.type != TreeChopperStat.Type.UPGRADE) continue;
-            result += getStat(stat);
-        }
-        return result;
-    }
-
-    public int getUpgradeCost() {
-        return 100 * (1 + getLevel());
-    }
-
-    public boolean upgradeIsPossible() {
-        for (TreeChopperStat stat : TreeChopperStat.values()) {
-            if (stat.type != TreeChopperStat.Type.UPGRADE) continue;
-            if (getStat(stat) >= stat.maxLevel) continue;
-            if (stat.conflictsWith(this)) continue;
-            if (!stat.doesMeetRequirements(this)) continue;
-            return true;
-        }
-        return false;
-    }
-
-    @Override
-    public boolean isSimilar(MytemTag other) {
-        return super.isSimilar(other)
-            && other instanceof TreeChopperTag that
-            && Objects.equals(this.stats, that.stats);
+    public final int getChoppingSpeed() {
+        return getChoppingSpeed(getUpgradeLevel(TreeChopperStat.SPEED));
     }
 }

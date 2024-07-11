@@ -39,6 +39,7 @@ public final class Gui implements InventoryHolder {
     private Consumer<InventoryCloseEvent> onClose = null;
     private Consumer<InventoryOpenEvent> onOpen = null;
     private Consumer<InventoryClickEvent> onClick = null;
+    private Consumer<InventoryDragEvent> onDrag = null;
     @Getter @Setter private boolean editable = false;
     @Getter private int size = 3 * 9;
     @Getter private Component title = Component.empty();
@@ -160,6 +161,11 @@ public final class Gui implements InventoryHolder {
         return this;
     }
 
+    public Gui onDrag(Consumer<InventoryDragEvent> responder) {
+        onDrag = responder;
+        return this;
+    }
+
     public Gui clear() {
         if (inventory != null) inventory.clear();
         slots.clear();
@@ -205,6 +211,10 @@ public final class Gui implements InventoryHolder {
     }
 
     private void onInventoryDrag(InventoryDragEvent event) {
+        if (onDrag != null) {
+            onDrag.accept(event);
+            if (event.isCancelled()) return;
+        }
         if (!editable) {
             event.setCancelled(true);
         }
@@ -274,6 +284,11 @@ public final class Gui implements InventoryHolder {
         this.inventory = theInventory;
         GUI_MAP.put(player.getUniqueId(), this);
         player.openInventory(inventory);
+    }
+
+    public void map(Player player, Inventory theInventory) {
+        this.inventory = theInventory;
+        GUI_MAP.put(player.getUniqueId(), this);
     }
 
     public static Gui of(Player player) {

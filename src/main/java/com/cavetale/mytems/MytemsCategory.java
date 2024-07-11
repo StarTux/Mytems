@@ -72,6 +72,7 @@ public enum MytemsCategory {
     SWAMPY,
     TECHNICAL,
     TETRIS,
+    TREE_CHOPPERS,
     TREE_SEED,
     TROPHY,
     UI,

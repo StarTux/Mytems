@@ -1,8 +1,11 @@
 package com.cavetale.mytems.item.combinable;
 
+import java.util.List;
 import org.bukkit.inventory.ItemStack;
 
 public interface ItemCombinerRecipe {
+    List<ItemStack> getItemPreview();
+
     boolean doesAcceptInput1(ItemStack input1);
 
     boolean doesAcceptInput2(ItemStack input2);

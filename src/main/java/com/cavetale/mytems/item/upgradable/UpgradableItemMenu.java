@@ -5,6 +5,7 @@ import com.cavetale.core.struct.Vec2i;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Gui;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.font.Unicode.subscript;
 import static com.cavetale.core.font.Unicode.superscript;
 import static com.cavetale.core.font.Unicode.tiny;
+import static com.cavetale.mytems.MytemsPlugin.plugin;
 import static com.cavetale.mytems.util.Items.tooltip;
 import static com.cavetale.mytems.util.Text.ITEM_LORE_WIDTH;
 import static com.cavetale.mytems.util.Text.roman;
@@ -41,6 +43,7 @@ public final class UpgradableItemMenu {
     private static final Component DIVIDER = text(" ".repeat(ITEM_LORE_WIDTH + 2), color(0x28055E), STRIKETHROUGH);
 
     public void open() {
+        final HashSet<Vec2i> usedSlots = new HashSet<>();
         final UpgradableItemTier itemTier = tag.getUpgradableItemTier();
         final TextColor menuColor = itemTier.getMenuColor();
         final UpgradableItem upgradableItem = tag.getUpgradableItem();
@@ -121,6 +124,7 @@ public final class UpgradableItemMenu {
                         tooltip.add(textOfChildren(text("  "),
                                                    completeDependency.getChatIcon(),
                                                    completeDependency.getTitle(),
+                                                   space(),
                                                    text(roman(completeDependency.getMaxLevel().getLevel())))
                                     .color(DARK_RED));
                     }
@@ -137,6 +141,8 @@ public final class UpgradableItemMenu {
                                     .color(DARK_RED));
                     }
                 }
+            }
+            if (status.hasCurrentLevel()) {
                 if (status.isDisabled()) {
                     tooltip.add(textOfChildren(Mytems.NO, text(tiny("disabled"), DARK_RED)));
                     tooltip.add(textOfChildren(text("DROP", GREEN), text(tiny(" to enable"), GRAY)));
@@ -146,12 +152,14 @@ public final class UpgradableItemMenu {
             }
             final TextColor highlightColor;
             if (status.isDisabled()) {
+                // Disabled, show X
                 highlightColor = null;
             } else if (status.isLocked()) {
+                // Locked, show keyhole
                 highlightColor = null;
             } else if (status.isUpgradable()) {
                 highlightColor = BLUE;
-            } else if (status.getCurrentLevel() == null) {
+            } else if (!status.hasCurrentLevel()) {
                 if (status.isPermanentlyLocked()) {
                     highlightColor = color(0x202020);
                 } else {
@@ -165,6 +173,10 @@ public final class UpgradableItemMenu {
                 highlightColor = lerp(0.35f, BLACK, menuColor);
             }
             final Vec2i slot = stat.getGuiSlot();
+            if (usedSlots.contains(slot)) {
+                plugin().getLogger().warning("[UpgradableItemMenu] Slot overlap: " + upgradableItem.getClass().getName() + " " + slot);
+            }
+            usedSlots.add(slot);
             gui.setItem(slot.x, slot.z, tooltip(icon, tooltip), click -> {
                     if (click.isRightClick()) {
                         onClickUnlockStat(stat, status);

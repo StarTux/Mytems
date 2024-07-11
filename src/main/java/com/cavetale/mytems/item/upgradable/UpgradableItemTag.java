@@ -13,6 +13,7 @@ import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.kyori.adventure.text.Component;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
 import static com.cavetale.core.font.Unicode.subscript;
@@ -20,6 +21,7 @@ import static com.cavetale.core.font.Unicode.superscript;
 import static com.cavetale.core.font.Unicode.tiny;
 import static com.cavetale.mytems.MytemsPlugin.namespacedKey;
 import static com.cavetale.mytems.util.Text.roman;
+import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
@@ -123,10 +125,12 @@ public abstract class UpgradableItemTag extends MytemTag {
      * equal members.
      */
     public boolean isSimilar(MytemTag other) {
-        if (!(other instanceof UpgradableItemTag tag)) return false;
         return super.isSimilar(other)
-            && this.xp == tag.xp
-            && Objects.equals(this.upgrades, tag.upgrades);
+            && other instanceof UpgradableItemTag that
+            && this.xp == that.xp
+            && this.level == that.level
+            && Objects.equals(this.upgrades, that.upgrades)
+            && Objects.equals(this.disabled, that.disabled);
     }
 
     public final int getUpgradeLevel(UpgradableStat stat) {
@@ -273,6 +277,38 @@ public abstract class UpgradableItemTag extends MytemTag {
             level += 1;
         }
         return true;
+    }
+
+    /**
+     * Add xp and inform the user.  Calls addXp and returns its
+     * result, with extra messaging.
+     *
+     * @param amount the xp amount to be added
+     * @return true if xp were added, false otherwise.
+     */
+    public final boolean addXpAndNotify(Player player, int amount) {
+        final boolean result = addXp(amount);
+        if (hasAvailableUnlocks()) {
+            final Component message = textOfChildren(text("Your ", GREEN),
+                                                     getUpgradableItemTier().getMytems(),
+                                                     text(" has leveled up.", GREEN))
+                .color(getUpgradableItemTier().getMenuColor());
+            player.sendMessage(message);
+            player.sendMessage(textOfChildren(Mytems.MOUSE_CURSOR, Mytems.MOUSE_RIGHT,
+                                              text(" Right click it in your inventory to choose a perk.", GREEN))
+                               .color(getUpgradableItemTier().getMenuColor()));
+            player.sendActionBar(message);
+        } else {
+            Component message = textOfChildren(getUpgradableItemTier().getMytems(),
+                                               text(level),
+                                               space(),
+                                               text(superscript(xp)),
+                                               text("/"),
+                                               text(subscript(getRequiredXp())))
+                .color(getUpgradableItemTier().getMenuColor());
+            player.sendActionBar(message);
+        }
+        return result;
     }
 
     public final int getTotalXp() {

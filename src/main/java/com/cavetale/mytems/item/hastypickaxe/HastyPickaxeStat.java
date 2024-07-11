@@ -2,7 +2,6 @@ package com.cavetale.mytems.item.hastypickaxe;
 
 import com.cavetale.core.struct.Vec2i;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.item.upgradable.UpgradableItemTier;
 import com.cavetale.mytems.item.upgradable.UpgradableStat;
 import com.cavetale.mytems.item.upgradable.UpgradableStatLevel;
 import java.util.HashMap;
@@ -128,7 +127,7 @@ public enum HastyPickaxeStat implements UpgradableStat {
     @Value
     public static final class Level implements UpgradableStatLevel {
         private final int level;
-        private final UpgradableItemTier requiredTier;
+        private final HastyPickaxeTier requiredTier;
         private final Supplier<ItemStack> iconSupplier;
         private final List<Component> description;
 

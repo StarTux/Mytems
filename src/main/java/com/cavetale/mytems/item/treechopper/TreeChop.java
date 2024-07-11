@@ -82,10 +82,10 @@ public final class TreeChop {
             return NOTHING_FOUND;
         }
         minHeight = brokenBlock.getY();
-        doVines = tag.getStat(TreeChopperStat.SILK) >= 2;
-        doReplant = tag.getStat(TreeChopperStat.REPLANT) >= 1;
-        enchanter = tag.getStat(TreeChopperStat.ENCH);
-        pickup = tag.getStat(TreeChopperStat.PICKUP);
+        doVines = tag.getEffectiveUpgradeLevel(TreeChopperStat.SILK) >= 2;
+        doReplant = tag.getEffectiveUpgradeLevel(TreeChopperStat.REPLANT) >= 1;
+        enchanter = tag.getEffectiveUpgradeLevel(TreeChopperStat.ENCH);
+        pickup = tag.getEffectiveUpgradeLevel(TreeChopperStat.PICKUP);
         // Log blocks is initialized with the original block!
         logBlocks.add(brokenBlock);
         // Blocks already searched, good or not
@@ -220,11 +220,15 @@ public final class TreeChop {
     }
 
     public void chop(Player player, ItemStack itemStack) {
-        ItemStack axeItem = new ItemStack(Material.NETHERITE_AXE);
-        int fortune = tag.getStat(TreeChopperStat.FORTUNE);
-        int silk = tag.getStat(TreeChopperStat.SILK);
-        if (fortune > 0) axeItem.addUnsafeEnchantments(Map.of(Enchantment.FORTUNE, fortune));
-        if (silk > 0) axeItem.addUnsafeEnchantments(Map.of(Enchantment.SILK_TOUCH, silk));
+        final ItemStack axeItem = new ItemStack(Material.NETHERITE_AXE);
+        final int fortune = tag.getEffectiveUpgradeLevel(TreeChopperStat.FORTUNE);
+        final int silk = tag.getEffectiveUpgradeLevel(TreeChopperStat.SILK);
+        if (fortune > 0) {
+            axeItem.addUnsafeEnchantments(Map.of(Enchantment.FORTUNE, fortune));
+        }
+        if (silk > 0) {
+            axeItem.addUnsafeEnchantments(Map.of(Enchantment.SILK_TOUCH, silk));
+        }
         // Determine the primary tree type.
         // If replant is not unlocked, we skip this!
         if (doReplant && !leafBlocks.isEmpty()) {

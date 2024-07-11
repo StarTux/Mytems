@@ -7,7 +7,7 @@ import com.cavetale.core.util.Json;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.session.Session;
-import com.google.common.collect.ImmutableListMultimap;
+import com.cavetale.mytems.util.Items;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -62,9 +62,9 @@ public final class HastyPickaxe implements Mytem {
         tier.createTag().store(prototype);
         prototype.editMeta(meta -> {
                 key.markItemMeta(meta);
-                meta.setAttributeModifiers(ImmutableListMultimap.of());
+                Items.clearAttributes(meta);
                 meta.setUnbreakable(true);
-                meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
+                meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
                 meta.setEnchantmentGlintOverride(false);
             });
     }
@@ -119,13 +119,8 @@ public final class HastyPickaxe implements Mytem {
                     return;
                 }
                 if (xp > 0) {
-                    if (tag.addXp(xp)) {
+                    if (tag.addXpAndNotify(player, xp)) {
                         tag.store(item);
-                    }
-                    if (tag.hasAvailableUnlocks()) {
-                        player.sendMessage(textOfChildren(text("Your ", GREEN), key, text(" has leveled up.", GREEN)));
-                        player.sendMessage(textOfChildren(Mytems.MOUSE_CURSOR, Mytems.MOUSE_RIGHT,
-                                                          text(" Right click it in your inventory to choose a perk.", GREEN)));
                     }
                 }
                 final int haste = tag.getEffectiveUpgradeLevel(HastyPickaxeStat.HASTE);
