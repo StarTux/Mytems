@@ -76,7 +76,7 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
                              .collect(Collectors.toList()))
             .description("Show some info on all mytems")
             .senderCaller(this::list);
-        rootNode.addChild("give").arguments("<player> <mytem> [amount]")
+        rootNode.addChild("give").arguments("<player> <mytem> [amount] [tag]")
             .description("Give an item to a player")
             .senderCaller(this::give)
             .completer(this::giveComplete);
@@ -197,10 +197,13 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
     }
 
     protected boolean give(CommandSender sender, String[] args) {
-        if (args.length != 2 && args.length != 3) return false;
+        if (args.length < 2) return false;
         String targetArg = args[0];
         String mytemArg = args[1];
         String amountArg = args.length >= 3 ? args[2] : null;
+        String tagArg = args.length >= 4
+            ? String.join(" ", Arrays.copyOfRange(args, 3, args.length))
+            : null;
         Player target = Bukkit.getPlayer(targetArg);
         if (target == null) throw new CommandWarn("Player not found: " + targetArg);
         List<Mytems> mytemsList;
@@ -221,10 +224,14 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
                 amount = -1;
             }
         }
-        if (amount < 1) throw new CommandWarn("Invalid amount: " + amountArg);
+        if (amount < 1) {
+            throw new CommandWarn("Invalid amount: " + amountArg);
+        }
         for (Mytems mytems : mytemsList) {
-            ItemStack item = mytems.createItemStack();
-            item.setAmount(amount);
+            ItemStack item = tagArg != null
+                ? mytems.getMytem().deserializeTag(tagArg)
+                : mytems.createItemStack();
+            item.setAmount(Math.min(mytems.getMytem().getMaxStackSize(), amount));
             int retain = 0;
             for (ItemStack drop : target.getInventory().addItem(item).values()) {
                 retain += drop.getAmount();
