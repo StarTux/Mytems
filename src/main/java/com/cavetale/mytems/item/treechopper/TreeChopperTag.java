@@ -1,6 +1,7 @@
 package com.cavetale.mytems.item.treechopper;
 
 import com.cavetale.mytems.item.upgradable.UpgradableItemTag;
+import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.bukkit.inventory.ItemStack;
@@ -8,6 +9,9 @@ import static com.cavetale.mytems.util.Items.tooltip;
 
 @Data @EqualsAndHashCode(callSuper = true)
 public abstract class TreeChopperTag extends UpgradableItemTag {
+    // Legacy, season 5
+    private Map<String, Integer> stats;
+
     public static final class Iron extends TreeChopperTag {
         @Override
         public TreeChopperTier getUpgradableItemTier() {
@@ -20,6 +24,11 @@ public abstract class TreeChopperTag extends UpgradableItemTag {
         public TreeChopperTier getUpgradableItemTier() {
             return TreeChopperTier.GOLD;
         }
+    }
+
+    @Override
+    public final boolean isEmpty() {
+        return super.isEmpty() && stats == null;
     }
 
     @Override
@@ -37,10 +46,29 @@ public abstract class TreeChopperTag extends UpgradableItemTag {
 
     @Override
     public final void store(ItemStack itemStack) {
+        if (stats != null) {
+            legacyConversion();
+        }
         super.store(itemStack);
         itemStack.editMeta(meta -> {
                 tooltip(meta, getDefaultTooltip());
             });
+    }
+
+    private void legacyConversion() {
+        // Legacy conversion
+        int nextLevel = 0;
+        for (TreeChopperStat stat : TreeChopperStat.values()) {
+            final int level = stats.getOrDefault(stat.getKey(), 0);
+            if (level <= 0) {
+                continue;
+            }
+            setUpgradeLevel(stat, level);
+            nextLevel += level;
+        }
+        setXp(stats.getOrDefault("xp", 0));
+        setLevel(nextLevel);
+        stats = null;
     }
 
     @Override
