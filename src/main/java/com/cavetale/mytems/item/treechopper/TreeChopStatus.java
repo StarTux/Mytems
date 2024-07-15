@@ -4,5 +4,7 @@ public enum TreeChopStatus {
     SUCCESS,
     TOO_MANY_LOGS,
     NOTHING_FOUND,
-    NO_SAPLING;
+    NO_SAPLING,
+    STAT_REQUIRED,
+    ;
 }

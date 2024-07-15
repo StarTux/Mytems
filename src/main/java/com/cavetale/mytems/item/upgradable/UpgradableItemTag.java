@@ -348,4 +348,9 @@ public abstract class UpgradableItemTag extends MytemTag {
         tooltip.add(textOfChildren(Mytems.MOUSE_CURSOR, Mytems.MOUSE_RIGHT, text(" Open menu", GRAY)));
         return tooltip;
     }
+
+    /**
+     * Override this to edit the menu.
+     */
+    public void onMenuCreated(UpgradableItemMenu menu) { }
 }

@@ -1,5 +1,7 @@
 package com.cavetale.mytems.item.treechopper;
 
+import com.cavetale.mytems.Mytems;
+import com.cavetale.mytems.item.upgradable.UpgradableItemMenu;
 import com.cavetale.mytems.item.upgradable.UpgradableItemTag;
 import java.util.Map;
 import lombok.Data;
@@ -74,6 +76,14 @@ public abstract class TreeChopperTag extends UpgradableItemTag {
     @Override
     public final TreeChopperItem getUpgradableItem() {
         return TreeChopperItem.treeChopperItem();
+    }
+
+    @Override
+    public final void onMenuCreated(UpgradableItemMenu menu) {
+        // 4,2
+        menu.getGui().setItem(3, 2, Mytems.ARROW_LEFT.createIcon(), null);
+        menu.getGui().setItem(5, 2, Mytems.ARROW_RIGHT.createIcon(), null);
+        menu.getGui().setItem(4, 1, Mytems.ARROW_UP.createIcon(), null);
     }
 
     public static int getMaxLogBlocks(int level) {

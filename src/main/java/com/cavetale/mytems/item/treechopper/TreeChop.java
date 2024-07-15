@@ -4,10 +4,8 @@ import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.event.block.PlayerBreakBlockEvent;
 import com.cavetale.core.event.block.PlayerChangeBlockEvent;
 import com.cavetale.mytems.MytemsPlugin;
-import com.destroystokyo.paper.MaterialSetTag;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.EnumMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -15,8 +13,10 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Tag;
+import org.bukkit.Particle;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.enchantments.Enchantment;
@@ -32,40 +32,22 @@ import static com.cavetale.mytems.item.treechopper.TreeChopStatus.*;
  */
 @Data @RequiredArgsConstructor
 public final class TreeChop {
-    protected static final Tag<Material> SAPLING_PLACEABLE = new MaterialSetTag(null, List.of(new Material[] {
-                Material.DIRT,
-                Material.COARSE_DIRT,
-                Material.ROOTED_DIRT,
-                Material.MOSS_BLOCK,
-                Material.GRASS_BLOCK,
-                Material.PODZOL,
-                Material.FARMLAND,
-                // World Gen
-                Material.GRAVEL,
-                Material.SAND,
-            }));
     protected static final Set<Block> CHOPPING = new HashSet<>();
     private static final List<Face> FACES = Face.all();
     protected final TreeChopperTag tag;
     protected final List<Block> logBlocks = new ArrayList<>();
     protected final List<Block> leafBlocks = new ArrayList<>();
+    protected final List<Block> vineBlocks = new ArrayList<>();
     protected final List<Block> saplingBlocks = new ArrayList<>(); // for placement
     protected int minHeight;
     // Used for chopping
-    protected ChoppedType replantType = null;
+    private ChoppedType choppedType = null;
     protected boolean doVines;
+    protected boolean didVines;
     protected boolean doReplant;
     protected int enchanter;
     protected int pickup;
     protected int brokenBlocks;
-    protected static final BlockFace[] FACE6 = {
-        BlockFace.UP,
-        BlockFace.DOWN,
-        BlockFace.NORTH,
-        BlockFace.EAST,
-        BlockFace.SOUTH,
-        BlockFace.WEST,
-    };
 
     private List<Face> faces() {
         Collections.shuffle(FACES);
@@ -81,6 +63,20 @@ public final class TreeChop {
         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, brokenBlock)) {
             return NOTHING_FOUND;
         }
+        choppedType = ChoppedType.of(brokenBlock.getType());
+        if (choppedType == null) {
+            return TreeChopStatus.NOTHING_FOUND;
+        }
+        if (choppedType == ChoppedType.RED_MUSHROOM || choppedType == ChoppedType.BROWN_MUSHROOM) {
+            if (tag.getEffectiveUpgradeLevel(TreeChopperStat.MUSHROOM) < 1) {
+                return TreeChopStatus.STAT_REQUIRED;
+            }
+        }
+        if (choppedType == ChoppedType.WARPED || choppedType == ChoppedType.CRIMSON) {
+            if (tag.getEffectiveUpgradeLevel(TreeChopperStat.FUNGI) < 1) {
+                return TreeChopStatus.STAT_REQUIRED;
+            }
+        }
         minHeight = brokenBlock.getY();
         doVines = tag.getEffectiveUpgradeLevel(TreeChopperStat.SILK) >= 2;
         doReplant = tag.getEffectiveUpgradeLevel(TreeChopperStat.REPLANT) >= 1;
@@ -91,7 +87,7 @@ public final class TreeChop {
         // Blocks already searched, good or not
         Set<Block> done = new HashSet<>();
         done.add(brokenBlock);
-        if (SAPLING_PLACEABLE.isTagged(brokenBlock.getRelative(BlockFace.DOWN).getType())) {
+        if (choppedType.placeableOn.isTagged(brokenBlock.getRelative(BlockFace.DOWN).getType())) {
             saplingBlocks.add(brokenBlock);
         }
         // Crawl over logs.  Neighboring logs will be added to the
@@ -107,7 +103,7 @@ public final class TreeChop {
                 if (CHOPPING.contains(nbor)) continue;
                 if (nbor.getY() < minHeight) continue;
                 if (isPlayerPlaced(nbor)) continue;
-                if (Tag.LOGS.isTagged(nbor.getType())) {
+                if (choppedType.logs.isTagged(nbor.getType())) {
                     if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, nbor)) {
                         continue;
                     }
@@ -115,18 +111,29 @@ public final class TreeChop {
                         return TOO_MANY_LOGS;
                     }
                     logBlocks.add(nbor);
-                    if (logBlock.getY() <= minHeight + 1 && SAPLING_PLACEABLE.isTagged(logBlock.getRelative(BlockFace.DOWN).getType())) {
+                    if (logBlock.getY() <= minHeight + 1 && choppedType.placeableOn.isTagged(logBlock.getRelative(BlockFace.DOWN).getType())) {
                         // Need this to replant AND to determine if xp are given!
                         saplingBlocks.add(nbor);
                     }
-                } else if (Tag.LEAVES.isTagged(nbor.getType())) {
+                } else if (choppedType == ChoppedType.OAK && ChoppedType.AZALEA.isAzaleaLeaf(nbor.getType())) {
+                    // Special case: Azalea tree is like a subtype of
+                    // Oak
+                    if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, nbor)) continue;
+                    leafBlocks.add(nbor);
+                    choppedType = ChoppedType.AZALEA;
+                } else if (leafBlocks.isEmpty() && choppedType == ChoppedType.RED_MUSHROOM && ChoppedType.BROWN_MUSHROOM.leaves.isTagged(nbor.getType())) {
+                    // Special case: Red -> brown mushroom
+                    if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, nbor)) continue;
+                    leafBlocks.add(nbor);
+                    choppedType = ChoppedType.BROWN_MUSHROOM;
+                } else if (choppedType.leaves.isTagged(nbor.getType())) {
                     if (leafBlocks.size() >= tag.getMaxLeafBlocks()) continue;
                     if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, nbor)) continue;
                     leafBlocks.add(nbor);
                 } else if (doVines && nbor.getType() == Material.VINE) {
-                    if (leafBlocks.size() >= tag.getMaxLeafBlocks()) continue;
+                    if (vineBlocks.size() >= tag.getMaxLeafBlocks()) continue;
                     if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, nbor)) continue;
-                    leafBlocks.add(nbor);
+                    vineBlocks.add(nbor);
                 }
             }
         }
@@ -144,15 +151,7 @@ public final class TreeChop {
                 if (CHOPPING.contains(nbor)) continue;
                 if (nbor.getY() < minHeight) continue;
                 if (isPlayerPlaced(nbor)) continue;
-                if (Tag.LEAVES.isTagged(nbor.getType())) {
-                    // If the leaf is attached to a log from a
-                    // different tree, we skip it.
-                    for (BlockFace blockFace : FACE6) {
-                        Block adj = nbor.getRelative(blockFace);
-                        if (Tag.LOGS.isTagged(adj.getType()) && !logBlocks.contains(adj)) {
-                            continue NBORS;
-                        }
-                    }
+                if (choppedType.leaves.isTagged(nbor.getType())) {
                     // Approximate if the leaf is connected with one
                     // of our logs.
                     boolean isConnected = false;
@@ -170,53 +169,14 @@ public final class TreeChop {
                     if (leafBlocks.size() >= tag.getMaxLeafBlocks()) break LEAVES;
                 } else if (doVines && nbor.getType() == Material.VINE) {
                     if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, nbor)) continue;
-                    leafBlocks.add(nbor);
-                    if (leafBlocks.size() >= tag.getMaxLeafBlocks()) break LEAVES;
+                    vineBlocks.add(nbor);
+                    if (vineBlocks.size() >= tag.getMaxLeafBlocks()) break LEAVES;
                 }
             }
         }
         if (saplingBlocks.isEmpty()) return NO_SAPLING;
         if (logBlocks.size() < 4) return NOTHING_FOUND;
         return SUCCESS;
-    }
-
-    /**
-     * Guess the type of tree.  This will depend on how many logs are
-     * to be chopped, except for Azalea, which uses oak logs, so we
-     * count the leaves.  So this method is mostly reliable unless
-     * this is an azalea or custom tree.
-     */
-    public ChoppedType guessChoppedType() {
-        final Map<ChoppedType, Integer> leafCount = new EnumMap<>(ChoppedType.class);
-        ChoppedType result = null;
-        for (Block leafBlock : leafBlocks) {
-            ChoppedType type = ChoppedType.of(leafBlock);
-            if (type == null) continue;
-            leafCount.compute(type, (t, i) -> i != null ? i + 1 : 1);
-        }
-        int highest = 0;
-        for (ChoppedType type : ChoppedType.values()) {
-            int count = leafCount.getOrDefault(type, 0);
-            if (count > highest) {
-                result = type;
-                highest = count;
-            }
-        }
-        if (leafCount.getOrDefault(ChoppedType.AZALEA, 0) > 0 && result != null) return result;
-        final Map<ChoppedType, Integer> logCount = new EnumMap<>(ChoppedType.class);
-        for (Block logBlock : logBlocks) {
-            ChoppedType type = ChoppedType.of(logBlock);
-            if (type == null) continue;
-            logCount.compute(type, (t, i) -> i != null ? i + 1 : 1);
-        }
-        for (ChoppedType type : ChoppedType.values()) {
-            int count = logCount.getOrDefault(type, 0);
-            if (count > highest) {
-                result = type;
-                highest = count;
-            }
-        }
-        return result;
     }
 
     public void chop(Player player, ItemStack itemStack) {
@@ -229,14 +189,10 @@ public final class TreeChop {
         if (silk > 0) {
             axeItem.addUnsafeEnchantments(Map.of(Enchantment.SILK_TOUCH, silk));
         }
-        // Determine the primary tree type.
-        // If replant is not unlocked, we skip this!
-        if (doReplant && !leafBlocks.isEmpty()) {
-            replantType = guessChoppedType();
-        }
         final int speed = tag.getChoppingSpeed();
         CHOPPING.addAll(logBlocks);
         CHOPPING.addAll(leafBlocks);
+        CHOPPING.addAll(vineBlocks);
         new BukkitRunnable() {
             protected int logBlockIndex;
             protected int leafBlockIndex;
@@ -244,9 +200,10 @@ public final class TreeChop {
 
             @Override
             public void run() {
-                if (doVines) {
+                if (doVines && !didVines) {
+                    didVines = true;
                     ItemStack shears = new ItemStack(Material.SHEARS);
-                    for (Block vineBlock : leafBlocks) {
+                    for (Block vineBlock : vineBlocks) {
                         if (vineBlock.getType() != Material.VINE) continue;
                         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, vineBlock)) continue;
                         if (!new PlayerBreakBlockEvent(player, vineBlock, itemStack).callEvent()) continue;
@@ -259,7 +216,7 @@ public final class TreeChop {
                 for (int i = 0; i <= speed; i += 1) {
                     if (logBlockIndex < logBlocks.size()) {
                         Block logBlock = logBlocks.get(logBlockIndex++);
-                        if (!Tag.LOGS.isTagged(logBlock.getType())) continue;
+                        if (!choppedType.logs.isTagged(logBlock.getType())) continue;
                         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, logBlock)) continue;
                         if (!new PlayerBreakBlockEvent(player, logBlock, itemStack).callEvent()) continue;
                         if (pickup > 0) TreeChopListener.target = player.getLocation();
@@ -284,7 +241,7 @@ public final class TreeChop {
                 for (int i = 0; i <= 2 * speed; i += 1) {
                     if (leafBlockIndex < leafBlocks.size()) {
                         Block leafBlock = leafBlocks.get(leafBlockIndex++);
-                        if (!Tag.LEAVES.isTagged(leafBlock.getType())) continue;
+                        if (!choppedType.leaves.isTagged(leafBlock.getType())) continue;
                         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, leafBlock)) continue;
                         if (!new PlayerBreakBlockEvent(player, leafBlock, itemStack).callEvent()) continue;
                         if (pickup > 0) TreeChopListener.target = player.getLocation();
@@ -298,18 +255,21 @@ public final class TreeChop {
                     }
                 }
                 if (blocksBrokenNow > 0) return;
-                if (doReplant && replantType != null) {
+                if (doReplant) {
                     for (Block saplingBlock : saplingBlocks) {
                         if (!saplingBlock.isEmpty()) continue;
-                        if (!SAPLING_PLACEABLE.isTagged(saplingBlock.getRelative(BlockFace.DOWN).getType())) continue;
+                        if (!choppedType.placeableOn.isTagged(saplingBlock.getRelative(BlockFace.DOWN).getType())) continue;
                         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, saplingBlock)) continue;
-                        List<Material> saplingTypes = List.copyOf(replantType.saplings.getValues());
-                        Material saplingType = saplingTypes.size() > 1
+                        final List<Material> saplingTypes = List.copyOf(choppedType.saplings.getValues());
+                        final Material saplingType = saplingTypes.size() > 1
                             ? saplingTypes.get(ThreadLocalRandom.current().nextInt(saplingTypes.size()))
                             : saplingTypes.get(0);
                         if (!new PlayerChangeBlockEvent(player, saplingBlock, saplingType.createBlockData(), itemStack).callEvent()) continue;
                         saplingBlock.setType(saplingType);
                         saplingBlocksPlaced += 1;
+                        final Location effectLocation = saplingBlock.getLocation().add(0.5, 0.25, 0.5);
+                        saplingBlock.getWorld().playSound(effectLocation, Sound.BLOCK_NYLIUM_PLACE, 1f, 1f);
+                        saplingBlock.getWorld().spawnParticle(Particle.BLOCK, effectLocation, 32, 0f, 0f, 0f, 0f, saplingType.createBlockData());
                         if (saplingBlocksPlaced >= leafBlocks.size()) break;
                     }
                 }
@@ -336,5 +296,15 @@ public final class TreeChop {
             }
             return result;
         }
+    }
+
+    /**
+     * Get the chopped type.
+     *
+     * @deprecation Use getChoppedType() instead.
+     */
+    @Deprecated
+    public ChoppedType guessChoppedType() {
+        return choppedType;
     }
 }

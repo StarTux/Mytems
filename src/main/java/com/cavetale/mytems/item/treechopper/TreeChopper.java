@@ -11,7 +11,6 @@ import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Sound;
-import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -77,7 +76,7 @@ public final class TreeChopper implements Mytem {
 
     private void tryToChop(Cancellable event, Player player, ItemStack itemStack, Block block) {
         if (event.isCancelled()) return;
-        if (!Tag.LOGS.isTagged(block.getType())) return;
+        if (!ChoppedType.ALL_LOGS.contains(block.getType())) return;
         if (isPlayerPlaced(block)) return;
         TreeChopperTag tag = serializeTag(itemStack);
         switch (player.getGameMode()) {
@@ -110,12 +109,13 @@ public final class TreeChopper implements Mytem {
         if (session.x == block.getX() && session.y == block.getY() && session.z == block.getZ()) {
             return;
         }
-        TreeChop chop = new TreeChop(tag);
-        TreeChopStatus status = chop.fill(player, block);
+        final TreeChop chop = new TreeChop(tag);
+        final TreeChopStatus status = chop.fill(player, block);
         if (false) {
             // DEBUG
             player.sendMessage("Chop!"
                                + " " + status
+                               + " type=" + chop.getChoppedType()
                                + " logs=" + chop.logBlocks.size() + "/" + tag.getMaxLogBlocks()
                                + " leaves=" + chop.leafBlocks.size() + "/" + tag.getMaxLeafBlocks());
         }
@@ -130,6 +130,7 @@ public final class TreeChopper implements Mytem {
             return;
         case NOTHING_FOUND:
         case NO_SAPLING:
+        case STAT_REQUIRED:
         default: return;
         }
         event.setCancelled(true);

@@ -190,6 +190,7 @@ public final class UpgradableItemMenu {
                 gui.highlight(slot.x, slot.z, highlightColor);
             }
         }
+        tag.onMenuCreated(this);
         gui.open(player);
     }
 
