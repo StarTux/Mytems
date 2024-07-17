@@ -16,7 +16,7 @@ import static net.kyori.adventure.text.format.TextColor.color;
 public enum TreeChopperTier implements UpgradableItemTier {
     IRON(1, Mytems.TREE_CHOPPER, TreeChopperTag.Iron.class, TreeChopperTag.Iron::new,
          text("Steel Tree Chopper", color(0xa0a0a0)), color(0xa0a0a0)),
-    GOLD(1, Mytems.GOLDEN_TREE_CHOPPER, TreeChopperTag.Gold.class, TreeChopperTag.Gold::new,
+    GOLD(2, Mytems.GOLDEN_TREE_CHOPPER, TreeChopperTag.Gold.class, TreeChopperTag.Gold::new,
          text("Golden Tree Chopper", color(0xeabb3a)), color(0xeabb3a)),
     ;
 
