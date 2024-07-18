@@ -16,6 +16,7 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
@@ -46,7 +47,9 @@ public final class NetheriteParityTable implements Mytem {
 
     @Override
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
-        if (event.isCancelled()) return;
+        if (event.useItemInHand() == Event.Result.DENY) {
+            return;
+        }
         if (!event.hasBlock()) return;
         event.setCancelled(true);
         final Block block = event.getClickedBlock().getRelative(event.getBlockFace());

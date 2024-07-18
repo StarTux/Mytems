@@ -17,6 +17,7 @@ import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
@@ -72,7 +73,9 @@ public final class NetheriteParityTableBlock implements MytemBlock {
 
     @Override
     public void onPlayerInteract(PlayerInteractEvent event, Block block) {
-        if (event.isCancelled()) return;
+        if (event.useInteractedBlock() == Event.Result.DENY) {
+            return;
+        }
         if (event.getHand() != EquipmentSlot.HAND) return;
         if (event.getAction() != Action.RIGHT_CLICK_BLOCK) return;
         if (event.getPlayer().isSneaking()) return;
