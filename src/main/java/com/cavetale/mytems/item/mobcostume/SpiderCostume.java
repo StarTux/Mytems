@@ -13,7 +13,7 @@ import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.GameMode;
-import org.bukkit.entity.EntityCategory;
+import org.bukkit.Tag;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -59,7 +59,7 @@ public abstract class SpiderCostume implements GearItem {
             @Override
             public void onEntityTargetPlayer(EntityTargetEvent event, Player player) {
                 if (event.isCancelled()) return;
-                if (event.getEntity() instanceof LivingEntity living && living.getCategory() == EntityCategory.ARTHROPOD) {
+                if (event.getEntity() instanceof LivingEntity living && Tag.ENTITY_TYPES_ARTHROPOD.isTagged(living.getType())) {
                     event.setCancelled(true);
                 }
             }
