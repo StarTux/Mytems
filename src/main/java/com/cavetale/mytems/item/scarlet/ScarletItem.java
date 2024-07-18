@@ -210,7 +210,7 @@ public abstract class ScarletItem implements GearItem {
                                                new Pattern(DyeColor.LIGHT_GRAY, PatternType.STRAIGHT_CROSS),
                                                new Pattern(DyeColor.RED, PatternType.RHOMBUS)));
                     blockStateMeta.setBlockState(banner);
-                    meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS); // hides banner patterns
+                    meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP); // hides banner patterns
                     final EquipmentSlot slot = EquipmentSlot.OFF_HAND;
                     meta.addAttributeModifier(GENERIC_ARMOR,
                                               of(UUID.fromString("1c9bd86b-7235-4881-a6d5-1fa9410998a7"),

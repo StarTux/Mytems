@@ -57,7 +57,7 @@ public final class FlameShield extends AculaItem {
                 meta.addAttributeModifier(GENERIC_KNOCKBACK_RESISTANCE,
                                           new AttributeModifier(UUID.randomUUID(),
                                                                 key.id, 0.1, ADD_NUMBER, OFF_HAND));
-                meta.addItemFlags(ItemFlag.HIDE_ITEM_SPECIFICS); // hides banner patterns
+                meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP); // hides banner patterns
             });
         return itemStack;
     }
