@@ -3,11 +3,15 @@ package com.cavetale.mytems.item.treechopper;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.item.upgradable.UpgradableItemMenu;
 import com.cavetale.mytems.item.upgradable.UpgradableItemTag;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.mytems.util.Items.tooltip;
+import static net.kyori.adventure.text.Component.text;
 
 @Data @EqualsAndHashCode(callSuper = true)
 public abstract class TreeChopperTag extends UpgradableItemTag {
@@ -84,6 +88,17 @@ public abstract class TreeChopperTag extends UpgradableItemTag {
         menu.getGui().setItem(3, 2, Mytems.ARROW_LEFT.createIcon(), null);
         menu.getGui().setItem(5, 2, Mytems.ARROW_RIGHT.createIcon(), null);
         menu.getGui().setItem(4, 1, Mytems.ARROW_UP.createIcon(), null);
+    }
+
+    @Override
+    public final List<Component> getTooltipDescription() {
+        final List<Component> result = new ArrayList<>();
+        result.addAll(super.getTooltipDescription());
+        final var color = getUpgradableItemTier().getMenuColor();
+        result.add(text("Break the root of a", color));
+        result.add(text("tree to chop it all", color));
+        result.add(text("and gather item XP.", color));
+        return result;
     }
 
     public static int getMaxLogBlocks(int level) {

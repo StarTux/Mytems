@@ -331,16 +331,15 @@ public abstract class UpgradableItemTag extends MytemTag {
 
     public final List<Component> getDefaultTooltip() {
         final List<Component> tooltip = new ArrayList<>();
-        final UpgradableItemTier tier = getUpgradableItemTier();
-        tooltip.add(tier.getMytems().getMytem().getDisplayName());
-        tooltip.add(text(tiny("tier " + tier.getRomanTier().toLowerCase()), LIGHT_PURPLE));
+        tooltip.add(getUpgradableItemTier().getMytems().getMytem().getDisplayName());
+        tooltip.addAll(getTooltipDescription());
         for (UpgradableStat stat : getUpgradableItem().getStats()) {
             final int upgradeLevel = getEffectiveUpgradeLevel(stat);
             if (upgradeLevel < 1) continue;
             if (stat.getLevels().size() > 1) {
                 tooltip.add(textOfChildren(stat.getChatIcon(), stat.getTitle(), text(" " + roman(upgradeLevel))).color(GRAY));
             } else {
-                tooltip.add(textOfChildren(stat.getChatIcon(), stat.getTitle()));
+                tooltip.add(textOfChildren(stat.getChatIcon(), stat.getTitle()).color(GRAY));
             }
         }
         tooltip.add(textOfChildren(text(tiny("level "), GRAY), text(getLevel(), WHITE)));
@@ -353,4 +352,11 @@ public abstract class UpgradableItemTag extends MytemTag {
      * Override this to edit the menu.
      */
     public void onMenuCreated(UpgradableItemMenu menu) { }
+
+    /**
+     * Override to add text to the tooltip.
+     */
+    public List<Component> getTooltipDescription() {
+        return List.of(text(tiny("tier " + getUpgradableItemTier().getRomanTier().toLowerCase()), getUpgradableItemTier().getMenuColor()));
+    }
 }
