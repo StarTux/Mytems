@@ -9,12 +9,14 @@ import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.LargeFireball;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.entity.SmallFireball;
 import org.bukkit.event.entity.EntityShootBowEvent;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionType;
 import static net.kyori.adventure.text.Component.text;
@@ -35,7 +37,12 @@ public final class GhastBow extends AculaItem {
 
     @Override
     protected ItemStack getRawItemStack() {
-        return new ItemStack(Material.BOW);
+        final ItemStack result = new ItemStack(Material.BOW);
+        result.editMeta(meta -> {
+                meta.addEnchant(Enchantment.INFINITY, 1, true);
+                meta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
+            });
+        return result;
     }
 
     @Override
@@ -44,9 +51,6 @@ public final class GhastBow extends AculaItem {
         if (NetworkServer.current() == NetworkServer.FESTIVAL) {
             event.setCancelled(true);
             return;
-        }
-        if (event.getConsumable() != null && event.getConsumable().getType() == Material.ARROW) {
-            event.setConsumeItem(false);
         }
         if (!(event.getProjectile() instanceof Arrow arrow)) return;
         // TODO TEST THIS
@@ -59,7 +63,6 @@ public final class GhastBow extends AculaItem {
         boolean fullForce = event.getForce() >= 1.0f;
         projectile = player.launchProjectile(fullForce ? LargeFireball.class : SmallFireball.class);
         if (projectile == null) return;
-        event.setConsumeItem(false);
         event.setProjectile(projectile);
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_BLAZE_SHOOT, SoundCategory.PLAYERS, 0.5f, 1.25f);
         if (fullForce) {
