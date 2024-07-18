@@ -124,7 +124,7 @@ public final class Luminator implements Mytem {
         if (player.getGameMode() != GameMode.CREATIVE) {
             tag.light = Math.max(0, tag.light - lightAmount);
             if (tag.light <= 0) {
-                Mytems.EMPTY_LUMINATOR.setItem(item);
+                player.getInventory().setItem(event.getHand(), Mytems.EMPTY_LUMINATOR.createItemStack());
             } else {
                 tag.store(item);
             }
@@ -157,7 +157,9 @@ public final class Luminator implements Mytem {
             if (luminance == null) return;
         }
         if (!luminance.drawLight()) return;
-        if (empty) Mytems.LUMINATOR.setItem(item);
+        if (empty) {
+            player.getInventory().setItem(event.getHand(), Mytems.LUMINATOR.createItemStack());
+        }
         int newLight = Math.min(MAX_LIGHT, tag.light + luminance.getLight());
         int drawnLight = newLight - tag.light;
         tag.light = newLight;

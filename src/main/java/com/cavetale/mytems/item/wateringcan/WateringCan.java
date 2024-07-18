@@ -108,7 +108,7 @@ public final class WateringCan implements Mytem {
             if (tag.water < type.maxWater) {
                 tag.store(item);
             } else {
-                type.emptyMytems.setItem(item);
+                player.getInventory().setItem(event.getHand(), type.emptyMytems.createItemStack());
             }
             Location location = block.getLocation().add(0.5, 0.5, 0.5);
             block.getWorld().playSound(location, BLOCK_BREWING_STAND_BREW, BLOCKS, 0.6f, 1.7f);

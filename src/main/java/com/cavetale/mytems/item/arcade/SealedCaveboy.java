@@ -14,6 +14,7 @@ import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
@@ -57,6 +58,9 @@ public final class SealedCaveboy implements Mytem {
     @Override
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
         event.setUseItemInHand(Event.Result.DENY);
+        if (event.getHand() != EquipmentSlot.HAND) {
+            return;
+        }
         if (item.getAmount() > 1) {
             player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_DIDGERIDOO, SoundCategory.MASTER, 1.0f, 0.5f);
             return;
@@ -66,7 +70,7 @@ public final class SealedCaveboy implements Mytem {
         games.remove(ArcadeGame.TIC_TAC_TOE);
         ArcadeGame game = games.get(ThreadLocalRandom.current().nextInt(games.size()));
         plugin().getLogger().info("[" + key + "] " + player.getName() + " unwrapped " + game);
-        game.mytems.setItem(item);
+        player.getInventory().setItem(event.getHand(), game.mytems.createItemStack());
         player.playSound(player.getLocation(), Sound.UI_LOOM_TAKE_RESULT, SoundCategory.MASTER, 1.0f, 2.0f);
         player.sendMessage(textOfChildren(text("The game inside is "), game.mytems, game.displayName));
     }

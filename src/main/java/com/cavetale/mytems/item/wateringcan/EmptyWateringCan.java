@@ -71,7 +71,7 @@ public final class EmptyWateringCan implements Mytem {
         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return;
         if (block.getType() == Material.WATER_CAULDRON) {
             if (!(block.getBlockData() instanceof Levelled levelled)) return;
-            type.filledMytems.setItem(item);
+            player.getInventory().setItem(event.getHand(), type.filledMytems.createItemStack());
             int level = levelled.getLevel();
             if (level == levelled.getMinimumLevel()) {
                 block.setType(Material.CAULDRON);

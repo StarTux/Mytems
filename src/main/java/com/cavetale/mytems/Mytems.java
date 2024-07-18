@@ -1378,11 +1378,6 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
         return false;
     }
 
-    public void setItem(ItemStack item) {
-        item.setType(material);
-        item.setItemMeta(createItemStack().getItemMeta());
-    }
-
     @Override
     public Component asComponent() {
         return component;

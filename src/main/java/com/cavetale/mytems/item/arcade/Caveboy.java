@@ -11,6 +11,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.font.Unicode.tiny;
@@ -48,7 +49,7 @@ public final class Caveboy implements Mytem {
                                       text(tiny("AA Batteries sold"), GRAY),
                                       text(tiny("separately."), GRAY),
                                       empty(),
-                                      textOfChildren(Mytems.MOUSE_LEFT, text(" Play ", GRAY), game.displayName)));
+                                      textOfChildren(Mytems.MOUSE_RIGHT, text(" Play ", GRAY), game.displayName)));
                 meta.addItemFlags(ItemFlag.values());
                 key.markItemMeta(meta);
             });
@@ -62,6 +63,9 @@ public final class Caveboy implements Mytem {
     @Override
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
         event.setUseItemInHand(Event.Result.DENY);
+        if (event.getHand() != EquipmentSlot.HAND) {
+            return;
+        }
         game.startMethod.accept(player);
         Bukkit.getScheduler().runTaskLater(plugin(), () -> player.playSound(player.getLocation(), BLOCK_NOTE_BLOCK_BIT, MASTER, 1.0f, 1.1f), 0L);
         Bukkit.getScheduler().runTaskLater(plugin(), () -> player.playSound(player.getLocation(), BLOCK_NOTE_BLOCK_BIT, MASTER, 1.0f, 1.6f), 2L);
