@@ -16,7 +16,6 @@ import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
-import org.bukkit.block.Block;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
@@ -58,10 +57,6 @@ public final class DrAculaStaff extends AculaItem {
 
     @Override
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
-        if (event.hasBlock()) {
-            Block block = event.getClickedBlock();
-            if (block.getType().isInteractable()) return;
-        }
         event.setUseItemInHand(Event.Result.DENY);
         use(player, item);
     }
