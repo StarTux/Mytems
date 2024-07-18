@@ -41,7 +41,7 @@ public enum HastyPickaxeStat implements UpgradableStat {
         }
     },
 
-    FORTUNE(Vec2i.of(3, 1), text("Fortune", color(0xA1FBE8)), () -> new ItemStack(Material.DIAMOND),
+    FORTUNE(Vec2i.of(3, 0), text("Fortune", color(0xA1FBE8)), () -> new ItemStack(Material.DIAMOND),
             List.of(new Level(1, HastyPickaxeTier.COPPER, () -> new ItemStack(Material.DIAMOND, 1), List.of(text("Add Fortune I"))),
                     new Level(2, HastyPickaxeTier.COPPER, () -> new ItemStack(Material.DIAMOND, 2), List.of(text("Add Fortune II"))),
                     new Level(3, HastyPickaxeTier.COPPER, () -> new ItemStack(Material.DIAMOND, 3), List.of(text("Add Fortune III"))),
@@ -61,7 +61,7 @@ public enum HastyPickaxeStat implements UpgradableStat {
         }
     },
 
-    SILK_TOUCH(Vec2i.of(3, 3), text("Silk Touch", color(0xD3D3D3)), () -> new ItemStack(Material.FEATHER),
+    SILK_TOUCH(Vec2i.of(3, 4), text("Silk Touch", color(0xD3D3D3)), () -> new ItemStack(Material.FEATHER),
                List.of(new Level(1, HastyPickaxeTier.COPPER, () -> new ItemStack(Material.FEATHER), List.of(text("Add Silk Touch")))),
                List.of(HastyPickaxeStat.EFFICIENCY), List.of()) {
         @Override public void removeFromItem(ItemMeta meta) {
@@ -77,25 +77,25 @@ public enum HastyPickaxeStat implements UpgradableStat {
         }
     },
 
-    HASTE(Vec2i.of(4, 2), text("Haste", GOLD), () -> new ItemStack(Material.GOLDEN_PICKAXE),
+    HASTE(Vec2i.of(5, 2), text("Haste", GOLD), () -> new ItemStack(Material.GOLDEN_PICKAXE),
           List.of(new Level(1, HastyPickaxeTier.COPPER, () -> new ItemStack(Material.GOLDEN_PICKAXE), List.of(text("Get Haste when you"),
                                                                                                               text("break an ore block"))),
                   new Level(2, HastyPickaxeTier.GOLD, () -> stack(Material.GOLDEN_PICKAXE, 2), List.of(text("Get Haste II when you"),
                                                                                                        text("break an ore block")))),
           List.of(), List.of(EFFICIENCY)),
 
-    HASTE_TIME(Vec2i.of(4, 1), text("Haste Time", color(0xFFFF00)), () -> new ItemStack(Material.CLOCK),
+    HASTE_TIME(Vec2i.of(5, 1), text("Haste Time", color(0xFFFF00)), () -> new ItemStack(Material.CLOCK),
                List.of(new Level(1, HastyPickaxeTier.GOLD, () -> new ItemStack(Material.CLOCK, 1), List.of(text("The Haste effect lasts"),
                                                                                                            text("twice as long"))),
                        new Level(2, HastyPickaxeTier.DIAMOND, () -> new ItemStack(Material.CLOCK, 2), List.of(text("The Haste effect lasts"),
                                                                                                               text("three times as long")))),
                List.of(HASTE), List.of()),
 
-    END_PORTAL(Vec2i.of(5, 2), text("End Relocator", color(0xB3B988)), () -> new ItemStack(Material.END_PORTAL_FRAME),
+    END_PORTAL(Vec2i.of(7, 2), text("End Relocator", color(0xB3B988)), () -> new ItemStack(Material.END_PORTAL_FRAME),
                List.of(new Level(1, HastyPickaxeTier.GOLD, () -> new ItemStack(Material.END_PORTAL_FRAME), List.of(text("Break End Portal Frames")))),
                List.of(HASTE), List.of()),
 
-    BEDROCK(Vec2i.of(6, 2), text("Bedrocker", DARK_GRAY), () -> new ItemStack(Material.BEDROCK),
+    BEDROCK(Vec2i.of(7, 1), text("Bedrocker", DARK_GRAY), () -> new ItemStack(Material.BEDROCK),
             List.of(new Level(1, HastyPickaxeTier.DIAMOND, () -> new ItemStack(Material.BEDROCK), List.of(text("Break Bedrock,"),
                                                                                                           text("provided it is either"),
                                                                                                           text("player placed or"),
@@ -112,7 +112,7 @@ public enum HastyPickaxeStat implements UpgradableStat {
                                                                                                           text("from an End Pillar")))),
             List.of(END_PORTAL), List.of()),
 
-    RADIUS(Vec2i.of(2, 2), text("Radius", RED), () -> new ItemStack(Material.TNT),
+    RADIUS(Vec2i.of(1, 2), text("Radius", RED), () -> new ItemStack(Material.TNT),
            List.of(new Level(1, HastyPickaxeTier.GOLD, () -> new ItemStack(Material.TNT), List.of(text("Mine underground blocks"),
                                                                                                   text("in a dome shaped area"))),
                    new Level(2, HastyPickaxeTier.DIAMOND, () -> new ItemStack(Material.TNT), List.of(text("Mine underground blocks"),
