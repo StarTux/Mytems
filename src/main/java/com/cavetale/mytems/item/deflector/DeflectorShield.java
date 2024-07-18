@@ -91,9 +91,10 @@ public final class DeflectorShield implements Mytem {
                 fireball.setDirection(dir);
             }
         } else {
-            proj.setVelocity(proj.getVelocity().multiply(-1 * factor));
+            final Vector dir = proj.getVelocity().multiply(-1 * factor);
+            proj.setVelocity(dir);
             if (proj instanceof Fireball fireball) {
-                fireball.setDirection(fireball.getDirection().multiply(-1 * factor));
+                fireball.setDirection(dir);
             }
         }
         proj.setShooter(player);
