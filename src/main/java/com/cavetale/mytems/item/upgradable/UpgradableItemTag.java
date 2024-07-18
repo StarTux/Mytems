@@ -230,6 +230,11 @@ public abstract class UpgradableItemTag extends MytemTag {
         return result;
     }
 
+    public final void resetUpgrades() {
+        upgrades = null;
+        disabled = null;
+    }
+
     /**
      * Get the required exp for the next level.
      */

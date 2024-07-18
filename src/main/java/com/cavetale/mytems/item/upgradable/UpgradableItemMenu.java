@@ -23,6 +23,7 @@ import static com.cavetale.mytems.MytemsPlugin.plugin;
 import static com.cavetale.mytems.util.Items.tooltip;
 import static com.cavetale.mytems.util.Text.ITEM_LORE_WIDTH;
 import static com.cavetale.mytems.util.Text.roman;
+import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
@@ -100,9 +101,9 @@ public final class UpgradableItemMenu {
                         }
                     }
                     if (status.getCurrentLevel() == null) {
-                        tooltip.add(textOfChildren(Mytems.MOUSE_RIGHT, text(tiny(" to unlock"), GREEN)));
+                        tooltip.add(textOfChildren(Mytems.MOUSE_RIGHT, text(tiny(" unlock"), GREEN)));
                     } else {
-                        tooltip.add(textOfChildren(Mytems.MOUSE_RIGHT, text(tiny(" to upgrade"), GREEN)));
+                        tooltip.add(textOfChildren(Mytems.MOUSE_RIGHT, text(tiny(" upgrade"), GREEN)));
                     }
                 }
                 if (status.isTierTooLow()) {
@@ -190,6 +191,23 @@ public final class UpgradableItemMenu {
                 gui.highlight(slot.x, slot.z, highlightColor);
             }
         }
+        if (tag.countTotalUpgrades() > 0) {
+            final List<Component> resetTooltip = List.of(text("Reset Upgrades", DARK_RED),
+                                                         text("Reset all upgrades, so", GRAY),
+                                                         text("you can reassign them.", GRAY),
+                                                         text("This will consume one", GRAY),
+                                                         textOfChildren(Mytems.KITTY_COIN, text("Kitty Coin from your", GRAY)),
+                                                         text("inventory. You keep", GRAY),
+                                                         text("item xp and levels.", GRAY),
+                                                         empty(),
+                                                         textOfChildren(Mytems.MOUSE_RIGHT, text(tiny(" reset"), DARK_RED)));
+            final ItemStack resetButton = Mytems.REDO.createIcon(resetTooltip);
+            gui.highlight(8, gui.getSize() / 9 - 1, color(0x202020));
+            gui.setItem(gui.getSize() - 1, resetButton, click -> {
+                    if (!click.isRightClick()) return;
+                    onClickReset();
+                });
+        }
         tag.onMenuCreated(this);
         gui.open(player);
     }
@@ -214,5 +232,33 @@ public final class UpgradableItemMenu {
         tag.store(itemStack);
         open();
         player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, SoundCategory.MASTER, 1f, 1f);
+    }
+
+    private void onClickReset() {
+        if (tag.countTotalUpgrades() <= 0) {
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 0.5f, 1.0f);
+            return;
+        }
+        boolean kittyCoinTaken = false;
+        for (int i = 0; i < player.getInventory().getSize(); i += 1) {
+            final ItemStack kittyCoin = player.getInventory().getItem(i);
+            if (!Mytems.KITTY_COIN.isItem(kittyCoin)) {
+                continue;
+            }
+            kittyCoinTaken = true;
+            kittyCoin.subtract(1);
+            break;
+        }
+        if (!kittyCoinTaken) {
+            player.sendMessage(textOfChildren(text("You do not have a "), Mytems.KITTY_COIN, text("Kitty Coin in your inventory"))
+                               .color(RED));
+            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 0.5f, 1.0f);
+            return;
+        }
+        tag.resetUpgrades();
+        tag.store(itemStack);
+        open();
+        player.sendMessage(textOfChildren(Mytems.KITTY_COIN, text("Kitty Coin consumed, upgrades reset. You can now reassign them.", GREEN)));
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 1.0f, 1.0f);
     }
 }
