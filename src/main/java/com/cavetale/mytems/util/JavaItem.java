@@ -68,11 +68,14 @@ public final class JavaItem {
             for (Map.Entry<Attribute, AttributeModifier> entry : attributes.entries()) {
                 Attribute attribute = entry.getKey();
                 AttributeModifier mod = entry.getValue();
-                List<String> argList = List.of(serialize(mod.getUniqueId()),
-                                               quote(mod.getName()),
-                                               "" + mod.getAmount(),
-                                               "AttributeModifier.Operation." + mod.getOperation(),
-                                               (mod.getSlot() != null ? "EquipmentSlot." + mod.getSlot() : "null"));
+                List<String> argList = new ArrayList<>();
+                argList.add(serialize(mod.getUniqueId()));
+                argList.add(quote(mod.getName()));
+                argList.add("" + mod.getAmount());
+                argList.add("AttributeModifier.Operation." + mod.getOperation());
+                if (mod.getSlotGroup() != null) {
+                    argList.add("EquipmentSlotGroup." + mod.getSlotGroup());
+                }
                 lines.add(String.format("meta.addAttributeModifier(Attribute.%s,", attribute.name()));
                 lines.addAll(sandwich("    new AttributeModifier(", "        ", argList, ",", "));"));
             }

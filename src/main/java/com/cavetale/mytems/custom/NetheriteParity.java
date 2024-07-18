@@ -117,7 +117,7 @@ public final class NetheriteParity {
                     for (AttributeModifier mod : entry.getValue()) {
                         final UUID uuid = UUID.randomUUID();
                         final String name = getAttributeNamePrefix() + attr.name().toLowerCase();
-                        meta.addAttributeModifier(attr, new AttributeModifier(uuid, name, mod.getAmount(), mod.getOperation(), mod.getSlot()));
+                        meta.addAttributeModifier(attr, new AttributeModifier(uuid, name, mod.getAmount(), mod.getOperation(), mod.getSlotGroup()));
                     }
                 }
                 meta.getPersistentDataContainer().set(getItemTagKey(), PersistentDataType.INTEGER, getItemTagValue());
