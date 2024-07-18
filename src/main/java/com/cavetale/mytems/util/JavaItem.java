@@ -12,7 +12,6 @@ import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
@@ -261,10 +260,7 @@ public final class JavaItem {
                 list.add(Json.serialize(tail.substring(0, index)));
             }
             if (tail.length() >= 2) {
-                ChatColor chatColor = ChatColor.getByChar(tail.charAt(1));
-                list.add(chatColor != null
-                         ? "ChatColor." + chatColor.name()
-                         : Json.serialize("\\u00a7" + tail.substring(1, 2)));
+                list.add(Json.serialize("\\u00a7" + tail.substring(1, 2)));
                 tail = tail.substring(2);
             } else {
                 list.add(Json.serialize("\\u00a7"));
