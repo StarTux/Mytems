@@ -44,7 +44,7 @@ public final class Luminance {
                 return true;
         });
         case SOUL_FIRE -> new Luminance(10 / 5, () -> {
-                if (!PlayerBreakBlockEvent.call(player, block)) return false;
+                if (!new PlayerBreakBlockEvent(player, block).callEvent()) return false;
                 block.setType(Material.AIR);
                 return true;
         });
