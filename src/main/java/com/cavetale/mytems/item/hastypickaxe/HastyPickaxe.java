@@ -82,21 +82,30 @@ public final class HastyPickaxe implements Mytem {
     public void onBlockBreak(BlockBreakEvent event, Player player, ItemStack item) {
         if (event.isCancelled()) return;
         final Block block = event.getBlock();
+        onBreak(player, block, item);
         final HastyPickaxeTag tag = serializeTag(item);
-        onBreak(player, block, item, tag);
         final int radius = tag.getEffectiveUpgradeLevel(HastyPickaxeStat.RADIUS);
         if (radius > 0 && STONE_TYPES.contains(block.getType())) {
             Bukkit.getScheduler().runTask(plugin(), () -> {
                     final int count = breakRadius(player, block, item,  2 + radius - 1);
                 });
         }
+        final int haste = tag.getEffectiveUpgradeLevel(HastyPickaxeStat.HASTE);
+        if (haste > 0 && block.getType().name().endsWith("_ORE")) {
+            final int hasteTime = tag.getEffectiveUpgradeLevel(HastyPickaxeStat.HASTE_TIME);
+            final int duration = 20 * 10 * (hasteTime + 1);
+            final int amplifier = haste - 1;
+            player.addPotionEffect(PotionEffectType.HASTE.createEffect(duration, amplifier)
+                                   .withAmbient(true)
+                                   .withIcon(true)
+                                   .withParticles(false));
+        }
     }
 
     @Override
     public void onPlayerBreakBlock(PlayerBreakBlockEvent event, Player player, ItemStack item) {
         if (event.isCancelled()) return;
-        final HastyPickaxeTag tag = serializeTag(item);
-        onBreak(player, event.getBlock(), item, tag);
+        onBreak(player, event.getBlock(), item);
     }
 
     private static final List<Material> STONE_TYPES = List.of(Material.STONE,
@@ -108,30 +117,19 @@ public final class HastyPickaxe implements Mytem {
                                                               Material.NETHERRACK,
                                                               Material.BLACKSTONE);
 
-    private void onBreak(Player player, Block block, ItemStack item, HastyPickaxeTag tag) {
+    private void onBreak(Player player, Block block, ItemStack item) {
         if (isPlayerPlaced(block)) {
             return;
         }
         final Material material = block.getType();
         final int xp = getXp(material);
+        if (xp <= 0) return;
         Bukkit.getScheduler().runTask(plugin(), () -> {
-                if (!item.equals(player.getInventory().getItemInMainHand())) {
-                    return;
-                }
+                final HastyPickaxeTag tag = serializeTag(item);
                 if (xp > 0) {
                     if (tag.addXpAndNotify(player, xp)) {
                         tag.store(item);
                     }
-                }
-                final int haste = tag.getEffectiveUpgradeLevel(HastyPickaxeStat.HASTE);
-                if (haste > 0 && material.name().endsWith("_ORE")) {
-                    final int hasteTime = tag.getEffectiveUpgradeLevel(HastyPickaxeStat.HASTE_TIME);
-                    final int duration = 20 * 10 * (hasteTime + 1);
-                    final int amplifier = haste - 1;
-                    player.addPotionEffect(PotionEffectType.HASTE.createEffect(duration, amplifier)
-                                           .withAmbient(true)
-                                           .withIcon(true)
-                                           .withParticles(false));
                 }
             });
     }
@@ -182,23 +180,35 @@ public final class HastyPickaxe implements Mytem {
 
     private int getXp(Material material) {
         return switch (material) {
-        case COAL_ORE -> 1;
-        case DEEPSLATE_COAL_ORE -> 1;
+        // case COAL_ORE -> 1;
+        // case DEEPSLATE_COAL_ORE -> 1;
+
         case REDSTONE_ORE -> 1;
         case DEEPSLATE_REDSTONE_ORE -> 1;
+
         case IRON_ORE -> 1;
         case DEEPSLATE_IRON_ORE -> 1;
+
         case COPPER_ORE -> 1;
         case DEEPSLATE_COPPER_ORE -> 1;
-        case GOLD_ORE -> 3;
-        case DEEPSLATE_GOLD_ORE -> 3;
-        case NETHER_GOLD_ORE -> 3;
-        case LAPIS_ORE -> 5;
+
+        case NETHER_QUARTZ_ORE -> 1;
+        case GLOWSTONE -> 1;
+
+        case GOLD_ORE -> 2;
+        case DEEPSLATE_GOLD_ORE -> 2;
+        case NETHER_GOLD_ORE -> 2;
+
+        case LAPIS_ORE -> 3;
         case DEEPSLATE_LAPIS_ORE -> 5;
-        case DIAMOND_ORE -> 10;
-        case DEEPSLATE_DIAMOND_ORE -> 10;
-        case EMERALD_ORE -> 10;
-        case DEEPSLATE_EMERALD_ORE -> 10;
+
+        case EMERALD_ORE -> 4;
+        case DEEPSLATE_EMERALD_ORE -> 4;
+
+        case DIAMOND_ORE -> 5;
+        case DEEPSLATE_DIAMOND_ORE -> 5;
+
+        case ANCIENT_DEBRIS -> 10;
         default -> 0;
         };
     }

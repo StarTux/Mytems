@@ -2,6 +2,7 @@ package com.cavetale.mytems.item.upgradable;
 
 import com.cavetale.mytems.MytemTag;
 import com.cavetale.mytems.Mytems;
+import com.cavetale.mytems.session.Session;
 import com.cavetale.worldmarker.util.Tags;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -230,6 +231,42 @@ public abstract class UpgradableItemTag extends MytemTag {
         return result;
     }
 
+    /**
+     * Count how many stats the player can unlock with the current
+     * tier and configuration of unlocked upgrades.
+     *
+     * This is slightly inaccurate because mutually conflicting but
+     * not yet unlocked stats will be counted twice, but for the
+     * purpose of determining if more XP shall be earned, this will be
+     * correct.
+     */
+    public final int countAvailableUpgradeLevels() {
+        int result = 0;
+        final UpgradableItemTier currentTier = getUpgradableItemTier();
+        STATS:
+        for (UpgradableStat stat : getUpgradableItem().getStats()) {
+            final int hasLevel = getUpgradeLevel(stat);
+            for (UpgradableStat conflict : stat.getConflicts()) {
+                if (getUpgradeLevel(conflict) > 0) {
+                    result += hasLevel;
+                    continue STATS;
+                }
+            }
+            for (UpgradableStatLevel statLevel : stat.getLevels()) {
+                if (hasLevel >= statLevel.getLevel()) {
+                    result += 1;
+                    continue;
+                }
+                final UpgradableItemTier requiredTier = statLevel.getRequiredTier();
+                if (requiredTier != null && requiredTier.getTier() > currentTier.getTier()) {
+                    continue;
+                }
+                result += 1;
+            }
+        }
+        return result;
+    }
+
     public final void resetUpgrades() {
         upgrades = null;
         disabled = null;
@@ -276,12 +313,19 @@ public abstract class UpgradableItemTag extends MytemTag {
         if (countTotalUpgrades() < level) {
             return false;
         }
+        if (countAvailableUpgradeLevels() <= level) {
+            return false;
+        }
         xp += amount;
         if (xp >= getRequiredXp()) {
             xp = 0;
             level += 1;
         }
         return true;
+    }
+
+    private static final class Favorite {
+        long fullTime;
     }
 
     /**
@@ -294,16 +338,23 @@ public abstract class UpgradableItemTag extends MytemTag {
     public final boolean addXpAndNotify(Player player, int amount) {
         final boolean result = addXp(amount);
         if (hasAvailableUnlocks()) {
-            final Component message = textOfChildren(text("Your ", GREEN),
-                                                     getUpgradableItemTier().getMytems(),
-                                                     text(" has leveled up.", GREEN))
-                .color(getUpgradableItemTier().getMenuColor());
-            player.sendMessage(message);
-            player.sendMessage(textOfChildren(Mytems.MOUSE_CURSOR, Mytems.MOUSE_RIGHT,
-                                              text(" Right click it in your inventory to choose a perk.", GREEN))
-                               .color(getUpgradableItemTier().getMenuColor()));
-            player.sendActionBar(message);
-        } else {
+            final Favorite favorite = Session.of(player).getFavorites().getOrSet(Favorite.class, Favorite::new);
+            final long fullTime = player.getWorld().getFullTime();
+            if (favorite.fullTime != fullTime) {
+                favorite.fullTime = fullTime;
+                final Component message = textOfChildren(text("Your ", GREEN),
+                                                         getUpgradableItemTier().getMytems(),
+                                                         text(" has leveled up.", GREEN))
+                    .color(getUpgradableItemTier().getMenuColor());
+                player.sendMessage(message);
+                player.sendMessage(textOfChildren(Mytems.MOUSE_CURSOR, Mytems.MOUSE_RIGHT,
+                                                  text(" Right click it in your inventory to choose a perk.", GREEN))
+                                   .color(getUpgradableItemTier().getMenuColor()));
+                player.sendActionBar(message);
+                return result;
+            }
+        }
+        if (result) {
             Component message = textOfChildren(getUpgradableItemTier().getMytems(),
                                                text(level),
                                                space(),

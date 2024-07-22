@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
+import static com.cavetale.mytems.item.hastypickaxe.HastyPickaxeItem.hastyPickaxeItem;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.TextColor.color;
 
@@ -43,5 +44,10 @@ public enum HastyPickaxeTier implements UpgradableItemTier {
 
     public HastyPickaxeTag createTag() {
         return tagSupplier.get();
+    }
+
+    @Override
+    public HastyPickaxeItem getUpgradableItem() {
+        return hastyPickaxeItem();
     }
 }

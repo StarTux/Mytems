@@ -214,29 +214,29 @@ public final class UpgradableItemMenu {
 
     private void onClickUnlockStat(UpgradableStat stat, UpgradableStatStatus status) {
         if (!status.isUpgradable()) {
-            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5f, 5.0f);
+            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5f, 0.5f);
             return;
         }
         tag.setUpgradeLevel(stat, Math.min(stat.getMaxLevel().getLevel(), tag.getUpgradeLevel(stat) + 1));
         tag.store(itemStack);
         open();
-        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 0.5f, 1.0f);
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 0.5f, 0.75f);
     }
 
     private void onDrop(UpgradableStat stat, UpgradableStatStatus status) {
         if (!status.hasCurrentLevel()) {
-            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5f, 5.0f);
+            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5f, 0.5f);
             return;
         }
         tag.setStatDisabled(stat, !tag.isStatDisabled(stat));
         tag.store(itemStack);
         open();
-        player.playSound(player.getLocation(), Sound.BLOCK_LEVER_CLICK, SoundCategory.MASTER, 1f, 1f);
+        player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1f, 1f);
     }
 
     private void onClickReset() {
         if (tag.countTotalUpgrades() <= 0) {
-            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 0.5f, 1.0f);
+            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5f, 0.5f);
             return;
         }
         boolean kittyCoinTaken = false;
@@ -252,13 +252,13 @@ public final class UpgradableItemMenu {
         if (!kittyCoinTaken) {
             player.sendMessage(textOfChildren(text("You do not have a "), Mytems.KITTY_COIN, text("Kitty Coin in your inventory"))
                                .color(RED));
-            player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 0.5f, 1.0f);
+            player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 0.5f, 0.5f);
             return;
         }
         tag.resetUpgrades();
         tag.store(itemStack);
         open();
         player.sendMessage(textOfChildren(Mytems.KITTY_COIN, text("Kitty Coin consumed, upgrades reset. You can now reassign them.", GREEN)));
-        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 1.0f, 1.0f);
+        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 0.5f, 0.5f);
     }
 }

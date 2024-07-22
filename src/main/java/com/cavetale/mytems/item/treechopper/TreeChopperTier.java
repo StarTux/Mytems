@@ -7,6 +7,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
+import static com.cavetale.mytems.item.treechopper.TreeChopperItem.treeChopperItem;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 import static net.kyori.adventure.text.format.TextColor.color;
@@ -38,5 +39,10 @@ public enum TreeChopperTier implements UpgradableItemTier {
 
     public TreeChopperTag createTag() {
         return tagSupplier.get();
+    }
+
+    @Override
+    public TreeChopperItem getUpgradableItem() {
+        return treeChopperItem();
     }
 }

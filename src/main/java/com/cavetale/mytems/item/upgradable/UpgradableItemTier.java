@@ -15,6 +15,8 @@ public interface UpgradableItemTier {
      */
     Mytems getMytems();
 
+    UpgradableItem getUpgradableItem();
+
     default String getRomanTier() {
         return Text.roman(getTier());
     }
