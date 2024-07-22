@@ -198,7 +198,7 @@ public final class UpgradableItemMenu {
                                                          text("This will consume one", GRAY),
                                                          textOfChildren(Mytems.KITTY_COIN, text("Kitty Coin from your", GRAY)),
                                                          text("inventory. You keep", GRAY),
-                                                         text("item " + tiny(xp) + " and " + tiny(lv) + ".", GRAY),
+                                                         text("item " + tiny("xp") + " and " + tiny("lv") + ".", GRAY),
                                                          empty(),
                                                          textOfChildren(Mytems.MOUSE_RIGHT, text(tiny(" reset"), DARK_RED)));
             final ItemStack resetButton = Mytems.REDO.createIcon(resetTooltip);
