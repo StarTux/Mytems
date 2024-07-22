@@ -398,7 +398,7 @@ public abstract class UpgradableItemTag extends MytemTag {
                 tooltip.add(textOfChildren(stat.getChatIcon(), stat.getTitle()).color(GRAY));
             }
         }
-        tooltip.add(textOfChildren(text(tiny("level "), GRAY), text(getLevel(), WHITE)));
+        tooltip.add(textOfChildren(text(tiny("lv "), GRAY), text(getLevel(), WHITE)));
         tooltip.add(textOfChildren(text(tiny("xp "), GRAY), text(superscript(getXp()), WHITE), text("/", GRAY), text(subscript(getRequiredXp()), WHITE)));
         tooltip.add(textOfChildren(Mytems.MOUSE_CURSOR, Mytems.MOUSE_RIGHT, text(" Open menu", GRAY)));
         return tooltip;

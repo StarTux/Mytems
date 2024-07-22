@@ -52,7 +52,7 @@ public final class UpgradableItemMenu {
             .size(upgradableItem.getMenuSize())
             .title(textOfChildren(itemTier.getMytems(),
                                   space(),
-                                  text(tiny("level"), GRAY),
+                                  text(tiny("lv"), GRAY),
                                   text(tag.getLevel(), WHITE, BOLD),
                                   space(),
                                   text(tiny("xp"), GRAY),
@@ -78,7 +78,7 @@ public final class UpgradableItemMenu {
             if (status.hasCurrentLevel()) {
                 tooltip.add(DIVIDER);
                 tooltip.add(textOfChildren(Mytems.CHECKED_CHECKBOX,
-                                           text(tiny("level ") + status.getCurrentLevel().getLevel() + "/" + stat.getMaxLevel().getLevel(), LIGHT_PURPLE)));
+                                           text(tiny("lv ") + status.getCurrentLevel().getLevel() + "/" + stat.getMaxLevel().getLevel(), LIGHT_PURPLE)));
                 for (Component line : status.getCurrentLevel().getDescription()) {
                     tooltip.add(textOfChildren(text("  "), line));
                 }
@@ -86,7 +86,7 @@ public final class UpgradableItemMenu {
             if (status.hasNextLevel()) {
                 tooltip.add(DIVIDER);
                 tooltip.add(textOfChildren((status.isUpgradable() ? Mytems.ARROW_RIGHT : Mytems.CROSSED_CHECKBOX),
-                                           text(tiny("level ") + status.getNextLevel().getLevel() + "/" + stat.getMaxLevel().getLevel(), LIGHT_PURPLE)));
+                                           text(tiny("lv ") + status.getNextLevel().getLevel() + "/" + stat.getMaxLevel().getLevel(), LIGHT_PURPLE)));
                 for (Component line : status.getNextLevel().getDescription()) {
                     tooltip.add(textOfChildren(text("  "), line));
                 }
@@ -198,7 +198,7 @@ public final class UpgradableItemMenu {
                                                          text("This will consume one", GRAY),
                                                          textOfChildren(Mytems.KITTY_COIN, text("Kitty Coin from your", GRAY)),
                                                          text("inventory. You keep", GRAY),
-                                                         text("item xp and levels.", GRAY),
+                                                         text("item " + tiny(xp) + " and " + tiny(lv) + ".", GRAY),
                                                          empty(),
                                                          textOfChildren(Mytems.MOUSE_RIGHT, text(tiny(" reset"), DARK_RED)));
             final ItemStack resetButton = Mytems.REDO.createIcon(resetTooltip);
