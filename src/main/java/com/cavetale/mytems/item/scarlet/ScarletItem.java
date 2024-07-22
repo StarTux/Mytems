@@ -7,6 +7,7 @@ import com.cavetale.mytems.gear.Equipment;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
+import com.cavetale.mytems.util.Attr;
 import com.cavetale.mytems.util.Skull;
 import com.cavetale.mytems.util.Text;
 import java.util.List;
@@ -23,7 +24,6 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.block.Banner;
 import org.bukkit.block.banner.Pattern;
@@ -32,6 +32,7 @@ import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
@@ -41,16 +42,13 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
-import static com.cavetale.mytems.util.Attr.of;
 import static com.cavetale.mytems.util.Items.tooltip;
-import static org.bukkit.attribute.Attribute.*;
-import static org.bukkit.attribute.AttributeModifier.Operation.*;
 
 @RequiredArgsConstructor @Getter
 public abstract class ScarletItem implements GearItem {
     protected static final TextColor TEXT_COLOR = TextColor.color(0xFF2400);
     protected static final Color LEATHER_COLOR = Color.fromRGB(0x8c2924);
-    protected static final Operation MOVEMENT_OP = ADD_SCALAR;
+    protected static final Operation MOVEMENT_OP = Operation.ADD_SCALAR;
     protected static final double MOVEMENT_MOD = -0.035;
     protected static final double KNOCKBACK_MOD = 0.1;
     protected static final double TOUGHNESS_MOD = 3.0;
@@ -100,19 +98,11 @@ public abstract class ScarletItem implements GearItem {
             prototype = new ItemStack(Material.PLAYER_HEAD);
             prototype.editMeta(meta -> {
                     SKULL.apply((SkullMeta) meta);
-                    final EquipmentSlot slot = EquipmentSlot.HEAD;
-                    meta.addAttributeModifier(GENERIC_ARMOR,
-                                              of(UUID.fromString("0cdd4db6-93e7-470f-aa3d-c45ca209e3ab"),
-                                                 "generic.armor", 3.0, ADD_NUMBER, slot));
-                    meta.addAttributeModifier(GENERIC_ARMOR_TOUGHNESS,
-                                              of(UUID.fromString("be66aad5-f8f5-48fa-b87e-4ac0c9a8a7ce"),
-                                                 "generic.armor_toughness", TOUGHNESS_MOD, ADD_NUMBER, slot));
-                    meta.addAttributeModifier(GENERIC_KNOCKBACK_RESISTANCE,
-                                              of(UUID.fromString("fbe109a3-85c4-464c-b520-5fb4b175b0e6"),
-                                                 "generic.knockback_resistance", KNOCKBACK_MOD, ADD_NUMBER, slot));
-                    meta.addAttributeModifier(GENERIC_MOVEMENT_SPEED,
-                                              of(UUID.fromString("b5d50d8a-ccb7-48e7-9742-9f3142e23e85"),
-                                                 "generic.movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot));
+                    final EquipmentSlotGroup slot = EquipmentSlotGroup.HEAD;
+                    Attr.add(meta, Attribute.GENERIC_ARMOR, "scarlet_helmet_armor", 3.0, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "scarlet_helmet_armor_toughness", TOUGHNESS_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.GENERIC_KNOCKBACK_RESISTANCE, "scarlet_helmet_knockback_resistance", KNOCKBACK_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.GENERIC_MOVEMENT_SPEED, "scarlet_helmet_movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot);
                 });
         }
     }
@@ -126,19 +116,11 @@ public abstract class ScarletItem implements GearItem {
             prototype.editMeta(meta -> {
                     ((LeatherArmorMeta) meta).setColor(LEATHER_COLOR);
                     meta.addItemFlags(ItemFlag.HIDE_DYE);
-                    final EquipmentSlot slot = EquipmentSlot.CHEST;
-                    meta.addAttributeModifier(GENERIC_ARMOR,
-                                              of(UUID.fromString("e744e0d7-4cb4-48f6-b1df-56bdfa05c8bb"),
-                                                 "generic.armor", 8.0, ADD_NUMBER, slot));
-                    meta.addAttributeModifier(GENERIC_ARMOR_TOUGHNESS,
-                                              of(UUID.fromString("e6f80206-0760-41bd-805d-7c32fdbec9d2"),
-                                                 "generic.armor_toughness", TOUGHNESS_MOD, ADD_NUMBER, slot));
-                    meta.addAttributeModifier(GENERIC_KNOCKBACK_RESISTANCE,
-                                              of(UUID.fromString("efceab5d-66bd-40f4-a582-6c2573cd7dc8"),
-                                                 "generic.knockback_resistance", KNOCKBACK_MOD, ADD_NUMBER, slot));
-                    meta.addAttributeModifier(GENERIC_MOVEMENT_SPEED,
-                                              of(UUID.fromString("01e96728-8fd0-4ea2-9880-643efec212e2"),
-                                                 "generic.movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot));
+                    final EquipmentSlotGroup slot = EquipmentSlotGroup.CHEST;
+                    Attr.add(meta, Attribute.GENERIC_ARMOR, "scarlet_chestplate_armor", 8.0, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "scarlet_chestplate_armor_toughness", TOUGHNESS_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.GENERIC_KNOCKBACK_RESISTANCE, "scarlet_chestplate_knockback_resistance", KNOCKBACK_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.GENERIC_MOVEMENT_SPEED, "scarlet_chestplate_movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot);
                 });
         }
     }
@@ -152,19 +134,11 @@ public abstract class ScarletItem implements GearItem {
             prototype.editMeta(meta -> {
                     ((LeatherArmorMeta) meta).setColor(LEATHER_COLOR);
                     meta.addItemFlags(ItemFlag.HIDE_DYE);
-                    final EquipmentSlot slot = EquipmentSlot.LEGS;
-                    meta.addAttributeModifier(GENERIC_ARMOR,
-                                              of(UUID.fromString("4e167552-23db-498b-8e31-d6c9c5f74313"),
-                                                 "generic.armor", 6.0, ADD_NUMBER, slot));
-                    meta.addAttributeModifier(GENERIC_ARMOR_TOUGHNESS,
-                                              of(UUID.fromString("bdc1a19d-751b-47f8-9a55-465f63042c8e"),
-                                                 "generic.armor_toughness", TOUGHNESS_MOD, ADD_NUMBER, slot));
-                    meta.addAttributeModifier(GENERIC_KNOCKBACK_RESISTANCE,
-                                              of(UUID.fromString("6bbe1b5d-a6a6-4c3d-ae08-612a30a74e35"),
-                                                 "generic.knockback_resistance", KNOCKBACK_MOD, ADD_NUMBER, slot));
-                    meta.addAttributeModifier(GENERIC_MOVEMENT_SPEED,
-                                              of(UUID.fromString("9ebae243-331a-4127-9f12-6066cf827986"),
-                                                 "generic.movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot));
+                    final EquipmentSlotGroup slot = EquipmentSlotGroup.LEGS;
+                    Attr.add(meta, Attribute.GENERIC_ARMOR, "scarlet_leggings_armor", 6.0, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "scarlet_leggings_armor_toughness", TOUGHNESS_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.GENERIC_KNOCKBACK_RESISTANCE, "scarlet_leggings_knockback_resistance", KNOCKBACK_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.GENERIC_MOVEMENT_SPEED, "scarlet_leggings_movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot);
                 });
         }
     }
@@ -178,19 +152,11 @@ public abstract class ScarletItem implements GearItem {
             prototype.editMeta(meta -> {
                     ((LeatherArmorMeta) meta).setColor(LEATHER_COLOR);
                     meta.addItemFlags(ItemFlag.HIDE_DYE);
-                    final EquipmentSlot slot = EquipmentSlot.FEET;
-                    meta.addAttributeModifier(GENERIC_ARMOR,
-                                              of(UUID.fromString("7a6a6d02-5b5c-45c3-a555-a4af22565ab6"),
-                                                 "generic.armor", 3.0, ADD_NUMBER, slot));
-                    meta.addAttributeModifier(GENERIC_ARMOR_TOUGHNESS,
-                                              of(UUID.fromString("6d2e31ea-1cf6-4245-8344-4f326fda8ebe"),
-                                                 "generic.armor_toughness", TOUGHNESS_MOD, ADD_NUMBER, slot));
-                    meta.addAttributeModifier(GENERIC_KNOCKBACK_RESISTANCE,
-                                              of(UUID.fromString("79644f72-d0b3-487e-9ef5-9d9714275b1a"),
-                                                 "generic.knockback_resistance", KNOCKBACK_MOD, ADD_NUMBER, slot));
-                    meta.addAttributeModifier(GENERIC_MOVEMENT_SPEED,
-                                              of(UUID.fromString("86cda9a4-f109-4450-84c8-52cbd41a3db8"),
-                                                 "generic.movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot));
+                    final EquipmentSlotGroup slot = EquipmentSlotGroup.FEET;
+                    Attr.add(meta, Attribute.GENERIC_ARMOR, "scarlet_boots_armor", 3.0, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "scarlet_boots_armor_toughness", TOUGHNESS_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.GENERIC_KNOCKBACK_RESISTANCE, "scarlet_boots_knockback_resistance", KNOCKBACK_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.GENERIC_MOVEMENT_SPEED, "scarlet_boots_movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot);
                 });
         }
     }
@@ -211,19 +177,11 @@ public abstract class ScarletItem implements GearItem {
                                                new Pattern(DyeColor.RED, PatternType.RHOMBUS)));
                     blockStateMeta.setBlockState(banner);
                     meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP); // hides banner patterns
-                    final EquipmentSlot slot = EquipmentSlot.OFF_HAND;
-                    meta.addAttributeModifier(GENERIC_ARMOR,
-                                              of(UUID.fromString("1c9bd86b-7235-4881-a6d5-1fa9410998a7"),
-                                                 "generic.armor", 6.0, ADD_NUMBER, slot));
-                    meta.addAttributeModifier(GENERIC_ARMOR_TOUGHNESS,
-                                              of(UUID.fromString("6b774835-9140-402e-a98d-24b6abcceded"),
-                                                 "generic.armor_toughness", TOUGHNESS_MOD, ADD_NUMBER, slot));
-                    meta.addAttributeModifier(GENERIC_KNOCKBACK_RESISTANCE,
-                                              of(UUID.fromString("c499f056-309d-4c1b-92b7-45c797ab2879"),
-                                                 "generic.knockback_resistance", KNOCKBACK_MOD, ADD_NUMBER, slot));
-                    meta.addAttributeModifier(GENERIC_MOVEMENT_SPEED,
-                                              of(UUID.fromString("463072b0-6ab9-476b-9526-96bfe79fe9b1"),
-                                                 "generic.movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot));
+                    final EquipmentSlotGroup slot = EquipmentSlotGroup.OFFHAND;
+                    Attr.add(meta, Attribute.GENERIC_ARMOR, "scarlet_shield_armor", 6.0, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "scarlet_shield_armor_toughness", TOUGHNESS_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.GENERIC_KNOCKBACK_RESISTANCE, "scarlet_shield_knockback_resistance", KNOCKBACK_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.GENERIC_MOVEMENT_SPEED, "scarlet_shield_movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot);
                 });
         }
     }
@@ -236,19 +194,11 @@ public abstract class ScarletItem implements GearItem {
                 + "\n\nSweep Attacks deal full Attack Damage.";
             prototype = new ItemStack(Material.NETHERITE_SWORD);
             prototype.editMeta(meta -> {
-                    final EquipmentSlot slot = EquipmentSlot.HAND;
-                    meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE,
-                                              of(UUID.fromString("fffe2549-0000-85b7-0001-6ab4fffef492"),
-                                                 "generic.attack_damage", 20.0 + 4.0, AttributeModifier.Operation.ADD_NUMBER, slot));
-                    meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED,
-                                              of(UUID.fromString("fffe2549-0000-867f-0001-6ab4fffef302"),
-                                                 "generic.attack_speed", -0.67, AttributeModifier.Operation.ADD_SCALAR, slot));
-                    meta.addAttributeModifier(GENERIC_KNOCKBACK_RESISTANCE,
-                                              of(UUID.fromString("ec8d0225-d616-4386-999e-88b463b714f0"),
-                                                 "generic.knockback_resistance", KNOCKBACK_MOD, ADD_NUMBER, slot));
-                    meta.addAttributeModifier(GENERIC_MOVEMENT_SPEED,
-                                              of(UUID.fromString("d823d982-1129-4df9-ae99-bd65392029e2"),
-                                                 "generic.movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot));
+                    final EquipmentSlotGroup slot = EquipmentSlotGroup.HAND;
+                    Attr.add(meta, Attribute.GENERIC_ATTACK_DAMAGE, "scarlet_sword_attack_damage", 20.0 + 4.0, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.GENERIC_ATTACK_SPEED, "scarlet_sword_attack_speed", -0.67, Operation.ADD_SCALAR, slot);
+                    Attr.add(meta, Attribute.GENERIC_KNOCKBACK_RESISTANCE, "scarlet_sword_knockback_resistance", KNOCKBACK_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.GENERIC_MOVEMENT_SPEED, "scarlet_sword_movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot);
                 });
         }
 

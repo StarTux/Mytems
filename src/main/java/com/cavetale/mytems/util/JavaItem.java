@@ -68,8 +68,7 @@ public final class JavaItem {
                 Attribute attribute = entry.getKey();
                 AttributeModifier mod = entry.getValue();
                 List<String> argList = new ArrayList<>();
-                argList.add(serialize(mod.getUniqueId()));
-                argList.add(quote(mod.getName()));
+                argList.add("new NamespacedKey(" + quote(mod.getKey().getNamespace()) + ", " + quote(mod.getKey().getKey()) + ")");
                 argList.add("" + mod.getAmount());
                 argList.add("AttributeModifier.Operation." + mod.getOperation());
                 if (mod.getSlotGroup() != null) {

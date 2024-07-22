@@ -537,7 +537,6 @@ public final class EventListener implements Listener {
         trident2.setPickupStatus(AbstractArrow.PickupStatus.DISALLOWED);
         trident2.setCritical(trident.isCritical());
         trident2.setDamage(trident.getDamage());
-        trident2.setKnockbackStrength(trident.getKnockbackStrength());
         trident2.setPierceLevel(trident.getPierceLevel());
         trident2.setLoyaltyLevel(0);
         EntityMarker.setId(trident2, "mytems:trident");

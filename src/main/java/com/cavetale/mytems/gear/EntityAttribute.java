@@ -1,23 +1,22 @@
 package com.cavetale.mytems.gear;
 
 import java.util.List;
-import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attributable;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
-import static com.cavetale.mytems.session.Attributes.PREFIX;
+import static com.cavetale.mytems.MytemsPlugin.namespacedKey;
 
 /**
  * An attribute which should be added to an entity by their item (set).
  *
  * For proper function, it is expected that each attribute has a
- * unique name within the context of this plugin. It will be prefixed
- * with "mytems:" for quick identification.
+ * unique name within the context of this plugin.
  *
  * A known weakness is that an attribute cannot change while retaining
  * the same name.
@@ -25,13 +24,16 @@ import static com.cavetale.mytems.session.Attributes.PREFIX;
 @Data @AllArgsConstructor @NoArgsConstructor
 public final class EntityAttribute {
     protected Attribute attribute;
-    protected UUID uuid;
-    protected String name; // PREFIX will be added
+    protected NamespacedKey key;
     protected double amount;
     protected Operation operation;
 
-    public AttributeModifier toAttributeModifier(String prefix) {
-        return new AttributeModifier(uuid, prefix + name, amount, operation);
+    public EntityAttribute(final Attribute attribute, final String name, final double amount, final Operation operation) {
+        this(attribute, namespacedKey(name), amount, operation);
+    }
+
+    public AttributeModifier toAttributeModifier() {
+        return new AttributeModifier(key, amount, operation);
     }
 
     @Override
@@ -49,23 +51,24 @@ public final class EntityAttribute {
     public boolean add(Attributable target) {
         AttributeInstance attributeInstance = target.getAttribute(attribute);
         if (attributeInstance == null) return false;
-        String fullName = PREFIX + name;
         for (AttributeModifier attributeModifier : attributeInstance.getModifiers()) {
-            if (attributeModifier.getName().equals(fullName)) return false;
+            if (key.equals(attributeModifier.getKey())) {
+                return false;
+            }
         }
-        attributeInstance.addModifier(toAttributeModifier(PREFIX));
+        attributeInstance.addModifier(toAttributeModifier());
         return true;
     }
 
     public boolean remove(Attributable target) {
         AttributeInstance attributeInstance = target.getAttribute(attribute);
         if (attributeInstance == null) return false;
-        String fullName = PREFIX + name;
         for (AttributeModifier attributeModifier : List.copyOf(attributeInstance.getModifiers())) {
-            if (attributeModifier.getName().equals(fullName)) {
-                attributeInstance.removeModifier(attributeModifier);
-                return true;
+            if (!key.equals(attributeModifier.getKey())) {
+                continue;
             }
+            attributeInstance.removeModifier(attributeModifier);
+            return true;
         }
         return false;
     }

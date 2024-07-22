@@ -8,6 +8,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
@@ -23,10 +24,10 @@ import org.bukkit.entity.Player;
  * removes the ones that they should no longer have.
  */
 public final class Attributes {
-    public static final String PREFIX = "mytems:attr";
+    private static final String LEGACY_PREFIX = "mytems:attr";
     private final Session session;
-    private final Set<String> hasAttributes = new HashSet<>();
-    private final Set<String> shouldHaveAttributeNames = new HashSet<>();
+    private final Set<NamespacedKey> hasAttributes = new HashSet<>();
+    private final Set<NamespacedKey> shouldHaveAttributeKeys = new HashSet<>();
     private final Map<Attribute, List<EntityAttribute>> shouldHaveAttributes = new EnumMap<>(Attribute.class);
 
     public Attributes(final Session session) {
@@ -47,40 +48,46 @@ public final class Attributes {
             AttributeInstance attributeInstance = player.getAttribute(attribute);
             if (attributeInstance == null) continue;
             for (AttributeModifier attributeModifier : attributeInstance.getModifiers()) {
-                if (!(attributeModifier.getName().startsWith(PREFIX))) continue;
-                attributeInstance.removeModifier(attributeModifier);
+                if (attributeModifier.getName().startsWith(LEGACY_PREFIX)) {
+                    attributeInstance.removeModifier(attributeModifier);
+                } else if ("mytems".equals(attributeModifier.getKey().getNamespace())) {
+                    attributeInstance.removeModifier(attributeModifier);
+                }
             }
         }
     }
 
     protected void update(Player player) {
         hasAttributes.clear();
-        shouldHaveAttributeNames.clear();
+        shouldHaveAttributeKeys.clear();
         shouldHaveAttributes.values().forEach(List::clear);
         // Compile all the attributes that should be there
         for (EntityAttribute entityAttribute : session.equipment.getEntityAttributes()) {
             shouldHaveAttributes.get(entityAttribute.getAttribute()).add(entityAttribute);
-            shouldHaveAttributeNames.add(entityAttribute.getName());
+            shouldHaveAttributeKeys.add(entityAttribute.getKey());
         }
         for (Attribute attribute : Attribute.values()) {
             AttributeInstance attributeInstance = player.getAttribute(attribute);
             if (attributeInstance == null) continue;
-            // See which attributes are there, by name.
+            // See which attributes are there, by namespaced key.
             Collection<AttributeModifier> modifiers = attributeInstance.getModifiers();
             for (AttributeModifier attributeModifier : modifiers) {
-                String name = attributeModifier.getName();
-                if (!name.startsWith(PREFIX)) continue;
-                name = name.substring(PREFIX.length());
+                final NamespacedKey key = attributeModifier.getKey();
+                if (!"mytems".equals(key.getNamespace())) {
+                    continue;
+                }
                 // Remove if they should not be there or mark as already had
-                if (!shouldHaveAttributeNames.contains(name)) {
+                if (!shouldHaveAttributeKeys.contains(key)) {
                     attributeInstance.removeModifier(attributeModifier);
                 } else {
-                    hasAttributes.add(name);
+                    hasAttributes.add(key);
                 }
             }
             for (EntityAttribute entityAttribute : shouldHaveAttributes.get(attribute)) {
-                if (hasAttributes.contains(entityAttribute.getName())) continue;
-                AttributeModifier modifier = entityAttribute.toAttributeModifier(PREFIX);
+                if (hasAttributes.contains(entityAttribute.getKey())) {
+                    continue;
+                }
+                AttributeModifier modifier = entityAttribute.toAttributeModifier();
                 attributeInstance.addModifier(modifier);
             }
         }

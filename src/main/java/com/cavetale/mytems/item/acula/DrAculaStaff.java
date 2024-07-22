@@ -3,6 +3,7 @@ package com.cavetale.mytems.item.acula;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.session.Session;
+import com.cavetale.mytems.util.Attr;
 import com.cavetale.worldmarker.entity.EntityMarker;
 import java.time.Duration;
 import java.util.List;
@@ -15,21 +16,19 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.entity.Bat;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import static java.util.UUID.randomUUID;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
-import static org.bukkit.attribute.AttributeModifier.Operation.*;
-import static org.bukkit.inventory.EquipmentSlot.*;
 
 @Getter
 public final class DrAculaStaff extends AculaItem {
@@ -49,8 +48,8 @@ public final class DrAculaStaff extends AculaItem {
     protected ItemStack getRawItemStack() {
         ItemStack item = new ItemStack(Material.NETHERITE_SWORD);
         item.editMeta(meta -> {
-                meta.addAttributeModifier(Attribute.GENERIC_ATTACK_DAMAGE, new AttributeModifier(randomUUID(), key.id, 13.0, ADD_NUMBER, HAND));
-                meta.addAttributeModifier(Attribute.GENERIC_ATTACK_SPEED, new AttributeModifier(randomUUID(), key.id, -0.7, ADD_SCALAR, HAND));
+                Attr.add(meta, Attribute.GENERIC_ATTACK_DAMAGE, "dr_acula_staff_damage", 13.0, Operation.ADD_NUMBER, EquipmentSlotGroup.HAND);
+                Attr.add(meta, Attribute.GENERIC_ATTACK_SPEED, "dr_acula_staff_attack_speed", -0.7, Operation.ADD_SCALAR, EquipmentSlotGroup.HAND);
             });
         return item;
     }

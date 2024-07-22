@@ -53,6 +53,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.material.Colorable;
 import org.bukkit.persistence.PersistentDataContainer;
 import static com.cavetale.core.font.Unicode.tiny;
+import static com.cavetale.core.util.CamelCase.snakeToCamelCase;
 import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
@@ -171,12 +172,12 @@ public final class PocketMobTag extends MytemTag {
                 nameComponents.add(0, blockColor.niceName);
             }
         } else if (entity instanceof Cat cat) {
-            nameComponents.add(Text.toCamelCase(cat.getCatType()));
+            nameComponents.add(snakeToCamelCase(" ", cat.getCatType().getKey().getKey()));
             text.add(prop("Collar", BlockColor.of(cat.getCollarColor())));
         } else if (entity instanceof Parrot parrot) {
             nameComponents.add(Text.toCamelCase(parrot.getVariant()));
         } else if (entity instanceof Frog frog) {
-            nameComponents.add(Text.toCamelCase(frog.getVariant()));
+            nameComponents.add(snakeToCamelCase(" ", frog.getVariant().getKey().getKey()));
         } else if (entity instanceof Wolf wolf) {
             if (wolf.isAngry()) {
                 nameComponents.add(0, "Angry");
@@ -217,13 +218,13 @@ public final class PocketMobTag extends MytemTag {
             finalNameComponent = Text.toCamelCase(tropicalFish.getPattern());
         } else if (entity instanceof Villager villager) {
             if (villager.getProfession() != Villager.Profession.NONE) {
-                finalNameComponent = Text.toCamelCase(villager.getProfession());
+                finalNameComponent = snakeToCamelCase(" ", villager.getProfession().getKey().getKey());
             }
-            nameComponents.add(Text.toCamelCase(villager.getVillagerType()));
+            nameComponents.add(snakeToCamelCase(" ", villager.getVillagerType().getKey().getKey()));
             text.add(prop("Level", "" + villager.getVillagerLevel()));
         } else if (entity instanceof ZombieVillager zombieVillager) {
-            finalNameComponent = Text.toCamelCase(zombieVillager.getVillagerProfession());
-            nameComponents.add(Text.toCamelCase(zombieVillager.getVillagerType()));
+            finalNameComponent = snakeToCamelCase(" ", zombieVillager.getVillagerProfession().getKey().getKey());
+            nameComponents.add(snakeToCamelCase(" ", zombieVillager.getVillagerType().getKey().getKey()));
         } else if (entity instanceof Slime slime) {
             text.add(prop("Size", "" + slime.getSize()));
         } else if (entity instanceof Raider raider) {

@@ -1,5 +1,6 @@
 package com.cavetale.mytems.custom;
 
+import com.cavetale.mytems.util.Attr;
 import com.destroystokyo.paper.MaterialTags;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -117,7 +118,7 @@ public final class NetheriteParity {
                     for (AttributeModifier mod : entry.getValue()) {
                         final UUID uuid = UUID.randomUUID();
                         final String name = getAttributeNamePrefix() + attr.name().toLowerCase();
-                        meta.addAttributeModifier(attr, new AttributeModifier(uuid, name, mod.getAmount(), mod.getOperation(), mod.getSlotGroup()));
+                        Attr.add(meta, attr, name, mod.getAmount(), mod.getOperation(), mod.getSlotGroup());
                     }
                 }
                 meta.getPersistentDataContainer().set(getItemTagKey(), PersistentDataType.INTEGER, getItemTagValue());

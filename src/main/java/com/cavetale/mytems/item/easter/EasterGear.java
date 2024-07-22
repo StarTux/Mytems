@@ -11,7 +11,6 @@ import com.cavetale.mytems.util.Text;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import java.time.Duration;
 import java.util.List;
-import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
@@ -26,7 +25,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -125,9 +124,9 @@ public abstract class EasterGear implements GearItem {
 
         @Override
         protected void process(ItemMeta meta) {
-            EquipmentSlot slot = EquipmentSlot.HEAD;
-            Attr.addNumber(meta, Attribute.GENERIC_ARMOR, UUID.fromString("faa92578-e897-488a-8fab-5894c5709aae"), key.id, 3.0, slot);
-            Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, UUID.fromString("8738a874-3d4a-46af-b70f-6a54abad23f7"), key.id, 3.0, slot);
+            EquipmentSlotGroup slot = EquipmentSlotGroup.HEAD;
+            Attr.addNumber(meta, Attribute.GENERIC_ARMOR, "easter_helmet_armor", 3.0, slot);
+            Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "easter_helmet_armor_toughness", 3.0, slot);
         }
     }
 
@@ -140,9 +139,9 @@ public abstract class EasterGear implements GearItem {
 
         @Override
         protected void process(ItemMeta meta) {
-            EquipmentSlot slot = EquipmentSlot.CHEST;
-            Attr.addNumber(meta, Attribute.GENERIC_ARMOR, UUID.fromString("fd152947-66c8-48d1-a91a-4d4942719476"), key.id, 8.0, slot);
-            Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, UUID.fromString("81ae88f5-3ea3-41ef-9198-53c98700cd8e"), key.id, 3.0, slot);
+            EquipmentSlotGroup slot = EquipmentSlotGroup.CHEST;
+            Attr.addNumber(meta, Attribute.GENERIC_ARMOR, "easter_chestplate_armor", 8.0, slot);
+            Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "easter_chestplate_armor_toughness", 3.0, slot);
         }
     }
 
@@ -155,9 +154,9 @@ public abstract class EasterGear implements GearItem {
 
         @Override
         protected void process(ItemMeta meta) {
-            EquipmentSlot slot = EquipmentSlot.LEGS;
-            Attr.addNumber(meta, Attribute.GENERIC_ARMOR, UUID.fromString("b0fd7a5d-e955-4a96-b3f3-ff09ea928ec5"), key.id, 6.0, slot);
-            Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, UUID.fromString("08d2a467-c2d1-42ae-85d0-9da8571d1f70"), key.id, 3.0, slot);
+            EquipmentSlotGroup slot = EquipmentSlotGroup.LEGS;
+            Attr.addNumber(meta, Attribute.GENERIC_ARMOR, "easter_leggings_armor", 6.0, slot);
+            Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "easter_leggings_armor_toughness", 3.0, slot);
         }
     }
 
@@ -170,9 +169,9 @@ public abstract class EasterGear implements GearItem {
 
         @Override
         protected void process(ItemMeta meta) {
-            EquipmentSlot slot = EquipmentSlot.FEET;
-            Attr.addNumber(meta, Attribute.GENERIC_ARMOR, UUID.fromString("cbf6b90d-2531-49fa-9af3-550688d04a8e"), key.id, 3.0, slot);
-            Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, UUID.fromString("ade6e795-7252-4be4-b24f-63cb4e224e3c"), key.id, 3.0, slot);
+            EquipmentSlotGroup slot = EquipmentSlotGroup.FEET;
+            Attr.addNumber(meta, Attribute.GENERIC_ARMOR, "easter_boots_armor", 3.0, slot);
+            Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "easter_boots_armor_toughness", 3.0, slot);
         }
     }
 

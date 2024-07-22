@@ -2,29 +2,28 @@ package com.cavetale.mytems.item.acula;
 
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.event.combat.DamageCalculationEvent;
+import com.cavetale.mytems.util.Attr;
 import java.util.List;
-import java.util.UUID;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.block.Banner;
 import org.bukkit.block.banner.Pattern;
+import org.bukkit.block.banner.PatternType;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
-import static org.bukkit.attribute.Attribute.*;
-import static org.bukkit.attribute.AttributeModifier.Operation.*;
-import static org.bukkit.block.banner.PatternType.*;
-import static org.bukkit.inventory.EquipmentSlot.*;
 
 @Getter
 public final class FlameShield extends AculaItem {
@@ -45,18 +44,14 @@ public final class FlameShield extends AculaItem {
                 BlockStateMeta blockStateMeta = (BlockStateMeta) meta;
                 Banner banner = (Banner) blockStateMeta.getBlockState();
                 banner.setBaseColor(DyeColor.BLACK);
-                banner.setPatterns(List.of(new Pattern(DyeColor.ORANGE, MOJANG),
-                                           new Pattern(DyeColor.ORANGE, TRIANGLE_BOTTOM),
-                                           new Pattern(DyeColor.BLACK, RHOMBUS),
-                                           new Pattern(DyeColor.RED, GRADIENT_UP)));
+                banner.setPatterns(List.of(new Pattern(DyeColor.ORANGE, PatternType.MOJANG),
+                                           new Pattern(DyeColor.ORANGE, PatternType.TRIANGLE_BOTTOM),
+                                           new Pattern(DyeColor.BLACK, PatternType.RHOMBUS),
+                                           new Pattern(DyeColor.RED, PatternType.GRADIENT_UP)));
                 blockStateMeta.setBlockState(banner);
-                meta.addAttributeModifier(GENERIC_ARMOR,
-                                          new AttributeModifier(UUID.randomUUID(), key.id, 4, ADD_NUMBER, OFF_HAND));
-                meta.addAttributeModifier(GENERIC_ARMOR_TOUGHNESS,
-                                          new AttributeModifier(UUID.randomUUID(), key.id, 1, ADD_NUMBER, OFF_HAND));
-                meta.addAttributeModifier(GENERIC_KNOCKBACK_RESISTANCE,
-                                          new AttributeModifier(UUID.randomUUID(),
-                                                                key.id, 0.1, ADD_NUMBER, OFF_HAND));
+                Attr.add(meta, Attribute.GENERIC_ARMOR, "flame_shield_armor", 4, Operation.ADD_NUMBER, EquipmentSlotGroup.OFFHAND);
+                Attr.add(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "flame_shield_armor_toughness", 1, Operation.ADD_NUMBER, EquipmentSlotGroup.OFFHAND);
+                Attr.add(meta, Attribute.GENERIC_KNOCKBACK_RESISTANCE, "flame_shield_knockback_resistance", 0.1, Operation.ADD_NUMBER, EquipmentSlotGroup.OFFHAND);
                 meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP); // hides banner patterns
             });
         return itemStack;

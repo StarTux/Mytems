@@ -8,14 +8,12 @@ import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.util.Text;
 import java.util.List;
-import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
@@ -153,8 +151,7 @@ public abstract class DuneItem implements GearItem {
             private final String name = "Sand Speed";
             private final String description = "Gain extra speed while walking on sand";
             private final EntityAttribute speedAttribute = new EntityAttribute(Attribute.GENERIC_MOVEMENT_SPEED,
-                                                                               UUID.fromString("51f94678-9053-4e51-a916-306925f592a6"),
-                                                                               "duneSandSpeed",
+                                                                               "dune_sand_speed",
                                                                                0.5, Operation.ADD_SCALAR);
             private final List<EntityAttribute> entityAttributes = List.of(speedAttribute);
 
@@ -193,12 +190,13 @@ public abstract class DuneItem implements GearItem {
                 if (event.isCancelled()) return;
                 if (event.getCause() != EntityDamageByEntityEvent.DamageCause.ENTITY_ATTACK) return;
                 if (ThreadLocalRandom.current().nextDouble() > 0.4) return;
-                int duration = 20 * 30;
+                final int seconds = 30;
                 if (!PlayerEntityAbilityQuery.Action.IGNITE.query(player, damager)) return;
-                EntityCombustByEntityEvent combustEvent = new EntityCombustByEntityEvent(player, damager, duration);
-                Bukkit.getPluginManager().callEvent(combustEvent);
-                if (combustEvent.isCancelled()) return;
-                damager.setFireTicks(Math.max(damager.getFireTicks(), duration));
+                EntityCombustByEntityEvent combustEvent = new EntityCombustByEntityEvent(player, damager, (float) seconds);
+                if (!combustEvent.callEvent()) {
+                    return;
+                }
+                damager.setFireTicks(Math.max(damager.getFireTicks(), seconds * 20));
             }
         }
     }

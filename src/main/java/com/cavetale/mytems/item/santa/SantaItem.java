@@ -16,7 +16,7 @@ import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.attribute.Attribute;
-import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -90,13 +90,9 @@ abstract class SantaItem implements GearItem {
     protected ItemStack makeBoots() {
         ItemStack item = makeColoredLeatherItem(Material.LEATHER_BOOTS, Color.BLACK);
         item.editMeta(meta -> {
-                EquipmentSlot slot = EquipmentSlot.FEET;
-                Attr.addNumber(meta, Attribute.GENERIC_ARMOR,
-                               UUID.fromString("5c76a2ff-ce50-43c3-984f-20e6c70f5155"),
-                               getKey().id, 3.0, slot);
-                Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS,
-                               UUID.fromString("cb36e422-2a10-447c-a5a7-0988e5adc773"),
-                               getKey().id, 3.0, slot);
+                EquipmentSlotGroup slot = EquipmentSlotGroup.FEET;
+                Attr.addNumber(meta, Attribute.GENERIC_ARMOR, "santa_boots_armor", 3.0, slot);
+                Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "santa_boots_armor_toughness", 3.0, slot);
             });
         return item;
     }
@@ -104,13 +100,9 @@ abstract class SantaItem implements GearItem {
     protected ItemStack makePants() {
         ItemStack item = makeColoredLeatherItem(Material.LEATHER_LEGGINGS, Color.RED);
         item.editMeta(meta -> {
-                EquipmentSlot slot = EquipmentSlot.LEGS;
-                Attr.addNumber(meta, Attribute.GENERIC_ARMOR,
-                               UUID.fromString("44574584-59c7-45d5-86af-d2fb3e568754"),
-                               getKey().id, 6.0, slot);
-                Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS,
-                               UUID.fromString("3f1b5d4d-ae14-47f0-a60e-ffd3f79a7e04"),
-                               getKey().id, 3.0, slot);
+                EquipmentSlotGroup slot = EquipmentSlotGroup.LEGS;
+                Attr.addNumber(meta, Attribute.GENERIC_ARMOR, "santa_pants_armor", 6.0, slot);
+                Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "santa_pants_armor", 3.0, slot);
             });
         return item;
     }
@@ -118,13 +110,9 @@ abstract class SantaItem implements GearItem {
     protected ItemStack makeJacket() {
         ItemStack item = makeColoredLeatherItem(Material.LEATHER_CHESTPLATE, Color.RED);
         item.editMeta(meta -> {
-                EquipmentSlot slot = EquipmentSlot.CHEST;
-                Attr.addNumber(meta, Attribute.GENERIC_ARMOR,
-                               UUID.fromString("8bce96f8-2fdd-4235-bf3d-d578e9e7cf95"),
-                               getKey().id, 8.0, slot);
-                Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS,
-                               UUID.fromString("cc160bc3-cf50-4702-b463-8d31eb5a2075"),
-                               getKey().id, 3.0, slot);
+                EquipmentSlotGroup slot = EquipmentSlotGroup.CHEST;
+                Attr.addNumber(meta, Attribute.GENERIC_ARMOR, "santa_jacket_armor", 8.0, slot);
+                Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "santa_pants_armor_toughness", 3.0, slot);
             });
         return item;
     }
@@ -132,13 +120,9 @@ abstract class SantaItem implements GearItem {
     protected ItemStack makeHat() {
         ItemStack item = Skull.create("Santa", SKULL_ID, SKULL_TEXTURE);
         item.editMeta(meta -> {
-                EquipmentSlot slot = EquipmentSlot.HEAD;
-                Attr.addNumber(meta, Attribute.GENERIC_ARMOR,
-                               UUID.fromString("2cf3df30-b900-4973-abf8-c5c0731b093c"),
-                               getKey().id, 3.0, slot);
-                Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS,
-                               UUID.fromString("a41ab31a-5dda-445c-a8d7-931cd8a5e45a"),
-                               getKey().id, 3.0, slot);
+                EquipmentSlotGroup slot = EquipmentSlotGroup.HEAD;
+                Attr.addNumber(meta, Attribute.GENERIC_ARMOR, "santa_hat_armor", 3.0, slot);
+                Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "santa_hat_armor_toughness", 3.0, slot);
             });
         return item;
     }
