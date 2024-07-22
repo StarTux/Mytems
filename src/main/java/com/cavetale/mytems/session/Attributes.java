@@ -24,7 +24,7 @@ import org.bukkit.entity.Player;
  * removes the ones that they should no longer have.
  */
 public final class Attributes {
-    private static final String LEGACY_PREFIX = "mytems:attr";
+    public static final String TMP_PREFIX = "tmp_";
     private final Session session;
     private final Set<NamespacedKey> hasAttributes = new HashSet<>();
     private final Set<NamespacedKey> shouldHaveAttributeKeys = new HashSet<>();
@@ -48,13 +48,15 @@ public final class Attributes {
             AttributeInstance attributeInstance = player.getAttribute(attribute);
             if (attributeInstance == null) continue;
             for (AttributeModifier attributeModifier : attributeInstance.getModifiers()) {
-                if (attributeModifier.getName().startsWith(LEGACY_PREFIX)) {
-                    attributeInstance.removeModifier(attributeModifier);
-                } else if ("mytems".equals(attributeModifier.getKey().getNamespace())) {
+                if (isTemporaryAttributeKey(attributeModifier.getKey())) {
                     attributeInstance.removeModifier(attributeModifier);
                 }
             }
         }
+    }
+
+    public static boolean isTemporaryAttributeKey(NamespacedKey key) {
+        return "mytems".equals(key.getNamespace()) && key.getKey().startsWith(TMP_PREFIX);
     }
 
     protected void update(Player player) {
@@ -73,7 +75,7 @@ public final class Attributes {
             Collection<AttributeModifier> modifiers = attributeInstance.getModifiers();
             for (AttributeModifier attributeModifier : modifiers) {
                 final NamespacedKey key = attributeModifier.getKey();
-                if (!"mytems".equals(key.getNamespace())) {
+                if (!isTemporaryAttributeKey(key)) {
                     continue;
                 }
                 // Remove if they should not be there or mark as already had

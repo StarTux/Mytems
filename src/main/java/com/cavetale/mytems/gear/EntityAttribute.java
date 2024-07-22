@@ -1,5 +1,6 @@
 package com.cavetale.mytems.gear;
 
+import com.cavetale.mytems.session.Attributes;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -29,7 +30,7 @@ public final class EntityAttribute {
     protected Operation operation;
 
     public EntityAttribute(final Attribute attribute, final String name, final double amount, final Operation operation) {
-        this(attribute, namespacedKey(name), amount, operation);
+        this(attribute, namespacedKey(Attributes.TMP_PREFIX + name), amount, operation);
     }
 
     public AttributeModifier toAttributeModifier() {
