@@ -302,23 +302,33 @@ public final class EventListener implements Listener {
         if (event.getView().getType() != InventoryType.CRAFTING) {
             return;
         }
+        final ItemStack item = event.getCurrentItem();
+        final Mytems mytems = Mytems.forItem(item);
+        if (mytems == null) {
+            return;
+        }
+        mytems.getMytem().onPlayerInventoryClick(event, player, item);
+        if (event.isCancelled()) {
+            return;
+        }
+        onClickUpgradableItem(event, player, item, mytems);
+    }
+
+    private void onClickUpgradableItem(InventoryClickEvent event, Player player, ItemStack item, Mytems mytems) {
+        if (!event.isRightClick()) {
+            return;
+        }
         // Empty cursor
         if (event.getCursor() != null && !event.getCursor().isEmpty()) {
             return;
         }
-        final ItemStack item = event.getCurrentItem();
-        final Mytems mytems = Mytems.forItem(item);
-        if (mytems == null) return;
-        mytems.getMytem().onPlayerInventoryClick(event, player, item);
-        if (event.isCancelled()) return;
-        if (event.isRightClick()) {
-            event.setCancelled(true);
-            final MytemTag tag = mytems.getMytem().serializeTag(item);
-            if (tag instanceof UpgradableItemTag upgradableItemTag) {
-                final UpgradableItemMenu menu = new UpgradableItemMenu(player, item, upgradableItemTag);
-                Bukkit.getScheduler().runTask(plugin, menu::open);
-            }
+        if (!(mytems.getMytem().serializeTag(item) instanceof UpgradableItemTag upgradableItemTag)) {
+            return;
         }
+        event.setCancelled(true);
+        final MytemTag tag = mytems.getMytem().serializeTag(item);
+        final UpgradableItemMenu menu = new UpgradableItemMenu(player, item, upgradableItemTag);
+        Bukkit.getScheduler().runTask(plugin, menu::open);
     }
 
     @EventHandler(priority = EventPriority.LOWEST)
