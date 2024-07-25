@@ -768,6 +768,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     STRUCTURE_FINDER(Finder.class, COMPASS, 0xF255, FINDER),
     SECRET_FINDER(Finder.class, COMPASS, 0xF256, FINDER),
     MYSTIC_FINDER(Finder.class, COMPASS, 0xF257, FINDER),
+    MASTER_FINDER(Finder.class, COMPASS, 0xF29D, FINDER),
     EMPTY_LUMINATOR(Luminator.class, IRON_PICKAXE, 0xF259, UTILITY),
     LUMINATOR(Luminator.class, IRON_PICKAXE, 0xF25A, UTILITY, Animation.frametime(2)),
     DEFLECTOR_SHIELD(DeflectorShield.class, SHIELD, 0xF266, DEFLECTOR),

@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import lombok.Value;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.mytems.item.finder.FinderItem.finderItem;
 import static com.cavetale.mytems.item.hastypickaxe.HastyPickaxeItem.hastyPickaxeItem;
+import static com.cavetale.mytems.item.treechopper.TreeChopperItem.treeChopperItem;
 
 @Value
 public final class UpgradableItemCombinerRecipe implements ItemCombinerRecipe {
@@ -65,17 +67,17 @@ public final class UpgradableItemCombinerRecipe implements ItemCombinerRecipe {
         }
         all = new ArrayList<>();
         addChain(hastyPickaxeItem());
+        addChain(treeChopperItem());
+        addChain(finderItem());
         addChain(Mytems.MOBSLAYER, Mytems.MOBSLAYER2, Mytems.MOBSLAYER3);
         addChain(Mytems.BINGO_BUKKIT, Mytems.GOLD_BINGO_BUKKIT, Mytems.DIAMOND_BINGO_BUKKIT);
         addChain(Mytems.COLORFALL_HOURGLASS, Mytems.MOONLIGHT_HOURGLASS);
         addChain(Mytems.COLORFALL_HOURGLASS, Mytems.ATMOSPHERE_HOURGLASS);
         addChain(Mytems.COLORFALL_HOURGLASS, Mytems.CLIMATE_HOURGLASS);
-        addChain(Mytems.STRUCTURE_FINDER, Mytems.SECRET_FINDER, Mytems.MYSTIC_FINDER);
         addChain(Mytems.DEFLECTOR_SHIELD, Mytems.RETURN_SHIELD, Mytems.VENGEANCE_SHIELD);
         addChain(Mytems.COPPER_SPLEEF_SHOVEL, Mytems.IRON_SPLEEF_SHOVEL, Mytems.GOLDEN_SPLEEF_SHOVEL);
         addChain(Mytems.IRON_SCYTHE, Mytems.GOLDEN_SCYTHE);
         addChain(Mytems.EMPTY_WATERING_CAN, Mytems.EMPTY_GOLDEN_WATERING_CAN);
-        addChain(Mytems.TREE_CHOPPER, Mytems.GOLDEN_TREE_CHOPPER);
         all = List.copyOf(all);
         return all;
     }

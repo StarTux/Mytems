@@ -77,16 +77,26 @@ public final class UpgradableItemMenu {
             tooltip.add(textOfChildren(stat.getChatIcon(), stat.getTitle()));
             if (status.hasCurrentLevel()) {
                 tooltip.add(DIVIDER);
-                tooltip.add(textOfChildren(Mytems.CHECKED_CHECKBOX,
-                                           text(tiny("lv ") + status.getCurrentLevel().getLevel() + "/" + stat.getMaxLevel().getLevel(), LIGHT_PURPLE)));
+                if (stat.getLevels().size() > 1) {
+                    tooltip.add(textOfChildren(Mytems.CHECKED_CHECKBOX,
+                                               text(tiny(" lv ") + status.getCurrentLevel().getLevel() + "/" + stat.getMaxLevel().getLevel(), GREEN)));
+                } else {
+                    tooltip.add(textOfChildren(Mytems.CHECKED_CHECKBOX,
+                                               text(tiny(" unlocked"), GREEN)));
+                }
                 for (Component line : status.getCurrentLevel().getDescription()) {
                     tooltip.add(textOfChildren(text("  "), line));
                 }
             }
             if (status.hasNextLevel()) {
                 tooltip.add(DIVIDER);
-                tooltip.add(textOfChildren((status.isUpgradable() ? Mytems.ARROW_RIGHT : Mytems.CROSSED_CHECKBOX),
-                                           text(tiny("lv ") + status.getNextLevel().getLevel() + "/" + stat.getMaxLevel().getLevel(), LIGHT_PURPLE)));
+                if (stat.getLevels().size() > 1) {
+                    tooltip.add(textOfChildren((status.isUpgradable() ? Mytems.ARROW_RIGHT : Mytems.CROSSED_CHECKBOX),
+                                               text(tiny(" lv ") + status.getNextLevel().getLevel() + "/" + stat.getMaxLevel().getLevel(), RED)));
+                } else {
+                    tooltip.add(textOfChildren((status.isUpgradable() ? Mytems.ARROW_RIGHT : Mytems.CROSSED_CHECKBOX),
+                                               text(tiny(" unlock"), RED)));
+                }
                 for (Component line : status.getNextLevel().getDescription()) {
                     tooltip.add(textOfChildren(text("  "), line));
                 }
@@ -190,6 +200,14 @@ public final class UpgradableItemMenu {
             if (highlightColor != null) {
                 gui.highlight(slot.x, slot.z, highlightColor);
             }
+            if (tag.shouldAutoPlaceArrows()) {
+                for (UpgradableStat dependency : stat.getDependencies()) {
+                    placeArrow(dependency, stat);
+                }
+                for (UpgradableStat dependency : stat.getCompleteDependencies()) {
+                    placeArrow(dependency, stat);
+                }
+            }
         }
         if (tag.countTotalUpgrades() > 0) {
             final List<Component> resetTooltip = List.of(text("Reset Upgrades", DARK_RED),
@@ -260,5 +278,39 @@ public final class UpgradableItemMenu {
         open();
         player.sendMessage(textOfChildren(Mytems.KITTY_COIN, text("Kitty Coin consumed, upgrades reset. You can now reassign them.", GREEN)));
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 0.5f, 0.5f);
+    }
+
+    private boolean placeArrow(UpgradableStat fromStat, UpgradableStat toStat) {
+        final Vec2i from = fromStat.getGuiSlot();
+        final Vec2i to = toStat.getGuiSlot();
+        if (from.x == to.x) {
+            // Vertical
+            if (Math.abs(to.z - from.z) != 2) {
+                return false;
+            }
+            final Vec2i slot = Vec2i.of(from.x, (from.z + to.z) / 2);
+            final Mytems mytems = from.z < to.z
+                ? Mytems.ARROW_DOWN
+                : Mytems.ARROW_UP;
+            final ItemStack arrow = mytems.createIcon();
+            arrow.editMeta(meta -> meta.setHideTooltip(true));
+            gui.setItem(slot.x, slot.z, arrow, null);
+            return true;
+        } else if (from.z == to.z) {
+            // Horizontal
+            if (Math.abs(to.x - from.x) != 2) {
+                return false;
+            }
+            final Vec2i slot = Vec2i.of((from.x + to.x) / 2, from.z);
+            final Mytems mytems = from.x < to.x
+                ? Mytems.ARROW_RIGHT
+                : Mytems.ARROW_LEFT;
+            final ItemStack arrow = mytems.createIcon();
+            arrow.editMeta(meta -> meta.setHideTooltip(true));
+            gui.setItem(slot.x, slot.z, arrow, null);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

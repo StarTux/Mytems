@@ -21,6 +21,7 @@ import static com.cavetale.core.font.Unicode.subscript;
 import static com.cavetale.core.font.Unicode.superscript;
 import static com.cavetale.core.font.Unicode.tiny;
 import static com.cavetale.mytems.MytemsPlugin.namespacedKey;
+import static com.cavetale.mytems.util.Items.tooltip;
 import static com.cavetale.mytems.util.Text.roman;
 import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
@@ -118,6 +119,7 @@ public abstract class UpgradableItemTag extends MytemTag {
                 } else {
                     pdc.remove(namespacedKey(DISABLED));
                 }
+                tooltip(meta, getDefaultTooltip());
             });
     }
 
@@ -388,6 +390,7 @@ public abstract class UpgradableItemTag extends MytemTag {
     public final List<Component> getDefaultTooltip() {
         final List<Component> tooltip = new ArrayList<>();
         tooltip.add(getUpgradableItemTier().getMytems().getMytem().getDisplayName());
+        tooltip.add(text(tiny("tier " + getUpgradableItemTier().getRomanTier().toLowerCase()), getUpgradableItemTier().getMenuColor()));
         tooltip.addAll(getTooltipDescription());
         for (UpgradableStat stat : getUpgradableItem().getStats()) {
             final int upgradeLevel = getEffectiveUpgradeLevel(stat);
@@ -413,6 +416,15 @@ public abstract class UpgradableItemTag extends MytemTag {
      * Override to add text to the tooltip.
      */
     public List<Component> getTooltipDescription() {
-        return List.of(text(tiny("tier " + getUpgradableItemTier().getRomanTier().toLowerCase()), getUpgradableItemTier().getMenuColor()));
+        return List.of();
+    }
+
+    /**
+     * Should the menu have automatic arrows between dependent stats
+     * that have one gap inbetween?
+     * See UpgradableItemMenu#placeArrow.
+     */
+    public boolean shouldAutoPlaceArrows() {
+        return true;
     }
 }

@@ -1,53 +1,68 @@
 package com.cavetale.mytems.item.finder;
 
+import com.cavetale.core.item.ItemKinds;
 import com.cavetale.mytems.Mytems;
 import java.util.List;
 import java.util.function.Supplier;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.util.CamelCase.toCamelCase;
 
+@Getter
+@RequiredArgsConstructor
 public enum FoundType {
     // Disabled
-    FOSSILS(null, List.of("minecraft:nether_fossil"), () -> new ItemStack(Material.BONE_BLOCK)),
-    // Normal
-    END_CITY(FinderType.STRUCTURE, List.of("minecraft:end_city"), () -> new ItemStack(Material.PURPUR_BLOCK)),
-    IGLOO(FinderType.STRUCTURE, List.of("minecraft:igloo"), () -> new ItemStack(Material.SNOW_BLOCK)),
-    JUNGLE_TEMPLE(FinderType.STRUCTURE, List.of("minecraft:jungle_pyramid"), () -> new ItemStack(Material.MOSSY_COBBLESTONE)),
-    MINESHAFT(FinderType.STRUCTURE, List.of("minecraft:mineshaft", "minecraft:mineshaft_mesa"), () -> new ItemStack(Material.CHEST_MINECART)),
-    NETHER_FORTRESS(FinderType.STRUCTURE, List.of("minecraft:fortress"), Mytems.BLAZE_FACE::createIcon),
-    PILLAGER_OUTPOST(FinderType.STRUCTURE, List.of("minecraft:pillager_outpost"), Mytems.PILLAGER_FACE::createIcon),
-    PYRAMID(FinderType.STRUCTURE, List.of("minecraft:desert_pyramid"), () -> new ItemStack(Material.SANDSTONE_STAIRS)),
-    RUINED_PORTAL(FinderType.STRUCTURE, List.of("minecraft:ruined_portal", "minecraft:ruined_portal_"), () -> new ItemStack(Material.OBSIDIAN)),
-    VILLAGE(FinderType.STRUCTURE, List.of("minecraft:village_"), () -> new ItemStack(Material.EMERALD)),
-    WITCH_HUT(FinderType.STRUCTURE, List.of("minecraft:swamp_hut"), Mytems.WITCH_FACE::createIcon),
-    // Secret
-    BASTION_REMNANT(FinderType.SECRET, List.of("minecraft:bastion_remnant"), () -> new ItemStack(Material.GILDED_BLACKSTONE)),
-    BURIED_TREASURE(FinderType.SECRET, List.of("minecraft:buried_treasure"), () -> new ItemStack(Material.CHEST)),
-    MONUMENT(FinderType.SECRET, List.of("minecraft:monument"), Mytems.GUARDIAN_FACE::createIcon),
-    SHIPWRECK(FinderType.SECRET, List.of("minecraft:shipwreck", "minecraft:shipwreck_beached"), () -> new ItemStack(Material.STRIPPED_OAK_LOG)),
-    UNDERWATER_RUINS(FinderType.SECRET, List.of("minecraft:ocean_ruin_cold", "minecraft:ocean_ruin_warm"), () -> new ItemStack(Material.MOSSY_STONE_BRICKS)),
-    // Mystic
-    ANCIENT_CITY(FinderType.MYSTIC, List.of("minecraft:ancient_city"), Mytems.WARDEN_FACE::createIcon),
-    CAVETALE_DUNGEON(FinderType.MYSTIC, List.of("dungeons:dungeon"), Mytems.CAVETALE_DUNGEON::createIcon),
-    STRONGHOLD(FinderType.MYSTIC, List.of("minecraft:stronghold"), () -> new ItemStack(Material.ENDER_EYE)),
-    WOODLAND_MANSION(FinderType.MYSTIC, List.of("minecraft:mansion"), Mytems.VEX_FACE::createIcon),
-    TRAIL_RUINS(FinderType.MYSTIC, List.of("minecraft:trail_ruins"), () -> new ItemStack(Material.BRUSH)),
+    FOSSILS(0, FinderStat.NONE, List.of("minecraft:nether_fossil"), () -> new ItemStack(Material.BONE_BLOCK)),
+    // Always Unlocked
+    IGLOO(1, FinderStat.NONE, List.of("minecraft:igloo"), () -> new ItemStack(Material.SNOW_BLOCK)),
+    MINESHAFT(5, FinderStat.NONE, List.of("minecraft:mineshaft", "minecraft:mineshaft_mesa"), () -> new ItemStack(Material.CHEST_MINECART)),
+    VILLAGE(10, FinderStat.NONE, List.of("minecraft:village_"), () -> new ItemStack(Material.EMERALD)),
+    RUINED_PORTAL(10, FinderStat.NONE, List.of("minecraft:ruined_portal", "minecraft:ruined_portal_"), () -> new ItemStack(Material.OBSIDIAN)),
+    // Treasure
+    BURIED_TREASURE(20, FinderStat.TREASURE, List.of("minecraft:buried_treasure"), () -> new ItemStack(Material.CHEST)),
+    SHIPWRECK(20, FinderStat.TREASURE, List.of("minecraft:shipwreck", "minecraft:shipwreck_beached"), () -> new ItemStack(Material.STRIPPED_OAK_LOG)),
+    // Pyramids
+    JUNGLE_TEMPLE(30, FinderStat.PYRAMID, List.of("minecraft:jungle_pyramid"), () -> new ItemStack(Material.MOSSY_COBBLESTONE)),
+    PYRAMID(30, FinderStat.PYRAMID, List.of("minecraft:desert_pyramid"), () -> new ItemStack(Material.SANDSTONE_STAIRS)),
+    // Archaeology
+    TRAIL_RUINS(50, FinderStat.ARCHAEOLOGY, List.of("minecraft:trail_ruins"), () -> new ItemStack(Material.BRUSH)),
+    UNDERWATER_RUINS(50, FinderStat.ARCHAEOLOGY, List.of("minecraft:ocean_ruin_cold", "minecraft:ocean_ruin_warm"), () -> new ItemStack(Material.MOSSY_STONE_BRICKS)),
+    // Villain
+    PILLAGER_OUTPOST(20, FinderStat.VILLAIN, List.of("minecraft:pillager_outpost"), Mytems.PILLAGER_FACE::createIcon),
+    WITCH_HUT(20, FinderStat.VILLAIN, List.of("minecraft:swamp_hut"), Mytems.WITCH_FACE::createIcon),
+    END_CITY(20, FinderStat.VILLAIN, List.of("minecraft:end_city"), () -> new ItemStack(Material.PURPUR_BLOCK)),
+    // Castle
+    NETHER_FORTRESS(30, FinderStat.CASTLE, List.of("minecraft:fortress"), Mytems.BLAZE_FACE::createIcon),
+    BASTION_REMNANT(30, FinderStat.CASTLE, List.of("minecraft:bastion_remnant"), () -> new ItemStack(Material.GILDED_BLACKSTONE)),
+    STRONGHOLD(30, FinderStat.CASTLE, List.of("minecraft:stronghold"), () -> new ItemStack(Material.ENDER_EYE)),
+    WOODLAND_MANSION(30, FinderStat.CASTLE, List.of("minecraft:mansion"), Mytems.VEX_FACE::createIcon),
+    // Hidden
+    MONUMENT(50, FinderStat.HIDDEN, List.of("minecraft:monument"), Mytems.GUARDIAN_FACE::createIcon),
+    CAVETALE_DUNGEON(50, FinderStat.HIDDEN, List.of("dungeons:dungeon"), Mytems.CAVETALE_DUNGEON::createIcon),
+    ANCIENT_CITY(50, FinderStat.HIDDEN, List.of("minecraft:ancient_city"), Mytems.WARDEN_FACE::createIcon),
+    // Boss Areas
+    TRIAL_CHAMBERS(100, FinderStat.TRIAL_CHAMBER, List.of("minecraft:trial_chambers"), () -> new ItemStack(Material.TRIAL_KEY)),
     ;
 
-    public final FinderType type;
-    public final List<String> keys;
-    protected final Supplier<ItemStack> iconSupplier;
-    public final String displayName;
+    private final int xp;
+    private final FinderStat requiredStat;
+    private final List<String> keys;
+    private final Supplier<ItemStack> iconSupplier;
 
-    FoundType(final FinderType type, final List<String> keys, final Supplier<ItemStack> iconSupplier) {
-        this.type = type;
-        this.keys = keys;
-        this.iconSupplier = iconSupplier;
-        this.displayName = toCamelCase(" ", this);
+    public String getDisplayName() {
+        return toCamelCase(" ", this);
     }
 
+    /**
+     * Get the FoundType for a structure.
+     *
+     * @param nkey the key of the structure
+     * @return the corresponding FoundType or null
+     */
     public static FoundType of(NamespacedKey nkey) {
         final String str = nkey.toString();
         for (var it : values()) {
@@ -59,7 +74,21 @@ public enum FoundType {
         return null;
     }
 
+    public ItemStack getIcon() {
+        return iconSupplier.get();
+    }
+
     public boolean isDisabled() {
-        return type == null;
+        return this == FOSSILS;
+    }
+
+    public FinderTier getRequiredTier() {
+        return requiredStat != null
+            ? (FinderTier) requiredStat.getFirstLevel().getRequiredTier()
+            : FinderTier.STRUCTURE;
+    }
+
+    public Component getChatIcon() {
+        return ItemKinds.icon(getIcon());
     }
 }
