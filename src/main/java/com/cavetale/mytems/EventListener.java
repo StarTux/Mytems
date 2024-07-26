@@ -318,6 +318,9 @@ public final class EventListener implements Listener {
         if (!event.isRightClick()) {
             return;
         }
+        if (item.getAmount() > 1) {
+            return;
+        }
         // Empty cursor
         if (event.getCursor() != null && !event.getCursor().isEmpty()) {
             return;
