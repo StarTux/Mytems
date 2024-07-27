@@ -18,7 +18,7 @@ public enum FoundType {
     // Disabled
     FOSSILS(0, FinderStat.NONE, List.of("minecraft:nether_fossil"), () -> new ItemStack(Material.BONE_BLOCK)),
     // Always Unlocked
-    IGLOO(1, FinderStat.NONE, List.of("minecraft:igloo"), () -> new ItemStack(Material.SNOW_BLOCK)),
+    IGLOO(10, FinderStat.NONE, List.of("minecraft:igloo"), () -> new ItemStack(Material.SNOWBALL)),
     MINESHAFT(10, FinderStat.NONE, List.of("minecraft:mineshaft", "minecraft:mineshaft_mesa"), () -> new ItemStack(Material.CHEST_MINECART)),
     VILLAGE(10, FinderStat.NONE, List.of("minecraft:village_"), () -> new ItemStack(Material.EMERALD)),
     RUINED_PORTAL(10, FinderStat.NONE, List.of("minecraft:ruined_portal", "minecraft:ruined_portal_"), () -> new ItemStack(Material.OBSIDIAN)),
