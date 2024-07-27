@@ -112,6 +112,10 @@ public final class DamageCalculationEvent extends Event {
         postDamageActions.add(new PostDamageAction(ignoreCancelled, callback));
     }
 
+    public void addPostDamageAction(Runnable callback) {
+        addPostDamageAction(true, callback);
+    }
+
     /**
      * Internal use only!
      */
@@ -119,7 +123,9 @@ public final class DamageCalculationEvent extends Event {
         if (postDamageActions == null) return;
         Bukkit.getScheduler().runTask(MytemsPlugin.getInstance(), () -> {
                 for (PostDamageAction it : postDamageActions) {
-                    if (it.ignoreCancelled() && calc.getEvent().isCancelled()) continue;
+                    if (!it.ignoreCancelled() && calc.getEvent().isCancelled()) {
+                        continue;
+                    }
                     it.callback().run();
                 }
             });

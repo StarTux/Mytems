@@ -93,7 +93,7 @@ public abstract class CactusCostume implements GearItem {
                 }
                 if (totalDamage <= 0) return;
                 final double damage = Math.min(4.0, (double) totalDamage);
-                event.addPostDamageAction(true, () -> {
+                event.addPostDamageAction(() -> {
                         if (attacker.isDead()) return;
                         attacker.damage(damage);
                         if (attacker instanceof Player attackerPlayer) {

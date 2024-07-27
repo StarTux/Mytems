@@ -73,8 +73,6 @@ public final class FlameShield extends AculaItem {
         if (slot != player.getHandRaised()) return;
         if (!(event.getEntityDamageEvent() instanceof EntityDamageByEntityEvent event2)) return;
         final Entity attacker = event2.getDamager();
-        event.addPostDamageAction(true, () -> {
-                attacker.setFireTicks(60);
-            });
+        event.addPostDamageAction(() -> attacker.setFireTicks(60));
     }
 }

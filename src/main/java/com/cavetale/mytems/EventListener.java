@@ -631,9 +631,12 @@ public final class EventListener implements Listener {
 
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = false)
     private void onEntityDamageCalculateHighest(EntityDamageEvent event) {
-        if (damageCalculationEvent == null) return;
+        if (damageCalculationEvent == null) {
+            return;
+        }
         if (damageCalculationEvent.getEntityDamageEvent() != event) {
             damageCalculationEvent = null;
+            return;
         }
         if (damageCalculationEvent.isHandled() && !event.isCancelled()) {
             damageCalculationEvent.getCalculation().apply();

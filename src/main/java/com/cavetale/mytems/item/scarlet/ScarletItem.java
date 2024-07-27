@@ -236,7 +236,7 @@ public abstract class ScarletItem implements GearItem {
             // Emulate Knockback
             LivingEntity target = event.getTarget();
             if (target != null && (isEntityAttack || isSweepAttack)) {
-                event.addPostDamageAction(true, () -> {
+                event.addPostDamageAction(() -> {
                         if (target.isDead()) return;
                         double resist = target.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).getValue();
                         if (resist >= 1.0) return;
@@ -316,7 +316,7 @@ public abstract class ScarletItem implements GearItem {
                 }
                 if (totalDamage <= 0) return;
                 final double damage = Math.min(4.0, (double) totalDamage);
-                event.addPostDamageAction(true, () -> {
+                event.addPostDamageAction(() -> {
                         if (attacker.isDead()) return;
                         attacker.damage(damage);
                         if (attacker instanceof Player attackerPlayer) {
