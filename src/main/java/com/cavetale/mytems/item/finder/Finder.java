@@ -12,6 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.mytems.MytemsPlugin.plugin;
 import static java.util.Objects.requireNonNull;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
@@ -97,6 +98,7 @@ public final class Finder implements Mytem {
         player.sendMessage(textOfChildren(key, text(" You discovered this ", GRAY),
                                           foundType.getChatIcon(),
                                           text(foundType.getDisplayName(), foundType.getRequiredTier().getColor())));
+        plugin().getLogger().info(player.getName() + " discovered " + foundType + " at " + structure.getBoundingBox().getCenter());
     }
 
     @Override
