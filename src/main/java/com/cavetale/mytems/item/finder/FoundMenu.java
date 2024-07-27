@@ -65,7 +65,7 @@ public final class FoundMenu {
                                           textOfChildren(text(tiny("distance ca"), GRAY), text(" " + found.distance() + " blocks", WHITE)),
                                           (found.structure().isDiscovered()
                                            ? textOfChildren(Mytems.CROSSED_CHECKBOX, text(" already discovered", RED))
-                                           : textOfChildren(Mytems.CHECKED_CHECKBOX, text(" undiscovered", RED))),
+                                           : textOfChildren(Mytems.CHECKED_CHECKBOX, text(" undiscovered", GREEN))),
                                           textOfChildren(Mytems.MOUSE_LEFT, text(" Locate", GRAY))));
                     meta.addItemFlags(ItemFlag.values());
                 });
