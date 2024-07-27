@@ -62,8 +62,11 @@ public final class FoundMenu {
             ItemStack icon = found.type().getIcon();
             icon.editMeta(meta -> {
                     tooltip(meta, List.of(text(found.type().getDisplayName(), found.type().getRequiredTier().getColor()),
-                                             textOfChildren(text(tiny("distance ca"), GRAY), text(" " + found.distance() + " blocks", WHITE)),
-                                             textOfChildren(Mytems.MOUSE_LEFT, text(" Locate", GRAY))));
+                                          textOfChildren(text(tiny("distance ca"), GRAY), text(" " + found.distance() + " blocks", WHITE)),
+                                          (found.structure().isDiscovered()
+                                           ? textOfChildren(Mytems.CROSSED_CHECKBOX, text(" already discovered", RED))
+                                           : textOfChildren(Mytems.CHECKED_CHECKBOX, text(" undiscovered", RED))),
+                                          textOfChildren(Mytems.MOUSE_LEFT, text(" Locate", GRAY))));
                     meta.addItemFlags(ItemFlag.values());
                 });
             gui.setItem(slot, icon, click -> {
@@ -102,7 +105,7 @@ public final class FoundMenu {
             }
             if (!findable.contains(foundType)) continue;
             int dist = structure.getBoundingBox().getCenter().maxHorizontalDistance(center);
-            Found found = new Found(foundType, structure.getBoundingBox().getCenter(), dist);
+            Found found = new Found(structure, foundType, structure.getBoundingBox().getCenter(), dist);
             if (result.contains(found)) continue;
             result.add(found);
         }
