@@ -21,10 +21,14 @@ import static net.kyori.adventure.text.format.NamedTextColor.*;
 @RequiredArgsConstructor
 public enum FinderStat implements UpgradableStat {
     RANGE(Vec2i.of(4, 0), text("Range", GOLD), Mytems.YARDSTICK::createIcon,
-          List.of(new RangeLevel(1, 200, FinderTier.STRUCTURE),
-                  new RangeLevel(2, 300, FinderTier.SECRET),
-                  new RangeLevel(3, 400, FinderTier.MYSTIC),
-                  new RangeLevel(4, 500, FinderTier.MASTER)),
+          List.of(new RangeLevel(1, 150, FinderTier.STRUCTURE),
+                  new RangeLevel(2, 200, FinderTier.STRUCTURE),
+                  new RangeLevel(3, 250, FinderTier.STRUCTURE),
+                  new RangeLevel(4, 300, FinderTier.SECRET),
+                  new RangeLevel(5, 350, FinderTier.SECRET),
+                  new RangeLevel(6, 400, FinderTier.MYSTIC),
+                  new RangeLevel(7, 450, FinderTier.MYSTIC),
+                  new RangeLevel(8, 500, FinderTier.MASTER)),
           List.of(), List.of()),
     // Start
     TREASURE(Vec2i.of(4, 2), FinderTier.STRUCTURE, "Treasure", () -> new ItemStack(Material.CHEST_MINECART), List.of()),
@@ -36,7 +40,7 @@ public enum FinderStat implements UpgradableStat {
     CASTLE(Vec2i.of(6, 3), FinderTier.SECRET, "Castles", () -> new ItemStack(Material.ENDER_EYE), List.of(VILLAIN)),
     HIDDEN(Vec2i.of(6, 4), FinderTier.MYSTIC, "Hidden", Mytems.CAVETALE_DUNGEON::createIcon, List.of(CASTLE)),
     // Final
-    TRIAL_CHAMBER(Vec2i.of(4, 4), FinderTier.MASTER, "Bosses", () -> new ItemStack(Material.TRIAL_KEY), List.of(HIDDEN, ARCHAEOLOGY)),
+    TRIAL_CHAMBER(Vec2i.of(4, 4), FinderTier.MASTER, "Trial", () -> new ItemStack(Material.TRIAL_KEY), List.of(HIDDEN, ARCHAEOLOGY)),
     ;
 
     public static final FinderStat NONE = null;
