@@ -11,6 +11,8 @@ import com.cavetale.mytems.util.Gui;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.EnumSet;
+import java.util.Iterator;
 import java.util.List;
 import lombok.Value;
 import net.kyori.adventure.text.Component;
@@ -33,7 +35,6 @@ import static net.kyori.adventure.text.format.TextDecoration.*;
 
 @Value
 public final class FoundMenu {
-    private static final int SIZE = 9 * 6;
     private final Player player;
     private final ItemStack item;
     private final FinderTag tag;
@@ -52,12 +53,13 @@ public final class FoundMenu {
                                          world.getMaxHeight(),
                                          playerVector.z + range);
         final List<Found> foundList = find(world, cuboid, playerVector);
+        final int size = 9 * Math.min(6, (foundList.size() - 1) / 9 + 1);
         Gui gui = new Gui()
-            .size(SIZE)
+            .size(size)
             .title(textOfChildren(mytems, mytems.getMytem().getDisplayName()))
             .layer(GuiOverlay.BLANK, tier.getColor())
             .layer(GuiOverlay.TITLE_BAR, GRAY);
-        for (int i = 0; i < foundList.size() && i < SIZE; i += 1) {
+        for (int i = 0; i < foundList.size() && i < size; i += 1) {
             final int slot = i;
             final Found found = foundList.get(i);
             ItemStack icon = found.type().getIcon();
@@ -86,7 +88,7 @@ public final class FoundMenu {
             gui.highlight(slot, found.type().getRequiredTier().getColor());
         }
         if (foundList.isEmpty()) {
-            gui.setItem(4, 3, Mytems.NO.createIcon(List.of(text("Nothing found!", color(0xFF0000)))), null);
+            gui.setItem(size / 2, Mytems.NO.createIcon(List.of(text("Nothing found!", color(0xFF0000)))), null);
             player.playSound(location, Sound.ITEM_LODESTONE_COMPASS_LOCK, SoundCategory.MASTER, 1.0f, 0.5f);
         } else {
             player.playSound(location, Sound.ITEM_LODESTONE_COMPASS_LOCK, SoundCategory.MASTER, 1.0f, 1.25f);
@@ -111,6 +113,15 @@ public final class FoundMenu {
             result.add(found);
         }
         Collections.sort(result, Comparator.comparing(Found::distance));
+        final var uniques = EnumSet.noneOf(FoundType.class);
+        for (Iterator<Found> iter = result.iterator(); iter.hasNext();) {
+            final Found found = iter.next();
+            if (uniques.contains(found.type())) {
+                iter.remove();
+            } else if (!found.structure().isDiscovered()) {
+                uniques.add(found.type());
+            }
+        }
         return result;
     }
 }
