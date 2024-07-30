@@ -33,6 +33,7 @@ import static net.kyori.adventure.text.format.TextDecoration.*;
 
 @Value
 public final class FoundMenu {
+    private static final int SIZE = 9 * 6;
     private final Player player;
     private final ItemStack item;
     private final FinderTag tag;
@@ -52,13 +53,13 @@ public final class FoundMenu {
                                          playerVector.z + range);
         final List<Found> foundList = find(world, cuboid, playerVector);
         Gui gui = new Gui()
-            .size(9 * 6)
+            .size(SIZE)
             .title(textOfChildren(mytems, mytems.getMytem().getDisplayName()))
             .layer(GuiOverlay.BLANK, tier.getColor())
             .layer(GuiOverlay.TITLE_BAR, GRAY);
-        int nextSlot = 0;
-        for (Found found : foundList) {
-            final int slot = nextSlot++;
+        for (int i = 0; i < foundList.size() && i < SIZE; i += 1) {
+            final int slot = i;
+            final Found found = foundList.get(i);
             ItemStack icon = found.type().getIcon();
             icon.editMeta(meta -> {
                     tooltip(meta, List.of(text(found.type().getDisplayName(), found.type().getRequiredTier().getColor()),
