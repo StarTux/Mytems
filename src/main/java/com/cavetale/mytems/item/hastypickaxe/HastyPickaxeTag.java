@@ -44,4 +44,9 @@ public abstract class HastyPickaxeTag extends UpgradableItemTag {
     public final boolean shouldAutoPlaceArrows() {
         return true;
     }
+
+    @Override
+    public final int getRequiredXpFromLevel(int theCurrentLevel) {
+        return 150 * (1 + theCurrentLevel);
+    }
 }
