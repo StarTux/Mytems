@@ -21,7 +21,7 @@ public enum HastyPickaxeTier implements UpgradableItemTier {
     DIAMOND(3, Mytems.DIAMOND_HASTY_PICKAXE, HastyPickaxeTag.Diamond.class, HastyPickaxeTag.Diamond::new,
             text("Diamond Hasty Pickaxe", color(0x27B29A)), color(0x27B29A)),
     RUBY(4, Mytems.RUBY_HASTY_PICKAXE, HastyPickaxeTag.Ruby.class, HastyPickaxeTag.Ruby::new,
-         text("Ruby Hasty Pickaxe", color(0xC7031F)), color(0xC7031F)),
+         text("Ruby Hasty Pickaxe", color(0xe46868)), color(0xe46868)),
     ;
 
     private final int tier;
