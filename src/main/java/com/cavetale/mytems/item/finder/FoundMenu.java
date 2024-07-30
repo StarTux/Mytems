@@ -118,7 +118,7 @@ public final class FoundMenu {
             final Found found = iter.next();
             if (uniques.contains(found.type())) {
                 iter.remove();
-            } else if (!found.structure().isDiscovered()) {
+            } else {
                 uniques.add(found.type());
             }
         }
