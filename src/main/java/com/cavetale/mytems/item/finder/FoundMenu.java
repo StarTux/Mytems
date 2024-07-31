@@ -2,6 +2,7 @@ package com.cavetale.mytems.item.finder;
 
 import com.cavetale.core.font.GuiOverlay;
 import com.cavetale.core.struct.Cuboid;
+import com.cavetale.core.struct.Vec2i;
 import com.cavetale.core.struct.Vec3i;
 import com.cavetale.core.structure.Structure;
 import com.cavetale.core.structure.Structures;
@@ -11,7 +12,7 @@ import com.cavetale.mytems.util.Gui;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
-import java.util.EnumSet;
+import java.util.EnumMap;
 import java.util.Iterator;
 import java.util.List;
 import lombok.Value;
@@ -52,7 +53,7 @@ public final class FoundMenu {
                                          playerVector.x + range,
                                          world.getMaxHeight(),
                                          playerVector.z + range);
-        final List<Found> foundList = find(world, cuboid, playerVector);
+        final List<Found> foundList = find(world, cuboid, playerVector.toVec2i());
         final int size = 9 * Math.min(6, (foundList.size() - 1) / 9 + 1);
         Gui gui = new Gui()
             .size(size)
@@ -75,7 +76,7 @@ public final class FoundMenu {
             gui.setItem(slot, icon, click -> {
                     if (!click.isLeftClick()) return;
                     item.editMeta(CompassMeta.class, meta -> {
-                            Location lodestone = found.vector().toCenterLocation(world);
+                            final Location lodestone = found.vector().toCenterLocation(world);
                             lodestone.setY(location.getY());
                             meta.setLodestone(lodestone);
                             meta.setLodestoneTracked(false);
@@ -97,29 +98,42 @@ public final class FoundMenu {
         gui.open(player);
     }
 
-    public List<Found> find(World world, Cuboid cuboid, Vec3i center) {
+    public List<Found> find(World world, Cuboid cuboid, Vec2i center) {
         final List<Found> result = new ArrayList<>();
         final List<FoundType> findable = tag.getFindableStructures();
+        final int range = tag.getRange();
         for (Structure structure : Structures.get().getStructuresWithin(world, cuboid)) {
             FoundType foundType = FoundType.of(structure.getKey());
             if (foundType == null) {
                 plugin().getLogger().warning("[Finder] Unknown structure: " + structure.getKey());
                 continue;
             }
-            if (!findable.contains(foundType)) continue;
-            int dist = structure.getBoundingBox().getCenter().maxHorizontalDistance(center);
-            Found found = new Found(structure, foundType, structure.getBoundingBox().getCenter(), dist);
-            if (result.contains(found)) continue;
+            if (!findable.contains(foundType)) {
+                continue;
+            }
+            final int dist = structure.getBoundingBox().getCenter().toVec2i().roundedDistance(center);
+            if (dist > range) {
+                continue;
+            }
+            final Found found = new Found(structure, foundType, structure.getBoundingBox().getRandomVector(), dist);
             result.add(found);
         }
+        // Filter only the nearest structure
         Collections.sort(result, Comparator.comparing(Found::distance));
-        final var uniques = EnumSet.noneOf(FoundType.class);
+        final var uniques = new EnumMap<FoundType, Found>(FoundType.class);
         for (Iterator<Found> iter = result.iterator(); iter.hasNext();) {
             final Found found = iter.next();
-            if (uniques.contains(found.type())) {
-                iter.remove();
+            final Found old = uniques.get(found.type());
+            if (old != null) {
+                // When another structure overlaps with the nearest
+                // one, we leave it in the result to avoid confusion.
+                // This happens frequently with mineshafts, which can
+                // spawn stacked on different Y levels.
+                if (!old.structure().getBoundingBox().overlapsHorizontally(found.structure().getBoundingBox())) {
+                    iter.remove();
+                }
             } else {
-                uniques.add(found.type());
+                uniques.put(found.type(), found);
             }
         }
         return result;
