@@ -23,7 +23,6 @@ import static com.cavetale.core.font.Unicode.tiny;
 import static com.cavetale.mytems.MytemsPlugin.namespacedKey;
 import static com.cavetale.mytems.util.Items.tooltip;
 import static com.cavetale.mytems.util.Text.roman;
-import static net.kyori.adventure.text.Component.space;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
@@ -358,8 +357,9 @@ public abstract class UpgradableItemTag extends MytemTag {
         }
         if (result) {
             Component message = textOfChildren(getUpgradableItemTier().getMytems(),
+                                               text(tiny(" lv")),
                                                text(level),
-                                               space(),
+                                               text(tiny(" xp")),
                                                text(superscript(xp)),
                                                text("/"),
                                                text(subscript(getRequiredXp())))

@@ -1,16 +1,19 @@
 package com.cavetale.mytems.item.finder;
 
-import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
+import com.cavetale.core.event.structure.PlayerDiscoverStructureEvent;
 import com.cavetale.core.structure.Structure;
-import com.cavetale.core.structure.Structures;
 import com.cavetale.core.util.Json;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
-import org.bukkit.block.Block;
+import org.bukkit.Bukkit;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
 import static java.util.Objects.requireNonNull;
@@ -19,7 +22,7 @@ import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 @Getter
-public final class Finder implements Mytem {
+public final class Finder implements Mytem, Listener {
     private final Mytems key;
     private final FinderTier tier;
     private ItemStack prototype;
@@ -38,6 +41,7 @@ public final class Finder implements Mytem {
         prototype.editMeta(meta -> {
                 key.markItemMeta(meta);
             });
+        Bukkit.getPluginManager().registerEvents(this, plugin());
     }
 
     @Override
@@ -62,43 +66,53 @@ public final class Finder implements Mytem {
         return itemStack;
     }
 
-    @Override
-    public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
-        if (!event.hasBlock()) return;
-        onClick(player, item, event.getClickedBlock());
-    }
-
-    @Override
-    public void onPlayerLeftClick(PlayerInteractEvent event, Player player, ItemStack item) {
-        if (!event.hasBlock()) return;
-        onClick(player, item, event.getClickedBlock());
-    }
-
-    private void onClick(Player player, ItemStack item, Block block) {
-        final Structure structure = Structures.get().getStructureAt(block);
-        if (structure == null || structure.isDiscovered()) {
-            return;
+    /**
+     * Attempt to give finder xp for the given structure to a Finder
+     * item.  This will check if the item is a Finder and can receive
+     * xp for the structure in question.
+     *
+     * @return true if xp were given, false otherwise.
+     */
+    private boolean giveFinderXp(Player player, Structure structure, FoundType foundType, ItemStack item) {
+        if (!key.isItem(item)) return false;
+        final FinderTag tag = serializeTag(item);
+        if (!tag.getFindableStructures().contains(foundType)) {
+            return false;
         }
+        if (tag.addXpAndNotify(player, foundType.getXp())) {
+            tag.store(item);
+        }
+        player.sendMessage(textOfChildren(key, text("You discovered this ", GRAY),
+                                          foundType.getChatIcon(),
+                                          text(foundType.getDisplayName(), foundType.getRequiredTier().getColor())));
+        player.playSound(player.getLocation(), Sound.ITEM_LODESTONE_COMPASS_LOCK, SoundCategory.MASTER, 1f, 2f);
+        plugin().getLogger().info("[" + key + "] " + player.getName() + " discovered " + foundType + " " + structure.getWorldName() + "/" + structure.getInternalId());
+        return true;
+    }
+
+    /**
+     * When a player discovers a structure. try to xp to any Finder
+     * item in their inventory, preferrably in their hands.
+     */
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
+    private void onPlayerDiscoverStructure(PlayerDiscoverStructureEvent event) {
+        final Structure structure = event.getStructure();
         final FoundType foundType = FoundType.of(structure.getKey());
         if (foundType == null || foundType.isDisabled()) {
             return;
         }
-        if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) {
+        final Player player = event.getPlayer();
+        if (giveFinderXp(player, structure, foundType, player.getInventory().getItemInMainHand())) {
             return;
         }
-        final FinderTag tag = serializeTag(item);
-        if (!tag.getFindableStructures().contains(foundType)) {
+        if (giveFinderXp(player, structure, foundType, player.getInventory().getItemInOffHand())) {
             return;
         }
-        if (!tag.addXpAndNotify(player, foundType.getXp())) {
-            return;
+        for (int i = 0; i < player.getInventory().getSize(); i += 1) {
+            if (giveFinderXp(player, structure, foundType, player.getInventory().getItem(i))) {
+                return;
+            }
         }
-        structure.setDiscovered(true);
-        tag.store(item);
-        player.sendMessage(textOfChildren(key, text(" You discovered this ", GRAY),
-                                          foundType.getChatIcon(),
-                                          text(foundType.getDisplayName(), foundType.getRequiredTier().getColor())));
-        plugin().getLogger().info(player.getName() + " discovered " + foundType + " at " + structure.getBoundingBox().getCenter());
     }
 
     @Override
