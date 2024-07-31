@@ -85,7 +85,7 @@ public final class HastyPickaxe implements Mytem {
         onBreak(player, block, item);
         final HastyPickaxeTag tag = serializeTag(item);
         final int radius = tag.getEffectiveUpgradeLevel(HastyPickaxeStat.RADIUS);
-        if (radius > 0 && STONE_TYPES.contains(block.getType())) {
+        if (radius > 0 && !player.isSneaking() && STONE_TYPES.contains(block.getType())) {
             Bukkit.getScheduler().runTask(plugin(), () -> {
                     final int count = breakRadius(player, block, item,  2 + radius - 1);
                 });
