@@ -51,14 +51,11 @@ public final class UpgradableItemMenu {
         gui = new Gui()
             .size(upgradableItem.getMenuSize())
             .title(textOfChildren(itemTier.getMytems(),
+                                  text(tiny("up"), GRAY), text(tag.countTotalUpgrades(), WHITE),
                                   space(),
-                                  text(tiny("lv"), GRAY),
-                                  text(tag.getLevel(), WHITE, BOLD),
+                                  text(tiny("lv"), GRAY), text(tag.getLevel(), WHITE, BOLD),
                                   space(),
-                                  text(tiny("xp"), GRAY),
-                                  text(superscript(tag.getXp()), WHITE),
-                                  text("/", GRAY),
-                                  text(subscript(tag.getRequiredXp()), WHITE)));
+                                  text(tiny("xp"), GRAY), text(superscript(tag.getXp()), WHITE), text("/", GRAY), text(subscript(tag.getRequiredXp()), WHITE)));
         gui.layer(GuiOverlay.BLANK, menuColor);
         gui.layer(GuiOverlay.TITLE_BAR, menuColor);
         for (UpgradableStat stat : upgradableItem.getStats()) {
@@ -165,9 +162,6 @@ public final class UpgradableItemMenu {
             if (status.isDisabled()) {
                 // Disabled, show X
                 highlightColor = null;
-            } else if (status.isLocked()) {
-                // Locked, show keyhole
-                highlightColor = null;
             } else if (status.isUpgradable()) {
                 highlightColor = BLUE;
             } else if (!status.hasCurrentLevel()) {
@@ -176,7 +170,7 @@ public final class UpgradableItemMenu {
                 } else {
                     highlightColor = null;
                 }
-            } else if (status.getCurrentLevel() != null) {
+            } else if (status.hasCurrentLevel()) {
                 final float percentage = (float) status.getCurrentLevel().getLevel() / (float) stat.getMaxLevel().getLevel();
                 final float value = (0.35f + percentage) / 1.35f;
                 highlightColor = lerp(value, BLACK, menuColor);
