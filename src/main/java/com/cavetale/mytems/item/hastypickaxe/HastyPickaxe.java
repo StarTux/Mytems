@@ -233,6 +233,8 @@ public final class HastyPickaxe implements Mytem {
 
     private boolean isEndPillarBlock(Block block) {
         if (block.getWorld().getEnvironment() != World.Environment.THE_END) return false;
+        if (Math.abs(block.getX()) > 64) return false;
+        if (Math.abs(block.getZ()) > 64) return false;
         // We assume that this is an end pillar block if it is a lone
         // bedrock block, with no other bedrock around.  This should
         // reasonably confirm that it is neither the End Portal nor an
