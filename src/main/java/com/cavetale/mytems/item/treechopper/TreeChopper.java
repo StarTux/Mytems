@@ -5,7 +5,6 @@ import com.cavetale.core.util.Json;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
-import com.cavetale.mytems.util.Items;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
@@ -17,7 +16,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.exploits.PlayerPlacedBlocks.isPlayerPlaced;
 import static net.kyori.adventure.text.Component.text;
@@ -41,13 +39,7 @@ public final class TreeChopper implements Mytem {
     public void enable() {
         displayName = tier.getDisplayName();
         prototype = new ItemStack(key.material);
-        prototype.editMeta(meta -> {
-                key.markItemMeta(meta);
-                Items.clearAttributes(meta);
-                meta.setUnbreakable(true);
-                meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
-                meta.setEnchantmentGlintOverride(false);
-            });
+        prototype.editMeta(meta -> key.markItemMeta(meta));
         tier.createTag().store(prototype);
         // Commands
         commandNode = MytemsPlugin.getInstance().getMytemsCommand().registerItemCommand(key)

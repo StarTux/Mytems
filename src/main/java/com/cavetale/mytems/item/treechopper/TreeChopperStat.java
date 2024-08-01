@@ -36,6 +36,7 @@ public enum TreeChopperStat implements UpgradableStat {
                  new ChopLevel(6, () -> new ItemStack(Material.OAK_LOG),
                                TreeChopperTier.IRON)),
          List.of(), List.of()),
+    // Leaves, Left
     LEAF(Vec2i.of(2, 2), text("Leaf Blower"), () -> new ItemStack(Material.OAK_LEAVES),
          List.of(new LeafLevel(1, () -> new ItemStack(Material.OAK_LEAVES),
                                TreeChopperTier.IRON),
@@ -46,7 +47,7 @@ public enum TreeChopperStat implements UpgradableStat {
                  new LeafLevel(4, () -> new ItemStack(Material.OAK_LEAVES),
                                TreeChopperTier.IRON)),
          List.of(CHOP), List.of()),
-    FORTUNE(Vec2i.of(2, 1), text("Fortune"), () -> Mytems.DICE.createIcon(),
+    FORTUNE(Vec2i.of(2, 0), text("Fortune"), () -> Mytems.DICE.createIcon(),
             List.of(new FortuneLevel(1, Mytems.DICE::createIcon,
                                      TreeChopperTier.IRON),
                     new FortuneLevel(2, Mytems.DICE::createIcon,
@@ -59,7 +60,7 @@ public enum TreeChopperStat implements UpgradableStat {
             return List.of(SILK);
         }
     },
-    SILK(Vec2i.of(2, 3), text("Shears"), () -> new ItemStack(Material.SHEARS),
+    SILK(Vec2i.of(2, 4), text("Shears"), () -> new ItemStack(Material.SHEARS),
          List.of(new TreeChopperStatLevel(1, () -> new ItemStack(Material.SHEARS, 1),
                                           List.of(text("Chopped leaves drop"),
                                                   text("as blocks")),
@@ -74,30 +75,37 @@ public enum TreeChopperStat implements UpgradableStat {
             return List.of(FORTUNE);
         }
     },
-    REPLANT(Vec2i.of(1, 2), text("Replant"), () -> new ItemStack(Material.OAK_SAPLING),
+    REPLANT(Vec2i.of(0, 2), text("Replant"), () -> new ItemStack(Material.OAK_SAPLING),
             List.of(new TreeChopperStatLevel(1, () -> new ItemStack(Material.OAK_SAPLING),
                                              List.of(text("Chopped trees are"),
                                                      text("instantly replanted")),
-                                             TreeChopperTier.IRON)),
+                                             TreeChopperTier.GOLD)),
             List.of(TreeChopperStat.LEAF), List.of()),
     PICKUP(Vec2i.of(4, 0), text("Magnet"), Mytems.MAGNET::createIcon,
            List.of(new TreeChopperStatLevel(1, Mytems.MAGNET::createIcon,
                                             List.of(text("Pick up broken blocks")),
                                             TreeChopperTier.IRON)),
            List.of(CHOP), List.of()),
+    // Speed, Right
     SPEED(Vec2i.of(6, 2), text("Speed"), () -> new ItemStack(Material.SUGAR),
           List.of(new SpeedLevel(1, () -> new ItemStack(Material.SUGAR),
                                  TreeChopperTier.IRON),
-                  new SpeedLevel(2, () -> new ItemStack(Material.SUGAR),
+                  new SpeedLevel(2, () -> new ItemStack(Material.SUGAR, 2),
                                  TreeChopperTier.IRON),
-                  new SpeedLevel(3, () -> new ItemStack(Material.SUGAR),
+                  new SpeedLevel(3, () -> new ItemStack(Material.SUGAR, 3),
                                  TreeChopperTier.IRON),
-                  new SpeedLevel(4, () -> new ItemStack(Material.SUGAR),
+                  new SpeedLevel(4, () -> new ItemStack(Material.SUGAR, 4),
                                  TreeChopperTier.IRON),
-                  new SpeedLevel(5, () -> new ItemStack(Material.SUGAR),
+                  new SpeedLevel(5, () -> new ItemStack(Material.SUGAR, 5),
                                  TreeChopperTier.IRON)),
-          List.of(TreeChopperStat.CHOP), List.of()) {
-
+          List.of(TreeChopperStat.CHOP), List.of()),
+    EFFICIENCY(Vec2i.of(7, 2), text("Efficiency"), () -> new ItemStack(Material.GOLDEN_AXE),
+               List.of(new EfficiencyLevel(1, TreeChopperTier.IRON),
+                       new EfficiencyLevel(2, TreeChopperTier.IRON),
+                       new EfficiencyLevel(3, TreeChopperTier.IRON),
+                       new EfficiencyLevel(4, TreeChopperTier.IRON),
+                       new EfficiencyLevel(5, TreeChopperTier.IRON)),
+               List.of(), List.of(TreeChopperStat.SPEED)) {
         @Override public void removeFromItem(ItemMeta meta) {
             meta.removeEnchant(Enchantment.EFFICIENCY);
         }
@@ -106,45 +114,35 @@ public enum TreeChopperStat implements UpgradableStat {
             meta.addEnchant(Enchantment.EFFICIENCY, upgradeLevel, true);
         }
     },
-    PUNCH(Vec2i.of(7, 2), text("Punching"), () -> new ItemStack(Material.GUNPOWDER),
+    PUNCH(Vec2i.of(8, 2), text("Punching"), () -> new ItemStack(Material.GUNPOWDER),
           List.of(new TreeChopperStatLevel(1, () -> new ItemStack(Material.GUNPOWDER),
                                            List.of(text("Insta chop the root"),
                                                    text("block")),
-                                           TreeChopperTier.IRON)),
-          List.of(), List.of(TreeChopperStat.SPEED)),
-    MUSHROOM(Vec2i.of(6, 1), text("Mushrooms"), () -> new ItemStack(Material.RED_MUSHROOM),
+                                           TreeChopperTier.GOLD)),
+          List.of(), List.of(TreeChopperStat.EFFICIENCY)),
+    MUSHROOM(Vec2i.of(6, 0), text("Mushrooms"), () -> new ItemStack(Material.RED_MUSHROOM),
              List.of(new TreeChopperStatLevel(1, () -> new ItemStack(Material.RED_MUSHROOM),
                                               List.of(text("Chop Huge Mushrooms")),
                                               TreeChopperTier.GOLD)),
              List.of(), List.of(SPEED)),
-    FUNGI(Vec2i.of(6, 0), text("Fungi"), () -> new ItemStack(Material.CRIMSON_FUNGUS),
+    FUNGI(Vec2i.of(7, 0), text("Fungi"), () -> new ItemStack(Material.CRIMSON_FUNGUS),
           List.of(new TreeChopperStatLevel(1, () -> new ItemStack(Material.CRIMSON_FUNGUS),
                                            List.of(text("Chop Crimson Fungus"),
                                                    text("and Warped Fungus")),
                                            TreeChopperTier.GOLD)),
           List.of(MUSHROOM), List.of()),
-    ENCH(Vec2i.of(0, 0), text("Enchanter"), () -> new ItemStack(Material.EXPERIENCE_BOTTLE),
-         List.of(new EnchantLevel(1, () -> new ItemStack(Material.EXPERIENCE_BOTTLE),
-                                  TreeChopperTier.IRON),
-                 new EnchantLevel(2, () -> new ItemStack(Material.EXPERIENCE_BOTTLE),
-                                  TreeChopperTier.IRON),
-                 new EnchantLevel(3, () -> new ItemStack(Material.EXPERIENCE_BOTTLE),
-                                  TreeChopperTier.IRON),
-                 new EnchantLevel(4, () -> new ItemStack(Material.EXPERIENCE_BOTTLE),
-                                  TreeChopperTier.IRON),
-                 new EnchantLevel(5, () -> new ItemStack(Material.EXPERIENCE_BOTTLE),
-                                  TreeChopperTier.IRON),
-                 new EnchantLevel(6, () -> new ItemStack(Material.EXPERIENCE_BOTTLE),
-                                  TreeChopperTier.IRON),
-                 new EnchantLevel(7, () -> new ItemStack(Material.EXPERIENCE_BOTTLE),
-                                  TreeChopperTier.IRON),
-                 new EnchantLevel(8, () -> new ItemStack(Material.EXPERIENCE_BOTTLE),
-                                  TreeChopperTier.IRON),
-                 new EnchantLevel(9, () -> new ItemStack(Material.EXPERIENCE_BOTTLE),
-                                  TreeChopperTier.IRON),
-                 new EnchantLevel(10, () -> new ItemStack(Material.EXPERIENCE_BOTTLE),
-                                  TreeChopperTier.IRON)),
-         List.of(), List.of()),
+    SHROOMLIGHT(Vec2i.of(8, 0), text("Shroomlights"), () -> new ItemStack(Material.SHROOMLIGHT),
+                List.of(new TreeChopperStatLevel(1, () -> new ItemStack(Material.SHROOMLIGHT),
+                                                 List.of(text("Pick up Shroomlights"),
+                                                         text("when chopping Fungi")),
+                                                 TreeChopperTier.GOLD)),
+                List.of(FUNGI), List.of()),
+    // Mangrove, Down
+    MANGROVE(Vec2i.of(4, 4), text("Mangroves"), () -> new ItemStack(Material.MANGROVE_PROPAGULE),
+             List.of(new TreeChopperStatLevel(1, () -> new ItemStack(Material.MANGROVE_PROPAGULE),
+                                              List.of(text("Chop Mangrove Trees")),
+                                              TreeChopperTier.IRON)),
+             List.of(CHOP), List.of()),
     ;
 
     @Value
@@ -234,6 +232,22 @@ public enum TreeChopperStat implements UpgradableStat {
             final int speed = TreeChopperTag.getChoppingSpeed(level);
             return List.of(text("Chop trees " + speed + " times"),
                            text("as fast"));
+        }
+    }
+
+    @Value
+    public static final class EfficiencyLevel implements UpgradableStatLevel {
+        private final int level;
+        private final TreeChopperTier requiredTier;
+
+        @Override
+        public ItemStack getIcon() {
+            return iconize(stack(Material.GOLDEN_AXE, level));
+        }
+
+        @Override
+        public List<Component> getDescription() {
+            return List.of(text("Add Efficiency " + roman(level)));
         }
     }
 

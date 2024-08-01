@@ -32,12 +32,14 @@ import static com.cavetale.mytems.item.treechopper.TreeChopStatus.*;
  */
 @Data @RequiredArgsConstructor
 public final class TreeChop {
+    private static final int MAX_SHROOMLIGHT_BLOCKS = 9;
     protected static final Set<Block> CHOPPING = new HashSet<>();
     private static final List<Face> FACES = Face.all();
     protected final TreeChopperTag tag;
     protected final List<Block> logBlocks = new ArrayList<>();
     protected final List<Block> leafBlocks = new ArrayList<>();
     protected final List<Block> vineBlocks = new ArrayList<>();
+    protected final List<Block> shroomlightBlocks = new ArrayList<>();
     protected final List<Block> saplingBlocks = new ArrayList<>(); // for placement
     protected int minHeight;
     // Used for chopping
@@ -45,7 +47,8 @@ public final class TreeChop {
     protected boolean doVines;
     protected boolean didVines;
     protected boolean doReplant;
-    protected int enchanter;
+    protected boolean doShroomlights;
+    protected boolean didShroomlights;
     protected int pickup;
     protected int brokenBlocks;
 
@@ -76,11 +79,16 @@ public final class TreeChop {
             if (tag.getEffectiveUpgradeLevel(TreeChopperStat.FUNGI) < 1) {
                 return TreeChopStatus.STAT_REQUIRED;
             }
+            doShroomlights = tag.getEffectiveUpgradeLevel(TreeChopperStat.SHROOMLIGHT) > 0;
+        }
+        if (choppedType == ChoppedType.MANGROVE) {
+            if (tag.getEffectiveUpgradeLevel(TreeChopperStat.MANGROVE) < 1) {
+                return TreeChopStatus.STAT_REQUIRED;
+            }
         }
         minHeight = brokenBlock.getY();
         doVines = tag.getEffectiveUpgradeLevel(TreeChopperStat.SILK) >= 2;
         doReplant = tag.getEffectiveUpgradeLevel(TreeChopperStat.REPLANT) >= 1;
-        enchanter = tag.getEffectiveUpgradeLevel(TreeChopperStat.ENCH);
         pickup = tag.getEffectiveUpgradeLevel(TreeChopperStat.PICKUP);
         // Log blocks is initialized with the original block!
         logBlocks.add(brokenBlock);
@@ -134,6 +142,10 @@ public final class TreeChop {
                     if (vineBlocks.size() >= tag.getMaxLeafBlocks()) continue;
                     if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, nbor)) continue;
                     vineBlocks.add(nbor);
+                } else if (doShroomlights && nbor.getType() == Material.SHROOMLIGHT) {
+                    if (shroomlightBlocks.size() >= MAX_SHROOMLIGHT_BLOCKS) continue;
+                    if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, nbor)) continue;
+                    shroomlightBlocks.add(nbor);
                 }
             }
         }
@@ -230,14 +242,12 @@ public final class TreeChop {
                             } else if (ThreadLocalRandom.current().nextInt(20) == 0) {
                                 player.setFoodLevel(Math.max(0, player.getFoodLevel() - 1));
                             }
-                            if (enchanter > 0 && ThreadLocalRandom.current().nextInt(20) < enchanter) {
-                                player.giveExp(1, true);
-                            }
                         }
                         blocksBrokenNow += 1;
                     }
                 }
                 if (blocksBrokenNow > 0) return;
+                // Break leaves
                 for (int i = 0; i <= 2 * speed; i += 1) {
                     if (leafBlockIndex < leafBlocks.size()) {
                         Block leafBlock = leafBlocks.get(leafBlockIndex++);
@@ -248,13 +258,26 @@ public final class TreeChop {
                         leafBlock.breakNaturally(axeItem, true);
                         TreeChopListener.target = null;
                         brokenBlocks += 1;
-                        if (enchanter > 0 && ThreadLocalRandom.current().nextInt(200) < enchanter && player.isOnline()) {
-                            player.giveExp(1, true);
-                        }
                         blocksBrokenNow += 1;
                     }
                 }
                 if (blocksBrokenNow > 0) return;
+                // Break shroomlights
+                if (doShroomlights && !didShroomlights) {
+                    didShroomlights = true;
+                    for (Block shroomlightBlock : shroomlightBlocks) {
+                        if (shroomlightBlock.getType() != Material.SHROOMLIGHT) continue;
+                        if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, shroomlightBlock)) continue;
+                        if (!new PlayerBreakBlockEvent(player, shroomlightBlock, itemStack).callEvent()) continue;
+                        if (pickup > 0) TreeChopListener.target = player.getLocation();
+                        shroomlightBlock.breakNaturally(axeItem, true);
+                        TreeChopListener.target = null;
+                        brokenBlocks += 1;
+                        blocksBrokenNow += 1;
+                    }
+                }
+                if (blocksBrokenNow > 0) return;
+                // Replant
                 if (doReplant) {
                     for (Block saplingBlock : saplingBlocks) {
                         if (!saplingBlock.isEmpty()) continue;

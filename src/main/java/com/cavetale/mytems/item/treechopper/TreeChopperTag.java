@@ -1,12 +1,14 @@
 package com.cavetale.mytems.item.treechopper;
 
 import com.cavetale.mytems.item.upgradable.UpgradableItemTag;
+import com.cavetale.mytems.util.Items;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.kyori.adventure.text.Component;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static net.kyori.adventure.text.Component.text;
 
@@ -53,6 +55,12 @@ public abstract class TreeChopperTag extends UpgradableItemTag {
             legacyConversion();
         }
         super.store(itemStack);
+        itemStack.editMeta(meta -> {
+                Items.clearAttributes(meta);
+                meta.setUnbreakable(true);
+                meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
+                meta.setEnchantmentGlintOverride(false);
+            });
     }
 
     private void legacyConversion() {

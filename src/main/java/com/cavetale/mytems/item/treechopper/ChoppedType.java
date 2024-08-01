@@ -24,7 +24,8 @@ public enum ChoppedType {
            Placeable.SAPLING,
            new MaterialSetTag(null, List.of(Material.AZALEA, Material.FLOWERING_AZALEA)),
            VanillaItems.AZALEA),
-    // MANGROVE(Tag.MANGROVE_LOGS, Material.MANGROVE_LEAVES, Material.MANGROVE_PROPAGULE),
+    MANGROVE(new MaterialSetTag(null, List.of(Material.MANGROVE_ROOTS)).add(Tag.MANGROVE_LOGS.getValues()),
+             Material.MANGROVE_LEAVES, Placeable.SAPLING, Material.MANGROVE_PROPAGULE, VanillaItems.MANGROVE_PROPAGULE),
     RED_MUSHROOM(new MaterialSetTag(null, List.of(Material.MUSHROOM_STEM)),
                  new MaterialSetTag(null, List.of(Material.RED_MUSHROOM_BLOCK)),
                  Placeable.SAPLING,
@@ -112,6 +113,9 @@ final class Placeable {
                 // World Gen
                 Material.GRAVEL,
                 Material.SAND,
+                // Tested, works
+                Material.MUD,
+                Material.MUDDY_MANGROVE_ROOTS,
             }));
 
     public static final Tag<Material> FUNGUS = new MaterialSetTag(null, List.of(new Material[] {
