@@ -108,6 +108,10 @@ public final class Items {
         return item;
     }
 
+    public static ItemStack iconize(Material material) {
+        return iconize(new ItemStack(material));
+    }
+
     public static ItemStack stack(Material material, int size) {
         return stack(new ItemStack(material), size);
     }
