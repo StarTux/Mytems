@@ -1061,8 +1061,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     APRIL_FOOLS(ForbiddenMytem.class, CARROT, 0xF26B, JOKE),
     // Spleef
     COPPER_SPLEEF_SHOVEL(SpleefShovel.class, IRON_SHOVEL, 0xF26C, SPLEEF_SHOVEL),
-    IRON_SPLEEF_SHOVEL(SpleefShovel.class, IRON_SHOVEL, 0xF26D, SPLEEF_SHOVEL),
-    GOLDEN_SPLEEF_SHOVEL(SpleefShovel.class, IRON_SHOVEL, 0xF26E, SPLEEF_SHOVEL),
+    IRON_SPLEEF_SHOVEL(SpleefShovel.class, GOLDEN_SHOVEL, 0xF26D, SPLEEF_SHOVEL),
+    GOLDEN_SPLEEF_SHOVEL(SpleefShovel.class, DIAMOND_SHOVEL, 0xF26E, SPLEEF_SHOVEL),
+    DIAMOND_SPLEEF_SHOVEL(SpleefShovel.class, DIAMOND_SHOVEL, 0xF29E, SPLEEF_SHOVEL),
     // Butterfly
     BLUE_BUTTERFLY(WardrobeItem.class, FEATHER, 0xF26F, (char) 0xF26F, chrarr(0xF26F, 0xF270, 0xF271, 0xF272, 0xF273, 0xF274), BUTTERFLY, Animation.BUTTERFLY),
     CYAN_BUTTERFLY(WardrobeItem.class, FEATHER, 0xF275, (char) 0xF275, chrarr(0xF275, 0xF276, 0xF277, 0xF278, 0xF279, 0xF27A), BUTTERFLY, Animation.BUTTERFLY),
