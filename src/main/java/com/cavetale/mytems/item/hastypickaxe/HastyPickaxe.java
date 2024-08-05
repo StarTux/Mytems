@@ -7,7 +7,6 @@ import com.cavetale.core.util.Json;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.session.Session;
-import com.cavetale.mytems.util.Items;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -28,7 +27,6 @@ import org.bukkit.block.data.type.EndPortalFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import static com.cavetale.core.exploits.PlayerPlacedBlocks.isPlayerPlaced;
@@ -59,14 +57,8 @@ public final class HastyPickaxe implements Mytem {
             throw new IllegalArgumentException("HastyPickaxe.key = " + key);
         }
         prototype = new ItemStack(key.material);
+        prototype.editMeta(meta -> key.markItemMeta(meta));
         tier.createTag().store(prototype);
-        prototype.editMeta(meta -> {
-                key.markItemMeta(meta);
-                Items.clearAttributes(meta);
-                meta.setUnbreakable(true);
-                meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE, ItemFlag.HIDE_ATTRIBUTES, ItemFlag.HIDE_ENCHANTS);
-                meta.setEnchantmentGlintOverride(false);
-            });
     }
 
     @Override
