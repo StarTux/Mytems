@@ -91,6 +91,7 @@ public final class SpleefShovel implements Mytem {
         // Check range
         final int range = tag.getRange();
         final boolean brush = tag.getEffectiveUpgradeLevel(SpleefShovelStat.BRUSH) > 0;
+        final boolean floating = tag.getEffectiveUpgradeLevel(SpleefShovelStat.FLOAT) > 0;
         if (range <= 0) return 0;
         // Check food
         if (player.getGameMode() != GameMode.CREATIVE && player.getFoodLevel() == 0) {
@@ -135,11 +136,9 @@ public final class SpleefShovel implements Mytem {
             }
             final BlockData blockData = breakBlock.getBlockData();
             final Sound breakSound = breakBlock.getBlockSoundGroup().getBreakSound();
-            final boolean breakResult = blockBreakListener().breakBlock(player, silkTouch, breakBlock, e -> {
-                    e.getEntity().teleport(player.getLocation());
-                    e.getEntity().setPickupDelay(0);
-                    e.getEntity().setOwner(player.getUniqueId());
-                });
+            final boolean breakResult = !floating
+                ? blockBreakListener().breakBlockAndPickup(player, silkTouch, breakBlock)
+                : blockBreakListener().breakBlockNoPhysicsAndPickup(player, silkTouch, breakBlock);
             if (!breakResult) {
                 continue;
             }

@@ -24,7 +24,7 @@ import static net.kyori.adventure.text.format.NamedTextColor.*;
 @Getter
 @RequiredArgsConstructor
 public enum SpleefShovelStat implements UpgradableStat {
-    EFFICIENCY(Vec2i.of(4, 1), "Efficiency", () -> iconize(Material.GOLDEN_SHOVEL),
+    EFFICIENCY(Vec2i.of(3, 1), "Efficiency", () -> iconize(Material.GOLDEN_SHOVEL),
                List.of(new EfficiencyLevel(1, SpleefShovelTier.COPPER),
                        new EfficiencyLevel(2, SpleefShovelTier.COPPER),
                        new EfficiencyLevel(3, SpleefShovelTier.COPPER),
@@ -40,21 +40,29 @@ public enum SpleefShovelStat implements UpgradableStat {
         }
     },
     // Range, Left
-    RANGE(Vec2i.of(2, 1), "Range", Mytems.YARDSTICK::createIcon,
+    RANGE(Vec2i.of(5, 1), "Range", Mytems.YARDSTICK::createIcon,
           List.of(new RangeLevel(1, SpleefShovelTier.COPPER),
                   new RangeLevel(2, SpleefShovelTier.IRON),
                   new RangeLevel(3, SpleefShovelTier.GOLD),
                   new RangeLevel(4, SpleefShovelTier.DIAMOND)),
           List.of(EFFICIENCY), List.of()),
-    BRUSH(Vec2i.of(2, 3), "Brush", () -> iconize(Material.BRUSH),
+    FLOAT(Vec2i.of(7, 1), "Floating", () -> iconize(Material.SCAFFOLDING),
+          List.of(new DefaultUpgradableStatLevel(1, () -> iconize(Material.SCAFFOLDING),
+                                                 List.of(text("Falling blocks will"),
+                                                         text("not fall when broken"),
+                                                         text("by range.")),
+                                                 SpleefShovelTier.GOLD)),
+          List.of(RANGE), List.of()),
+    BRUSH(Vec2i.of(5, 3), "Brush", () -> iconize(Material.BRUSH),
           List.of(new DefaultUpgradableStatLevel(1, () -> iconize(Material.BRUSH),
                                                  List.of(text("Suspicious sand and"),
                                                          text("gravel are left"),
-                                                         text("intact")),
-                                                 SpleefShovelTier.IRON)),
+                                                         text("intact when broken"),
+                                                         text("by range.")),
+                                                 SpleefShovelTier.DIAMOND)),
           List.of(RANGE), List.of()),
     // Fortune and Silk, Left
-    SILK_TOUCH(Vec2i.of(6, 1), "Silk Touch", () -> iconize(Material.FEATHER),
+    SILK_TOUCH(Vec2i.of(1, 1), "Silk Touch", () -> iconize(Material.FEATHER),
                List.of(new SilkTouchLevel(1, SpleefShovelTier.COPPER)),
                List.of(EFFICIENCY), List.of()) {
         @Override public void removeFromItem(ItemMeta meta) {
@@ -65,7 +73,7 @@ public enum SpleefShovelStat implements UpgradableStat {
             meta.addEnchant(Enchantment.SILK_TOUCH, upgradeLevel, true);
         }
     },
-    FORTUNE(Vec2i.of(6, 3), "Fortune", () -> iconize(Material.DIAMOND),
+    FORTUNE(Vec2i.of(1, 3), "Fortune", () -> iconize(Material.DIAMOND),
             List.of(new FortuneLevel(1, SpleefShovelTier.IRON),
                     new FortuneLevel(2, SpleefShovelTier.IRON),
                     new FortuneLevel(3, SpleefShovelTier.GOLD)),
