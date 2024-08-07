@@ -26,7 +26,11 @@ public final class SpleefShovelItem implements UpgradableItem {
 
     @Override
     public UpgradableStat statForKey(String key) {
-        return null;
+        try {
+            return SpleefShovelStat.valueOf(key.toUpperCase());
+        } catch (IllegalArgumentException iae) {
+            return null;
+        }
     }
 
     @Override
