@@ -1,6 +1,7 @@
 package com.cavetale.mytems.item.spleef;
 
 import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
+import com.cavetale.core.exploits.PlayerPlacedBlocks;
 import com.cavetale.core.struct.Vec3i;
 import com.cavetale.core.util.Json;
 import com.cavetale.mytems.Mytem;
@@ -21,8 +22,8 @@ import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
@@ -38,7 +39,6 @@ public final class SpleefShovel implements Mytem {
     private final SpleefShovelTier tier;
     private ItemStack prototype;
     private Component displayName;
-    private ItemStack silkTouch;
     private List<Vec3i> faces = new ArrayList<>();
 
     public SpleefShovel(final Mytems mytems) {
@@ -52,8 +52,6 @@ public final class SpleefShovel implements Mytem {
         this.prototype = new ItemStack(key.material);
         tier.createTag().store(prototype);
         prototype.editMeta(meta -> key.markItemMeta(meta));
-        this.silkTouch = new ItemStack(Material.NETHERITE_SHOVEL);
-        silkTouch.editMeta(meta -> meta.addEnchant(Enchantment.SILK_TOUCH, 1, true));
         for (int y = -1; y <= 1; y += 1) {
             for (int z = -1; z <= 1; z += 1) {
                 for (int x = -1; x <= 1; x += 1) {
@@ -78,7 +76,7 @@ public final class SpleefShovel implements Mytem {
         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, event.getBlock())) return;
         final SpleefShovelTag tag = serializeTag(item);
         final int breakRangeCount = breakRange(player, event.getBlock(), item, tag);
-        final int bonusXp = (int) Math.sqrt((double) breakRangeCount);
+        final int bonusXp = (int) Math.cbrt((double) breakRangeCount);
         Bukkit.getScheduler().runTask(plugin(), () -> {
                 if (tag.addXpAndNotify(player, 1 + bonusXp)) {
                     tag.store(item);
@@ -90,16 +88,23 @@ public final class SpleefShovel implements Mytem {
         if (player.isSneaking()) return 0;
         // Check range
         final int range = tag.getRange();
+        if (range <= 0) return 0;
+        final double exactRange = switch (range) {
+        case 1 -> 1.0;
+        case 2 -> 1.5;
+        case 3 -> 2;
+        case 4 -> 2.5;
+        default -> 0.0;
+        };
         final boolean brush = tag.getEffectiveUpgradeLevel(SpleefShovelStat.BRUSH) > 0;
         final boolean floating = tag.getEffectiveUpgradeLevel(SpleefShovelStat.FLOAT) > 0;
-        if (range <= 0) return 0;
         // Check food
         if (player.getGameMode() != GameMode.CREATIVE && player.getFoodLevel() == 0) {
             return 0;
         }
         // Flood fill
         final Vec3i centerVec = Vec3i.of(center);
-        final int rangeSquared = range * range;
+        final double rangeSquared = exactRange * exactRange;
         final List<Block> blockBreakList = new ArrayList<>();
         blockBreakList.add(center);
         final Set<Vec3i> done = new HashSet<>();
@@ -136,9 +141,10 @@ public final class SpleefShovel implements Mytem {
             }
             final BlockData blockData = breakBlock.getBlockData();
             final Sound breakSound = breakBlock.getBlockSoundGroup().getBreakSound();
-            final boolean breakResult = !floating
-                ? blockBreakListener().breakBlockAndPickup(player, silkTouch, breakBlock)
-                : blockBreakListener().breakBlockNoPhysicsAndPickup(player, silkTouch, breakBlock);
+            final boolean wasPlayerPlaced = PlayerPlacedBlocks.isPlayerPlaced(breakBlock);
+            final boolean breakResult = !floating || !checkIfFloating(breakBlock)
+                ? blockBreakListener().breakBlockAndPickup(player, item, breakBlock)
+                : blockBreakListener().breakBlockNoPhysicsAndPickup(player, item, breakBlock);
             if (!breakResult) {
                 continue;
             }
@@ -146,9 +152,62 @@ public final class SpleefShovel implements Mytem {
             final Location location = breakBlock.getLocation().add(0.5, 0.5, 0.5);
             location.getWorld().spawnParticle(Particle.BLOCK, location, 8, 0.0, 0.25, 0.25, 0.25, blockData);
             location.getWorld().playSound(location, breakSound, 0.5f, 1f);
-            count += 1;
+            if (!wasPlayerPlaced) {
+                count += 1;
+            }
         }
         return count;
+    }
+
+    /**
+     * Check if a block has to be broken without physics, provided the
+     * Floating upgrade is unlocked.
+     *
+     * @return true if this block or any adjacend block is floating,
+     * otherwise false.
+     */
+    private static boolean checkIfFloating(Block block) {
+        if (!isFloating(block)) return false;
+        for (BlockFace face : List.of(BlockFace.UP, BlockFace.DOWN, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST)) {
+            if (!isFloating(block.getRelative(face))) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    /**
+     * Check if a single block is considered floating as a helper for
+     * checkIfFloating.
+     */
+    private static boolean isFloating(Block block) {
+        switch (block.getType()) {
+        case SAND:
+        case SUSPICIOUS_SAND:
+        case GRAVEL:
+        case SUSPICIOUS_GRAVEL:
+        case RED_SAND:
+        case BLACK_CONCRETE_POWDER:
+        case BLUE_CONCRETE_POWDER:
+        case BROWN_CONCRETE_POWDER:
+        case CYAN_CONCRETE_POWDER:
+        case GRAY_CONCRETE_POWDER:
+        case GREEN_CONCRETE_POWDER:
+        case LEGACY_CONCRETE_POWDER:
+        case LIGHT_BLUE_CONCRETE_POWDER:
+        case LIGHT_GRAY_CONCRETE_POWDER:
+        case LIME_CONCRETE_POWDER:
+        case MAGENTA_CONCRETE_POWDER:
+        case ORANGE_CONCRETE_POWDER:
+        case PINK_CONCRETE_POWDER:
+        case PURPLE_CONCRETE_POWDER:
+        case RED_CONCRETE_POWDER:
+        case WHITE_CONCRETE_POWDER:
+        case YELLOW_CONCRETE_POWDER:
+            return true;
+        default:
+            return false;
+        }
     }
 
     private static boolean isSuspicious(Material material) {
