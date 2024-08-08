@@ -7,10 +7,7 @@ import java.util.List;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import static com.cavetale.core.font.Unicode.tiny;
-import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
-import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 public abstract class SpleefShovelTag extends UpgradableItemTag {
@@ -63,9 +60,7 @@ public abstract class SpleefShovelTag extends UpgradableItemTag {
         return List.of(text("Excavate a whole area", GRAY),
                        text("all at once at the", GRAY),
                        text("cost of a little", GRAY),
-                       text("extra hunger", GRAY),
-                       empty(),
-                       textOfChildren(text(tiny("range "), GRAY), text(getRange(), WHITE)));
+                       text("extra hunger", GRAY));
     }
 
     @Override
