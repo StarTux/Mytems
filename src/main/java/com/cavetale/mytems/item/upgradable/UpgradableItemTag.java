@@ -73,16 +73,25 @@ public abstract class UpgradableItemTag extends MytemTag {
         final var pdc = itemStack.getItemMeta().getPersistentDataContainer();
         this.xp = Tags.getInt(pdc, namespacedKey(XP), 0);
         this.level = Tags.getInt(pdc, namespacedKey(LEVEL), 0);
-        this.upgrades = new HashMap<>();
         for (var stat : getUpgradableItem().getStats()) {
             final int upgradeLevel = Tags.getInt(pdc, stat.getNamespacedKey(), 0);
-            if (upgradeLevel == 0) continue;
+            if (upgradeLevel <= 0) {
+                continue;
+            }
+            if (upgrades == null) {
+                upgrades = new HashMap<>();
+            }
             upgrades.put(stat.getKey(), upgradeLevel);
         }
         final var disabledKey = namespacedKey(DISABLED);
         if (pdc.has(disabledKey, PersistentDataType.LIST.strings())) {
             for (String key : pdc.get(disabledKey, PersistentDataType.LIST.strings())) {
-                if (getUpgradableItem().statForKey(key) == null) continue;
+                if (getUpgradableItem().statForKey(key) == null) {
+                    continue;
+                }
+                if (upgrades == null || !upgrades.containsKey(key)) {
+                    continue;
+                }
                 if (disabled == null) {
                     disabled = new HashSet<>();
                 }
@@ -102,15 +111,21 @@ public abstract class UpgradableItemTag extends MytemTag {
                 Tags.set(pdc, namespacedKey(XP), xp);
                 Tags.set(pdc, namespacedKey(LEVEL), level);
                 for (UpgradableStat stat : getUpgradableItem().getStats()) {
+                    // Store the value in the item tag
                     final int upgradeLevel = upgrades != null
                         ? upgrades.getOrDefault(stat.getKey(), 0)
                         : 0;
                     if (upgradeLevel == 0) {
                         pdc.remove(stat.getNamespacedKey());
-                        stat.removeFromItem(meta);
                     } else {
                         Tags.set(pdc, stat.getNamespacedKey(), upgradeLevel);
-                        stat.applyToItem(meta, upgradeLevel);
+                    }
+                    // Now enable or disable the effect
+                    final int effectiveLevel = getEffectiveUpgradeLevel(stat);
+                    if (effectiveLevel == 0) {
+                        stat.removeFromItem(meta);
+                    } else {
+                        stat.applyToItem(meta, effectiveLevel);
                     }
                 }
                 if (disabled != null && !disabled.isEmpty()) {
