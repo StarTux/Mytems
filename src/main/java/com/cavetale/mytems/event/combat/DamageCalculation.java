@@ -311,9 +311,16 @@ public final class DamageCalculation {
     public void debugPrint() {
         Logger logger = MytemsPlugin.getInstance().getLogger();
         logger.info("DMG DEBUG " + (attacker != null ? Text.toCamelCase(attacker.getType(), "") : "?")
-                    + (hasProjectile() ? "->" : "v")
+                    + (hasProjectile() ? " -> " : " v ")
                     + (target != null ? Text.toCamelCase(target.getType(), "") : "?")
                     + " " + Text.toCamelCase(event.getCause(), ""));
+        if (projectile instanceof AbstractArrow arrow) {
+            logger.info("Arrow Damage " + fmt(arrow.getDamage()));
+            logger.info("Arrow Crit " + arrow.isCritical());
+            if (arrow.getWeapon() != null) {
+                logger.info("Arrow Weapon " + arrow.getWeapon().getType());
+            }
+        }
         logger.info("Base " + fmt(baseDamage));
         for (DamageFactor it : DamageFactor.values()) {
             if (!event.isApplicable(it.damageModifier)) continue;
