@@ -53,6 +53,7 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
     private final ShulkerBoxListener shulkerBoxListener = new ShulkerBoxListener(this);
     private final OpenShulkerCommand openShulkerCommand = new OpenShulkerCommand(this);
     private final BlockBreakListener blockBreakListener = new BlockBreakListener(this);
+    private final DamageListener damageListener = new DamageListener(this);
     protected final Sessions sessions = new Sessions(this);
     private Map<Mytems, Mytem> mytems = new EnumMap<>(Mytems.class);
     private List<CustomMytemSlot> customMytemSlots = new ArrayList<>();
@@ -72,6 +73,7 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
         shulkerBoxListener.enable();
         openShulkerCommand.enable();
         blockBreakListener.enable();
+        damageListener.enable();
         enableItems();
         fixAllPlayerInventoriesLater();
         sessions.enable();

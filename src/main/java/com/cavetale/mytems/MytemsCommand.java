@@ -491,11 +491,11 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
 
     protected boolean damageCalcToggleDebug(Player player, String[] args) {
         if (args.length != 0) return false;
-        if (plugin.getEventListener().getDamageCalculationDebugPlayers().contains(player.getUniqueId())) {
-            plugin.getEventListener().getDamageCalculationDebugPlayers().remove(player.getUniqueId());
+        if (plugin.getDamageListener().getDamageCalculationDebugPlayers().contains(player.getUniqueId())) {
+            plugin.getDamageListener().getDamageCalculationDebugPlayers().remove(player.getUniqueId());
             player.sendMessage(text("Damage calculation debug spam disabled", YELLOW));
         } else {
-            plugin.getEventListener().getDamageCalculationDebugPlayers().add(player.getUniqueId());
+            plugin.getDamageListener().getDamageCalculationDebugPlayers().add(player.getUniqueId());
             player.sendMessage(text("Damage calculation debug spam enabled", AQUA));
         }
         return true;

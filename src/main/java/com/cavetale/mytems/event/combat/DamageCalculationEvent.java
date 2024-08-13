@@ -1,12 +1,10 @@
 package com.cavetale.mytems.event.combat;
 
-import com.cavetale.mytems.MytemsPlugin;
 import java.util.ArrayList;
 import java.util.function.Function;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.bukkit.Bukkit;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -119,15 +117,14 @@ public final class DamageCalculationEvent extends Event {
     /**
      * Internal use only!
      */
-    public void schedulePostDamageActions() {
+    public void runPostDamageActions() {
         if (postDamageActions == null) return;
-        Bukkit.getScheduler().runTask(MytemsPlugin.getInstance(), () -> {
-                for (PostDamageAction it : postDamageActions) {
-                    if (!it.ignoreCancelled() && calc.getEvent().isCancelled()) {
-                        continue;
-                    }
-                    it.callback().run();
-                }
-            });
+        for (PostDamageAction it : postDamageActions) {
+            if (!it.ignoreCancelled() && calc.getEvent().isCancelled()) {
+                continue;
+            }
+            it.callback().run();
+        }
+        postDamageActions = null;
     }
 }
