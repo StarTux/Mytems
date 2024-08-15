@@ -81,7 +81,7 @@ public abstract class SheepCostume implements GearItem {
             public void onPlayerShearEntity(PlayerShearEntityEvent event, Player player) {
                 if (event.isCancelled()) return;
                 if (!(event.getEntity() instanceof Sheep sheep)) return;
-                if (sheep.isSheared()) return;
+                if (sheep.readyToBeSheared()) return;
                 if (!sheep.getWorld().getGameRuleValue(GameRule.DO_MOB_LOOT)) return;
                 BlockColor blockColor = BlockColor.of(sheep.getColor());
                 Material woolMaterial = blockColor.getMaterial(BlockColor.Suffix.WOOL);
