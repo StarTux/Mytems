@@ -3,9 +3,7 @@ package com.cavetale.mytems;
 import com.cavetale.mytems.event.combat.DamageCalculation;
 import com.cavetale.mytems.event.combat.DamageCalculationEvent;
 import com.cavetale.mytems.gear.SetBonus;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -26,9 +24,20 @@ public final class DamageListener implements Listener {
     public void enable() {
         Bukkit.getPluginManager().registerEvents(this, plugin);
     }
-    
-    private final Set<UUID> damageCalculationDebugPlayers = new HashSet<>();
+
+    private UUID debugPlayerIn;
+    private UUID debugPlayerOut;
     private DamageCalculationEvent damageCalculationEvent;
+
+    public void clearDebugPlayer() {
+        debugPlayerIn = null;
+        debugPlayerOut = null;
+    }
+
+    public void setDebugPlayer(UUID in, UUID out) {
+        debugPlayerIn = in;
+        debugPlayerOut = out;
+    }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     private void onEntityDamageCalculateLow(EntityDamageEvent event) {
@@ -36,10 +45,10 @@ public final class DamageListener implements Listener {
         if (!calc.isValid()) return;
         damageCalculationEvent = new DamageCalculationEvent(calc);
         damageCalculationEvent.callEvent();
-        if (calc.attackerIsPlayer() && damageCalculationDebugPlayers.contains(calc.getAttackerPlayer().getUniqueId())) {
+        if (debugPlayerOut != null && calc.attackerIsPlayer() && debugPlayerOut.equals(calc.getAttackerPlayer().getUniqueId())) {
             damageCalculationEvent.setShouldPrintDebug(true);
         }
-        if (calc.targetIsPlayer() && damageCalculationDebugPlayers.contains(calc.getTargetPlayer().getUniqueId())) {
+        if (debugPlayerIn != null && calc.targetIsPlayer() && debugPlayerIn.equals(calc.getTargetPlayer().getUniqueId())) {
             damageCalculationEvent.setShouldPrintDebug(true);
         }
         if (!damageCalculationEvent.isHandled() && !damageCalculationEvent.isShouldPrintDebug()) {
@@ -59,9 +68,6 @@ public final class DamageListener implements Listener {
         if (damageCalculationEvent.isHandled() && !event.isCancelled()) {
             damageCalculationEvent.getCalculation().apply();
         }
-        if (damageCalculationEvent.isShouldPrintDebug()) {
-            damageCalculationEvent.getCalculation().debugPrint();
-        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = false)
@@ -70,6 +76,9 @@ public final class DamageListener implements Listener {
             return;
         }
         damageCalculationEvent.runPostDamageActions();
+        if (damageCalculationEvent.isShouldPrintDebug()) {
+            damageCalculationEvent.getCalculation().debugPrint();
+        }
         damageCalculationEvent = null;
     }
 

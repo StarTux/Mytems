@@ -9,10 +9,12 @@ import lombok.NonNull;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.AbstractArrow;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Explosive;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.entity.SpectralArrow;
 import org.bukkit.entity.TNTPrimed;
 import org.bukkit.event.entity.EntityDamageByBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -20,7 +22,6 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityDamageEvent.DamageModifier;
 import org.bukkit.inventory.ItemStack;
-import static org.bukkit.event.entity.EntityDamageEvent.DamageCause.*;
 
 /**
  * Turn the cheeseburger that is Minecraft damage back into the cow
@@ -47,6 +48,8 @@ public final class DamageCalculation {
      * amount of the target entity.
      */
     private double absorption; // flat
+    // Custom
+    private BaseDamageModifier baseDamageModifier;
 
     public DamageCalculation(final EntityDamageEvent event) {
         this.event = event;
@@ -107,17 +110,17 @@ public final class DamageCalculation {
         }
         switch (factor) {
         case HELMET:
-            return cause == FALLING_BLOCK;
+            return cause == DamageCause.FALLING_BLOCK;
         case SHIELD:
-            if (cause == ENTITY_ATTACK) return true;
-            if (cause == ENTITY_SWEEP_ATTACK) return true;
-            if (cause == PROJECTILE) {
+            if (cause == DamageCause.ENTITY_ATTACK) return true;
+            if (cause == DamageCause.ENTITY_SWEEP_ATTACK) return true;
+            if (cause == DamageCause.PROJECTILE) {
                 if (projectile instanceof AbstractArrow arrow && arrow.getPierceLevel() > 0) {
                     return false;
                 }
                 return true;
             }
-            if (cause == ENTITY_EXPLOSION) {
+            if (cause == DamageCause.ENTITY_EXPLOSION) {
                 if (explosive instanceof TNTPrimed tnt
                     && (tnt.getSource() == null || tnt.getSource() == target)) {
                     return false;
@@ -195,6 +198,9 @@ public final class DamageCalculation {
      * Apply the results to the event if possible.
      */
     public void apply() {
+        if (baseDamageModifier != null) {
+            baseDamage = baseDamageModifier.computeResult();
+        }
         event.setDamage(DamageModifier.BASE, baseDamage);
         double currentDamage = baseDamage;
         for (DamageFactor it : DamageFactor.values()) {
@@ -204,7 +210,9 @@ public final class DamageCalculation {
             currentDamage *= factor;
             event.setDamage(it.damageModifier, -reduction);
         }
-        this.absorption = target == null ? 0.0 : Math.min(currentDamage, target.getAbsorptionAmount());
+        this.absorption = target == null
+            ? 0.0
+            : Math.min(currentDamage, target.getAbsorptionAmount());
         event.setDamage(DamageModifier.ABSORPTION, -absorption);
         if (event.getFinalDamage() < 0.0) {
             if (event.getFinalDamage() <= -0.01) {
@@ -294,6 +302,38 @@ public final class DamageCalculation {
         return shieldFactor == 0.0;
     }
 
+    public boolean isArrowAttack() {
+        if (!isProjectileAttack() || projectile == null) return false;
+        return projectile instanceof Arrow // TippedArrow is subinterface
+            || projectile instanceof SpectralArrow;
+    }
+
+    public AbstractArrow getArrow() {
+        return isArrowAttack()
+            ? (AbstractArrow) projectile
+            : null;
+    }
+
+    public DamageCause getDamageCause() {
+        return event.getCause();
+    }
+
+    public boolean isProjectileAttack() {
+        switch (event.getCause()) {
+        case PROJECTILE: return true;
+        default: return false;
+        }
+    }
+
+    public boolean isMeleeAttack() {
+        switch (event.getCause()) {
+        case ENTITY_ATTACK:
+        case ENTITY_SWEEP_ATTACK:
+            return true;
+        default: return false;
+        }
+    }
+
     public boolean setIfApplicable(DamageFactor factor, double value) {
         if (!isApplicable(factor)) return false;
         set(factor, value);
@@ -322,6 +362,9 @@ public final class DamageCalculation {
             }
         }
         logger.info("Base " + fmt(baseDamage));
+        if (baseDamageModifier != null) {
+            logger.info("Base Mod " + baseDamageModifier.toString());
+        }
         for (DamageFactor it : DamageFactor.values()) {
             if (!event.isApplicable(it.damageModifier)) continue;
             // if (get(it) == 1.0 && event.getDamage(it.damageModifier) == 0.0) continue;
@@ -385,5 +428,17 @@ public final class DamageCalculation {
             logger.warning("BLOCK " + damagerBlock.getType().name().toLowerCase());
         }
         logger.warning("////////////////////////////////////////");
+    }
+
+    public BaseDamageModifier getOrCreateBaseDamageModifier() {
+        if (baseDamageModifier == null) {
+            baseDamageModifier = new BaseDamageModifier();
+            baseDamageModifier.setBase(baseDamage);
+        }
+        return baseDamageModifier;
+    }
+
+    public boolean hasBaseDamageModifier() {
+        return baseDamageModifier != null;
     }
 }

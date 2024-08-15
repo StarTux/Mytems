@@ -6,6 +6,7 @@ import com.cavetale.core.command.CommandContext;
 import com.cavetale.core.command.CommandNode;
 import com.cavetale.core.command.CommandWarn;
 import com.cavetale.core.item.ItemKinds;
+import com.cavetale.core.playercache.PlayerCache;
 import com.cavetale.core.struct.Cuboid;
 import com.cavetale.core.util.Json;
 import com.cavetale.mytems.custom.NetheriteParityGui;
@@ -139,9 +140,12 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         // Damage Calculation
         CommandNode damageCalcNode = rootNode.addChild("damagecalc")
             .description("Damage calculation commands");
-        damageCalcNode.addChild("toggledebug").denyTabCompletion()
-            .description("Toggle player debug spam")
-            .playerCaller(this::damageCalcToggleDebug);
+        damageCalcNode.addChild("debug")
+            .arguments("<player> in|out")
+            .description("Set debug player spam")
+            .completers(CommandArgCompleter.ONLINE_PLAYERS,
+                        CommandArgCompleter.list(List.of("in", "out")))
+            .senderCaller(this::damageCalcDebug);
         // Bank Teller
         rootNode.addChild("atm").arguments("<player>")
             .description("Open the bank teller")
@@ -489,16 +493,27 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         return true;
     }
 
-    protected boolean damageCalcToggleDebug(Player player, String[] args) {
-        if (args.length != 0) return false;
-        if (plugin.getDamageListener().getDamageCalculationDebugPlayers().contains(player.getUniqueId())) {
-            plugin.getDamageListener().getDamageCalculationDebugPlayers().remove(player.getUniqueId());
-            player.sendMessage(text("Damage calculation debug spam disabled", YELLOW));
+    protected boolean damageCalcDebug(CommandSender sender, String[] args) {
+        if (args.length == 0) {
+            plugin.getDamageListener().clearDebugPlayer();
+            sender.sendMessage(text("Cleared debug player", YELLOW));
+            return true;
+        } else if (args.length == 2) {
+            final PlayerCache target = CommandArgCompleter.requirePlayerCache(args[0]);
+            if ("in".equals(args[1])) {
+                plugin.getDamageListener().setDebugPlayer(target.uuid, null);
+                sender.sendMessage(text("Selected " + target.name + " for debugging incoming damage", YELLOW));
+                return true;
+            } else if ("out".equals(args[1])) {
+                plugin.getDamageListener().setDebugPlayer(null, target.uuid);
+                sender.sendMessage(text("Selected " + target.name + " for debugging outgoing damage", YELLOW));
+                return true;
+            } else {
+                return false;
+            }
         } else {
-            plugin.getDamageListener().getDamageCalculationDebugPlayers().add(player.getUniqueId());
-            player.sendMessage(text("Damage calculation debug spam enabled", AQUA));
+            return false;
         }
-        return true;
     }
 
     private boolean bankTeller(CommandSender sender, String[] args) {
