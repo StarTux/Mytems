@@ -74,6 +74,7 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
         openShulkerCommand.enable();
         blockBreakListener.enable();
         damageListener.enable();
+        new TradeListener().enable();
         enableItems();
         fixAllPlayerInventoriesLater();
         sessions.enable();
