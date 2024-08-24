@@ -50,6 +50,7 @@ public final class DamageCalculation {
     private double absorption; // flat
     // Custom
     private BaseDamageModifier baseDamageModifier;
+    private FinalDamageModifier finalDamageModifier;
 
     public DamageCalculation(final EntityDamageEvent event) {
         this.event = event;
@@ -198,10 +199,13 @@ public final class DamageCalculation {
      * Apply the results to the event if possible.
      */
     public void apply() {
+        // Calculate base damage
         if (baseDamageModifier != null) {
+            baseDamageModifier.setBase(baseDamage);
             baseDamage = baseDamageModifier.computeResult();
         }
         event.setDamage(DamageModifier.BASE, baseDamage);
+        // Apply all modifiers except absorption
         double currentDamage = baseDamage;
         for (DamageFactor it : DamageFactor.values()) {
             if (!event.isApplicable(it.damageModifier)) continue;
@@ -210,10 +214,17 @@ public final class DamageCalculation {
             currentDamage *= factor;
             event.setDamage(it.damageModifier, -reduction);
         }
-        this.absorption = target == null
+        // Absorption is special
+        absorption = target == null
             ? 0.0
             : Math.min(currentDamage, target.getAbsorptionAmount());
+        // Final damage
+        if (finalDamageModifier != null) {
+            finalDamageModifier.setBase(-absorption);
+            absorption = -finalDamageModifier.computeResult();
+        }
         event.setDamage(DamageModifier.ABSORPTION, -absorption);
+        //
         if (event.getFinalDamage() < 0.0) {
             if (event.getFinalDamage() <= -0.01) {
                 errorPrint();
@@ -380,6 +391,9 @@ public final class DamageCalculation {
         logger.info((Math.abs(absorption + event.getDamage(DamageModifier.ABSORPTION)) < 0.001 ? "OK" : "WRONG")
                     + " Absorption"
                     + " " + fmt(absorption) + "|" + fmt(event.getDamage(DamageModifier.ABSORPTION)));
+        if (finalDamageModifier != null) {
+            logger.info("Final Mod " + finalDamageModifier.toString());
+        }
         logger.info((Math.abs(getTotalDamage() - event.getFinalDamage()) < 0.001 ? "OK" : "WRONG")
                     + " Final"
                     + " => " + fmt2(getTotalDamage()) + "|" + fmt2(event.getFinalDamage()));
@@ -433,9 +447,15 @@ public final class DamageCalculation {
     public BaseDamageModifier getOrCreateBaseDamageModifier() {
         if (baseDamageModifier == null) {
             baseDamageModifier = new BaseDamageModifier();
-            baseDamageModifier.setBase(baseDamage);
         }
         return baseDamageModifier;
+    }
+
+    public FinalDamageModifier getOrCreateFinalDamageModifier() {
+        if (finalDamageModifier == null) {
+            finalDamageModifier = new FinalDamageModifier();
+        }
+        return finalDamageModifier;
     }
 
     public boolean hasBaseDamageModifier() {
