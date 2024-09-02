@@ -1,12 +1,11 @@
 package com.cavetale.mytems.loot;
 
-import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.MytemsCategory;
 import com.cavetale.mytems.MytemsPlugin;
-import com.cavetale.mytems.MytemsTag;
+import com.cavetale.mytems.item.tree.CustomTreeType;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.WanderingTrader;
@@ -23,7 +22,6 @@ import org.bukkit.loot.LootTables;
 @RequiredArgsConstructor
 public final class LootTableListener implements Listener {
     private final MytemsPlugin plugin;
-    private Random random = new Random();
 
     @EventHandler(ignoreCancelled = true)
     private void onLootGenerate(LootGenerateEvent event) {
@@ -33,13 +31,6 @@ public final class LootTableListener implements Listener {
         }
     }
 
-    private void onChestGenerate(LootTable lootTable, List<ItemStack> loot) {
-        List<Mytems> list = MytemsTag.of(MytemsCategory.TREE_SEED).getMytems();
-        Mytems mytems = list.get(random.nextInt(list.size()));
-        int amount = random.nextInt(16) + 1;
-        loot.add(mytems.createItemStack(amount));
-    }
-
     @EventHandler(ignoreCancelled = true)
     private void onCreatureSpawn(CreatureSpawnEvent event) {
         if (event.getSpawnReason() == SpawnReason.NATURAL && event.getEntity() instanceof WanderingTrader trader) {
@@ -47,13 +38,39 @@ public final class LootTableListener implements Listener {
         }
     }
 
+    private void onChestGenerate(LootTable lootTable, List<ItemStack> loot) {
+        final Random random = ThreadLocalRandom.current();
+        final List<ItemStack> list = new ArrayList<>();
+        addTreeSeeds(list, random);
+        if (list.isEmpty()) return;
+        final ItemStack item = list.get(random.nextInt(list.size()));
+        loot.add(item);
+    }
+
     private void onWanderingTraderSpawn(WanderingTrader trader) {
-        List<Mytems> list = MytemsTag.of(MytemsCategory.TREE_SEED).getMytems();
-        Mytems mytems = list.get(random.nextInt(list.size()));
-        MerchantRecipe recipe = new MerchantRecipe(mytems.createItemStack(1), 128);
+        final Random random = ThreadLocalRandom.current();
+        // Loot list
+        final List<ItemStack> list = new ArrayList<>();
+        addTreeSeeds(list, random);
+        if (list.isEmpty()) return;
+        final ItemStack item = list.get(random.nextInt(list.size()));
+        // Make recipe
+        MerchantRecipe recipe = new MerchantRecipe(item, 128);
         recipe.setIngredients(List.of(new ItemStack(Material.EMERALD, 2)));
         List<MerchantRecipe> recipes = new ArrayList<>(trader.getRecipes());
         recipes.add(recipe);
         trader.setRecipes(recipes);
+    }
+
+    private int addTreeSeeds(List<ItemStack> list, Random random) {
+        int total = 0;
+        for (CustomTreeType customTreeType : CustomTreeType.values()) {
+            if (customTreeType.getTreeModelCount() == 0) continue;
+            for (int i = 0; i < customTreeType.getRandomWeight(); i += 1) {
+                list.add(customTreeType.randomLootItemStack(random));
+                total += 1;
+            }
+        }
+        return total;
     }
 }
