@@ -1,19 +1,14 @@
 package com.cavetale.mytems.item.finder;
 
-import com.cavetale.core.event.structure.PlayerDiscoverStructureEvent;
 import com.cavetale.core.structure.Structure;
 import com.cavetale.core.util.Json;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
 import static java.util.Objects.requireNonNull;
@@ -22,7 +17,7 @@ import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 @Getter
-public final class Finder implements Mytem, Listener {
+public final class Finder implements Mytem {
     private final Mytems key;
     private final FinderTier tier;
     private ItemStack prototype;
@@ -41,7 +36,7 @@ public final class Finder implements Mytem, Listener {
         prototype.editMeta(meta -> {
                 key.markItemMeta(meta);
             });
-        Bukkit.getPluginManager().registerEvents(this, plugin());
+        FinderListener.enableOnce();
     }
 
     @Override
@@ -73,7 +68,7 @@ public final class Finder implements Mytem, Listener {
      *
      * @return true if xp were given, false otherwise.
      */
-    private boolean giveFinderXp(Player player, Structure structure, FoundType foundType, ItemStack item) {
+    protected boolean giveFinderXp(Player player, Structure structure, FoundType foundType, ItemStack item) {
         if (!key.isItem(item)) return false;
         final FinderTag tag = serializeTag(item);
         if (!tag.getFindableStructures().contains(foundType)) {
@@ -88,31 +83,6 @@ public final class Finder implements Mytem, Listener {
         player.playSound(player.getLocation(), Sound.ITEM_LODESTONE_COMPASS_LOCK, SoundCategory.MASTER, 1f, 2f);
         plugin().getLogger().info("[" + key + "] " + player.getName() + " discovered " + foundType + " " + structure.getWorldName() + "/" + structure.getInternalId());
         return true;
-    }
-
-    /**
-     * When a player discovers a structure. try to xp to any Finder
-     * item in their inventory, preferrably in their hands.
-     */
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGHEST)
-    private void onPlayerDiscoverStructure(PlayerDiscoverStructureEvent event) {
-        final Structure structure = event.getStructure();
-        final FoundType foundType = FoundType.of(structure.getKey());
-        if (foundType == null || foundType.isDisabled()) {
-            return;
-        }
-        final Player player = event.getPlayer();
-        if (giveFinderXp(player, structure, foundType, player.getInventory().getItemInMainHand())) {
-            return;
-        }
-        if (giveFinderXp(player, structure, foundType, player.getInventory().getItemInOffHand())) {
-            return;
-        }
-        for (int i = 0; i < player.getInventory().getSize(); i += 1) {
-            if (giveFinderXp(player, structure, foundType, player.getInventory().getItem(i))) {
-                return;
-            }
-        }
     }
 
     @Override
