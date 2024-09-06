@@ -92,6 +92,7 @@ public final class Yardstick implements Mytem {
             return;
         }
         if (!block.getWorld().getName().equals(session.world)) {
+            session.clearBlocks();
             session.reset();
             session.world = block.getWorld().getName();
         }
