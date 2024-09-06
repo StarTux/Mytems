@@ -1,29 +1,30 @@
 package com.cavetale.mytems.item.yardstick;
 
 import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
-import com.cavetale.core.struct.Vec2i;
+import com.cavetale.core.struct.Cuboid;
 import com.cavetale.core.struct.Vec3i;
 import com.cavetale.core.text.LineWrap;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.MytemsPlugin;
+import com.cavetale.mytems.item.axis.CuboidOutline;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
+import org.bukkit.Color;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import static com.cavetale.core.font.Unicode.MULTIPLICATION;
+import org.bukkit.util.BlockIterator;
+import org.bukkit.util.Vector;
 import static com.cavetale.core.font.Unicode.tiny;
 import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
@@ -56,6 +57,7 @@ public final class Yardstick implements Mytem {
                 text.add(empty());
                 text.add(textOfChildren(Mytems.MOUSE_LEFT, text(" Set point A", GRAY)));
                 text.add(textOfChildren(Mytems.MOUSE_RIGHT, text(" Set point B", GRAY)));
+                text.add(textOfChildren(Mytems.MOUSE_CURSOR, Mytems.MOUSE_RIGHT, text(" Clear selection", GRAY)));
                 tooltip(meta, text);
                 meta.setUnbreakable(true);
                 meta.addItemFlags(ItemFlag.values());
@@ -95,192 +97,76 @@ public final class Yardstick implements Mytem {
         }
         if (num == 1) {
             session.point1 = Vec3i.of(block);
-            if (session.point2 == null) {
-                draw(player, List.of(session.point1), false);
-            }
-            if (session.point1 == null) {
-                player.sendActionBar(textOfChildren(text("Point A ", GRAY),
-                                                    text(session.point1.x + " " + session.point1.y + " " + session.point1.z, GOLD)));
-            }
+            player.sendActionBar(textOfChildren(key, text("Point A ", GRAY),
+                                                text(session.point1.x + " " + session.point1.y + " " + session.point1.z, GOLD)));
         } else if (num == 2) {
             session.point2 = Vec3i.of(block);
-            if (session.point1 == null) {
-                draw(player, List.of(session.point1), false);
-            }
-            if (session.point2 == null) {
-                player.sendActionBar(textOfChildren(text("Point B ", GRAY),
-                                                    text(session.point2.x + " " + session.point2.y + " " + session.point2.z, GOLD)));
-            }
+            player.sendActionBar(textOfChildren(key, text("Point B ", GRAY),
+                                                text(session.point2.x + " " + session.point2.y + " " + session.point2.z, GOLD)));
         }
         if (session.point1 != null && session.point2 != null) {
-            drawLine(player, session, session.point1, session.point2);
-            soundDraw(player);
+            if (drawLine(player, session, session.point1, session.point2)) {
+                soundDraw(player);
+            } else {
+                soundFail(player);
+            }
         } else {
             soundUse(player);
         }
     }
 
-    private static boolean isFullBlock(Block block) {
-        var voxelShape = block.getCollisionShape();
-        if (voxelShape == null) return false;
-        var boundingBoxes = voxelShape.getBoundingBoxes();
-        if (boundingBoxes.size() != 1) return false;
-        var bb = boundingBoxes.iterator().next();
-        return bb.getWidthX() == 1.0 && bb.getWidthZ() == 1.0
-            && (bb.getHeight() == 1.0 || bb.getHeight() == 0.9375);
-    }
-
     private boolean drawLine(Player player, YardstickSession session, Vec3i a, Vec3i b) {
-        World world = player.getWorld();
-        final double dx = (double) (Math.abs(a.x - b.x) + 1);
-        final double dy = (double) (Math.abs(a.y - b.y) + 1);
-        final double dz = (double) (Math.abs(a.z - b.z) + 1);
-        session.horizontalLength = (int) Math.round(Math.sqrt(dx * dx + dz * dz));
-        if (session.horizontalLength > MAX_LENGTH) {
-            player.sendActionBar(text("Line span too long: " + session.horizontalLength, RED));
-            soundFail(player);
-            return false;
+        session.clearBlocks();
+        session.blocks = new HashMap<>();
+        final World world = player.getWorld();
+        final int length;
+        if (a.equals(b)) {
+            drawBlock(player, session, world, a);
+            length = 1;
+        } else {
+            final Vector mid = new Vector(0.5, 0.5, 0.5);
+            final Vector start = a.toVector().add(mid);
+            final Vector stop = b.toVector().add(mid);
+            final Vector direction = stop.clone().subtract(start);
+            length = (int) Math.round(direction.length());
+            if (length > MAX_LENGTH) {
+                player.sendActionBar(text("Line span too long: " + length, RED));
+                soundFail(player);
+                return false;
+            }
+            final BlockIterator blockIterator = new BlockIterator(world, start, direction, 0.0, length);
+            while (blockIterator.hasNext()) {
+                drawBlock(player, session, world, Vec3i.of(blockIterator.next()));
+            }
         }
-        session.length = (int) Math.round(Math.sqrt(dx * dx + dy * dy + dz * dz));
-        List<Vec2i> horizontalLine = makeLine(Vec2i.of(a.x, a.z), Vec2i.of(b.x, b.z));
-        List<Vec3i> blocks = makeBlocks(world, horizontalLine, a, b);
-        draw(player, blocks, true);
+        player.sendMessage(textOfChildren(key,
+                                          text(tiny(" distance"), GRAY), text(length, GOLD),
+                                          text(tiny(" blocks"), GRAY), text(session.blocks.size(), GOLD)));
         return true;
     }
 
-    /**
-     * We traverse the x-coordinates from left to right.  If the
-     * z-axis is longer than the x-axis however, we swap them first.
-     *
-     * @return Each pixel of the line from point a to point b,
-     * correctly swapped.
-     */
-    protected static List<Vec2i> makeLine(Vec2i a, Vec2i b) {
-        final int hor = Math.abs(b.x - a.x);
-        final int ver = Math.abs(b.z - a.z);
-        final int dx;
-        final int dz;
-        final int ax;
-        final int bx;
-        final int az;
-        final int bz;
-        final boolean swapped;
-        if (hor >= ver) {
-            swapped = false;
-            dx = hor;
-            dz = ver;
-            ax = a.x;
-            bx = b.x;
-            az = a.z;
-            bz = b.z;
-        } else {
-            swapped = true;
-            dx = ver;
-            dz = hor;
-            ax = a.z;
-            bx = b.z;
-            az = a.x;
-            bz = b.x;
-        }
-        final List<Vec2i> line = new ArrayList<>();
-        int z = az;
-        int x = ax;
-        int part = 0;
-        final int sx = ax < bx ? 1 : -1;
-        final int sz = az < bz ? 1 : -1;
-        for (int i = 0; i <= dx; i += 1) {
-            line.add(!swapped
-                       ? Vec2i.of(x, z)
-                       : Vec2i.of(z, x));
-            part += dz;
-            if (part >= dx) {
-                z += sz;
-                part -= dx;
-            }
-            x += sx;
-        }
-        return line;
-    }
-
-    private List<Vec3i> makeBlocks(World world, List<Vec2i> horizontalLine, Vec3i a, Vec3i b) {
-        final List<Vec3i> blocks = new ArrayList<>();
-        final int cy = (a.y + b.y) / 2;
-        LOOP:
-        for (Vec2i base : horizontalLine) {
-            if (!world.isChunkLoaded(base.x >> 4, base.z >> 4)) continue;
-            Block block = world.getBlockAt(base.x, cy, base.z);
-            // Move up
-            while (isFullBlock(block) && block.getY() < world.getMaxHeight()) {
-                Block above = block.getRelative(0, 1, 0);
-                if (!isFullBlock(above)) break;
-                block = above;
-            }
-            // Move down
-            while (!isFullBlock(block)) {
-                if (block.getY() <= world.getMinHeight()) continue LOOP;
-                block = block.getRelative(0, -1, 0);
-            }
-            Vec3i vec = Vec3i.of(block);
-            if (blocks.contains(vec)) continue;
-            blocks.add(vec);
-        }
-        return blocks;
-    }
-
-    private void draw(Player player, List<Vec3i> blocks, boolean feedback) {
-        YardstickSession session = YardstickSession.of(player);
-        if (session.drawing) return;
-        session.drawing = true;
-        Bukkit.getScheduler().runTaskLater(MytemsPlugin.getInstance(), () -> {
-                session.drawing = false;
-                final World world = player.getWorld();
-                if (!player.isOnline() || !world.getName().equals(session.world)) {
-                    return;
-                }
-                if (session.blocks != null) {
-                    for (Vec3i vec : session.blocks) {
-                        if (!world.isChunkLoaded(vec.x >> 4, vec.z >> 4)) continue;
-                        Block block = vec.toBlock(world);
-                        player.sendBlockChange(block.getLocation(), block.getBlockData());
-                    }
-                    session.blocks = null;
-                }
-                BlockData fake = Material.BUDDING_AMETHYST.createBlockData();
-                for (Vec3i vec : blocks) {
-                    if (!world.isChunkLoaded(vec.x >> 4, vec.z >> 4)) continue;
-                    Block block = vec.toBlock(world);
-                    player.sendBlockChange(block.getLocation(), fake);
-                }
-                if (feedback) {
-                    player.sendMessage(textOfChildren(key, text(" Line drawn from "),
-                                                      text(session.point1.x + " " + session.point1.y + " " + session.point1.z, GOLD),
-                                                      text(" to "),
-                                                      text(session.point2.x + " " + session.point2.y + " " + session.point2.z, GOLD))
-                                       .color(GRAY));
-                    final int dx = Math.abs(session.point1.x - session.point2.x) + 1;
-                    final int dy = Math.abs(session.point1.y - session.point2.y) + 1;
-                    final int dz = Math.abs(session.point1.z - session.point2.z) + 1;
-                    player.sendMessage(textOfChildren(key,
-                                                      text(tiny(" distance")),
-                                                      text(session.length, GOLD),
-                                                      text(tiny(" horizontal")),
-                                                      text(session.horizontalLength, GOLD),
-                                                      text(tiny(" blocks")),
-                                                      text(blocks.size(), GOLD),
-                                                      text(tiny(" size")),
-                                                      text(dx, GOLD),
-                                                      text(MULTIPLICATION.string),
-                                                      text(dy, GOLD),
-                                                      text(MULTIPLICATION.string),
-                                                      text(dz, GOLD))
-                                       .color(GRAY));
-                }
-                session.blocks = blocks;
-            }, 2L);
+    private void drawBlock(Player player, YardstickSession session, World world, Vec3i vector) {
+        final Cuboid cuboid = new Cuboid(vector.x, vector.y, vector.z,
+                                         vector.x, vector.y, vector.z);
+        final CuboidOutline outline = new CuboidOutline(world, cuboid);
+        outline.showOnlyTo(player);
+        outline.spawn();
+        outline.glow(Color.fromRGB(0xE1C16E));
+        session.blocks.put(vector, outline);
     }
 
     @Override
     public void onDamageEntity(EntityDamageByEntityEvent event, Player player, ItemStack item) {
+        event.setCancelled(true);
+    }
+
+    @Override
+    public void onPlayerInventoryClick(InventoryClickEvent event, Player player, ItemStack item) {
+        if (!event.isRightClick()) return;
+        final YardstickSession session = YardstickSession.of(player);
+        session.clearBlocks();
+        session.reset();
+        soundUse(player);
         event.setCancelled(true);
     }
 

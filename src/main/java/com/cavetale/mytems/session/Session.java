@@ -65,6 +65,7 @@ public final class Session {
     public void disable(Player player) {
         flying.disable(player);
         attributes.disable(player);
+        favorites.disable();
     }
 
     public void tick(Player player) {
