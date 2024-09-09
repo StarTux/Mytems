@@ -23,8 +23,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.util.BlockIterator;
-import org.bukkit.util.Vector;
 import static com.cavetale.core.font.Unicode.tiny;
 import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
@@ -120,40 +118,29 @@ public final class Yardstick implements Mytem {
         session.clearBlocks();
         session.blocks = new HashMap<>();
         final World world = player.getWorld();
-        final int length;
-        if (a.equals(b)) {
-            drawBlock(player, session, world, a);
-            length = 1;
-        } else {
-            final Vector mid = new Vector(0.5, 0.5, 0.5);
-            final Vector start = a.toVector().add(mid);
-            final Vector stop = b.toVector().add(mid);
-            final Vector direction = stop.clone().subtract(start);
-            length = (int) Math.round(direction.length());
-            if (length > MAX_LENGTH) {
-                player.sendActionBar(text("Line span too long: " + length, RED));
-                soundFail(player);
-                return false;
-            }
-            final BlockIterator blockIterator = new BlockIterator(world, start, direction, 0.0, length);
-            while (blockIterator.hasNext()) {
-                drawBlock(player, session, world, Vec3i.of(blockIterator.next()));
-            }
+        final int length = a.roundedDistance(b);
+        if (length > MAX_LENGTH) {
+            player.sendActionBar(text("Line span too long: " + length, RED));
+            soundFail(player);
+            return false;
+        }
+        for (Vec3i vector : LineTool.line3d(a, b)) {
+            final Cuboid cuboid = new Cuboid(vector.x, vector.y, vector.z,
+                                             vector.x, vector.y, vector.z);
+            final CuboidOutline outline = new CuboidOutline(world, cuboid);
+            outline.showOnlyTo(player);
+            outline.spawn();
+            outline.glow(Color.fromRGB(0xE1C16E));
+            session.blocks.put(vector, outline);
         }
         player.sendMessage(textOfChildren(key,
-                                          text(tiny(" distance"), GRAY), text(length, GOLD),
-                                          text(tiny(" blocks"), GRAY), text(session.blocks.size(), GOLD)));
+                                          text("(" + a + ")", GOLD),
+                                          text(" - ", GRAY),
+                                          text("(" + b + ")", GOLD),
+                                          text(" " + session.blocks.size(), GOLD),
+                                          text(tiny("blocks"), GRAY))
+                           .insertion("(" + a + ") (" + b + ")"));
         return true;
-    }
-
-    private void drawBlock(Player player, YardstickSession session, World world, Vec3i vector) {
-        final Cuboid cuboid = new Cuboid(vector.x, vector.y, vector.z,
-                                         vector.x, vector.y, vector.z);
-        final CuboidOutline outline = new CuboidOutline(world, cuboid);
-        outline.showOnlyTo(player);
-        outline.spawn();
-        outline.glow(Color.fromRGB(0xE1C16E));
-        session.blocks.put(vector, outline);
     }
 
     @Override
