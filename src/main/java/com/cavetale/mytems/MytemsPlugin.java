@@ -62,12 +62,12 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
 
     @Override
     public void onLoad() {
+        instance = this;
         ItemFinder.super.register();
     }
 
     @Override
     public void onEnable() {
-        instance = this;
         mytemsCommand.enable();
         eventListener.enable();
         shulkerBoxListener.enable();
