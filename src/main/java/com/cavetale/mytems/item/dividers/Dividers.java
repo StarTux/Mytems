@@ -188,9 +188,7 @@ public final class Dividers implements Mytem {
             soundFail(player);
             return false;
         }
-        final double dx = (double) a.x - (double) b.x;
-        final double dz = (double) a.z - (double) b.z;
-        final int radius = (int) Math.round(Math.sqrt(dx * dx + dz * dz));
+        final int radius = a.maxDistance(b);
         if (radius > MAX_RADIUS) {
             player.sendActionBar(text("Radius too big: " + radius, RED));
             soundFail(player);
