@@ -7,6 +7,7 @@ import com.cavetale.core.text.LineWrap;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.item.axis.CuboidOutline;
+import com.cavetale.mytems.util.Attr;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -16,11 +17,13 @@ import org.bukkit.Color;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.World;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.font.Unicode.tiny;
@@ -33,6 +36,7 @@ import static net.kyori.adventure.text.format.TextColor.color;
 
 @Getter
 public final class Yardstick implements Mytem {
+    private static final int COLOR_HEX = 0xE1C16E;
     private final Mytems key;
     private Component displayName;
     private ItemStack prototype;
@@ -46,20 +50,21 @@ public final class Yardstick implements Mytem {
 
     @Override
     public void enable() {
-        this.displayName = text("Yardstick", color(0xE1C16E));
+        this.displayName = text("Yardstick", color(COLOR_HEX));
         this.prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
+                key.markItemMeta(meta);
                 List<Component> text = new ArrayList<>();
                 text.add(displayName);
-                text.addAll(new LineWrap().emoji(true).componentMaker(str -> text(str, WHITE)).wrap(TOOLTIP));
+                text.addAll(new LineWrap().emoji(true).componentMaker(str -> text(tiny(str), GRAY)).wrap(TOOLTIP));
                 text.add(empty());
                 text.add(textOfChildren(Mytems.MOUSE_LEFT, text(" Set point A", GRAY)));
                 text.add(textOfChildren(Mytems.MOUSE_RIGHT, text(" Set point B", GRAY)));
                 text.add(textOfChildren(Mytems.MOUSE_CURSOR, Mytems.MOUSE_RIGHT, text(" Clear selection", GRAY)));
                 tooltip(meta, text);
                 meta.setUnbreakable(true);
-                meta.addItemFlags(ItemFlag.values());
-                key.markItemMeta(meta);
+                Attr.addNumber(meta, Attribute.PLAYER_BLOCK_INTERACTION_RANGE, "yardstick_range", 5.5, EquipmentSlotGroup.HAND);
+                meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
             });
     }
 
@@ -97,11 +102,11 @@ public final class Yardstick implements Mytem {
         if (num == 1) {
             session.point1 = Vec3i.of(block);
             player.sendActionBar(textOfChildren(key, text("Point A ", GRAY),
-                                                text(session.point1.x + " " + session.point1.y + " " + session.point1.z, GOLD)));
+                                                text(session.point1.x + " " + session.point1.y + " " + session.point1.z, color(COLOR_HEX))));
         } else if (num == 2) {
             session.point2 = Vec3i.of(block);
             player.sendActionBar(textOfChildren(key, text("Point B ", GRAY),
-                                                text(session.point2.x + " " + session.point2.y + " " + session.point2.z, GOLD)));
+                                                text(session.point2.x + " " + session.point2.y + " " + session.point2.z, color(COLOR_HEX))));
         }
         if (session.point1 != null && session.point2 != null) {
             if (drawLine(player, session, session.point1, session.point2)) {
@@ -125,19 +130,22 @@ public final class Yardstick implements Mytem {
             return false;
         }
         for (Vec3i vector : LineTool.line3d(a, b)) {
+            if (!world.isChunkLoaded(vector.x >> 4, vector.z >> 4)) {
+                continue;
+            }
             final Cuboid cuboid = new Cuboid(vector.x, vector.y, vector.z,
                                              vector.x, vector.y, vector.z);
             final CuboidOutline outline = new CuboidOutline(world, cuboid);
             outline.showOnlyTo(player);
             outline.spawn();
-            outline.glow(Color.fromRGB(0xE1C16E));
+            outline.glow(Color.fromRGB(COLOR_HEX));
             session.blocks.put(vector, outline);
         }
         player.sendMessage(textOfChildren(key,
-                                          text("(" + a + ")", GOLD),
+                                          text("(" + a + ")", color(COLOR_HEX)),
                                           text(" - ", GRAY),
-                                          text("(" + b + ")", GOLD),
-                                          text(" " + session.blocks.size(), GOLD),
+                                          text("(" + b + ")", color(COLOR_HEX)),
+                                          text(" " + session.blocks.size(), color(COLOR_HEX)),
                                           text(tiny("blocks"), GRAY))
                            .insertion("(" + a + ") (" + b + ")"));
         return true;
