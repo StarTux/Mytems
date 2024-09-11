@@ -1,6 +1,5 @@
 package com.cavetale.mytems.item.yardstick;
 
-import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.struct.Cuboid;
 import com.cavetale.core.struct.Vec3i;
 import com.cavetale.core.text.LineWrap;
@@ -90,10 +89,6 @@ public final class Yardstick implements Mytem {
     private void click(Player player, Block block, int num) {
         YardstickSession session = YardstickSession.of(player);
         if (session.drawing) return;
-        if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) {
-            soundFail(player);
-            return;
-        }
         if (!block.getWorld().getName().equals(session.world)) {
             session.clearBlocks();
             session.reset();

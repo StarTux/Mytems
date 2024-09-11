@@ -1,6 +1,5 @@
 package com.cavetale.mytems.item.dividers;
 
-import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.struct.Cuboid;
 import com.cavetale.core.struct.Vec2i;
 import com.cavetale.core.struct.Vec3i;
@@ -109,10 +108,6 @@ public final class Dividers implements Mytem {
 
     private void click(Player player, Block block, boolean right, Axis axis) {
         DividersSession session = Session.of(player).getFavorites().getOrSet(DividersSession.class, DividersSession::new);
-        if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) {
-            soundFail(player);
-            return;
-        }
         if (!block.getWorld().getName().equals(session.world)) {
             session.clearBlocks();
             session.reset();
