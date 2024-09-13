@@ -10,6 +10,7 @@ import com.cavetale.mytems.session.Session;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -100,14 +101,16 @@ public final class HastyPickaxe implements Mytem {
         onBreak(player, event.getBlock(), item);
     }
 
-    private static final List<Material> STONE_TYPES = List.of(Material.STONE,
-                                                              Material.DEEPSLATE,
-                                                              Material.ANDESITE,
-                                                              Material.DIORITE,
-                                                              Material.GRANITE,
-                                                              Material.TUFF,
-                                                              Material.NETHERRACK,
-                                                              Material.BLACKSTONE);
+    private static final Set<Material> STONE_TYPES = Set.of(Material.STONE,
+                                                            Material.DEEPSLATE,
+                                                            Material.ANDESITE,
+                                                            Material.DIORITE,
+                                                            Material.GRANITE,
+                                                            Material.TUFF,
+                                                            Material.NETHERRACK,
+                                                            Material.BLACKSTONE,
+                                                            Material.BASALT,
+                                                            Material.END_STONE);
 
     private void onBreak(Player player, Block block, ItemStack item) {
         if (isPlayerPlaced(block)) {
