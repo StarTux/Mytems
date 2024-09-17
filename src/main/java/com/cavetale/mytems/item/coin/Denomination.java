@@ -1,10 +1,12 @@
 package com.cavetale.mytems.item.coin;
 
 import com.cavetale.mytems.Mytems;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.format.TextColor;
 import static net.kyori.adventure.text.format.TextColor.color;
 
+@Getter
 @RequiredArgsConstructor
 public enum Denomination {
     COPPER(10, Mytems.COPPER_COIN, color(0xE77C56), true),
