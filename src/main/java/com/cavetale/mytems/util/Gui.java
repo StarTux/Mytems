@@ -44,7 +44,7 @@ public final class Gui implements InventoryHolder {
     @Getter private int size = 3 * 9;
     @Getter private Component title = Component.empty();
     @Getter @Setter private InventoryType inventoryType = null;
-    protected boolean locked = false;
+    @Getter @Setter protected boolean locked = false;
     private static final Map<UUID, Gui> GUI_MAP = new HashMap<>();
     private GuiOverlay.Builder overlayBuilder;
 
@@ -223,7 +223,7 @@ public final class Gui implements InventoryHolder {
     @RequiredArgsConstructor
     public static final class EventListener implements Listener {
         @EventHandler(ignoreCancelled = false, priority = EventPriority.LOWEST)
-        void onInventoryOpen(final InventoryOpenEvent event) {
+        private void onInventoryOpen(final InventoryOpenEvent event) {
             if (event.getInventory().getHolder() instanceof Gui gui) {
                 gui.onInventoryOpen(event);
             } else if (event.getPlayer() instanceof Player player) {
@@ -233,7 +233,7 @@ public final class Gui implements InventoryHolder {
         }
 
         @EventHandler(ignoreCancelled = false, priority = EventPriority.LOWEST)
-        void onInventoryClose(final InventoryCloseEvent event) {
+        private void onInventoryClose(final InventoryCloseEvent event) {
             if (event.getInventory().getHolder() instanceof Gui gui) {
                 gui.onInventoryClose(event);
             } else if (event.getPlayer() instanceof Player player) {
@@ -246,7 +246,7 @@ public final class Gui implements InventoryHolder {
         }
 
         @EventHandler(ignoreCancelled = false, priority = EventPriority.LOWEST)
-        void onInventoryClick(final InventoryClickEvent event) {
+        private void onInventoryClick(final InventoryClickEvent event) {
             if (event.getInventory().getHolder() instanceof Gui gui) {
                 gui.onInventoryClick(event);
             } else if (event.getWhoClicked() instanceof Player player) {
@@ -256,7 +256,7 @@ public final class Gui implements InventoryHolder {
         }
 
         @EventHandler(ignoreCancelled = false, priority = EventPriority.LOWEST)
-        void onInventoryDrag(final InventoryDragEvent event) {
+        private void onInventoryDrag(final InventoryDragEvent event) {
             if (event.getInventory().getHolder() instanceof Gui gui) {
                 gui.onInventoryDrag(event);
             } else if (event.getWhoClicked() instanceof Player player) {
@@ -266,7 +266,7 @@ public final class Gui implements InventoryHolder {
         }
 
         @EventHandler
-        void onPluginDisable(PluginDisableEvent event) {
+        private void onPluginDisable(PluginDisableEvent event) {
             for (Player player : Bukkit.getServer().getOnlinePlayers()) {
                 Gui gui = Gui.of(player);
                 if (gui != null && gui.plugin == event.getPlugin()) {
