@@ -3,6 +3,7 @@ package com.cavetale.mytems.item;
 import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.event.player.PluginPlayerEvent;
 import com.cavetale.core.event.player.PluginPlayerQuery;
+import com.cavetale.core.struct.Vec3i;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
@@ -28,6 +29,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityToggleGlideEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.Repairable;
+import static com.cavetale.core.font.Unicode.subscript;
+import static com.cavetale.core.font.Unicode.superscript;
+import static com.cavetale.core.font.Unicode.tiny;
 import static com.cavetale.mytems.util.Items.tooltip;
 import static java.awt.Color.HSBtoRGB;
 import static net.kyori.adventure.text.Component.empty;
@@ -117,8 +121,7 @@ public final class MagicCape implements Mytem, Listener {
         PluginPlayerEvent.Name.START_FLYING.call(MytemsPlugin.getInstance(), player);
         session.getFlying().setFlying(player, key, FLY_SPEED, this::onTickFlight, this::onEndFlight);
         Location location = player.getLocation();
-        session.getFavorites().set(new MagicCapeFlight(location.getWorld().getName(),
-                                                       location.getBlockX(), location.getBlockY(), location.getBlockZ()));
+        session.getFavorites().set(new MagicCapeFlight(location.getWorld().getName(), Vec3i.of(location)));
         player.getWorld().playSound(player.getLocation(), Sound.ENTITY_PHANTOM_FLAP, SoundCategory.PLAYERS, 2.0f, 2.0f);
         player.sendActionBar(rainbowify("The Magic Cape lifts you up"));
     }
@@ -132,11 +135,9 @@ public final class MagicCape implements Mytem, Listener {
             fail(player);
             return;
         }
-        Location location = player.getLocation();
-        if (!location.getWorld().getName().equals(flight.world)
-            || Math.abs(location.getBlockX() - flight.x) > MAX_DISTANCE
-            || Math.abs(location.getBlockY() - flight.y) > MAX_DISTANCE
-            || Math.abs(location.getBlockZ() - flight.z) > MAX_DISTANCE) {
+        final Location location = player.getLocation();
+        final int distance = Vec3i.of(location).maxDistance(flight.origin);
+        if (!location.getWorld().getName().equals(flight.world) || distance > MAX_DISTANCE) {
             session.getFlying().stopFlying(player);
             onEndFlight(player);
             fail(player);
@@ -147,6 +148,7 @@ public final class MagicCape implements Mytem, Listener {
             player.getWorld().spawnParticle(Particle.END_ROD, player.getLocation(), 1, 0.0, 0.0, 0.0, 0.1);
         }
         session.cooldown(key).duration(COOLDOWN);
+        player.sendActionBar(textOfChildren(key, rainbowify(tiny("distance ") + superscript(distance) + "/" + subscript(MAX_DISTANCE))));
     }
 
     private void onEndFlight(Player player) {
@@ -175,9 +177,7 @@ public final class MagicCape implements Mytem, Listener {
     @RequiredArgsConstructor
     private static final class MagicCapeFlight {
         protected final String world;
-        protected final int x;
-        protected final int y;
-        protected final int z;
+        protected final Vec3i origin;
     }
 
     @EventHandler
