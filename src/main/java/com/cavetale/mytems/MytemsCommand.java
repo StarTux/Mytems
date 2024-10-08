@@ -22,6 +22,7 @@ import com.cavetale.mytems.util.Collision;
 import com.cavetale.mytems.util.Entities;
 import com.cavetale.mytems.util.JavaItem;
 import com.cavetale.mytems.util.Skull;
+import com.google.common.collect.Multimap;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -43,6 +44,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
@@ -50,6 +53,7 @@ import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BoundingBox;
+import static com.cavetale.mytems.util.Text.formatDouble;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
 import static net.kyori.adventure.text.Component.newline;
@@ -134,6 +138,9 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
             .completers(CommandArgCompleter.enumLowerList(Mytems.class))
             .description("Serialize item to Java")
             .senderCaller(this::serializeJava);
+        serializeNode.addChild("defaultattributemodifiers").denyTabCompletion()
+            .description("Serialize default attribute modifiers")
+            .playerCaller(this::serializeDefaultAttributeModifiers);
         // Item
         itemNode = rootNode.addChild("item")
             .description("Item specific commands");
@@ -477,6 +484,34 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
             plugin.getLogger().log(Level.SEVERE, "Writing " + file, ioe);
         }
         return true;
+    }
+
+    protected void serializeDefaultAttributeModifiers(Player player) {
+        ItemStack itemStack = player.getInventory().getItemInMainHand();
+        if (itemStack == null) {
+            throw new CommandWarn("There's no item in your main hand!");
+        }
+        player.sendMessage(text(itemStack.getType().name().toLowerCase() + ":", GOLD));
+        final Multimap<Attribute, AttributeModifier> attributes = itemStack.getType().getDefaultAttributeModifiers();
+        for (Attribute attribute : Attribute.values()) {
+            if (!attributes.containsKey(attribute)) continue;
+            for (AttributeModifier modifier : attributes.get(attribute)) {
+                String attributeName = attribute.name().toLowerCase();
+                if (attributeName.startsWith("generic_")) {
+                    attributeName = attributeName.substring(8);
+                }
+                String modifierKey = modifier.getKey().toString();
+                if (modifierKey.startsWith("minecraft:")) {
+                    modifierKey = modifierKey.substring(10);
+                }
+                player.sendMessage(textOfChildren(text(formatDouble(modifier.getAmount()), GOLD),
+                                                  space(), text(modifier.getOperation().name().toLowerCase(), YELLOW),
+                                                  space(), text(attributeName, WHITE),
+                                                  space(), text(modifier.getSlotGroup().toString().toLowerCase(), LIGHT_PURPLE),
+                                                  space(), text("'", DARK_GRAY), text(modifierKey, GRAY), text("'", DARK_GRAY),
+                                                  empty()));
+            }
+        }
     }
 
     protected boolean placeBlock(Player player, String[] args) {
