@@ -1,5 +1,6 @@
 package com.cavetale.mytems.util;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
@@ -16,6 +17,7 @@ import static net.kyori.adventure.text.Component.text;
  */
 public final class Text {
     public static final int ITEM_LORE_WIDTH = 26;
+    private static final DecimalFormat DOUBLE_FORMAT = new DecimalFormat("0.####");
 
     private Text() { }
 
@@ -193,5 +195,9 @@ public final class Text {
             }
         } while (value > 0);
         return sb.toString();
+    }
+
+    public static String formatDouble(double in) {
+        return DOUBLE_FORMAT.format(in);
     }
 }
