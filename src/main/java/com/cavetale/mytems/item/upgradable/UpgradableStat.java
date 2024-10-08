@@ -2,9 +2,12 @@ package com.cavetale.mytems.item.upgradable;
 
 import com.cavetale.core.item.ItemKinds;
 import com.cavetale.core.struct.Vec2i;
+import com.google.common.collect.Multimap;
 import java.util.List;
 import net.kyori.adventure.text.Component;
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import static com.cavetale.mytems.MytemsPlugin.namespacedKey;
@@ -25,14 +28,6 @@ public interface UpgradableStat {
      * Get the slot where this stat goes in the GUI.
      */
     Vec2i getGuiSlot();
-
-    /**
-     * Get all possible levels of this stat.  It is possible to
-     * implement both UpgradableStat and Level, and then return a list
-     * containing oneself.  Returning a single item list is expected
-     * to be common.
-     */
-    List<? extends UpgradableStatLevel> getLevels();
 
     /**
      * Get the level corresponding to the level number.
@@ -70,6 +65,14 @@ public interface UpgradableStat {
     }
 
     /**
+     * Get all possible levels of this stat.  It is possible to
+     * implement both UpgradableStat and Level, and then return a list
+     * containing oneself.  Returning a single item list is expected
+     * to be common.
+     */
+    List<? extends UpgradableStatLevel> getLevels();
+
+    /**
      * List all dependencies of this stat.
      * Each dependency must have one level unlocked.
      */
@@ -97,5 +100,16 @@ public interface UpgradableStat {
      */
     default void applyToItem(ItemMeta meta, int upgradeLevel) {
         getLevel(upgradeLevel).applyToItem(meta);
+    }
+
+    /**
+     * Apply attributes.  Is only called if the corresponding
+     * UpgradableItemTag::shouldHandleAttributes yields true.
+     *
+     * This can be overridden with general function for this stat.  By
+     * default, it is handed over to the current level.
+     */
+    default void applyAttributes(Multimap<Attribute, AttributeModifier> attributes, int upgradeLevel) {
+        getLevel(upgradeLevel).applyAttributes(attributes);
     }
 }

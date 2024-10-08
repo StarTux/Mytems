@@ -1,7 +1,10 @@
 package com.cavetale.mytems.item.upgradable;
 
+import com.google.common.collect.Multimap;
 import java.util.List;
 import net.kyori.adventure.text.Component;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -34,4 +37,10 @@ public interface UpgradableStatLevel {
     }
 
     default void applyToItem(ItemMeta meta) { }
+
+    /**
+     * Apply attributes.  Is only called if the corresponding
+     * UpgradableItemTag::shouldHandleAttributes yields true.
+     */
+    default void applyAttributes(Multimap<Attribute, AttributeModifier> attributes) { }
 }

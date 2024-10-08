@@ -67,7 +67,7 @@ import com.cavetale.mytems.item.mobcostume.FoxCostume;
 import com.cavetale.mytems.item.mobcostume.SheepCostume;
 import com.cavetale.mytems.item.mobcostume.SkeletonCostume;
 import com.cavetale.mytems.item.mobcostume.SpiderCostume;
-import com.cavetale.mytems.item.mobslayer.Mobslayer;
+import com.cavetale.mytems.item.mobslayer.LegacyMobslayer;
 import com.cavetale.mytems.item.music.HyruleInstrument;
 import com.cavetale.mytems.item.music.MusicalInstrument;
 import com.cavetale.mytems.item.photo.Photo;
@@ -100,6 +100,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import lombok.Getter;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
@@ -117,6 +118,7 @@ import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText;
 import static org.bukkit.Material.*;
 
+@Getter
 @SuppressWarnings("LineLength")
 /**
  * List of all known Mytems.
@@ -750,9 +752,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     BLUE_ENDERBALL_TROPHY(Trophy.class, LEATHER_BOOTS, 0xF312, TROPHY),
     PHOTO(Photo.class, FILLED_MAP, 306, (char) 0xF14F, PHOTOS),
     DEBUG(DummyMytem.class, DIAMOND, 20, (char) 0xF150, UTILITY),
-    MOBSLAYER(Mobslayer.class, NETHERITE_SWORD, 719, (char) 0xF151, MOBSLAYERS),
-    MOBSLAYER2(Mobslayer.class, NETHERITE_SWORD, 720, (char) 0xF152, MOBSLAYERS),
-    MOBSLAYER3(Mobslayer.class, NETHERITE_SWORD, 721, (char) 0xF153, MOBSLAYERS),
+    MOBSLAYER(LegacyMobslayer.class, NETHERITE_SWORD, 719, (char) 0xF151, MOBSLAYERS),
+    MOBSLAYER2(LegacyMobslayer.class, NETHERITE_SWORD, 720, (char) 0xF152, MOBSLAYERS),
+    MOBSLAYER3(LegacyMobslayer.class, NETHERITE_SWORD, 721, (char) 0xF153, MOBSLAYERS),
     BINGO_BUKKIT(BingoBukkit.class, WOODEN_PICKAXE, 722, (char) 0xF154, BINGO_BUKKITS),
     GOLD_BINGO_BUKKIT(BingoBukkit.class, WOODEN_PICKAXE, 723, (char) 0xF155, BINGO_BUKKITS),
     DIAMOND_BINGO_BUKKIT(BingoBukkit.class, WOODEN_PICKAXE, 724, (char) 0xF156, BINGO_BUKKITS),

@@ -4,6 +4,8 @@ import com.cavetale.mytems.MytemTag;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.worldmarker.util.Tags;
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -14,6 +16,8 @@ import java.util.Set;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import net.kyori.adventure.text.Component;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataType;
@@ -110,6 +114,9 @@ public abstract class UpgradableItemTag extends MytemTag {
                 final var pdc = meta.getPersistentDataContainer();
                 Tags.set(pdc, namespacedKey(XP), xp);
                 Tags.set(pdc, namespacedKey(LEVEL), level);
+                final Multimap<Attribute, AttributeModifier> attributes = shouldHandleAttributes()
+                    ? createAttributeMultimap()
+                    : null;
                 for (UpgradableStat stat : getUpgradableItem().getStats()) {
                     // Store the value in the item tag
                     final int upgradeLevel = upgrades != null
@@ -127,6 +134,12 @@ public abstract class UpgradableItemTag extends MytemTag {
                     } else {
                         stat.applyToItem(meta, effectiveLevel);
                     }
+                    if (effectiveLevel > 0 && attributes != null) {
+                        stat.applyAttributes(attributes, effectiveLevel);
+                    }
+                }
+                if (attributes != null) {
+                    meta.setAttributeModifiers(attributes);
                 }
                 if (disabled != null && !disabled.isEmpty()) {
                     pdc.set(namespacedKey(DISABLED), PersistentDataType.LIST.strings(), List.copyOf(disabled));
@@ -441,5 +454,23 @@ public abstract class UpgradableItemTag extends MytemTag {
      */
     public boolean shouldAutoPlaceArrows() {
         return true;
+    }
+
+    /**
+     * Should this tag manage the attributes of the resulting item
+     * during load?
+     */
+    public boolean shouldHandleAttributes() {
+        return false;
+    }
+
+    /**
+     * Create the attribute multimap.  Override to return a desired
+     * implementing type or skip the default values.
+     */
+    public Multimap<Attribute, AttributeModifier> createAttributeMultimap() {
+        final Multimap<Attribute, AttributeModifier> result = ArrayListMultimap.create();
+        result.putAll(getUpgradableItemTier().getMytems().getMaterial().getDefaultAttributeModifiers());
+        return result;
     }
 }
