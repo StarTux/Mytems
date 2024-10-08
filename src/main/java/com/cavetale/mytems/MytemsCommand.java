@@ -20,6 +20,7 @@ import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.Blocks;
 import com.cavetale.mytems.util.Collision;
 import com.cavetale.mytems.util.Entities;
+import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.JavaItem;
 import com.cavetale.mytems.util.Skull;
 import com.google.common.collect.Multimap;
@@ -85,6 +86,12 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
             .description("Give an item to a player")
             .senderCaller(this::give)
             .completer(this::giveComplete);
+        rootNode.addChild("givecolored").arguments("<player> <mytem> <color>")
+            .description("Give a colored to a player")
+            .senderCaller(this::giveColored)
+            .completers(CommandArgCompleter.ONLINE_PLAYERS,
+                        CommandArgCompleter.enumLowerList(Mytems.class),
+                        CommandArgCompleter.NULL);
         rootNode.addChild("equipment")
             .description("Display player equipment")
             .senderCaller(this::equipment);
@@ -261,6 +268,23 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         return true;
     }
 
+    protected boolean giveColored(CommandSender sender, String[] args) {
+        if (args.length != 3) return false;
+        final String targetArg = args[0];
+        final String mytemArg = args[1];
+        final String colorArg = args[2];
+        final Player target = Bukkit.getPlayer(targetArg);
+        if (target == null) throw new CommandWarn("Player not found: " + targetArg);
+        final Mytems mytems = CommandArgCompleter.requireEnum(Mytems.class, mytemArg);
+        final TextColor color = TextColor.fromHexString(colorArg);
+        if (color == null) throw new CommandWarn("Invalid color: " + colorArg);
+        final ItemStack item = Items.colorized(mytems.createItemStack(), color);
+        target.getInventory().addItem(item);
+        sender.sendMessage(textOfChildren(mytems,
+                                          text(" (" + color.asHexString() + ")", color),
+                                          text(" given to " + target.getName(), YELLOW)));
+        return true;
+    }
 
     protected boolean equipment(CommandSender sender, String[] args) {
         Player target;

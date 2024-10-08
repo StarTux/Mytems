@@ -6,12 +6,16 @@ import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.bukkit.Color;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ColorableArmorMeta;
 import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.Repairable;
 
 public final class Items {
@@ -126,6 +130,20 @@ public final class Items {
             });
         item.setAmount(size);
         return item;
+    }
+
+    public static ItemStack colorized(ItemStack item, Color color) {
+        if (item.editMeta(PotionMeta.class, meta -> meta.setColor(color))) {
+            return item;
+        }
+        if (item.editMeta(ColorableArmorMeta.class, meta -> meta.setColor(color))) {
+            return item;
+        }
+        throw new IllegalArgumentException("Not colorable: " + item.getType());
+    }
+
+    public static ItemStack colorized(ItemStack item, TextColor textColor) {
+        return colorized(item, Color.fromRGB(textColor.value()));
     }
 
     private Items() { }

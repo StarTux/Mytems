@@ -1100,6 +1100,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     //
     AXIS_MODEL(ForbiddenMytem.class, END_ROD, 0xE027, (char) 0, TECHNICAL),
     MOUSE_CURSOR(ForbiddenMytem.class, ARROW, 0xE028, (char) 0xE028, UI),
+    //
+    PLAY_BUTTON(ForbiddenMytem.class, LEATHER_CHESTPLATE, (char) 0xF32C, UI),
+    PAUSE_BUTTON(ForbiddenMytem.class, LEATHER_CHESTPLATE, (char) 0xF32D, UI),
+    STOP_BUTTON(ForbiddenMytem.class, LEATHER_CHESTPLATE, (char) 0xF32E, UI),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
