@@ -1104,6 +1104,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     PLAY_BUTTON(ForbiddenMytem.class, LEATHER_CHESTPLATE, (char) 0xF32C, UI),
     PAUSE_BUTTON(ForbiddenMytem.class, LEATHER_CHESTPLATE, (char) 0xF32D, UI),
     STOP_BUTTON(ForbiddenMytem.class, LEATHER_CHESTPLATE, (char) 0xF32E, UI),
+    VAMPIRE_WINGS(WardrobeItem.class, FEATHER, 0xF32F, WARDROBE_OFFHAND),
+    BAT_WINGS(WardrobeItem.class, FEATHER, 0xF330, WARDROBE_OFFHAND),
+    PUMPKIN_SUIT(WardrobeItem.class, FEATHER, 0xF331, (char) 0, WARDROBE_OFFHAND),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
