@@ -6,7 +6,6 @@ import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.session.Session;
-import com.cavetale.mytems.util.Attr;
 import com.cavetale.mytems.util.Text;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import java.time.Duration;
@@ -21,14 +20,11 @@ import org.bukkit.Color;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.inventory.EquipmentSlotGroup;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.potion.PotionEffect;
@@ -70,7 +66,6 @@ public abstract class EasterGear implements GearItem {
                     ((LeatherArmorMeta) meta).setColor(PINK_COLOR);
                     meta.addItemFlags(ItemFlag.HIDE_DYE);
                 }
-                process(meta);
                 key.markItemMeta(meta);
             });
     }
@@ -101,8 +96,6 @@ public abstract class EasterGear implements GearItem {
         return "This is the gear of a true warrior bunny. Or the bunny warrior. Either expression is valid.";
     }
 
-    protected abstract void process(ItemMeta meta);
-
     @Override
     public final ItemSet getItemSet() {
         if (easterItemSet == null) easterItemSet = new EasterItemSet();
@@ -121,13 +114,6 @@ public abstract class EasterGear implements GearItem {
         public Helmet(final Mytems key) {
             super(key);
         }
-
-        @Override
-        protected void process(ItemMeta meta) {
-            EquipmentSlotGroup slot = EquipmentSlotGroup.HEAD;
-            Attr.addNumber(meta, Attribute.GENERIC_ARMOR, "easter_helmet_armor", 3.0, slot);
-            Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "easter_helmet_armor_toughness", 3.0, slot);
-        }
     }
 
     public static final class Chestplate extends EasterGear {
@@ -135,13 +121,6 @@ public abstract class EasterGear implements GearItem {
 
         public Chestplate(final Mytems key) {
             super(key);
-        }
-
-        @Override
-        protected void process(ItemMeta meta) {
-            EquipmentSlotGroup slot = EquipmentSlotGroup.CHEST;
-            Attr.addNumber(meta, Attribute.GENERIC_ARMOR, "easter_chestplate_armor", 8.0, slot);
-            Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "easter_chestplate_armor_toughness", 3.0, slot);
         }
     }
 
@@ -151,13 +130,6 @@ public abstract class EasterGear implements GearItem {
         public Leggings(final Mytems key) {
             super(key);
         }
-
-        @Override
-        protected void process(ItemMeta meta) {
-            EquipmentSlotGroup slot = EquipmentSlotGroup.LEGS;
-            Attr.addNumber(meta, Attribute.GENERIC_ARMOR, "easter_leggings_armor", 6.0, slot);
-            Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "easter_leggings_armor_toughness", 3.0, slot);
-        }
     }
 
     public static final class Boots extends EasterGear {
@@ -165,13 +137,6 @@ public abstract class EasterGear implements GearItem {
 
         public Boots(final Mytems key) {
             super(key);
-        }
-
-        @Override
-        protected void process(ItemMeta meta) {
-            EquipmentSlotGroup slot = EquipmentSlotGroup.FEET;
-            Attr.addNumber(meta, Attribute.GENERIC_ARMOR, "easter_boots_armor", 3.0, slot);
-            Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "easter_boots_armor_toughness", 3.0, slot);
         }
     }
 
