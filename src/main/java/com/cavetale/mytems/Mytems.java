@@ -1092,21 +1092,31 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     //
     SCUBA_HELMET(ScubaHelmet.class, PLAYER_HEAD, null, (char) 0, UTILITY),
     MINER_HELMET(MinerHelmet.class, PLAYER_HEAD, null, (char) 0, UTILITY),
-    //
+    // Mother and Father
     MOM(ForbiddenMytem.class, HEART_OF_THE_SEA, 0xF321, MOTHERS_DAY),
     MOTHER(ForbiddenMytem.class, HEART_OF_THE_SEA, 0xF322, MOTHERS_DAY, 64),
     DAD(ForbiddenMytem.class, HEART_OF_THE_SEA, 0xF323, FATHERS_DAY),
     FATHER(ForbiddenMytem.class, HEART_OF_THE_SEA, 0xF324, FATHERS_DAY, 64),
-    //
+    // Axes
     AXIS_MODEL(ForbiddenMytem.class, END_ROD, 0xE027, (char) 0, TECHNICAL),
     MOUSE_CURSOR(ForbiddenMytem.class, ARROW, 0xE028, (char) 0xE028, UI),
-    //
+    // Buttons
     PLAY_BUTTON(ForbiddenMytem.class, LEATHER_CHESTPLATE, (char) 0xF32C, UI),
     PAUSE_BUTTON(ForbiddenMytem.class, LEATHER_CHESTPLATE, (char) 0xF32D, UI),
     STOP_BUTTON(ForbiddenMytem.class, LEATHER_CHESTPLATE, (char) 0xF32E, UI),
+    // Halloween Costumes
     VAMPIRE_WINGS(WardrobeItem.class, FEATHER, 0xF32F, WARDROBE_OFFHAND),
     BAT_WINGS(WardrobeItem.class, FEATHER, 0xF330, WARDROBE_OFFHAND),
     PUMPKIN_SUIT(WardrobeItem.class, FEATHER, 0xF331, (char) 0, WARDROBE_OFFHAND),
+    // Halloween Weapons
+    CRESCENT_MOON(ForbiddenMytem.class, IRON_HOE, 0xF332, HALLOWEEN_WEAPON),
+    ETHEREAL_BLADE(ForbiddenMytem.class, IRON_SWORD, 0xF333, HALLOWEEN_WEAPON),
+    KNIFE(ForbiddenMytem.class, IRON_SWORD, 0xF334, HALLOWEEN_WEAPON),
+    SMASHING_PUMPKIN(ForbiddenMytem.class, MACE, 0xF335, HALLOWEEN_WEAPON),
+    // Lances
+    COPPER_LANCE(ForbiddenMytem.class, IRON_SWORD, 0xF336, (char) 0, LANCE),
+    GOLDEN_LANCE(ForbiddenMytem.class, GOLDEN_SWORD, 0xF337, (char) 0, LANCE),
+    DIAMOND_LANCE(ForbiddenMytem.class, DIAMOND_SWORD, 0xF338, (char) 0, LANCE),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
