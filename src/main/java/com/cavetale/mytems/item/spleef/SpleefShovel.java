@@ -20,6 +20,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -151,7 +152,7 @@ public final class SpleefShovel implements Mytem {
             // Effects
             final Location location = breakBlock.getLocation().add(0.5, 0.5, 0.5);
             location.getWorld().spawnParticle(Particle.BLOCK, location, 8, 0.0, 0.25, 0.25, 0.25, blockData);
-            location.getWorld().playSound(location, breakSound, 0.5f, 1f);
+            location.getWorld().playSound(location, breakSound, SoundCategory.BLOCKS, 0.5f, 1f);
             if (!wasPlayerPlaced) {
                 count += 1;
             }
