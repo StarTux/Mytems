@@ -9,13 +9,12 @@ import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.font.Unicode.tiny;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
+import static com.cavetale.mytems.util.Items.clearAttributes;
 import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
@@ -49,9 +48,10 @@ public final class Caveboy implements Mytem {
                                       text(tiny("AA Batteries sold"), GRAY),
                                       text(tiny("separately."), GRAY),
                                       empty(),
-                                      textOfChildren(Mytems.MOUSE_RIGHT, text(" Play ", GRAY), game.displayName)));
+                                      textOfChildren(Mytems.MOUSE_CURSOR, Mytems.MOUSE_RIGHT, text(" Play ", GRAY), game.displayName)));
                 meta.addItemFlags(ItemFlag.values());
                 key.markItemMeta(meta);
+                clearAttributes(meta);
             });
     }
 
@@ -61,12 +61,15 @@ public final class Caveboy implements Mytem {
     }
 
     @Override
-    public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
-        event.setUseItemInHand(Event.Result.DENY);
-        if (event.getHand() != EquipmentSlot.HAND) {
+    public void onPlayerInventoryClick(InventoryClickEvent event, Player player, ItemStack item) {
+        if (!event.isRightClick()) {
             return;
         }
-        game.startMethod.accept(player);
+        if (event.getCursor() != null && !event.getCursor().isEmpty()) {
+            return;
+        }
+        event.setCancelled(true);
+        Bukkit.getScheduler().runTask(plugin(), () -> game.startMethod.accept(player));
         Bukkit.getScheduler().runTaskLater(plugin(), () -> player.playSound(player.getLocation(), BLOCK_NOTE_BLOCK_BIT, MASTER, 1.0f, 1.1f), 0L);
         Bukkit.getScheduler().runTaskLater(plugin(), () -> player.playSound(player.getLocation(), BLOCK_NOTE_BLOCK_BIT, MASTER, 1.0f, 1.6f), 2L);
         Bukkit.getScheduler().runTaskLater(plugin(), () -> player.playSound(player.getLocation(), BLOCK_NOTE_BLOCK_BIT, MASTER, 1.0f, 2.0f), 4L);
