@@ -26,6 +26,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.ComponentLike;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.Instrument;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -43,6 +44,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.scheduler.BukkitTask;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
+import static com.cavetale.mytems.util.Items.colorized;
 import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
@@ -68,14 +70,6 @@ public final class MusicalInstrument implements Mytem {
     private static final TextColor COLOR = TextColor.color(0xFFAA88);
     private static final TextColor BG = TextColor.color(0x6A5ACD);
     private InstrumentType type;
-    private static final Map<Tone, Mytems> TONE_MYTEMS_MAP = Map
-        .of(Tone.A, Mytems.LETTER_A,
-            Tone.B, Mytems.LETTER_B,
-            Tone.C, Mytems.LETTER_C,
-            Tone.D, Mytems.LETTER_D,
-            Tone.E, Mytems.LETTER_E,
-            Tone.F, Mytems.LETTER_F,
-            Tone.G, Mytems.LETTER_G);
     protected static final NamespacedKey SHARP_KEY = new NamespacedKey(plugin(), "sharp");
     protected static final NamespacedKey FLAT_KEY = new NamespacedKey(plugin(), "flat");
 
@@ -342,11 +336,7 @@ public final class MusicalInstrument implements Mytem {
                 privateData.hero.gridCount += 1;
                 beat = beat.cooked(privateData.hero.melody);
                 gui.setItem(HERO_OFFSET + i * 3,
-                            TONE_MYTEMS_MAP.get(beat.tone).createIcon(List.of(text(beat.toString()))));
-                gui.setItem(HERO_OFFSET + i * 3 + 1,
-                            beat.semitone != null && beat.semitone != Semitone.NATURAL
-                            ? beat.semitone.mytems.createIcon()
-                            : null);
+                            MusicalNoteType.ofIgnoreNatural(beat.tone, beat.semitone).getMytems().createItemStack());
             }
         }
     }
@@ -366,17 +356,22 @@ public final class MusicalInstrument implements Mytem {
     }
 
     protected ItemStack makeNoteButton(Button button, GuiPrivateData privateData) {
-        Touch touch = privateData.touchOf(button.tone, button.octave);
+        final Touch touch = privateData.touchOf(button.tone, button.octave);
+        final Semitone semitone = privateData.semitones.get(button.tone);
+        final MusicalNoteType musicalNoteType = MusicalNoteType.ofIgnoreNatural(button.tone, semitone);
+        final ItemStack icon = musicalNoteType.getMytems().createItemStack();
+        if (button.octave == 1) {
+            colorized(icon, Color.fromRGB(0x885544));
+        }
         if (privateData.hero != null) {
             // Shorten this in hero mode!
-            return tooltip(TONE_MYTEMS_MAP.get(button.tone).createIcon(),
-                              List.of(text(touch.toString(), COLOR)));
+            return tooltip(icon, List.of(text(touch.toString(), COLOR)));
         }
         List<Component> text = new ArrayList<>();
         text.add(textOfChildren(text(touch.toString(), COLOR),
                                 space(), Mytems.MOUSE_LEFT));
         if (button.flat != null) {
-            if (privateData.semitones.get(button.tone) == Semitone.FLAT) {
+            if (semitone == Semitone.FLAT) {
                 text.add(textOfChildren(text(button.tone.name() + Semitone.NATURAL.symbol, COLOR),
                                         empty(), Mytems.SHIFT_KEY, Mytems.MOUSE_LEFT));
             } else {
@@ -385,7 +380,7 @@ public final class MusicalInstrument implements Mytem {
             }
         }
         if (button.sharp != null) {
-            if (privateData.semitones.get(button.tone) == Semitone.SHARP) {
+            if (semitone == Semitone.SHARP) {
                 text.add(textOfChildren(text(button.tone.name() + Semitone.NATURAL.symbol, COLOR),
                                         space(), Mytems.MOUSE_RIGHT));
             } else {
@@ -395,7 +390,7 @@ public final class MusicalInstrument implements Mytem {
         }
         text.add(text("Keyboard", COLOR)
                  .append(text(" 1...9", GRAY)));
-        return tooltip(TONE_MYTEMS_MAP.get(button.tone).createIcon(), text);
+        return tooltip(icon, text);
     }
 
     protected ItemStack makeSemitoneButton(Button button, GuiPrivateData privateData) {
@@ -407,7 +402,9 @@ public final class MusicalInstrument implements Mytem {
                                 Mytems.MOUSE_LEFT));
         text.add(textOfChildren(text("Flatten", COLOR),
                                 Mytems.MOUSE_RIGHT));
-        ItemStack icon = tooltip(semitone.mytems.createIcon(), text);
+        ItemStack icon = button.octave == 1
+            ? Mytems.ARROW_UP.createIcon(text)
+            : Mytems.ARROW_DOWN.createIcon(text);
         return icon;
     }
 
@@ -441,8 +438,7 @@ public final class MusicalInstrument implements Mytem {
         if (touch == null) return;
         ComponentLike actionBar = text()
             .append(key.component)
-            .append(TONE_MYTEMS_MAP.get(touch.tone).component)
-            .append(touch.semitone != Semitone.NATURAL ? touch.semitone.mytems.component : empty());
+            .append(MusicalNoteType.ofIgnoreNatural(touch.tone, touch.semitone).getMytems());
         player.sendActionBar(actionBar);
         player.getWorld().playSound(player.getLocation(), Sounds.of(type.instrument).sound, SoundCategory.PLAYERS,
                                     1.0f, Notes.of(touch.bukkitNote).pitch);
@@ -527,8 +523,7 @@ public final class MusicalInstrument implements Mytem {
             for (int i = 0; i < sharp.length(); i += 1) {
                 try {
                     Tone tone = Tone.valueOf(sharp.substring(i, i + 1));
-                    line.add(textOfChildren(TONE_MYTEMS_MAP.get(tone).component,
-                                            Semitone.SHARP.mytems.component));
+                    line.add(MusicalNoteType.of(tone, Semitone.SHARP).getMytems().asComponent());
                 } catch (IllegalArgumentException iae) { }
             }
         }
@@ -536,8 +531,7 @@ public final class MusicalInstrument implements Mytem {
             for (int i = 0; i < flat.length(); i += 1) {
                 try {
                     Tone tone = Tone.valueOf(flat.substring(i, i + 1));
-                    line.add(textOfChildren(TONE_MYTEMS_MAP.get(tone).component,
-                                            Semitone.FLAT.mytems.component));
+                    line.add(MusicalNoteType.of(tone, Semitone.FLAT).getMytems().asComponent());
                 } catch (IllegalArgumentException iae) { }
             }
         }

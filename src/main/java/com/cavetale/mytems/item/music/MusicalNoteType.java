@@ -1,9 +1,11 @@
 package com.cavetale.mytems.item.music;
 
 import com.cavetale.mytems.Mytems;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Note.Tone;
 
+@Getter
 @RequiredArgsConstructor
 public enum MusicalNoteType {
     A_NOTE(Mytems.A_NOTE, Tone.A, null),
@@ -60,5 +62,13 @@ public enum MusicalNoteType {
             if (it.tone == tone && it.semitone == semitone) return it;
         }
         return null;
+    }
+
+    public static MusicalNoteType of(Tone tone) {
+        return of(tone, null);
+    }
+
+    public static MusicalNoteType ofIgnoreNatural(Tone tone, Semitone semitone) {
+        return of(tone, (semitone != Semitone.NATURAL ? semitone : null));
     }
 }
