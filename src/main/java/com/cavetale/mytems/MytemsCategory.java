@@ -55,6 +55,7 @@ public enum MytemsCategory {
     MOTHERS_DAY,
     MUSIC,
     MUSICAL,
+    MUSICAL_NOTE,
     MUSIC_HYRULE,
     NUMBER,
     PAINTBRUSH,

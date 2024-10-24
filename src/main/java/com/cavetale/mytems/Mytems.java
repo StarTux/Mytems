@@ -70,6 +70,7 @@ import com.cavetale.mytems.item.mobcostume.SpiderCostume;
 import com.cavetale.mytems.item.mobslayer.LegacyMobslayer;
 import com.cavetale.mytems.item.music.HyruleInstrument;
 import com.cavetale.mytems.item.music.MusicalInstrument;
+import com.cavetale.mytems.item.music.MusicalNote;
 import com.cavetale.mytems.item.photo.Photo;
 import com.cavetale.mytems.item.pocketmob.MobCatcher;
 import com.cavetale.mytems.item.pocketmob.PocketMob;
@@ -1117,6 +1118,35 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     COPPER_LANCE(ForbiddenMytem.class, IRON_SWORD, 0xF336, (char) 0, LANCE),
     GOLDEN_LANCE(ForbiddenMytem.class, GOLDEN_SWORD, 0xF337, (char) 0, LANCE),
     DIAMOND_LANCE(ForbiddenMytem.class, DIAMOND_SWORD, 0xF338, (char) 0, LANCE),
+    // Musical Notes
+    A_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf339, MUSICAL_NOTE),
+    A_FLAT_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf33a, MUSICAL_NOTE),
+    A_NATURAL_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf33b, MUSICAL_NOTE),
+    A_SHARP_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf33c, MUSICAL_NOTE),
+    B_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf33d, MUSICAL_NOTE),
+    B_FLAT_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf33e, MUSICAL_NOTE),
+    B_NATURAL_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf33f, MUSICAL_NOTE),
+    B_SHARP_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf340, MUSICAL_NOTE),
+    C_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf341, MUSICAL_NOTE),
+    C_FLAT_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf342, MUSICAL_NOTE),
+    C_NATURAL_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf343, MUSICAL_NOTE),
+    C_SHARP_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf344, MUSICAL_NOTE),
+    D_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf345, MUSICAL_NOTE),
+    D_FLAT_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf346, MUSICAL_NOTE),
+    D_NATURAL_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf347, MUSICAL_NOTE),
+    D_SHARP_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf348, MUSICAL_NOTE),
+    E_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf349, MUSICAL_NOTE),
+    E_FLAT_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf34a, MUSICAL_NOTE),
+    E_NATURAL_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf34b, MUSICAL_NOTE),
+    E_SHARP_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf34c, MUSICAL_NOTE),
+    F_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf34d, MUSICAL_NOTE),
+    F_FLAT_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf34e, MUSICAL_NOTE),
+    F_NATURAL_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf34f, MUSICAL_NOTE),
+    F_SHARP_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf350, MUSICAL_NOTE),
+    G_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf351, MUSICAL_NOTE),
+    G_FLAT_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf352, MUSICAL_NOTE),
+    G_NATURAL_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf353, MUSICAL_NOTE),
+    G_SHARP_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf354, MUSICAL_NOTE),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
