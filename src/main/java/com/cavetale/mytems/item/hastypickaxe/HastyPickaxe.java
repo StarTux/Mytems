@@ -33,6 +33,7 @@ import org.bukkit.potion.PotionEffectType;
 import static com.cavetale.core.exploits.PlayerPlacedBlocks.isPlayerPlaced;
 import static com.cavetale.core.font.Unicode.subscript;
 import static com.cavetale.core.font.Unicode.superscript;
+import static com.cavetale.mytems.MytemsPlugin.blockBreakListener;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
@@ -168,7 +169,7 @@ public final class HastyPickaxe implements Mytem {
             } else {
                 break;
             }
-            block.breakNaturally(item, true, true);
+            blockBreakListener().breakBlockAndPickup(player, item, block);
         }
         return blocks.size();
     }
