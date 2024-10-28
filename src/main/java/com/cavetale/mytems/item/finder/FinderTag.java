@@ -101,7 +101,7 @@ public abstract class FinderTag extends UpgradableItemTag {
                 continue;
             }
             final FinderStat requiredStat = foundType.getRequiredStat();
-            if (requiredStat == null || getUpgradeLevel(requiredStat) > 0) {
+            if (requiredStat == null || getEffectiveUpgradeLevel(requiredStat) > 0) {
                 result.add(foundType);
             }
         }
