@@ -1147,6 +1147,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     G_FLAT_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf352, MUSICAL_NOTE),
     G_NATURAL_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf353, MUSICAL_NOTE),
     G_SHARP_NOTE(MusicalNote.class, LEATHER_HELMET, 0xf354, MUSICAL_NOTE),
+    //
+    HALLOWEEN_TROPHY(Trophy.class, JACK_O_LANTERN, 0xf355, TROPHY),
+    CAVETOBER_TROPHY(Trophy.class, JACK_O_LANTERN, 0xf356, TROPHY),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();

@@ -110,6 +110,9 @@ public enum TrophyType implements ComponentLike {
     SILVER_HOE(Material.IRON_HOE, HOE, SILVER),
     BRONZE_HOE(Material.STONE_HOE, HOE, BRONZE),
     PARTICIPATION_HOE(Material.WOODEN_HOE, HOE, PARTICIPATION),
+    // Halloween
+    HALLOWEEN_TROPHY(Mytems.HALLOWEEN_TROPHY, HALLOWEEN, GOLD),
+    CAVETOBER_TROPHY(Mytems.CAVETOBER_TROPHY, CAVETOBER, GOLD),
     ;
 
     private final Mytems mytems;

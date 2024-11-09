@@ -15,6 +15,8 @@ public enum TrophyCategory {
     SPLEEF,
     END_FIGHT,
     ENDERBALL,
+    HALLOWEEN,
+    CAVETOBER,
 
     SHOVEL,
     SWORD,
