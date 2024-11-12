@@ -124,9 +124,7 @@ public final class JavaItem {
                 lines.add("banner.setBaseColor(DyeColor." + banner.getBaseColor() + ");");
                 List<String> patternList = new ArrayList<>();
                 for (Pattern pattern : banner.getPatterns()) {
-                    patternList.add(String.format("new Pattern(DyeColor.%s, PatternType.%s)",
-                                                  pattern.getColor().name(),
-                                                  pattern.getPattern().name()));
+                    patternList.add("new Pattern(DyeColor." + pattern.getColor() + ", PatternType." + pattern.getPattern() + ")");
                 }
                 lines.addAll(sandwich("banner.setPatterns(List.of(", "    ", patternList, ",", "));"));
                 lines.add("blockStateMeta.setBlockState(banner);");
