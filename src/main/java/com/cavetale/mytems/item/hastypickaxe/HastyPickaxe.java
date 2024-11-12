@@ -60,7 +60,7 @@ public final class HastyPickaxe implements Mytem {
         }
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> key.markItemMeta(meta));
-        tier.createTag().store(prototype);
+        tier.createTag().store(key, prototype);
     }
 
     @Override
@@ -124,7 +124,7 @@ public final class HastyPickaxe implements Mytem {
                 final HastyPickaxeTag tag = serializeTag(item);
                 if (xp > 0) {
                     if (tag.addXpAndNotify(player, xp)) {
-                        tag.store(item);
+                        tag.store(key, item);
                     }
                 }
             });
@@ -335,7 +335,7 @@ public final class HastyPickaxe implements Mytem {
     @Override
     public HastyPickaxeTag serializeTag(ItemStack itemStack) {
         HastyPickaxeTag tag = tier.createTag();
-        tag.load(itemStack);
+        tag.load(key, itemStack);
         return tag;
     }
 
@@ -344,7 +344,7 @@ public final class HastyPickaxe implements Mytem {
         ItemStack itemStack = createItemStack();
         HastyPickaxeTag tag = Json.deserialize(serialized, tier.getTagClass());
         if (tag != null && !tag.isEmpty()) {
-            tag.store(itemStack);
+            tag.store(key, itemStack);
         }
         return itemStack;
     }

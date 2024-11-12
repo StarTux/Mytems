@@ -1,5 +1,6 @@
 package com.cavetale.mytems.item.hastypickaxe;
 
+import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.item.upgradable.UpgradableItem;
 import com.cavetale.mytems.item.upgradable.UpgradableItemTag;
 import com.cavetale.mytems.util.Items;
@@ -36,8 +37,8 @@ public abstract class HastyPickaxeTag extends UpgradableItemTag {
     }
 
     @Override
-    public final void store(ItemStack itemStack) {
-        super.store(itemStack);
+    public final void store(Mytems mytems, ItemStack itemStack) {
+        super.store(mytems, itemStack);
         itemStack.editMeta(meta -> {
                 Items.clearAttributes(meta);
                 meta.setUnbreakable(true);

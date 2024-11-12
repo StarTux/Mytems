@@ -46,7 +46,7 @@ public final class Photo implements Mytem {
     @Override
     public PhotoTag serializeTag(ItemStack itemStack) {
         PhotoTag tag = new PhotoTag();
-        tag.load(itemStack);
+        tag.load(key, itemStack);
         return tag;
     }
 
@@ -54,7 +54,7 @@ public final class Photo implements Mytem {
     public ItemStack deserializeTag(String serialized) {
         ItemStack result = prototype.clone();
         PhotoTag tag = Json.deserialize(serialized, PhotoTag.class);
-        if (tag != null) tag.store(result);
+        if (tag != null) tag.store(key, result);
         return result;
     }
 
@@ -75,13 +75,13 @@ public final class Photo implements Mytem {
         PhotoTag tag = new PhotoTag();
         tag.photoId = photoId;
         ItemStack itemStack = Mytems.PHOTO.createItemStack();
-        tag.store(itemStack);
+        tag.store(Mytems.PHOTO, itemStack);
         return itemStack;
     }
 
     public static int getPhotoId(ItemStack itemStack) {
         PhotoTag tag = new PhotoTag();
-        tag.load(itemStack);
+        tag.load(Mytems.PHOTO, itemStack);
         if (tag.photoId == null) {
             return 0;
         }

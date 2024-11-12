@@ -1,6 +1,7 @@
 package com.cavetale.mytems.item.bingo;
 
 import com.cavetale.mytems.MytemTag;
+import com.cavetale.mytems.Mytems;
 import com.cavetale.worldmarker.util.Tags;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,14 +18,7 @@ import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 
 public final class BingoBukkitTag extends MytemTag {
-    protected transient BingoBukkitType type = BingoBukkitType.DEFAULT;
     protected int water = 0;
-
-    public BingoBukkitTag() { }
-
-    public BingoBukkitTag(final BingoBukkitType type) {
-        this.type = type;
-    }
 
     @Override
     public boolean isEmpty() {
@@ -33,8 +27,8 @@ public final class BingoBukkitTag extends MytemTag {
     }
 
     @Override
-    public void load(ItemStack itemStack) {
-        super.load(itemStack);
+    public void load(Mytems mytems, ItemStack itemStack) {
+        super.load(mytems, itemStack);
         ItemMeta meta = itemStack.getItemMeta();
         PersistentDataContainer tag = meta.getPersistentDataContainer();
         Integer w = Tags.getInt(tag, namespacedKey("water"));
@@ -42,9 +36,10 @@ public final class BingoBukkitTag extends MytemTag {
     }
 
     @Override
-    public void store(ItemStack itemStack) {
-        super.store(itemStack);
+    public void store(Mytems mytems, ItemStack itemStack) {
+        super.store(mytems, itemStack);
         itemStack.editMeta(meta -> {
+                final BingoBukkitType type = BingoBukkitType.of(mytems);
                 PersistentDataContainer tag = meta.getPersistentDataContainer();
                 if (water == 0) {
                     tag.remove(namespacedKey("water"));

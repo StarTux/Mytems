@@ -1,5 +1,6 @@
 package com.cavetale.mytems.item.treechopper;
 
+import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.item.upgradable.UpgradableItemTag;
 import com.cavetale.mytems.util.Items;
 import java.util.ArrayList;
@@ -37,8 +38,8 @@ public abstract class TreeChopperTag extends UpgradableItemTag {
     }
 
     @Override
-    public final void load(ItemStack itemStack) {
-        super.load(itemStack);
+    public final void load(Mytems mytems, ItemStack itemStack) {
+        super.load(mytems, itemStack);
         if (getLevel() == 0 && getUpgrades() != null) {
             // Legacy items did not store the level
             int nextLevel = 0;
@@ -50,11 +51,11 @@ public abstract class TreeChopperTag extends UpgradableItemTag {
     }
 
     @Override
-    public final void store(ItemStack itemStack) {
+    public final void store(Mytems mytems, ItemStack itemStack) {
         if (stats != null) {
             legacyConversion();
         }
-        super.store(itemStack);
+        super.store(mytems, itemStack);
         itemStack.editMeta(meta -> {
                 Items.clearAttributes(meta);
                 meta.setUnbreakable(true);

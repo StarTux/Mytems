@@ -21,8 +21,8 @@ public final class LuminatorTag extends MytemTag {
     }
 
     @Override
-    public void load(ItemStack itemStack) {
-        super.load(itemStack);
+    public void load(Mytems mytems, ItemStack itemStack) {
+        super.load(mytems, itemStack);
         if (!itemStack.hasItemMeta()) return;
         PersistentDataContainer tag = itemStack.getItemMeta().getPersistentDataContainer();
         Integer l = Tags.getInt(tag, namespacedKey("light"));
@@ -30,8 +30,8 @@ public final class LuminatorTag extends MytemTag {
     }
 
     @Override
-    public void store(ItemStack itemStack) {
-        super.store(itemStack);
+    public void store(Mytems mytems, ItemStack itemStack) {
+        super.store(mytems, itemStack);
         itemStack.editMeta(meta -> {
                 PersistentDataContainer tag = meta.getPersistentDataContainer();
                 if (light == 0) {

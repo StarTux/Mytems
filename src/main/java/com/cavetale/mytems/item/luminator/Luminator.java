@@ -80,7 +80,7 @@ public final class Luminator implements Mytem {
     @Override
     public LuminatorTag serializeTag(ItemStack itemStack) {
         LuminatorTag tag = new LuminatorTag();
-        tag.load(itemStack);
+        tag.load(key, itemStack);
         return tag;
     }
 
@@ -89,7 +89,7 @@ public final class Luminator implements Mytem {
         ItemStack itemStack = createItemStack();
         LuminatorTag tag = Json.deserialize(serialized, LuminatorTag.class);
         if (tag != null && !tag.isEmpty()) {
-            tag.store(itemStack);
+            tag.store(key, itemStack);
         }
         return itemStack;
     }
@@ -126,7 +126,7 @@ public final class Luminator implements Mytem {
             if (tag.light <= 0) {
                 player.getInventory().setItem(event.getHand(), Mytems.EMPTY_LUMINATOR.createItemStack());
             } else {
-                tag.store(item);
+                tag.store(key, item);
             }
             if (tag.light <= 0) {
                 player.sendActionBar(textOfChildren(Mytems.EMPTY_LUMINATOR, text(" Luminator Level ", GRAY), text(tag.light, YELLOW)));
@@ -163,7 +163,7 @@ public final class Luminator implements Mytem {
         int newLight = Math.min(MAX_LIGHT, tag.light + luminance.getLight());
         int drawnLight = newLight - tag.light;
         tag.light = newLight;
-        tag.store(item);
+        tag.store(key, item);
         player.sendActionBar(textOfChildren(Mytems.LUMINATOR, text(" Luminator Level ", GRAY), text(tag.light, YELLOW)));
         Location soundLocation = block.getLocation().add(0.5, 0.5, 0.5);
         block.getWorld().playSound(soundLocation, Sound.BLOCK_BREWING_STAND_BREW, SoundCategory.BLOCKS, 0.5f, 2.0f);

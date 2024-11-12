@@ -80,7 +80,7 @@ public final class PocketMob implements Mytem, Listener {
     @Override
     public PocketMobTag serializeTag(ItemStack itemStack) {
         PocketMobTag tag = new PocketMobTag();
-        tag.load(itemStack, this);
+        tag.load(key, itemStack);
         return tag;
     }
 
@@ -88,7 +88,7 @@ public final class PocketMob implements Mytem, Listener {
     public ItemStack deserializeTag(String serialized) {
         ItemStack itemStack = createItemStack();
         PocketMobTag tag = Json.deserialize(serialized, PocketMobTag.class, PocketMobTag::new);
-        tag.store(itemStack, this);
+        tag.store(key, itemStack);
         return itemStack;
     }
 
@@ -99,6 +99,11 @@ public final class PocketMob implements Mytem, Listener {
         if (mytems == null || mytems.category != MytemsCategory.POCKET_MOB) return;
         event.setCancelled(true);
         if (delegate != null) delegate.onBlockPreDispense(this, event);
+    }
+
+    @Override
+    public int getMaxStackSize() {
+        return 1;
     }
 
     @Override

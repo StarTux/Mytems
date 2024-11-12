@@ -47,7 +47,7 @@ public final class FarawayMap implements Mytem {
     @Override
     public FarawayMapTag serializeTag(ItemStack itemStack) {
         FarawayMapTag tag = new FarawayMapTag();
-        tag.load(itemStack);
+        tag.load(key, itemStack);
         return tag;
     }
 
@@ -61,7 +61,7 @@ public final class FarawayMap implements Mytem {
             return itemStack;
         } else {
             ItemStack itemStack = createItemStack();
-            tag.store(itemStack);
+            tag.store(key, itemStack);
             return itemStack;
         }
     }

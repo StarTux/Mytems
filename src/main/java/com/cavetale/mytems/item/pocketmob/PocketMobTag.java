@@ -76,8 +76,9 @@ public final class PocketMobTag extends MytemTag {
         return mob == null && super.isEmpty();
     }
 
-    public void load(ItemStack itemStack, PocketMob pocketMob) {
-        super.load(itemStack);
+    @Override
+    public void load(Mytems mytems, ItemStack itemStack) {
+        super.load(mytems, itemStack);
         if (!itemStack.hasItemMeta()) return;
         ItemMeta meta = itemStack.getItemMeta();
         PersistentDataContainer tag = meta.getPersistentDataContainer();
@@ -107,15 +108,16 @@ public final class PocketMobTag extends MytemTag {
      * This method stores this tag in the item and updates its lore
      * accordingly.
      */
-    public void store(ItemStack itemStack, PocketMob pocketMob) {
-        super.store(itemStack);
-        itemStack.editMeta(meta -> store(meta, pocketMob));
+    @Override
+    public void store(Mytems mytems, ItemStack itemStack) {
+        super.store(mytems, itemStack);
+        itemStack.editMeta(meta -> store(meta, mytems));
     }
 
-    public void store(ItemMeta meta, PocketMob pocketMob) {
+    public void store(ItemMeta meta, Mytems mytems) {
         PersistentDataContainer tag = meta.getPersistentDataContainer();
         if (mob == null) {
-            tooltip(meta, List.of(pocketMob.getDisplayName()));
+            tooltip(meta, List.of(mytems.getMytem().getDisplayName()));
             tag.remove(KEY_MOB);
             return;
         }

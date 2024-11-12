@@ -230,7 +230,7 @@ public final class UpgradableItemMenu {
             return;
         }
         tag.setUpgradeLevel(stat, Math.min(stat.getMaxLevel().getLevel(), tag.getUpgradeLevel(stat) + 1));
-        tag.store(itemStack);
+        tag.store(tag.getUpgradableItemTier().getMytems(), itemStack);
         open();
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 0.5f, 0.75f);
     }
@@ -241,7 +241,7 @@ public final class UpgradableItemMenu {
             return;
         }
         tag.setStatDisabled(stat, !tag.isStatDisabled(stat));
-        tag.store(itemStack);
+        tag.store(tag.getUpgradableItemTier().getMytems(), itemStack);
         open();
         player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, SoundCategory.MASTER, 1f, 1f);
     }
@@ -268,7 +268,7 @@ public final class UpgradableItemMenu {
             return;
         }
         tag.resetUpgrades();
-        tag.store(itemStack);
+        tag.store(tag.getUpgradableItemTier().getMytems(), itemStack);
         open();
         player.sendMessage(textOfChildren(Mytems.KITTY_COIN, text("Kitty Coin consumed, upgrades reset. You can now reassign them.", GREEN)));
         player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, SoundCategory.MASTER, 0.5f, 0.5f);

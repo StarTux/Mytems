@@ -709,7 +709,7 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         if (!upgradable.addXp(xp)) {
             throw new CommandWarn("Adding xp was rejected");
         }
-        upgradable.store(item);
+        upgradable.store(mytems, item);
         player.sendMessage(textOfChildren(text("Added " + xp + " xp to ", YELLOW),
                                           ItemKinds.chatDescription(item)));
         return true;
@@ -728,7 +728,7 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
             throw new CommandWarn(mytems + " is not an upgradable Mytem!");
         }
         upgradable.setLevel(level);
-        upgradable.store(item);
+        upgradable.store(mytems, item);
         player.sendMessage(textOfChildren(text("Set level of ", YELLOW),
                                           ItemKinds.chatDescription(item),
                                           text(" to " + level, YELLOW)));

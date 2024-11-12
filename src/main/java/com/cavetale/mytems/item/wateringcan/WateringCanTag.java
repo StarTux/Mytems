@@ -1,6 +1,7 @@
 package com.cavetale.mytems.item.wateringcan;
 
 import com.cavetale.mytems.MytemTag;
+import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.worldmarker.util.Tags;
 import java.util.ArrayList;
@@ -27,7 +28,6 @@ import static net.kyori.adventure.text.format.TextDecoration.*;
 public final class WateringCanTag extends MytemTag {
     public static final String WATER = "water";
     protected int water;
-    protected transient WateringCan wateringCan;
 
     @Override
     public boolean isEmpty() {
@@ -36,8 +36,8 @@ public final class WateringCanTag extends MytemTag {
     }
 
     @Override
-    public void load(ItemStack itemStack) {
-        super.load(itemStack);
+    public void load(Mytems mytems, ItemStack itemStack) {
+        super.load(mytems, itemStack);
         if (!itemStack.hasItemMeta()) return;
         ItemMeta meta = itemStack.getItemMeta();
         if (meta == null) return;
@@ -47,9 +47,10 @@ public final class WateringCanTag extends MytemTag {
     }
 
     @Override
-    public void store(ItemStack itemStack) {
-        super.store(itemStack);
+    public void store(Mytems mytems, ItemStack itemStack) {
+        super.store(mytems, itemStack);
         itemStack.editMeta(meta -> {
+                final WateringCan wateringCan = (WateringCan) mytems.getMytem();
                 PersistentDataContainer tag = meta.getPersistentDataContainer();
                 Tags.set(tag, MytemsPlugin.namespacedKey(WATER), water);
                 List<Component> tooltip = new ArrayList<>();

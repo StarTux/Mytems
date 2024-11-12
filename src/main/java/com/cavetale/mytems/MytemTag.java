@@ -25,7 +25,7 @@ public class MytemTag {
     /**
      * Load this empty tag from an item.
      */
-    public void load(ItemStack itemStack) {
+    public void load(Mytems mytems, ItemStack itemStack) {
         if (itemStack.getAmount() != 1) {
             this.amount = itemStack.getAmount();
         }
@@ -34,7 +34,7 @@ public class MytemTag {
     /**
      * Store the contents of this tag in a new item.
      */
-    public void store(ItemStack itemStack) {
+    public void store(Mytems mytems, ItemStack itemStack) {
         if (amount != null) {
             itemStack.setAmount(amount);
         }

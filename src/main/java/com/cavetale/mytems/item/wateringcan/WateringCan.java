@@ -7,6 +7,7 @@ import com.cavetale.mytems.util.Json;
 import com.cavetale.mytems.util.Text;
 import java.util.List;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -27,15 +28,16 @@ import static org.bukkit.SoundCategory.*;
 import static org.bukkit.inventory.ItemFlag.*;
 
 @Getter
+@RequiredArgsConstructor
 public final class WateringCan implements Mytem {
     protected final Mytems key;
-    protected final WateringCanType type;
-    protected final ItemStack prototype;
-    protected final Component displayName;
-    protected final List<Component> tooltip;
+    protected WateringCanType type;
+    protected ItemStack prototype;
+    protected Component displayName;
+    protected List<Component> tooltip;
 
-    public WateringCan(final Mytems key) {
-        this.key = key;
+    @Override
+    public void enable() {
         this.type = WateringCanType.of(key);
         this.displayName = text(Text.toCamelCase(key, " "), type.textColor);
         this.prototype = new ItemStack(key.material);
@@ -48,12 +50,7 @@ public final class WateringCan implements Mytem {
                 key.markItemMeta(meta);
             });
         WateringCanTag tag = new WateringCanTag();
-        tag.wateringCan = this;
-        tag.store(prototype);
-    }
-
-    @Override
-    public void enable() {
+        tag.store(key, prototype);
     }
 
     @Override
@@ -74,13 +71,12 @@ public final class WateringCan implements Mytem {
         Block block = event.getClickedBlock();
         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return;
         WateringCanTag tag = new WateringCanTag();
-        tag.wateringCan = this;
-        tag.load(item);
+        tag.load(key, item);
         if (block.getType() == Material.WATER_CAULDRON) {
             if (tag.water == 0) return;
             if (!(block.getBlockData() instanceof Levelled levelled)) return;
             tag.water = 0;
-            tag.store(item);
+            tag.store(key, item);
             int level = levelled.getLevel();
             if (level == levelled.getMinimumLevel()) {
                 block.setType(Material.CAULDRON);
@@ -106,7 +102,7 @@ public final class WateringCan implements Mytem {
             }
             if (waterCount == 0) return;
             if (tag.water < type.maxWater) {
-                tag.store(item);
+                tag.store(key, item);
             } else {
                 player.getInventory().setItem(event.getHand(), type.emptyMytems.createItemStack());
             }
@@ -130,8 +126,7 @@ public final class WateringCan implements Mytem {
     @Override
     public WateringCanTag serializeTag(ItemStack itemStack) {
         WateringCanTag tag = new WateringCanTag();
-        tag.wateringCan = this;
-        tag.load(itemStack);
+        tag.load(key, itemStack);
         return tag;
     }
 
@@ -140,8 +135,7 @@ public final class WateringCan implements Mytem {
         ItemStack itemStack = createItemStack();
         WateringCanTag tag = Json.deserialize(serialized, WateringCanTag.class);
         if (tag != null && !tag.isEmpty()) {
-            tag.wateringCan = this;
-            tag.store(itemStack);
+            tag.store(key, itemStack);
         }
         return itemStack;
     }

@@ -32,7 +32,7 @@ public final class Finder implements Mytem {
     public void enable() {
         this.displayName = tier.getTitle();
         this.prototype = new ItemStack(key.material);
-        tier.createTag().store(prototype);
+        tier.createTag().store(key, prototype);
         prototype.editMeta(meta -> {
                 key.markItemMeta(meta);
             });
@@ -47,7 +47,7 @@ public final class Finder implements Mytem {
     @Override
     public FinderTag serializeTag(ItemStack itemStack) {
         FinderTag tag = tier.createTag();
-        tag.load(itemStack);
+        tag.load(key, itemStack);
         return tag;
     }
 
@@ -56,7 +56,7 @@ public final class Finder implements Mytem {
         ItemStack itemStack = createItemStack();
         FinderTag tag = Json.deserialize(serialized, tier.getTagClass());
         if (tag != null && !tag.isEmpty()) {
-            tag.store(itemStack);
+            tag.store(key, itemStack);
         }
         return itemStack;
     }
@@ -75,7 +75,7 @@ public final class Finder implements Mytem {
             return false;
         }
         if (tag.addXpAndNotify(player, foundType.getXp())) {
-            tag.store(item);
+            tag.store(key, item);
         }
         player.sendMessage(textOfChildren(key, text("You discovered this ", GRAY),
                                           foundType.getChatIcon(),

@@ -504,7 +504,7 @@ public final class MusicalInstrument implements Mytem {
     @Override
     public MusicalInstrumentTag serializeTag(ItemStack itemStack) {
         MusicalInstrumentTag musicalInstrumentTag = new MusicalInstrumentTag();
-        musicalInstrumentTag.load(itemStack, this);
+        musicalInstrumentTag.load(key, itemStack);
         return musicalInstrumentTag;
     }
 
@@ -513,7 +513,7 @@ public final class MusicalInstrument implements Mytem {
         ItemStack itemStack = createItemStack();
         MusicalInstrumentTag musicalInstrumentTag = Json.deserialize(serialized, MusicalInstrumentTag.class,
                                                                      MusicalInstrumentTag::new);
-        musicalInstrumentTag.store(itemStack, this);
+        musicalInstrumentTag.store(key, itemStack);
         return itemStack;
     }
 

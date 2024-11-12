@@ -126,7 +126,7 @@ public interface Mytem {
     default MytemTag serializeTag(ItemStack itemStack) {
         if (itemStack.getAmount() == 1) return null;
         MytemTag tag = new MytemTag();
-        tag.load(itemStack);
+        tag.load(getKey(), itemStack);
         return tag;
     }
 
@@ -138,7 +138,7 @@ public interface Mytem {
         ItemStack itemStack = createItemStack();
         MytemTag tag = Json.deserialize(serialized, MytemTag.class);
         if (tag != null && !tag.isEmpty()) {
-            tag.store(itemStack);
+            tag.store(getKey(), itemStack);
         }
         return itemStack;
     }

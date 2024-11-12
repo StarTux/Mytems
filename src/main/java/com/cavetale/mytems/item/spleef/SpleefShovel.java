@@ -51,7 +51,7 @@ public final class SpleefShovel implements Mytem {
     public void enable() {
         this.displayName = text(tier.getDisplayName(), tier.getColor());
         this.prototype = new ItemStack(key.material);
-        tier.createTag().store(prototype);
+        tier.createTag().store(key, prototype);
         prototype.editMeta(meta -> key.markItemMeta(meta));
         for (int y = -1; y <= 1; y += 1) {
             for (int z = -1; z <= 1; z += 1) {
@@ -80,7 +80,7 @@ public final class SpleefShovel implements Mytem {
         final int bonusXp = (int) Math.cbrt((double) breakRangeCount);
         Bukkit.getScheduler().runTask(plugin(), () -> {
                 if (tag.addXpAndNotify(player, 1 + bonusXp)) {
-                    tag.store(item);
+                    tag.store(key, item);
                 }
             });
     }
@@ -219,7 +219,7 @@ public final class SpleefShovel implements Mytem {
     @Override
     public SpleefShovelTag serializeTag(ItemStack itemStack) {
         final SpleefShovelTag tag = tier.createTag();
-        tag.load(itemStack);
+        tag.load(key, itemStack);
         return tag;
     }
 
@@ -228,7 +228,7 @@ public final class SpleefShovel implements Mytem {
         final ItemStack itemStack = createItemStack();
         final SpleefShovelTag tag = Json.deserialize(serialized, tier.getTagClass());
         if (tag != null && !tag.isEmpty()) {
-            tag.store(itemStack);
+            tag.store(key, itemStack);
         }
         return itemStack;
     }

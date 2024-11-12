@@ -47,7 +47,7 @@ public final class Mobslayer implements Mytem {
     @Override
     public MobslayerTag serializeTag(ItemStack item) {
         final MobslayerTag tag = tier.createTag();
-        tag.load(item);
+        tag.load(key, item);
         return tag;
     }
 
@@ -55,7 +55,7 @@ public final class Mobslayer implements Mytem {
     public ItemStack deserializeTag(String serialized) {
         final ItemStack itemStack = createItemStack();
         final MobslayerTag tag = Json.deserialize(serialized, tier.getTagClass());
-        if (tag != null) tag.store(itemStack);
+        if (tag != null) tag.store(key, itemStack);
         return itemStack;
     }
 }

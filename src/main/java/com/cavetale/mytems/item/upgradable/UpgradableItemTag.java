@@ -69,8 +69,8 @@ public abstract class UpgradableItemTag extends MytemTag {
      * Load the xp and all stats from the item.
      */
     @Override
-    public void load(ItemStack itemStack) {
-        super.load(itemStack);
+    public void load(Mytems mytems, ItemStack itemStack) {
+        super.load(mytems, itemStack);
         if (!itemStack.hasItemMeta()) {
             return;
         }
@@ -108,8 +108,8 @@ public abstract class UpgradableItemTag extends MytemTag {
      * Store the exp and stats.
      */
     @Override
-    public void store(ItemStack itemStack) {
-        super.store(itemStack);
+    public void store(Mytems mytems, ItemStack itemStack) {
+        super.store(mytems, itemStack);
         itemStack.editMeta(meta -> {
                 final var pdc = meta.getPersistentDataContainer();
                 Tags.set(pdc, namespacedKey(XP), xp);

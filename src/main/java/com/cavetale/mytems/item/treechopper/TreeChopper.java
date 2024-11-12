@@ -40,7 +40,7 @@ public final class TreeChopper implements Mytem {
         displayName = tier.getDisplayName();
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> key.markItemMeta(meta));
-        tier.createTag().store(prototype);
+        tier.createTag().store(key, prototype);
         // Commands
         commandNode = MytemsPlugin.getInstance().getMytemsCommand().registerItemCommand(key)
             .description("Tree Chopper commands");
@@ -142,14 +142,14 @@ public final class TreeChopper implements Mytem {
         }
         xpBonus = Math.max(1, (xpBonus - 1) / 2 + 1);
         if (tag.addXpAndNotify(player, xpBonus)) {
-            tag.store(itemStack);
+            tag.store(key, itemStack);
         }
     }
 
     @Override
     public TreeChopperTag serializeTag(ItemStack itemStack) {
         TreeChopperTag tag = tier.createTag();
-        tag.load(itemStack);
+        tag.load(key, itemStack);
         return tag;
     }
 
@@ -158,7 +158,7 @@ public final class TreeChopper implements Mytem {
         ItemStack itemStack = createItemStack();
         TreeChopperTag tag = Json.deserialize(serialized, tier.getTagClass());
         if (tag != null && !tag.isEmpty()) {
-            tag.store(itemStack);
+            tag.store(key, itemStack);
         }
         return itemStack;
     }

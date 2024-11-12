@@ -2,6 +2,7 @@ package com.cavetale.mytems.item.photo;
 
 import com.cavetale.core.playercache.PlayerCache;
 import com.cavetale.mytems.MytemTag;
+import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.worldmarker.util.Tags;
 import java.util.ArrayList;
@@ -36,8 +37,8 @@ public final class PhotoTag extends MytemTag {
     }
 
     @Override
-    public void load(ItemStack itemStack) {
-        super.load(itemStack);
+    public void load(Mytems mytems, ItemStack itemStack) {
+        super.load(mytems, itemStack);
         if (!itemStack.hasItemMeta()) return;
         ItemMeta meta = itemStack.getItemMeta();
         if (meta == null) return;
@@ -46,8 +47,8 @@ public final class PhotoTag extends MytemTag {
     }
 
     @Override
-    public void store(ItemStack itemStack) {
-        super.store(itemStack);
+    public void store(Mytems mytems, ItemStack itemStack) {
+        super.store(mytems, itemStack);
         itemStack.editMeta(m -> {
                 if (photoId != null) {
                     PersistentDataContainer tag = m.getPersistentDataContainer();

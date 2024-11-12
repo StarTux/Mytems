@@ -52,7 +52,7 @@ public final class UpgradableItemCombinerRecipe implements ItemCombinerRecipe {
             && inputTag2 instanceof UpgradableItemTag upgradable2
             && resultTag instanceof UpgradableItemTag upgradable3) {
             upgradable3.setTotalXp(upgradable1.getTotalXp() + upgradable2.getTotalXp());
-            upgradable3.store(result);
+            upgradable3.store(outputMytems, result);
         }
         return result;
     }

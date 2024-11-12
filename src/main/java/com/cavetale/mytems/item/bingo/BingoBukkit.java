@@ -69,8 +69,8 @@ public final class BingoBukkit implements Mytem {
     @Override
     public ItemStack createItemStack() {
         ItemStack result = prototype.clone();
-        BingoBukkitTag tag = new BingoBukkitTag(type);
-        tag.store(result);
+        BingoBukkitTag tag = new BingoBukkitTag();
+        tag.store(key, result);
         return result;
     }
 
@@ -87,40 +87,40 @@ public final class BingoBukkit implements Mytem {
         boolean sneak = player.isSneaking();
         if (!sneak && blockData.getMaterial() == Material.WATER && blockData instanceof Levelled levelled && levelled.getLevel() == 0) {
             // Fill
-            BingoBukkitTag tag = new BingoBukkitTag(type);
-            tag.load(item);
+            BingoBukkitTag tag = new BingoBukkitTag();
+            tag.load(key, item);
             if (tag.water >= type.capacity) return;
             if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return;
             BlockData newBlockData = Material.AIR.createBlockData();
             if (!new PlayerChangeBlockEvent(player, block, newBlockData).callEvent()) return;
             block.setBlockData(newBlockData);
             tag.water += 1;
-            tag.store(item);
+            tag.store(key, item);
             fillEffect(block);
         } else if (!sneak && blockData instanceof Waterlogged waterlogged) {
             if (waterlogged.isWaterlogged()) {
                 // Fill
-                BingoBukkitTag tag = new BingoBukkitTag(type);
-                tag.load(item);
+                BingoBukkitTag tag = new BingoBukkitTag();
+                tag.load(key, item);
                 if (tag.water >= type.capacity) return;
                 if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return;
                 waterlogged.setWaterlogged(false);
                 if (!new PlayerChangeBlockEvent(player, block, waterlogged).callEvent()) return;
                 block.setBlockData(blockData);
                 tag.water += 1;
-                tag.store(item);
+                tag.store(key, item);
                 fillEffect(block);
             } else {
                 // Place
-                BingoBukkitTag tag = new BingoBukkitTag(type);
-                tag.load(item);
+                BingoBukkitTag tag = new BingoBukkitTag();
+                tag.load(key, item);
                 if (tag.water <= 0) return;
                 if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return;
                 waterlogged.setWaterlogged(true);
                 if (!new PlayerChangeBlockEvent(player, block, waterlogged).callEvent()) return;
                 block.setBlockData(blockData);
                 tag.water -= 1;
-                tag.store(item);
+                tag.store(key, item);
                 placeEffect(block);
             }
         } else if (trace.getHitBlockFace() != null) {
@@ -128,15 +128,15 @@ public final class BingoBukkit implements Mytem {
             blockData = block.getBlockData();
             if (block.isEmpty() || (blockData.getMaterial() == Material.WATER && blockData instanceof Levelled levelled && levelled.getLevel() != 0)) {
                 // Place
-                BingoBukkitTag tag = new BingoBukkitTag(type);
-                tag.load(item);
+                BingoBukkitTag tag = new BingoBukkitTag();
+                tag.load(key, item);
                 if (tag.water <= 0) return;
                 if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return;
                 BlockData newBlockData = Material.WATER.createBlockData();
                 if (!new PlayerChangeBlockEvent(player, block, newBlockData).callEvent()) return;
                 block.setBlockData(newBlockData);
                 tag.water -= 1;
-                tag.store(item);
+                tag.store(key, item);
                 placeEffect(block);
             }
         }
@@ -157,8 +157,7 @@ public final class BingoBukkit implements Mytem {
     @Override
     public BingoBukkitTag serializeTag(ItemStack itemStack) {
         BingoBukkitTag tag = new BingoBukkitTag();
-        tag.type = this.type;
-        tag.load(itemStack);
+        tag.load(key, itemStack);
         return tag;
     }
 
@@ -167,8 +166,7 @@ public final class BingoBukkit implements Mytem {
         ItemStack result = prototype.clone();
         BingoBukkitTag tag = Json.deserialize(serialized, BingoBukkitTag.class);
         if (tag != null) {
-            tag.type = this.type;
-            tag.store(result);
+            tag.store(key, result);
         }
         return result;
     }

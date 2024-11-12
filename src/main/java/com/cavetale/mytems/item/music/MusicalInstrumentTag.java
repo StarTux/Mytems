@@ -1,6 +1,7 @@
 package com.cavetale.mytems.item.music;
 
 import com.cavetale.mytems.MytemTag;
+import com.cavetale.mytems.Mytems;
 import com.cavetale.worldmarker.util.Tags;
 import java.util.Objects;
 import org.bukkit.inventory.ItemStack;
@@ -19,15 +20,17 @@ public final class MusicalInstrumentTag extends MytemTag {
         return flat == null && sharp == null;
     }
 
-    public void load(ItemStack itemStack, MusicalInstrument instance) {
-        super.load(itemStack);
+    @Override
+    public void load(Mytems mytems, ItemStack itemStack) {
+        super.load(mytems, itemStack);
         PersistentDataContainer tag = itemStack.getItemMeta().getPersistentDataContainer();
         sharp = Tags.getString(tag, MusicalInstrument.SHARP_KEY);
         flat = Tags.getString(tag, MusicalInstrument.FLAT_KEY);
     }
 
-    public void store(ItemStack itemStack, MusicalInstrument instance) {
-        super.store(itemStack);
+    @Override
+    public void store(Mytems mytems, ItemStack itemStack) {
+        super.store(mytems, itemStack);
         if (!musicalInstrumentIsEmpty()) {
             itemStack.editMeta(meta -> {
                     PersistentDataContainer tag = meta.getPersistentDataContainer();
@@ -37,7 +40,8 @@ public final class MusicalInstrumentTag extends MytemTag {
                     if (flat != null) {
                         Tags.set(tag, MusicalInstrument.FLAT_KEY, flat);
                     }
-                    instance.updateLore(meta, sharp, flat);
+                    final MusicalInstrument musicalInstrument = (MusicalInstrument) mytems.getMytem();
+                    musicalInstrument.updateLore(meta, sharp, flat);
                 });
         }
     }

@@ -2,6 +2,7 @@ package com.cavetale.mytems.item.farawaymap;
 
 import com.cavetale.core.connect.Connect;
 import com.cavetale.mytems.MytemTag;
+import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.worldmarker.util.Tags;
 import java.util.Objects;
@@ -31,8 +32,9 @@ public final class FarawayMapTag extends MytemTag {
             && color == null;
     }
 
-    public void load(ItemStack itemStack) {
-        super.load(itemStack);
+    @Override
+    public void load(Mytems mytems, ItemStack itemStack) {
+        super.load(mytems, itemStack);
         ItemMeta meta = itemStack.getItemMeta();
         if (meta == null) return;
         PersistentDataContainer tag = meta.getPersistentDataContainer();
@@ -42,8 +44,9 @@ public final class FarawayMapTag extends MytemTag {
         this.color = Tags.getInt(tag, MytemsPlugin.namespacedKey(COLOR));
     }
 
-    public void store(ItemStack itemStack) {
-        super.store(itemStack);
+    @Override
+    public void store(Mytems mytems, ItemStack itemStack) {
+        super.store(mytems, itemStack);
         itemStack.editMeta(meta -> {
                 PersistentDataContainer tag = meta.getPersistentDataContainer();
                 if (server != null) {
@@ -63,7 +66,7 @@ public final class FarawayMapTag extends MytemTag {
     }
 
     public void loadMap(ItemStack itemStack) {
-        super.load(itemStack); // amount
+        super.load(Mytems.FARAWAY_MAP, itemStack); // amount
         if (itemStack.getItemMeta() instanceof MapMeta meta) {
             if (meta.hasMapView()) {
                 MapView mapView = meta.getMapView();
@@ -77,7 +80,7 @@ public final class FarawayMapTag extends MytemTag {
     }
 
     public void storeMap(ItemStack itemStack) {
-        super.store(itemStack); // amount
+        super.store(Mytems.FARAWAY_MAP, itemStack); // amount
         itemStack.editMeta(m -> {
                 if (!(m instanceof MapMeta meta)) return;
                 if (mapId != null) {
