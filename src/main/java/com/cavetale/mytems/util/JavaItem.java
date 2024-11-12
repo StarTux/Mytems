@@ -110,9 +110,7 @@ public final class JavaItem {
             for (Pattern pattern : bannerMeta.getPatterns()) {
                 DyeColor patternColor = pattern.getColor();
                 PatternType patternType = pattern.getPattern();
-                patternList.add(String.format("new Pattern(DyeColor.%s, PatternType.%s)",
-                                              patternColor.name(),
-                                              patternType.name()));
+                patternList.add("new Pattern(DyeColor." + patternColor + ", PatternType." + patternType + ")");
             }
             lines.addAll(sandwich("bannerMeta.setPatterns(List.of(", "    ", patternList, ",", "));"));
         }
