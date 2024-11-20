@@ -19,6 +19,7 @@ import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -124,7 +125,9 @@ public final class Magnifier implements Mytem {
 
     @Override
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player, ItemStack item) {
-        event.setCancelled(true);
+        if (event.getRightClicked().getType() == EntityType.ALLAY) {
+            event.setCancelled(true);
+        }
     }
 
     @Override
