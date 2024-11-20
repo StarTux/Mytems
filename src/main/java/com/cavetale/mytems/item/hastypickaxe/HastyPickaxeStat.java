@@ -55,10 +55,6 @@ public enum HastyPickaxeStat implements UpgradableStat {
         @Override public void applyToItem(ItemMeta meta, int upgradeLevel) {
             meta.addEnchant(Enchantment.FORTUNE, upgradeLevel, true);
         }
-
-        @Override public List<HastyPickaxeStat> getConflicts() {
-            return List.of(SILK_TOUCH);
-        }
     },
 
     SILK_TOUCH(Vec2i.of(3, 4), text("Silk Touch", color(0xD3D3D3)), () -> new ItemStack(Material.FEATHER),
@@ -70,10 +66,6 @@ public enum HastyPickaxeStat implements UpgradableStat {
 
         @Override public void applyToItem(ItemMeta meta, int upgradeLevel) {
             meta.addEnchant(Enchantment.SILK_TOUCH, 1, true);
-        }
-
-        @Override public List<HastyPickaxeStat> getConflicts() {
-            return List.of(FORTUNE);
         }
     },
 
