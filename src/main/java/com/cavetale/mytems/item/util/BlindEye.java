@@ -9,6 +9,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -66,6 +67,7 @@ public final class BlindEye implements Mytem {
 
     @Override
     public void onPlayerInteractEntity(PlayerInteractEntityEvent event, Player player, ItemStack item) {
+        if (event.getRightClicked() instanceof ItemFrame) return;
         event.setCancelled(true);
     }
 
