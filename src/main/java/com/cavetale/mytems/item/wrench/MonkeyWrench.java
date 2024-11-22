@@ -29,6 +29,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.core.util.CamelCase.toCamelCase;
 import static com.cavetale.mytems.MytemsPlugin.sessionOf;
+import static com.cavetale.mytems.util.Items.clearAttributes;
 import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.space;
@@ -54,6 +55,7 @@ public final class MonkeyWrench implements Mytem {
                                       textOfChildren(Mytems.MOUSE_RIGHT, text(" Change block", GRAY))));
                 meta.setUnbreakable(true);
                 meta.addItemFlags(ItemFlag.values());
+                clearAttributes(meta);
                 key.markItemMeta(meta);
             });
     }
