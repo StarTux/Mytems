@@ -48,8 +48,8 @@ public final class DrAculaStaff extends AculaItem {
     protected ItemStack getRawItemStack() {
         ItemStack item = new ItemStack(Material.NETHERITE_SWORD);
         item.editMeta(meta -> {
-                Attr.add(meta, Attribute.GENERIC_ATTACK_DAMAGE, "dr_acula_staff_damage", 13.0, Operation.ADD_NUMBER, EquipmentSlotGroup.HAND);
-                Attr.add(meta, Attribute.GENERIC_ATTACK_SPEED, "dr_acula_staff_attack_speed", -0.7, Operation.ADD_SCALAR, EquipmentSlotGroup.HAND);
+                Attr.add(meta, Attribute.ATTACK_DAMAGE, "dr_acula_staff_damage", 13.0, Operation.ADD_NUMBER, EquipmentSlotGroup.HAND);
+                Attr.add(meta, Attribute.ATTACK_SPEED, "dr_acula_staff_attack_speed", -0.7, Operation.ADD_SCALAR, EquipmentSlotGroup.HAND);
             });
         return item;
     }
@@ -86,7 +86,7 @@ public final class DrAculaStaff extends AculaItem {
                     b.setPersistent(false);
                     b.setSilent(true);
                     b.setRemoveWhenFarAway(true);
-                    b.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(2048.0);
+                    b.getAttribute(Attribute.MAX_HEALTH).setBaseValue(2048.0);
                     b.setHealth(2048.0);
                 });
             if (bat == null) break;

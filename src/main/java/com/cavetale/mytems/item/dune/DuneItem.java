@@ -150,7 +150,7 @@ public abstract class DuneItem implements GearItem {
             private final int requiredItemCount;
             private final String name = "Sand Speed";
             private final String description = "Gain extra speed while walking on sand";
-            private final EntityAttribute speedAttribute = new EntityAttribute(Attribute.GENERIC_MOVEMENT_SPEED,
+            private final EntityAttribute speedAttribute = new EntityAttribute(Attribute.MOVEMENT_SPEED,
                                                                                "dune_sand_speed",
                                                                                0.5, Operation.ADD_SCALAR);
             private final List<EntityAttribute> entityAttributes = List.of(speedAttribute);

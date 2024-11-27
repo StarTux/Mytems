@@ -135,7 +135,7 @@ public final class PocketMobTag extends MytemTag {
                 text.add(prop("Name", customName));
             }
             String health = "" + (int) Math.ceil(mobEntity.getHealth());
-            String maxHealth = "" + (int) Math.ceil(mobEntity.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
+            String maxHealth = "" + (int) Math.ceil(mobEntity.getAttribute(Attribute.MAX_HEALTH).getValue());
             text.add(prop("Health", textOfChildren(Mytems.HEART, text(health, RED), text("/", COLOR_BG), text(maxHealth, RED))));
             if ((!(mobEntity instanceof Animals) && mobEntity.getRemoveWhenFarAway())
                 || !mobEntity.isPersistent() || Entities.isTransient(mobEntity)) {
@@ -165,7 +165,7 @@ public final class PocketMobTag extends MytemTag {
                 text.add(prop("Strength", "" + llama.getStrength()));
             }
             text.add(prop("Jump", "" + (int) Math.round(100.0 * ahorse.getJumpStrength())));
-            text.add(prop("Speed", "" + (int) Math.round(100.0 * ahorse.getAttribute(Attribute.GENERIC_MOVEMENT_SPEED).getValue())));
+            text.add(prop("Speed", "" + (int) Math.round(100.0 * ahorse.getAttribute(Attribute.MOVEMENT_SPEED).getValue())));
         } else if (entity instanceof Colorable colorable) { // Sheep, Shulker
             DyeColor dyeColor = colorable.getColor();
             if (dyeColor != null) {

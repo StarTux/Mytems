@@ -91,8 +91,8 @@ abstract class SantaItem implements GearItem {
         ItemStack item = makeColoredLeatherItem(Material.LEATHER_BOOTS, Color.BLACK);
         item.editMeta(meta -> {
                 EquipmentSlotGroup slot = EquipmentSlotGroup.FEET;
-                Attr.addNumber(meta, Attribute.GENERIC_ARMOR, "santa_boots_armor", 3.0, slot);
-                Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "santa_boots_armor_toughness", 3.0, slot);
+                Attr.addNumber(meta, Attribute.ARMOR, "santa_boots_armor", 3.0, slot);
+                Attr.addNumber(meta, Attribute.ARMOR_TOUGHNESS, "santa_boots_armor_toughness", 3.0, slot);
             });
         return item;
     }
@@ -101,8 +101,8 @@ abstract class SantaItem implements GearItem {
         ItemStack item = makeColoredLeatherItem(Material.LEATHER_LEGGINGS, Color.RED);
         item.editMeta(meta -> {
                 EquipmentSlotGroup slot = EquipmentSlotGroup.LEGS;
-                Attr.addNumber(meta, Attribute.GENERIC_ARMOR, "santa_pants_armor", 6.0, slot);
-                Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "santa_pants_armor", 3.0, slot);
+                Attr.addNumber(meta, Attribute.ARMOR, "santa_pants_armor", 6.0, slot);
+                Attr.addNumber(meta, Attribute.ARMOR_TOUGHNESS, "santa_pants_armor", 3.0, slot);
             });
         return item;
     }
@@ -111,8 +111,8 @@ abstract class SantaItem implements GearItem {
         ItemStack item = makeColoredLeatherItem(Material.LEATHER_CHESTPLATE, Color.RED);
         item.editMeta(meta -> {
                 EquipmentSlotGroup slot = EquipmentSlotGroup.CHEST;
-                Attr.addNumber(meta, Attribute.GENERIC_ARMOR, "santa_jacket_armor", 8.0, slot);
-                Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "santa_pants_armor_toughness", 3.0, slot);
+                Attr.addNumber(meta, Attribute.ARMOR, "santa_jacket_armor", 8.0, slot);
+                Attr.addNumber(meta, Attribute.ARMOR_TOUGHNESS, "santa_pants_armor_toughness", 3.0, slot);
             });
         return item;
     }
@@ -121,8 +121,8 @@ abstract class SantaItem implements GearItem {
         ItemStack item = Skull.create("Santa", SKULL_ID, SKULL_TEXTURE);
         item.editMeta(meta -> {
                 EquipmentSlotGroup slot = EquipmentSlotGroup.HEAD;
-                Attr.addNumber(meta, Attribute.GENERIC_ARMOR, "santa_hat_armor", 3.0, slot);
-                Attr.addNumber(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "santa_hat_armor_toughness", 3.0, slot);
+                Attr.addNumber(meta, Attribute.ARMOR, "santa_hat_armor", 3.0, slot);
+                Attr.addNumber(meta, Attribute.ARMOR_TOUGHNESS, "santa_hat_armor_toughness", 3.0, slot);
             });
         return item;
     }

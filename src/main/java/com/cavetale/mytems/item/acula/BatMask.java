@@ -28,8 +28,8 @@ public final class BatMask extends AculaItem {
                                       "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvZjc2NjE5NjUyZmFmZWM5MGNlOThkZjUwMTNjNjNkYzZhNzc3NzZhYjI3ODczYjczZGFmYjJiNmJkZWIxODUifX19",
                                       null);
         item.editMeta(meta -> {
-                Attr.add(meta, Attribute.GENERIC_ARMOR, "bat_mask_armor", 3.0, Operation.ADD_NUMBER, EquipmentSlotGroup.HEAD);
-                Attr.add(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "bat_mask_armor_toughness", 3.0, Operation.ADD_NUMBER, EquipmentSlotGroup.HEAD);
+                Attr.add(meta, Attribute.ARMOR, "bat_mask_armor", 3.0, Operation.ADD_NUMBER, EquipmentSlotGroup.HEAD);
+                Attr.add(meta, Attribute.ARMOR_TOUGHNESS, "bat_mask_armor_toughness", 3.0, Operation.ADD_NUMBER, EquipmentSlotGroup.HEAD);
             });
         return item;
     }

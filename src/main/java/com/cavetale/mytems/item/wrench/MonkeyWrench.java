@@ -27,7 +27,6 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import static com.cavetale.core.util.CamelCase.toCamelCase;
 import static com.cavetale.mytems.MytemsPlugin.sessionOf;
 import static com.cavetale.mytems.util.Items.clearAttributes;
 import static com.cavetale.mytems.util.Items.tooltip;
@@ -187,8 +186,7 @@ public final class MonkeyWrench implements Mytem {
                 Art newArt = arts.get(index);
                 if (painting.setArt(newArt)) {
                     soundUse(player);
-                    player.sendActionBar(textOfChildren(VanillaPaintings.componentOf(newArt),
-                                                        text(toCamelCase(" ", newArt), BLUE)));
+                    player.sendActionBar(textOfChildren(VanillaPaintings.componentOf(newArt), newArt.title()));
                     return;
                 }
             }

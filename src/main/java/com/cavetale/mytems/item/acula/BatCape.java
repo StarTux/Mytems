@@ -22,8 +22,8 @@ public final class BatCape extends AculaItem {
     protected ItemStack getRawItemStack() {
         var item = new ItemStack(Material.ELYTRA);
         item.editMeta(meta -> {
-                Attr.add(meta, Attribute.GENERIC_ARMOR, "bat_cape_armor", 8.0, Operation.ADD_NUMBER, EquipmentSlotGroup.CHEST);
-                Attr.add(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "bat_cape_armor_toughness", 3.0, Operation.ADD_NUMBER, EquipmentSlotGroup.CHEST);
+                Attr.add(meta, Attribute.ARMOR, "bat_cape_armor", 8.0, Operation.ADD_NUMBER, EquipmentSlotGroup.CHEST);
+                Attr.add(meta, Attribute.ARMOR_TOUGHNESS, "bat_cape_armor_toughness", 3.0, Operation.ADD_NUMBER, EquipmentSlotGroup.CHEST);
             });
         return item;
     }

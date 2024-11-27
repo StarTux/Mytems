@@ -49,9 +49,9 @@ public final class UnicornHorn implements Mytem {
         prototype.editMeta(meta -> {
                 meta.displayName(displayName);
                 meta.lore(Text.wrapLore(description, c -> c.color(NamedTextColor.AQUA)));
-                Attr.add(meta, Attribute.GENERIC_ARMOR, "unicorn_horn_armor", 2.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.HEAD);
-                Attr.add(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "unicorn_horn_armor_toughness", 2.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.HEAD);
-                Attr.add(meta, Attribute.GENERIC_MOVEMENT_SPEED, "unicorn_horn_speed", 0.15, AttributeModifier.Operation.ADD_SCALAR, EquipmentSlotGroup.HEAD);
+                Attr.add(meta, Attribute.ARMOR, "unicorn_horn_armor", 2.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.HEAD);
+                Attr.add(meta, Attribute.ARMOR_TOUGHNESS, "unicorn_horn_armor_toughness", 2.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.HEAD);
+                Attr.add(meta, Attribute.MOVEMENT_SPEED, "unicorn_horn_speed", 0.15, AttributeModifier.Operation.ADD_SCALAR, EquipmentSlotGroup.HEAD);
                 key.markItemMeta(meta);
             });
     }

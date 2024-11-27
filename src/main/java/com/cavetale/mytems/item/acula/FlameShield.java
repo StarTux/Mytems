@@ -49,9 +49,9 @@ public final class FlameShield extends AculaItem {
                                            new Pattern(DyeColor.BLACK, PatternType.RHOMBUS),
                                            new Pattern(DyeColor.RED, PatternType.GRADIENT_UP)));
                 blockStateMeta.setBlockState(banner);
-                Attr.add(meta, Attribute.GENERIC_ARMOR, "flame_shield_armor", 4, Operation.ADD_NUMBER, EquipmentSlotGroup.OFFHAND);
-                Attr.add(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "flame_shield_armor_toughness", 1, Operation.ADD_NUMBER, EquipmentSlotGroup.OFFHAND);
-                Attr.add(meta, Attribute.GENERIC_KNOCKBACK_RESISTANCE, "flame_shield_knockback_resistance", 0.1, Operation.ADD_NUMBER, EquipmentSlotGroup.OFFHAND);
+                Attr.add(meta, Attribute.ARMOR, "flame_shield_armor", 4, Operation.ADD_NUMBER, EquipmentSlotGroup.OFFHAND);
+                Attr.add(meta, Attribute.ARMOR_TOUGHNESS, "flame_shield_armor_toughness", 1, Operation.ADD_NUMBER, EquipmentSlotGroup.OFFHAND);
+                Attr.add(meta, Attribute.KNOCKBACK_RESISTANCE, "flame_shield_knockback_resistance", 0.1, Operation.ADD_NUMBER, EquipmentSlotGroup.OFFHAND);
                 meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP); // hides banner patterns
             });
         return itemStack;

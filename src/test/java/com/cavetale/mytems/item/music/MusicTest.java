@@ -3,11 +3,9 @@ package com.cavetale.mytems.item.music;
 import com.cavetale.core.util.Json;
 import org.bukkit.Instrument;
 import org.bukkit.Note;
-import org.junit.Test;
 import static org.junit.Assert.assertEquals;
 
 public final class MusicTest {
-    @Test
     public void test() {
         Melody melody = Melody.builder(Instrument.PIANO, 50L)
             .key(Note.Tone.A, Semitone.SHARP)

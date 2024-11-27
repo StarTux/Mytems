@@ -3,7 +3,7 @@ package com.cavetale.mytems.session;
 import com.cavetale.mytems.gear.EntityAttribute;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.EnumMap;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -28,7 +28,7 @@ public final class Attributes {
     private final Session session;
     private final Set<NamespacedKey> hasAttributes = new HashSet<>();
     private final Set<NamespacedKey> shouldHaveAttributeKeys = new HashSet<>();
-    private final Map<Attribute, List<EntityAttribute>> shouldHaveAttributes = new EnumMap<>(Attribute.class);
+    private final Map<Attribute, List<EntityAttribute>> shouldHaveAttributes = new HashMap<>();
 
     public Attributes(final Session session) {
         this.session = session;

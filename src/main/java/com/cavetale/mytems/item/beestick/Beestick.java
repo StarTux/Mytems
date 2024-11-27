@@ -13,6 +13,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.LivingEntity;
@@ -34,7 +35,6 @@ import static net.kyori.adventure.text.JoinConfiguration.noSeparators;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 import static org.bukkit.Sound.*;
 import static org.bukkit.SoundCategory.*;
-import static org.bukkit.attribute.Attribute.*;
 
 @RequiredArgsConstructor @Getter
 public final class Beestick implements Mytem {
@@ -94,7 +94,7 @@ public final class Beestick implements Mytem {
                 Entities.setTransient(e);
                 e.setRemoveWhenFarAway(true);
                 e.setAdult();
-                e.getAttribute(GENERIC_MAX_HEALTH).setBaseValue(0.1);
+                e.getAttribute(Attribute.MAX_HEALTH).setBaseValue(0.1);
                 e.setHealth(0.1);
                 e.setAnger(9999);
             });

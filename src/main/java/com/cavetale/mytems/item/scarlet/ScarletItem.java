@@ -99,10 +99,10 @@ public abstract class ScarletItem implements GearItem {
             prototype.editMeta(meta -> {
                     SKULL.apply((SkullMeta) meta);
                     final EquipmentSlotGroup slot = EquipmentSlotGroup.HEAD;
-                    Attr.add(meta, Attribute.GENERIC_ARMOR, "scarlet_helmet_armor", 3.0, Operation.ADD_NUMBER, slot);
-                    Attr.add(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "scarlet_helmet_armor_toughness", TOUGHNESS_MOD, Operation.ADD_NUMBER, slot);
-                    Attr.add(meta, Attribute.GENERIC_KNOCKBACK_RESISTANCE, "scarlet_helmet_knockback_resistance", KNOCKBACK_MOD, Operation.ADD_NUMBER, slot);
-                    Attr.add(meta, Attribute.GENERIC_MOVEMENT_SPEED, "scarlet_helmet_movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot);
+                    Attr.add(meta, Attribute.ARMOR, "scarlet_helmet_armor", 3.0, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.ARMOR_TOUGHNESS, "scarlet_helmet_armor_toughness", TOUGHNESS_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.KNOCKBACK_RESISTANCE, "scarlet_helmet_knockback_resistance", KNOCKBACK_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.MOVEMENT_SPEED, "scarlet_helmet_movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot);
                 });
         }
     }
@@ -117,10 +117,10 @@ public abstract class ScarletItem implements GearItem {
                     ((LeatherArmorMeta) meta).setColor(LEATHER_COLOR);
                     meta.addItemFlags(ItemFlag.HIDE_DYE);
                     final EquipmentSlotGroup slot = EquipmentSlotGroup.CHEST;
-                    Attr.add(meta, Attribute.GENERIC_ARMOR, "scarlet_chestplate_armor", 8.0, Operation.ADD_NUMBER, slot);
-                    Attr.add(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "scarlet_chestplate_armor_toughness", TOUGHNESS_MOD, Operation.ADD_NUMBER, slot);
-                    Attr.add(meta, Attribute.GENERIC_KNOCKBACK_RESISTANCE, "scarlet_chestplate_knockback_resistance", KNOCKBACK_MOD, Operation.ADD_NUMBER, slot);
-                    Attr.add(meta, Attribute.GENERIC_MOVEMENT_SPEED, "scarlet_chestplate_movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot);
+                    Attr.add(meta, Attribute.ARMOR, "scarlet_chestplate_armor", 8.0, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.ARMOR_TOUGHNESS, "scarlet_chestplate_armor_toughness", TOUGHNESS_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.KNOCKBACK_RESISTANCE, "scarlet_chestplate_knockback_resistance", KNOCKBACK_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.MOVEMENT_SPEED, "scarlet_chestplate_movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot);
                 });
         }
     }
@@ -135,10 +135,10 @@ public abstract class ScarletItem implements GearItem {
                     ((LeatherArmorMeta) meta).setColor(LEATHER_COLOR);
                     meta.addItemFlags(ItemFlag.HIDE_DYE);
                     final EquipmentSlotGroup slot = EquipmentSlotGroup.LEGS;
-                    Attr.add(meta, Attribute.GENERIC_ARMOR, "scarlet_leggings_armor", 6.0, Operation.ADD_NUMBER, slot);
-                    Attr.add(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "scarlet_leggings_armor_toughness", TOUGHNESS_MOD, Operation.ADD_NUMBER, slot);
-                    Attr.add(meta, Attribute.GENERIC_KNOCKBACK_RESISTANCE, "scarlet_leggings_knockback_resistance", KNOCKBACK_MOD, Operation.ADD_NUMBER, slot);
-                    Attr.add(meta, Attribute.GENERIC_MOVEMENT_SPEED, "scarlet_leggings_movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot);
+                    Attr.add(meta, Attribute.ARMOR, "scarlet_leggings_armor", 6.0, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.ARMOR_TOUGHNESS, "scarlet_leggings_armor_toughness", TOUGHNESS_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.KNOCKBACK_RESISTANCE, "scarlet_leggings_knockback_resistance", KNOCKBACK_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.MOVEMENT_SPEED, "scarlet_leggings_movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot);
                 });
         }
     }
@@ -153,10 +153,10 @@ public abstract class ScarletItem implements GearItem {
                     ((LeatherArmorMeta) meta).setColor(LEATHER_COLOR);
                     meta.addItemFlags(ItemFlag.HIDE_DYE);
                     final EquipmentSlotGroup slot = EquipmentSlotGroup.FEET;
-                    Attr.add(meta, Attribute.GENERIC_ARMOR, "scarlet_boots_armor", 3.0, Operation.ADD_NUMBER, slot);
-                    Attr.add(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "scarlet_boots_armor_toughness", TOUGHNESS_MOD, Operation.ADD_NUMBER, slot);
-                    Attr.add(meta, Attribute.GENERIC_KNOCKBACK_RESISTANCE, "scarlet_boots_knockback_resistance", KNOCKBACK_MOD, Operation.ADD_NUMBER, slot);
-                    Attr.add(meta, Attribute.GENERIC_MOVEMENT_SPEED, "scarlet_boots_movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot);
+                    Attr.add(meta, Attribute.ARMOR, "scarlet_boots_armor", 3.0, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.ARMOR_TOUGHNESS, "scarlet_boots_armor_toughness", TOUGHNESS_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.KNOCKBACK_RESISTANCE, "scarlet_boots_knockback_resistance", KNOCKBACK_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.MOVEMENT_SPEED, "scarlet_boots_movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot);
                 });
         }
     }
@@ -178,10 +178,10 @@ public abstract class ScarletItem implements GearItem {
                     blockStateMeta.setBlockState(banner);
                     meta.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP); // hides banner patterns
                     final EquipmentSlotGroup slot = EquipmentSlotGroup.OFFHAND;
-                    Attr.add(meta, Attribute.GENERIC_ARMOR, "scarlet_shield_armor", 6.0, Operation.ADD_NUMBER, slot);
-                    Attr.add(meta, Attribute.GENERIC_ARMOR_TOUGHNESS, "scarlet_shield_armor_toughness", TOUGHNESS_MOD, Operation.ADD_NUMBER, slot);
-                    Attr.add(meta, Attribute.GENERIC_KNOCKBACK_RESISTANCE, "scarlet_shield_knockback_resistance", KNOCKBACK_MOD, Operation.ADD_NUMBER, slot);
-                    Attr.add(meta, Attribute.GENERIC_MOVEMENT_SPEED, "scarlet_shield_movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot);
+                    Attr.add(meta, Attribute.ARMOR, "scarlet_shield_armor", 6.0, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.ARMOR_TOUGHNESS, "scarlet_shield_armor_toughness", TOUGHNESS_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.KNOCKBACK_RESISTANCE, "scarlet_shield_knockback_resistance", KNOCKBACK_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.MOVEMENT_SPEED, "scarlet_shield_movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot);
                 });
         }
     }
@@ -195,10 +195,10 @@ public abstract class ScarletItem implements GearItem {
             prototype = new ItemStack(Material.NETHERITE_SWORD);
             prototype.editMeta(meta -> {
                     final EquipmentSlotGroup slot = EquipmentSlotGroup.HAND;
-                    Attr.add(meta, Attribute.GENERIC_ATTACK_DAMAGE, "scarlet_sword_attack_damage", 20.0 + 4.0, Operation.ADD_NUMBER, slot);
-                    Attr.add(meta, Attribute.GENERIC_ATTACK_SPEED, "scarlet_sword_attack_speed", -0.67, Operation.ADD_SCALAR, slot);
-                    Attr.add(meta, Attribute.GENERIC_KNOCKBACK_RESISTANCE, "scarlet_sword_knockback_resistance", KNOCKBACK_MOD, Operation.ADD_NUMBER, slot);
-                    Attr.add(meta, Attribute.GENERIC_MOVEMENT_SPEED, "scarlet_sword_movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot);
+                    Attr.add(meta, Attribute.ATTACK_DAMAGE, "scarlet_sword_attack_damage", 20.0 + 4.0, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.ATTACK_SPEED, "scarlet_sword_attack_speed", -0.67, Operation.ADD_SCALAR, slot);
+                    Attr.add(meta, Attribute.KNOCKBACK_RESISTANCE, "scarlet_sword_knockback_resistance", KNOCKBACK_MOD, Operation.ADD_NUMBER, slot);
+                    Attr.add(meta, Attribute.MOVEMENT_SPEED, "scarlet_sword_movement_speed", MOVEMENT_MOD, MOVEMENT_OP, slot);
                 });
         }
 
@@ -222,14 +222,14 @@ public abstract class ScarletItem implements GearItem {
             if (slot != EquipmentSlot.HAND) return;
             boolean isSweepAttack = event.getEntityDamageEvent().getCause() == DamageCause.ENTITY_SWEEP_ATTACK;
             if (isSweepAttack) {
-                double dmg = event.getAttacker().getAttribute(Attribute.GENERIC_ATTACK_DAMAGE).getValue();
+                double dmg = event.getAttacker().getAttribute(Attribute.ATTACK_DAMAGE).getValue();
                 event.getCalculation().setBaseDamage(dmg);
                 event.setHandled(true);
             }
             boolean isEntityAttack = event.getEntityDamageEvent().getCause() == DamageCause.ENTITY_ATTACK;
             if (isEntityAttack && event.attackerIsPlayer()) {
                 Player player = event.getAttackerPlayer();
-                double value = player.getAttribute(Attribute.GENERIC_ATTACK_SPEED).getValue();
+                double value = player.getAttribute(Attribute.ATTACK_SPEED).getValue();
                 double speed = 20.0 / value;
                 player.setCooldown(key.material, (int) Math.round(speed));
             }
@@ -238,7 +238,7 @@ public abstract class ScarletItem implements GearItem {
             if (target != null && (isEntityAttack || isSweepAttack)) {
                 event.addPostDamageAction(() -> {
                         if (target.isDead()) return;
-                        double resist = target.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).getValue();
+                        double resist = target.getAttribute(Attribute.KNOCKBACK_RESISTANCE).getValue();
                         if (resist >= 1.0) return;
                         Vector v = target.getEyeLocation().subtract(event.getAttacker().getLocation()).toVector();
                         if (v.length() == 0.0) return;
@@ -323,7 +323,7 @@ public abstract class ScarletItem implements GearItem {
                             attackerPlayer.playSound(attackerPlayer.getLocation(), Sound.ENCHANT_THORNS_HIT, 1.0f, 1.0f);
                         }
                         // Knockback
-                        double resist = attacker.getAttribute(Attribute.GENERIC_KNOCKBACK_RESISTANCE).getValue();
+                        double resist = attacker.getAttribute(Attribute.KNOCKBACK_RESISTANCE).getValue();
                         if (resist >= 1.0) return;
                         Vector v = attacker.getEyeLocation().subtract(target.getLocation()).toVector();
                         if (v.length() == 0.0) return;

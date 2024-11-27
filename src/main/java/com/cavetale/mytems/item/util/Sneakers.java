@@ -32,7 +32,7 @@ public final class Sneakers implements Mytem {
                                           text(tiny("Sanic the Hedgehag"), BLUE));
         this.prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
-                Attr.add(meta, Attribute.GENERIC_MOVEMENT_SPEED, "sneakers_speed", 0.1, Operation.ADD_NUMBER, EquipmentSlotGroup.FEET);
+                Attr.add(meta, Attribute.MOVEMENT_SPEED, "sneakers_speed", 0.1, Operation.ADD_NUMBER, EquipmentSlotGroup.FEET);
                 if (meta instanceof LeatherArmorMeta meta2) {
                     meta2.setColor(fromRGB(0xffffff));
                 }

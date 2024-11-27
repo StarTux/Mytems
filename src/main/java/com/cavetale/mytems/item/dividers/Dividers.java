@@ -66,7 +66,7 @@ public final class Dividers implements Mytem {
                                       textOfChildren(Mytems.MOUSE_RIGHT, text(" Draw Circle", GRAY)),
                                       textOfChildren(Mytems.MOUSE_CURSOR, Mytems.MOUSE_RIGHT, text(" Clear selection", GRAY))));
                 meta.setUnbreakable(true);
-                Attr.addNumber(meta, Attribute.PLAYER_BLOCK_INTERACTION_RANGE, "dividers_range", 5.5, EquipmentSlotGroup.HAND);
+                Attr.addNumber(meta, Attribute.BLOCK_INTERACTION_RANGE, "dividers_range", 5.5, EquipmentSlotGroup.HAND);
                 meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
             });
         BASE_CIRCLES.add(List.of(Vec2i.of(0, 0)));

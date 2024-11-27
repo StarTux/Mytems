@@ -59,9 +59,9 @@ public enum MobslayerStat implements UpgradableStat {
          List.of(SWEEP), List.of()),
     // TESTING
     ATTR(Vec2i.of(2, 4), text("Attack Damage"), () -> new ItemStack(Material.DIRT),
-         List.of(new BaseAttributeStatLevel(1, MobslayerTier.TIER_1, () -> new ItemStack(Material.STONE, 1), Attribute.GENERIC_ATTACK_DAMAGE, 1.0),
-                 new BaseAttributeStatLevel(2, MobslayerTier.TIER_2, () -> new ItemStack(Material.STONE, 2), Attribute.GENERIC_ATTACK_DAMAGE, 2.0),
-                 new BaseAttributeStatLevel(3, MobslayerTier.TIER_3, () -> new ItemStack(Material.STONE, 3), Attribute.GENERIC_ATTACK_DAMAGE, 3.0)),
+         List.of(new BaseAttributeStatLevel(1, MobslayerTier.TIER_1, () -> new ItemStack(Material.STONE, 1), Attribute.ATTACK_DAMAGE, 1.0),
+                 new BaseAttributeStatLevel(2, MobslayerTier.TIER_2, () -> new ItemStack(Material.STONE, 2), Attribute.ATTACK_DAMAGE, 2.0),
+                 new BaseAttributeStatLevel(3, MobslayerTier.TIER_3, () -> new ItemStack(Material.STONE, 3), Attribute.ATTACK_DAMAGE, 3.0)),
          List.of(SWEEP), List.of()),
     ;
 
