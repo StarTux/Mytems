@@ -31,6 +31,7 @@ public enum BlockColor {
     public enum Suffix {
         BANNER,
         BED,
+        BUNDLE,
         CANDLE,
         CANDLE_CAKE,
         CARPET,
@@ -43,7 +44,8 @@ public enum BlockColor {
         STAINED_GLASS_PANE,
         TERRACOTTA,
         WALL_BANNER,
-        WOOL;
+        WOOL,
+        ;
 
         public Material getMaterial(BlockColor blockColor) {
             return blockColor.suffixMap.get(this);
