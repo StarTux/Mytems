@@ -62,7 +62,7 @@ public final class Yardstick implements Mytem {
                 text.add(textOfChildren(Mytems.MOUSE_CURSOR, Mytems.MOUSE_RIGHT, text(" Clear selection", GRAY)));
                 tooltip(meta, text);
                 meta.setUnbreakable(true);
-                Attr.addNumber(meta, Attribute.BLOCK_INTERACTION_RANGE, "yardstick_range", 5.5, EquipmentSlotGroup.HAND);
+                Attr.addNumber(meta, Attribute.BLOCK_INTERACTION_RANGE, "yardstick_range", 5.5, EquipmentSlotGroup.MAINHAND);
                 meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
             });
     }

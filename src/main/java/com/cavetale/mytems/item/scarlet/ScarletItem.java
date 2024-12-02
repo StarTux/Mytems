@@ -194,7 +194,7 @@ public abstract class ScarletItem implements GearItem {
                 + "\n\nSweep Attacks deal full Attack Damage.";
             prototype = new ItemStack(Material.NETHERITE_SWORD);
             prototype.editMeta(meta -> {
-                    final EquipmentSlotGroup slot = EquipmentSlotGroup.HAND;
+                    final EquipmentSlotGroup slot = EquipmentSlotGroup.MAINHAND;
                     Attr.add(meta, Attribute.ATTACK_DAMAGE, "scarlet_sword_attack_damage", 20.0 + 4.0, Operation.ADD_NUMBER, slot);
                     Attr.add(meta, Attribute.ATTACK_SPEED, "scarlet_sword_attack_speed", -0.67, Operation.ADD_SCALAR, slot);
                     Attr.add(meta, Attribute.KNOCKBACK_RESISTANCE, "scarlet_sword_knockback_resistance", KNOCKBACK_MOD, Operation.ADD_NUMBER, slot);
