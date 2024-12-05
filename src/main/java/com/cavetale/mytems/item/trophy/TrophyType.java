@@ -100,7 +100,7 @@ public enum TrophyType implements ComponentLike {
     SILVER_PICKAXE(Material.IRON_PICKAXE, PICKAXE, SILVER),
     BRONZE_PICKAXE(Material.STONE_PICKAXE, PICKAXE, BRONZE),
     PARTICIPATION_PICKAXE(Material.WOODEN_PICKAXE, PICKAXE, PARTICIPATION),
-    // Pickaxe
+    // Axe
     GOLD_AXE(Material.GOLDEN_AXE, AXE, GOLD),
     SILVER_AXE(Material.IRON_AXE, AXE, SILVER),
     BRONZE_AXE(Material.STONE_AXE, AXE, BRONZE),
