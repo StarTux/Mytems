@@ -49,6 +49,7 @@ import com.cavetale.mytems.item.finder.Finder;
 import com.cavetale.mytems.item.font.GlyphItem;
 import com.cavetale.mytems.item.garden.Scissors;
 import com.cavetale.mytems.item.garden.Scythe;
+import com.cavetale.mytems.item.gem.Gem;
 import com.cavetale.mytems.item.halloween.HalloweenCandy;
 import com.cavetale.mytems.item.halloween.HalloweenToken;
 import com.cavetale.mytems.item.halloween.HalloweenToken2;
@@ -1150,6 +1151,56 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     //
     HALLOWEEN_TROPHY(Trophy.class, JACK_O_LANTERN, 0xf355, TROPHY),
     CAVETOBER_TROPHY(Trophy.class, JACK_O_LANTERN, 0xf356, TROPHY),
+    // Gemcraft
+    SQUARE_SHAPED_SAPPHIRE(Gem.class, DIAMOND, 0xf357, GEM),
+    TRIANGLE_SHAPED_SAPPHIRE(Gem.class, DIAMOND, 0xf358, GEM),
+    STAR_SHAPED_SAPPHIRE(Gem.class, DIAMOND, 0xf359, GEM),
+    MOON_SHAPED_SAPPHIRE(Gem.class, DIAMOND, 0xf35a, GEM),
+    CIRCLE_SHAPED_SAPPHIRE(Gem.class, DIAMOND, 0xf35b, GEM),
+    LIGHTNING_SHAPED_SAPPHIRE(Gem.class, DIAMOND, 0xf35c, GEM),
+    HEART_SHAPED_SAPPHIRE(Gem.class, DIAMOND, 0xf35d, GEM),
+    TEAR_SHAPED_SAPPHIRE(Gem.class, DIAMOND, 0xf35e, GEM),
+    SQUARE_SHAPED_OPAL(Gem.class, DIAMOND, 0xf35f, GEM),
+    TRIANGLE_SHAPED_OPAL(Gem.class, DIAMOND, 0xf360, GEM),
+    STAR_SHAPED_OPAL(Gem.class, DIAMOND, 0xf361, GEM),
+    MOON_SHAPED_OPAL(Gem.class, DIAMOND, 0xf362, GEM),
+    CIRCLE_SHAPED_OPAL(Gem.class, DIAMOND, 0xf363, GEM),
+    LIGHTNING_SHAPED_OPAL(Gem.class, DIAMOND, 0xf364, GEM),
+    HEART_SHAPED_OPAL(Gem.class, DIAMOND, 0xf365, GEM),
+    TEAR_SHAPED_OPAL(Gem.class, DIAMOND, 0xf366, GEM),
+    SQUARE_SHAPED_TOPAZ(Gem.class, DIAMOND, 0xf367, GEM),
+    TRIANGLE_SHAPED_TOPAZ(Gem.class, DIAMOND, 0xf368, GEM),
+    STAR_SHAPED_TOPAZ(Gem.class, DIAMOND, 0xf369, GEM),
+    MOON_SHAPED_TOPAZ(Gem.class, DIAMOND, 0xf36a, GEM),
+    CIRCLE_SHAPED_TOPAZ(Gem.class, DIAMOND, 0xf36b, GEM),
+    LIGHTNING_SHAPED_TOPAZ(Gem.class, DIAMOND, 0xf36c, GEM),
+    HEART_SHAPED_TOPAZ(Gem.class, DIAMOND, 0xf36d, GEM),
+    TEAR_SHAPED_TOPAZ(Gem.class, DIAMOND, 0xf36e, GEM),
+    SQUARE_SHAPED_JADE(Gem.class, DIAMOND, 0xf36f, GEM),
+    TRIANGLE_SHAPED_JADE(Gem.class, DIAMOND, 0xf370, GEM),
+    STAR_SHAPED_JADE(Gem.class, DIAMOND, 0xf371, GEM),
+    MOON_SHAPED_JADE(Gem.class, DIAMOND, 0xf372, GEM),
+    CIRCLE_SHAPED_JADE(Gem.class, DIAMOND, 0xf373, GEM),
+    LIGHTNING_SHAPED_JADE(Gem.class, DIAMOND, 0xf374, GEM),
+    HEART_SHAPED_JADE(Gem.class, DIAMOND, 0xf375, GEM),
+    TEAR_SHAPED_JADE(Gem.class, DIAMOND, 0xf376, GEM),
+    SQUARE_SHAPED_RUBY(Gem.class, DIAMOND, 0xf377, GEM),
+    TRIANGLE_SHAPED_RUBY(Gem.class, DIAMOND, 0xf378, GEM),
+    STAR_SHAPED_RUBY(Gem.class, DIAMOND, 0xf379, GEM),
+    MOON_SHAPED_RUBY(Gem.class, DIAMOND, 0xf37a, GEM),
+    CIRCLE_SHAPED_RUBY(Gem.class, DIAMOND, 0xf37b, GEM),
+    LIGHTNING_SHAPED_RUBY(Gem.class, DIAMOND, 0xf37c, GEM),
+    HEART_SHAPED_RUBY(Gem.class, DIAMOND, 0xf37d, GEM),
+    TEAR_SHAPED_RUBY(Gem.class, DIAMOND, 0xf37e, GEM),
+    // Gem Slots
+    SQUARE_SHAPED_SLOT(ForbiddenMytem.class, LEATHER_HELMET, 0xf37f, GEM_SLOT),
+    TRIANGLE_SHAPED_SLOT(ForbiddenMytem.class, LEATHER_HELMET, 0xf380, GEM_SLOT),
+    STAR_SHAPED_SLOT(ForbiddenMytem.class, LEATHER_HELMET, 0xf381, GEM_SLOT),
+    MOON_SHAPED_SLOT(ForbiddenMytem.class, LEATHER_HELMET, 0xf382, GEM_SLOT),
+    CIRCLE_SHAPED_SLOT(ForbiddenMytem.class, LEATHER_HELMET, 0xf383, GEM_SLOT),
+    LIGHTNING_SHAPED_SLOT(ForbiddenMytem.class, LEATHER_HELMET, 0xf384, GEM_SLOT),
+    HEART_SHAPED_SLOT(ForbiddenMytem.class, LEATHER_HELMET, 0xf385, GEM_SLOT),
+    TEAR_SHAPED_SLOT(ForbiddenMytem.class, LEATHER_HELMET, 0xf386, GEM_SLOT),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();

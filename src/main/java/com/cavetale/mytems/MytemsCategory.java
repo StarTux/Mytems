@@ -37,6 +37,8 @@ public enum MytemsCategory {
     FUN_FLAGS,
     FURNITURE,
     GARDENING,
+    GEM,
+    GEM_SLOT,
     HALLOWEEN,
     HALLOWEEN_WEAPON,
     HASTY_PICKAXES,
