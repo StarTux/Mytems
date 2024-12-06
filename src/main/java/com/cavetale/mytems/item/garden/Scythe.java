@@ -8,7 +8,6 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Text;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.ThreadLocalRandom;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
@@ -32,6 +31,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
+import static com.cavetale.mytems.util.Hunger.createHunger;
 import static com.cavetale.mytems.util.Items.tooltip;
 import static com.cavetale.mytems.util.Items.unbreakable;
 import static net.kyori.adventure.text.Component.empty;
@@ -148,10 +148,8 @@ public final class Scythe implements Mytem, Listener {
                 }
                 if (count > 0) {
                     player.swingMainHand();
-                    if (player.getSaturation() >= 0.01f) {
-                        player.setSaturation(Math.max(0.0f, player.getSaturation() - 0.25f));
-                    } else if (ThreadLocalRandom.current().nextInt(4) == 0) {
-                        player.setFoodLevel(Math.max(0, player.getFoodLevel() - 1));
+                    if (player.getGameMode() != GameMode.CREATIVE) {
+                        createHunger(player, 0.25f, 1.0 / 4.0);
                     }
                 }
             });

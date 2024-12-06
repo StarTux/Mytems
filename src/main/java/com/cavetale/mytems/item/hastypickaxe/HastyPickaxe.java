@@ -11,11 +11,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -35,6 +35,7 @@ import static com.cavetale.core.font.Unicode.subscript;
 import static com.cavetale.core.font.Unicode.superscript;
 import static com.cavetale.mytems.MytemsPlugin.blockBreakListener;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
+import static com.cavetale.mytems.util.Hunger.createHunger;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
@@ -160,13 +161,7 @@ public final class HastyPickaxe implements Mytem {
         for (int i = 1; i < blocks.size(); i += 1) {
             final Block block = blocks.get(i);
             if (!new PlayerBreakBlockEvent(player, block, item).callEvent()) continue;
-            if (player.getSaturation() >= 0.01f) {
-                player.setSaturation(Math.max(0.0f, player.getSaturation() - 0.025f));
-            } else if (player.getFoodLevel() > 0) {
-                if (ThreadLocalRandom.current().nextInt(20) == 0) {
-                    player.setFoodLevel(player.getFoodLevel() - 1);
-                }
-            } else {
+            if (player.getGameMode() != GameMode.CREATIVE && !createHunger(player, 0.025f, 1.0 / 32.0)) {
                 break;
             }
             blockBreakListener().breakBlockAndPickup(player, item, block);

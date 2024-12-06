@@ -11,7 +11,6 @@ import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.concurrent.ThreadLocalRandom;
 import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -30,6 +29,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.mytems.MytemsPlugin.blockBreakListener;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
+import static com.cavetale.mytems.util.Hunger.createHunger;
 import static java.util.Objects.requireNonNull;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
@@ -129,16 +129,8 @@ public final class SpleefShovel implements Mytem {
         int count = 0;
         for (int i = 1; i < blockBreakList.size(); i += 1) {
             final Block breakBlock = blockBreakList.get(i);
-            if (player.getGameMode() != GameMode.CREATIVE) {
-                if (player.getSaturation() >= 0.01f) {
-                    player.setSaturation(Math.max(0.0f, player.getSaturation() - 0.025f));
-                } else if (player.getFoodLevel() > 0) {
-                    if (ThreadLocalRandom.current().nextInt(32) == 0) {
-                        player.setFoodLevel(Math.max(0, player.getFoodLevel() - 1));
-                    }
-                } else {
-                    break;
-                }
+            if (player.getGameMode() != GameMode.CREATIVE && !createHunger(player, 0.025f, 1.0 / 64.0)) {
+                break;
             }
             final BlockData blockData = breakBlock.getBlockData();
             final Sound breakSound = breakBlock.getBlockSoundGroup().getBreakSound();

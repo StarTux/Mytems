@@ -13,6 +13,7 @@ import java.util.Set;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -25,6 +26,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import static com.cavetale.core.exploits.PlayerPlacedBlocks.isPlayerPlaced;
 import static com.cavetale.mytems.item.treechopper.TreeChopStatus.*;
+import static com.cavetale.mytems.util.Hunger.createHunger;
 
 /**
  * Represents one tree chopping action.  It provides the flood fill
@@ -235,13 +237,8 @@ public final class TreeChop {
                         logBlock.breakNaturally(axeItem, true);
                         TreeChopListener.target = null;
                         brokenBlocks += 1;
-                        if (player.isOnline()) {
-                            if (player.getSaturation() >= 0.01f) {
-                                // Buff saturation over food level
-                                player.setSaturation(Math.max(0.0f, player.getSaturation() - 0.025f));
-                            } else if (ThreadLocalRandom.current().nextInt(20) == 0) {
-                                player.setFoodLevel(Math.max(0, player.getFoodLevel() - 1));
-                            }
+                        if (player.isOnline() && player.getGameMode() != GameMode.CREATIVE) {
+                            createHunger(player, 0.025f, 1.0 / 64.0);
                         }
                         blocksBrokenNow += 1;
                     }
