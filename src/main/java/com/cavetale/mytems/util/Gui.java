@@ -33,7 +33,8 @@ import org.bukkit.plugin.Plugin;
 public final class Gui implements InventoryHolder {
     public static final int OUTSIDE = -999;
     public static final int OFF_HAND = 40;
-    private final Plugin plugin;
+    @Getter private final Plugin plugin;
+    @Getter @Setter private Object privateData;
     private Inventory inventory;
     private Map<Integer, Slot> slots = new HashMap<>();
     private Consumer<InventoryCloseEvent> onClose = null;
