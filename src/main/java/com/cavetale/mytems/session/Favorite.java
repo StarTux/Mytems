@@ -5,5 +5,5 @@ package com.cavetale.mytems.session;
  * receive a call when the session is disabled.
  */
 public interface Favorite {
-    void onDisable();
+    void onSessionDisable(Session session);
 }

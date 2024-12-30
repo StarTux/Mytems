@@ -54,6 +54,7 @@ import com.cavetale.mytems.item.halloween.HalloweenCandy;
 import com.cavetale.mytems.item.halloween.HalloweenToken;
 import com.cavetale.mytems.item.halloween.HalloweenToken2;
 import com.cavetale.mytems.item.hastypickaxe.HastyPickaxe;
+import com.cavetale.mytems.item.hookshot.Hookshot;
 import com.cavetale.mytems.item.hourglass.Hourglass;
 import com.cavetale.mytems.item.luminator.Luminator;
 import com.cavetale.mytems.item.magnifier.Magnifier;
@@ -1201,6 +1202,8 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     LIGHTNING_SHAPED_SLOT(ForbiddenMytem.class, LEATHER_HELMET, 0xf384, GEM_SLOT),
     HEART_SHAPED_SLOT(ForbiddenMytem.class, LEATHER_HELMET, 0xf385, GEM_SLOT),
     TEAR_SHAPED_SLOT(ForbiddenMytem.class, LEATHER_HELMET, 0xf386, GEM_SLOT),
+    //
+    PUMPKIN_HOOKSHOT(Hookshot.class, STONE_PICKAXE, 0xf387, HOOKSHOT),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();

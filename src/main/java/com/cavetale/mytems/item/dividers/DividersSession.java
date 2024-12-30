@@ -17,7 +17,7 @@ public final class DividersSession implements Favorite {
     protected Map<Vec3i, CuboidOutline> blocks;
 
     @Override
-    public void onDisable() {
+    public void onSessionDisable(Session session) {
         clearBlocks();
         reset();
     }

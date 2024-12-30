@@ -42,6 +42,7 @@ public enum MytemsCategory {
     HALLOWEEN,
     HALLOWEEN_WEAPON,
     HASTY_PICKAXES,
+    HOOKSHOT,
     HOURGLASS,
     JOKE,
     KEY,

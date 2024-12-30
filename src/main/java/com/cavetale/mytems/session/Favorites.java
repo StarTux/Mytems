@@ -9,11 +9,11 @@ import static com.cavetale.mytems.MytemsPlugin.plugin;
 public final class Favorites {
     protected Map<Class<?>, Object> map = new HashMap<>();
 
-    protected void disable() {
+    protected void disable(Session session) {
         for (Object value : map.values()) {
             if (value instanceof Favorite fav) {
                 try {
-                    fav.onDisable();
+                    fav.onSessionDisable(session);
                 } catch (Exception e) {
                     plugin().getLogger().log(Level.SEVERE, fav.getClass().getName(), e);
                 }
@@ -43,5 +43,14 @@ public final class Favorites {
 
     public void clear(Class<?> clz) {
         map.remove(clz);
+    }
+
+    public boolean removeInstance(Object object) {
+        Object stored = get(object.getClass());
+        if (object != stored) {
+            return false;
+        }
+        clear(object.getClass());
+        return true;
     }
 }

@@ -333,6 +333,10 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
         return instance;
     }
 
+    public static MytemsPlugin mytemsPlugin() {
+        return instance;
+    }
+
     public static BlockBreakListener blockBreakListener() {
         return instance.blockBreakListener;
     }
