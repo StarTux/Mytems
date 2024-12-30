@@ -39,6 +39,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryClickEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.persistence.PersistentDataContainer;
@@ -85,7 +86,7 @@ public final class MusicalInstrument implements Mytem {
         this.displayNameString = Text.toCamelCase(key, " ");
         this.displayName = text(displayNameString, COLOR);
         tooltip = List.of(displayName,
-                          textOfChildren(Mytems.MOUSE_CURSOR, Mytems.MOUSE_RIGHT,
+                          textOfChildren(Mytems.MOUSE_RIGHT,
                                          text(" Play the ", GRAY),
                                          text(Text.toCamelCase(type, " "), COLOR)));
         prototype = new ItemStack(key.material);
@@ -237,6 +238,12 @@ public final class MusicalInstrument implements Mytem {
     @Override
     public void onBlockDamage(BlockDamageEvent event, Player player, ItemStack item) {
         event.setCancelled(true);
+    }
+
+    @Override
+    public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
+        event.setCancelled(true);
+        Bukkit.getScheduler().runTask(plugin(), () -> openGui(player, item));
     }
 
     @Override
