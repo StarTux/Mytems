@@ -176,9 +176,4 @@ public final class TreeChopper implements Mytem {
         }
         return true;
     }
-
-    @Override
-    public boolean isMassStorable() {
-        return false;
-    }
 }

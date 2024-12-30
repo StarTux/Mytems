@@ -343,9 +343,4 @@ public final class HastyPickaxe implements Mytem {
         }
         return itemStack;
     }
-
-    @Override
-    public boolean isMassStorable() {
-        return false;
-    }
 }
