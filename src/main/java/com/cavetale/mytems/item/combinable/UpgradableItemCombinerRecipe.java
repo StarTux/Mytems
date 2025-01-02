@@ -79,6 +79,7 @@ public final class UpgradableItemCombinerRecipe implements ItemCombinerRecipe {
         addChain(Mytems.DEFLECTOR_SHIELD, Mytems.RETURN_SHIELD, Mytems.VENGEANCE_SHIELD);
         addChain(Mytems.IRON_SCYTHE, Mytems.GOLDEN_SCYTHE);
         addChain(Mytems.EMPTY_WATERING_CAN, Mytems.EMPTY_GOLDEN_WATERING_CAN);
+        addChain(Mytems.SNEAKERS, Mytems.RED_SNEAKERS, Mytems.BLUE_SNEAKERS, Mytems.PURPLE_SNEAKERS, Mytems.GOLDEN_SNEAKERS);
         all = List.copyOf(all);
         return all;
     }

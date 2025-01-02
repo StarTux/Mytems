@@ -72,6 +72,7 @@ public enum MytemsCategory {
     SCARLET,
     SHEEP_COSTUME,
     SKELETON_COSTUME,
+    SNEAKERS,
     SPIDER_COSTUME,
     SPLEEF_SHOVEL,
     SUNGLASSES,

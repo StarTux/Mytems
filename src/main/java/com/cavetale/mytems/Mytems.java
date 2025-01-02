@@ -83,6 +83,7 @@ import com.cavetale.mytems.item.santa.SantaJacket;
 import com.cavetale.mytems.item.santa.SantaPants;
 import com.cavetale.mytems.item.scarlet.ScarletItem;
 import com.cavetale.mytems.item.scuba.ScubaHelmet;
+import com.cavetale.mytems.item.sneakers.Sneakers;
 import com.cavetale.mytems.item.spleef.SpleefShovel;
 import com.cavetale.mytems.item.swampy.SwampyItem;
 import com.cavetale.mytems.item.tree.TreeSeed;
@@ -90,7 +91,6 @@ import com.cavetale.mytems.item.treechopper.TreeChopper;
 import com.cavetale.mytems.item.trophy.Trophy;
 import com.cavetale.mytems.item.util.BlindEye;
 import com.cavetale.mytems.item.util.SlimeFinder;
-import com.cavetale.mytems.item.util.Sneakers;
 import com.cavetale.mytems.item.vote.VoteCandy;
 import com.cavetale.mytems.item.vote.VoteFirework;
 import com.cavetale.mytems.item.wateringcan.EmptyWateringCan;
@@ -137,7 +137,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     BAT_PANTS(BatPants.class, NETHERITE_LEGGINGS, 0xF30D, ACULA),
     UNICORN_HORN(UnicornHorn.class, END_ROD, 7413003, (char) 0, UTILITY),
     MAGIC_CAPE(MagicCape.class, ELYTRA, 7413006, (char) 0xE238, chrarr(0xE238, 0xF001, 0xF002, 0xF003, 0xF004), UTILITY, Animation.MAGIC_CAPE),
-    SNEAKERS(Sneakers.class, LEATHER_BOOTS, 333, (char) 0xF005, UTILITY),
+    SNEAKERS(Sneakers.class, LEATHER_BOOTS, 333, (char) 0xF005, MytemsCategory.SNEAKERS),
     KITTY_COIN(KittyCoin.class, PLAYER_HEAD, 7413001, (char) 0xE200, CURRENCY),
     RAINBOW_KITTY_COIN(KittyCoin.class, PLAYER_HEAD, 7413007, (char) 0xE243, CURRENCY),
     CHRISTMAS_TOKEN(ChristmasToken.class, PLAYER_HEAD, 221, (char) 0xF006, CHRISTMAS),
@@ -1204,6 +1204,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     TEAR_SHAPED_SLOT(ForbiddenMytem.class, LEATHER_HELMET, 0xf386, GEM_SLOT),
     //
     PUMPKIN_HOOKSHOT(Hookshot.class, STONE_PICKAXE, 0xf387, HOOKSHOT),
+    RED_SNEAKERS(Sneakers.class, LEATHER_BOOTS, 0xf388, MytemsCategory.SNEAKERS),
+    BLUE_SNEAKERS(Sneakers.class, LEATHER_BOOTS, 0xf389, MytemsCategory.SNEAKERS),
+    PURPLE_SNEAKERS(Sneakers.class, LEATHER_BOOTS, 0xf38a, MytemsCategory.SNEAKERS),
+    GOLDEN_SNEAKERS(Sneakers.class, LEATHER_BOOTS, 0xf38b, MytemsCategory.SNEAKERS),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
