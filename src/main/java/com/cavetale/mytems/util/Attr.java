@@ -18,6 +18,14 @@ public final class Attr {
         add(meta, attribute, name, value, Operation.ADD_NUMBER, slot);
     }
 
+    public static void addScalar(ItemMeta meta, Attribute attribute, String name, double value, EquipmentSlotGroup slot) {
+        add(meta, attribute, name, value, Operation.ADD_SCALAR, slot);
+    }
+
+    public static void multiplyScalar1(ItemMeta meta, Attribute attribute, String name, double value, EquipmentSlotGroup slot) {
+        add(meta, attribute, name, value, Operation.MULTIPLY_SCALAR_1, slot);
+    }
+
     public static AttributeModifier of(final String name, final double value, final Operation operation, final EquipmentSlotGroup slot) {
         return new AttributeModifier(namespacedKey(name), value, operation, slot);
     }
