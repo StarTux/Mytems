@@ -63,6 +63,10 @@ public final class Items {
         meta.lore(nonItalic(lore));
     }
 
+    public static void tooltip(ItemMeta meta, Component... lore) {
+        tooltip(meta, List.of(lore));
+    }
+
     public static ItemStack deserialize(String base64) {
         final byte[] bytes = Base64.getDecoder().decode(base64);
         ItemStack item = ItemStack.deserializeBytes(bytes);
