@@ -5,6 +5,7 @@ import com.cavetale.core.util.Json;
 import com.cavetale.mytems.item.ArmorPart;
 import com.cavetale.mytems.item.ArmorStandEditor;
 import com.cavetale.mytems.item.ChristmasToken;
+import com.cavetale.mytems.item.ClaimTool;
 import com.cavetale.mytems.item.DiceItem;
 import com.cavetale.mytems.item.DummyMytem;
 import com.cavetale.mytems.item.Enderball;
@@ -1208,6 +1209,8 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     BLUE_SNEAKERS(Sneakers.class, LEATHER_BOOTS, 0xf389, MytemsCategory.SNEAKERS),
     PURPLE_SNEAKERS(Sneakers.class, LEATHER_BOOTS, 0xf38a, MytemsCategory.SNEAKERS),
     GOLDEN_SNEAKERS(Sneakers.class, LEATHER_BOOTS, 0xf38b, MytemsCategory.SNEAKERS),
+    //
+    CLAIM_TOOL(ClaimTool.class, GOLDEN_SHOVEL, 0xf38c, MytemsCategory.UTILITY, Animation.frametime(3)),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
