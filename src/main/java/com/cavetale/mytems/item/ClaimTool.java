@@ -34,9 +34,9 @@ public final class ClaimTool implements Mytem {
         prototype.editMeta(meta -> {
                 key.markItemMeta(meta);
                 tooltip(meta, displayName,
-                        text(tiny("Make changes your claim"), color),
-                        text(tiny("with this mysterious"), color),
-                        text(tiny("item in your hand."), color),
+                        text(tiny("Make changes to your claim"), color),
+                        text(tiny("with this mysterious item"), color),
+                        text(tiny("in your hand."), color),
                         empty(),
                         textOfChildren(Mytems.MOUSE_LEFT, text(" Claim info", GRAY)),
                         textOfChildren(Mytems.MOUSE_RIGHT, text(" Edit claim size", GRAY)));
