@@ -21,6 +21,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.block.sign.Side;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -91,10 +92,11 @@ public final class Magnifier implements Mytem {
     @Override
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
         if (!event.hasBlock()) return;
-        Block block = event.getClickedBlock();
+        event.setUseInteractedBlock(Event.Result.DENY);
+        final Block block = event.getClickedBlock();
         if (!(block.getState() instanceof Sign sign)) return;
-        Vec3i vec = Vec3i.of(block);
-        Favorite fav = sessionOf(player).getFavorites().getOrSet(Favorite.class, Favorite::new);
+        final Vec3i vec = Vec3i.of(block);
+        final Favorite fav = sessionOf(player).getFavorites().getOrSet(Favorite.class, Favorite::new);
         final List<Component> lines = List.copyOf(sign.getSide(Side.FRONT).lines());
         if (!vec.equals(fav.vec)) {
             fav.vec = vec;
