@@ -41,6 +41,7 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.BlockStateMeta;
+import org.bukkit.inventory.meta.BundleMeta;
 import org.bukkit.loot.Lootable;
 import org.bukkit.plugin.java.JavaPlugin;
 import static com.cavetale.core.util.CamelCase.toCamelCase;
@@ -250,6 +251,24 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
             int count = fixInventory(shulkerBox.getInventory());
             if (count == 0) return null;
             meta.setBlockState(shulkerBox);
+            oldItemStack.setItemMeta(meta);
+            return oldItemStack;
+        }
+        if (Tag.ITEMS_BUNDLES.isTagged(oldItemStack.getType())) {
+            if (!oldItemStack.hasItemMeta()) return null;
+            final BundleMeta meta = (BundleMeta) oldItemStack.getItemMeta();
+            int count = 0;
+            final List<ItemStack> items = new ArrayList<>(meta.getItems());
+            for (int i = 0; i < items.size(); i += 1) {
+                final ItemStack oldItem = items.get(i);
+                if (oldItem == null || oldItem.isEmpty()) continue;
+                final ItemStack newItem = fixItemStack(oldItem);
+                if (newItem == null) continue;
+                items.set(i, newItem);
+                count += 1;
+            }
+            if (count == 0) return null;
+            meta.setItems(items);
             oldItemStack.setItemMeta(meta);
             return oldItemStack;
         }
