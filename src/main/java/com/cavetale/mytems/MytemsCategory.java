@@ -83,6 +83,7 @@ public enum MytemsCategory {
     TREE_SEED,
     TROPHY,
     UI,
+    UI_COLOR,
     UTILITY,
     VALENTINE_TOKENS,
     VOTE,

@@ -65,7 +65,8 @@ public final class Fertilizer implements Mytem {
         for (Material mat : Tag.SMALL_FLOWERS.getValues()) {
             growList.add(new FertilizerFlower(mat));
         }
-        for (Material mat : Tag.TALL_FLOWERS.getValues()) {
+        for (Material mat : Tag.FLOWERS.getValues()) {
+            if (Tag.SMALL_FLOWERS.isTagged(mat)) continue;
             growList.add(new FertilizerBisectedFlower(mat));
         }
     }

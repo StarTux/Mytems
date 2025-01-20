@@ -317,6 +317,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     POCKET_CHICKEN(PocketMob.class, CHICKEN_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_COD(PocketMob.class, COD_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_COW(PocketMob.class, COW_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
+    POCKET_CREAKING(PocketMob.class, CREAKING_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_CREEPER(PocketMob.class, CREEPER_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_DOLPHIN(PocketMob.class, DOLPHIN_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_DONKEY(PocketMob.class, DONKEY_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
@@ -1105,9 +1106,9 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     AXIS_MODEL(ForbiddenMytem.class, END_ROD, 0xE027, (char) 0, TECHNICAL),
     MOUSE_CURSOR(ForbiddenMytem.class, ARROW, 0xE028, (char) 0xE028, UI),
     // Buttons
-    PLAY_BUTTON(ForbiddenMytem.class, LEATHER_CHESTPLATE, (char) 0xF32C, UI),
-    PAUSE_BUTTON(ForbiddenMytem.class, LEATHER_CHESTPLATE, (char) 0xF32D, UI),
-    STOP_BUTTON(ForbiddenMytem.class, LEATHER_CHESTPLATE, (char) 0xF32E, UI),
+    PLAY_BUTTON(ForbiddenMytem.class, LEATHER_CHESTPLATE, (char) 0xF32C, UI_COLOR),
+    PAUSE_BUTTON(ForbiddenMytem.class, LEATHER_CHESTPLATE, (char) 0xF32D, UI_COLOR),
+    STOP_BUTTON(ForbiddenMytem.class, LEATHER_CHESTPLATE, (char) 0xF32E, UI_COLOR),
     // Halloween Costumes
     VAMPIRE_WINGS(WardrobeItem.class, FEATHER, 0xF32F, WARDROBE_OFFHAND),
     BAT_WINGS(WardrobeItem.class, FEATHER, 0xF330, WARDROBE_OFFHAND),
@@ -1411,6 +1412,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
         ItemMarker.setId(meta, id);
         if (customModelData != null) {
             meta.setCustomModelData(customModelData);
+            meta.setItemModel(getNamespacedKey());
         }
     }
 
@@ -1463,7 +1465,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
             item = new ItemStack(material, amount);
         }
         if (customModelData != null) {
-            item.editMeta(meta -> meta.setCustomModelData(customModelData));
+            item.editMeta(meta -> {
+                    meta.setCustomModelData(customModelData);
+                    meta.setItemModel(getNamespacedKey());
+                });
         }
         return item;
     }
@@ -1612,6 +1617,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
         long tick = System.currentTimeMillis() / 50L;
         int frame = (int) (tick % (long) getAnimationFrameCount());
         return getAnimationFrame(frame);
+    }
+
+    public NamespacedKey getNamespacedKey() {
+        return MytemsPlugin.mytemsPlugin().namespacedKey(id);
     }
 
     public boolean isEssential() {
