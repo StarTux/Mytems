@@ -38,6 +38,7 @@ public enum ChoppedType {
                    VanillaItems.BROWN_MUSHROOM),
     CRIMSON(Tag.CRIMSON_STEMS, Material.NETHER_WART_BLOCK, Placeable.FUNGUS, Material.CRIMSON_FUNGUS, VanillaItems.CRIMSON_FUNGUS),
     WARPED(Tag.WARPED_STEMS, Material.WARPED_WART_BLOCK, Placeable.FUNGUS, Material.WARPED_FUNGUS, VanillaItems.WARPED_FUNGUS),
+    PALE_OAK(Tag.PALE_OAK_LOGS, Material.PALE_OAK_LEAVES, Placeable.SAPLING, Material.PALE_OAK_SAPLING, VanillaItems.PALE_OAK_SAPLING),
     ;
 
     public final Tag<Material> logs;
@@ -116,6 +117,7 @@ final class Placeable {
                 // Tested, works
                 Material.MUD,
                 Material.MUDDY_MANGROVE_ROOTS,
+                Material.PALE_MOSS_BLOCK,
             }));
 
     public static final Tag<Material> FUNGUS = new MaterialSetTag(null, List.of(new Material[] {
