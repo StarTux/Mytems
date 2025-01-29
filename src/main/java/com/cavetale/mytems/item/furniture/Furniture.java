@@ -112,7 +112,7 @@ public final class Furniture implements Mytem, BlockEventHandler {
      */
     private boolean placeFurniture(Player player, Block originBlock, ItemStack item) {
         // Test origin block
-        if (!originBlock.getType().isAir()) return false;
+        if (!originBlock.isEmpty() && originBlock.getType() != Material.LIGHT) return false;
         if (BlockMarker.getId(originBlock) != null) return false;
         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, originBlock)) {
             return false;
@@ -164,7 +164,7 @@ public final class Furniture implements Mytem, BlockEventHandler {
      * We use a simple flood fill.
      */
     private List<Block> findFurnitureBlocks(Block originBlock) {
-        if (!originBlock.equals(getOriginBlock(originBlock))) return List.of();
+        if (!originBlock.equals(getOriginBlock(originBlock, true))) return List.of();
         final Set<Vec3i> done = new HashSet<>();
         final List<Block> result = new ArrayList<>();
         result.add(originBlock);
@@ -180,7 +180,8 @@ public final class Furniture implements Mytem, BlockEventHandler {
                         final Vec3i nborVec = Vec3i.of(nbor);
                         if (done.contains(nborVec)) continue;
                         done.add(nborVec);
-                        if (!originBlock.equals(getOriginBlock(nbor))) continue;
+                        if (!key.id.equals(BlockMarker.getId(nbor))) continue;
+                        if (!originBlock.equals(getOriginBlock(nbor, false))) continue;
                         result.add(nbor);
                     }
                 }
@@ -222,10 +223,14 @@ public final class Furniture implements Mytem, BlockEventHandler {
      *
      * The origin block must have this Mytem's id!
      *
+     * @param block the block
+     * @param requireConsistency true if we should warn on console if
+     *   the origin block has an unexpected id.
+     *
      * @return The origin block or null if there is an inconsistency
      *   (see console)
      */
-    private Block getOriginBlock(Block block) {
+    private Block getOriginBlock(Block block, boolean requireConsistency) {
         final PersistentDataContainer tag = BlockMarker.getTag(block);
         // This should not happen if we previously got a valid id from this block.
         if (tag == null) return null;
@@ -239,11 +244,13 @@ public final class Furniture implements Mytem, BlockEventHandler {
         final String originBlockId = BlockMarker.getId(originBlock);
         // Check if origin is consistent
         if (!originBlock.equals(block) && !key.id.equals(originBlockId)) {
-            mytemsPlugin().getLogger().severe("[" + key + "] Bad origin block"
-                                              + " world:" + block.getWorld().getName()
-                                              + " block: " + blockVector
-                                              + " origin:" + originVector
-                                              + " origin.id: " + originBlockId);
+            if (requireConsistency) {
+                mytemsPlugin().getLogger().severe("[" + key + "] Bad origin block"
+                                                  + " world:" + block.getWorld().getName()
+                                                  + " block: " + blockVector
+                                                  + " origin:" + originVector
+                                                  + " origin.id: " + originBlockId);
+            }
             return null;
         }
         return originBlock;
@@ -268,7 +275,7 @@ public final class Furniture implements Mytem, BlockEventHandler {
         if (event.getHand() != EquipmentSlot.HAND) return;
         final Player player = event.getPlayer();
         if (player.getGameMode() == GameMode.SPECTATOR) return;
-        final Block originBlock = getOriginBlock(clickedBlock);
+        final Block originBlock = getOriginBlock(clickedBlock, true);
         if (originBlock == null) {
             return;
         } else if (left) {
