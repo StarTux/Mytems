@@ -24,7 +24,8 @@ public interface FurnitureTypeImpl {
         final Location location = block.getLocation().add(0.5, 0.5, 0.5);
         switch (getOrientation()) {
         case HORIZONTAL_FREE:
-            location.setYaw(player.getYaw() + 180f);
+            final float yaw = Math.round(player.getYaw() / 22.5f) * 22.5f;
+            location.setYaw(yaw + 180f);
             break;
         case HORIZONTAL_AXIS_ALIGNED:
             location.setDirection(facing.getDirection());
