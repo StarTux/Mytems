@@ -1,6 +1,7 @@
 package com.cavetale.mytems.item.furniture;
 
 import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
+import com.cavetale.core.event.block.PlayerBreakBlockEvent;
 import com.cavetale.core.event.block.PlayerChangeBlockEvent;
 import com.cavetale.core.struct.Vec3i;
 import com.cavetale.mytems.Mytem;
@@ -204,6 +205,7 @@ public final class Furniture implements Mytem, BlockEventHandler {
         if (blocks.isEmpty()) return false;
         furnitureType.getImplementation().onBreakFurniture(player, originBlock, blocks);
         for (Block block : blocks) {
+            new PlayerBreakBlockEvent(player, block);
             BlockMarker.clearTag(block);
             block.setBlockData(Material.AIR.createBlockData());
         }
