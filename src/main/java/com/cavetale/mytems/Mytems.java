@@ -48,6 +48,7 @@ import com.cavetale.mytems.item.farawaymap.FarawayMap;
 import com.cavetale.mytems.item.fertilizer.Fertilizer;
 import com.cavetale.mytems.item.finder.Finder;
 import com.cavetale.mytems.item.font.GlyphItem;
+import com.cavetale.mytems.item.furniture.Furniture;
 import com.cavetale.mytems.item.garden.Scissors;
 import com.cavetale.mytems.item.garden.Scythe;
 import com.cavetale.mytems.item.gem.Gem;
@@ -187,19 +188,46 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     EASTER_CHESTPLATE(EasterGear.Chestplate.class, LEATHER_CHESTPLATE, 345712, (char) 0xE219, EASTER),
     EASTER_LEGGINGS(EasterGear.Leggings.class, LEATHER_LEGGINGS, 345713, (char) 0xE21A, EASTER),
     EASTER_BOOTS(EasterGear.Boots.class, LEATHER_BOOTS, 345714, (char) 0xE21B, EASTER),
-    TOILET(Toilet.class, CAULDRON, 498101, (char) 0, FURNITURE),
-    BOSS_CHEST(ForbiddenMytem.class, CHEST, 7413004, (char) 0, FURNITURE),
-    OAK_CHAIR(ForbiddenMytem.class, OAK_PLANKS, 135, (char) 0, FURNITURE),
-    SPRUCE_CHAIR(ForbiddenMytem.class, SPRUCE_PLANKS, 136, (char) 0, FURNITURE),
-    WHITE_ARMCHAIR(ForbiddenMytem.class, WHITE_WOOL, 137, (char) 0, FURNITURE),
-    WHITE_SOFA_LEFT(ForbiddenMytem.class, WHITE_WOOL, 138, (char) 0, FURNITURE),
-    WHITE_SOFA_RIGHT(ForbiddenMytem.class, WHITE_WOOL, 139, (char) 0, FURNITURE),
-    RED_ARMCHAIR(ForbiddenMytem.class, RED_WOOL, 140, (char) 0, FURNITURE),
-    RED_SOFA_LEFT(ForbiddenMytem.class, RED_WOOL, 141, (char) 0, FURNITURE),
-    RED_SOFA_RIGHT(ForbiddenMytem.class, RED_WOOL, 142, (char) 0, FURNITURE),
-    BLACK_ARMCHAIR(ForbiddenMytem.class, RED_WOOL, 143, (char) 0, FURNITURE),
-    BLACK_SOFA_LEFT(ForbiddenMytem.class, RED_WOOL, 144, (char) 0, FURNITURE),
-    BLACK_SOFA_RIGHT(ForbiddenMytem.class, RED_WOOL, 145, (char) 0, FURNITURE),
+    // Furniture
+    TOILET(Toilet.class, CAULDRON, 498101, (char) 0, CHAIR),
+    BOSS_CHEST(Furniture.class, CHEST, 7413004, (char) 0, BLOCKS),
+    OAK_CHAIR(Furniture.class, OAK_PLANKS, 135, (char) 0, CHAIR),
+    SPRUCE_CHAIR(Furniture.class, SPRUCE_PLANKS, 136, (char) 0, CHAIR),
+    // Armchairs
+    WHITE_WOOL_ARMCHAIR(Furniture.class, WHITE_WOOL, 137, (char) 0, ARMCHAIR),
+    LIGHT_GRAY_WOOL_ARMCHAIR(Furniture.class, LIGHT_GRAY_WOOL, 137, (char) 0, ARMCHAIR),
+    GRAY_WOOL_ARMCHAIR(Furniture.class, GRAY_WOOL, 137, (char) 0, ARMCHAIR),
+    BLACK_WOOL_ARMCHAIR(Furniture.class, BLACK_WOOL, 137, (char) 0, ARMCHAIR),
+    BROWN_WOOL_ARMCHAIR(Furniture.class, BROWN_WOOL, 137, (char) 0, ARMCHAIR),
+    RED_WOOL_ARMCHAIR(Furniture.class, RED_WOOL, 137, (char) 0, ARMCHAIR),
+    ORANGE_WOOL_ARMCHAIR(Furniture.class, ORANGE_WOOL, 137, (char) 0, ARMCHAIR),
+    YELLOW_WOOL_ARMCHAIR(Furniture.class, YELLOW_WOOL, 137, (char) 0, ARMCHAIR),
+    LIME_WOOL_ARMCHAIR(Furniture.class, LIME_WOOL, 137, (char) 0, ARMCHAIR),
+    GREEN_WOOL_ARMCHAIR(Furniture.class, GREEN_WOOL, 137, (char) 0, ARMCHAIR),
+    CYAN_WOOL_ARMCHAIR(Furniture.class, CYAN_WOOL, 137, (char) 0, ARMCHAIR),
+    LIGHT_BLUE_WOOL_ARMCHAIR(Furniture.class, LIGHT_BLUE_WOOL, 137, (char) 0, ARMCHAIR),
+    BLUE_WOOL_ARMCHAIR(Furniture.class, BLUE_WOOL, 137, (char) 0, ARMCHAIR),
+    PURPLE_WOOL_ARMCHAIR(Furniture.class, PURPLE_WOOL, 137, (char) 0, ARMCHAIR),
+    MAGENTA_WOOL_ARMCHAIR(Furniture.class, MAGENTA_WOOL, 137, (char) 0, ARMCHAIR),
+    PINK_WOOL_ARMCHAIR(Furniture.class, PINK_WOOL, 137, (char) 0, ARMCHAIR),
+    // Sofas
+    WHITE_WOOL_SOFA(Furniture.class, WHITE_WOOL, 138, (char) 0, SOFA),
+    LIGHT_GRAY_WOOL_SOFA(Furniture.class, LIGHT_GRAY_WOOL, 138, (char) 0, SOFA),
+    GRAY_WOOL_SOFA(Furniture.class, GRAY_WOOL, 138, (char) 0, SOFA),
+    BLACK_WOOL_SOFA(Furniture.class, BLACK_WOOL, 138, (char) 0, SOFA),
+    BROWN_WOOL_SOFA(Furniture.class, BROWN_WOOL, 138, (char) 0, SOFA),
+    RED_WOOL_SOFA(Furniture.class, RED_WOOL, 138, (char) 0, SOFA),
+    ORANGE_WOOL_SOFA(Furniture.class, ORANGE_WOOL, 138, (char) 0, SOFA),
+    YELLOW_WOOL_SOFA(Furniture.class, YELLOW_WOOL, 138, (char) 0, SOFA),
+    LIME_WOOL_SOFA(Furniture.class, LIME_WOOL, 138, (char) 0, SOFA),
+    GREEN_WOOL_SOFA(Furniture.class, GREEN_WOOL, 138, (char) 0, SOFA),
+    CYAN_WOOL_SOFA(Furniture.class, CYAN_WOOL, 138, (char) 0, SOFA),
+    LIGHT_BLUE_WOOL_SOFA(Furniture.class, LIGHT_BLUE_WOOL, 138, (char) 0, SOFA),
+    BLUE_WOOL_SOFA(Furniture.class, BLUE_WOOL, 138, (char) 0, SOFA),
+    PURPLE_WOOL_SOFA(Furniture.class, PURPLE_WOOL, 138, (char) 0, SOFA),
+    MAGENTA_WOOL_SOFA(Furniture.class, MAGENTA_WOOL, 138, (char) 0, SOFA),
+    PINK_WOOL_SOFA(Furniture.class, PINK_WOOL, 138, (char) 0, SOFA),
+    //
     WEDDING_RING(WeddingRing.class, PLAYER_HEAD, 7413002, (char) 0xE21C, FRIENDS),
     MAGIC_MAP(MagicMap.class, FILLED_MAP, 7413005, (char) 0xE21D, chrarr(0xE21D, 0xF00E, 0xF00F, 0xF010, 0xF011, 0xF012, 0xF013, 0xF014, 0xF015, 0xF016, 0xF017, 0xF018, 0xF019, 0xF01A, 0xF01B, 0xF01C), UTILITY, Animation.MAGIC_MAP),
     SNOW_SHOVEL(SnowShovel.class, IRON_SHOVEL, 220, (char) 0xF01D, UTILITY),

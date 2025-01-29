@@ -24,6 +24,8 @@ import com.cavetale.mytems.util.Items;
 import com.cavetale.mytems.util.JavaItem;
 import com.cavetale.mytems.util.Skull;
 import com.google.common.collect.Multimap;
+import io.papermc.paper.datacomponent.DataComponentTypes;
+import io.papermc.paper.datacomponent.item.DyedItemColor;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -87,8 +89,14 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
             .senderCaller(this::give)
             .completer(this::giveComplete);
         rootNode.addChild("givecolored").arguments("<player> <mytem> <color>")
-            .description("Give a colored to a player")
+            .description("Give colored item to player")
             .senderCaller(this::giveColored)
+            .completers(CommandArgCompleter.ONLINE_PLAYERS,
+                        CommandArgCompleter.enumLowerList(Mytems.class),
+                        CommandArgCompleter.NULL);
+        rootNode.addChild("givedyedcolor").arguments("<player> <mytem> <color>")
+            .description("Give item with dyed color")
+            .senderCaller(this::giveDyedColor)
             .completers(CommandArgCompleter.ONLINE_PLAYERS,
                         CommandArgCompleter.enumLowerList(Mytems.class),
                         CommandArgCompleter.NULL);
@@ -282,6 +290,26 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         target.getInventory().addItem(item);
         sender.sendMessage(textOfChildren(mytems,
                                           text(" (" + color.asHexString() + ")", color),
+                                          text(" given to " + target.getName(), YELLOW)));
+        return true;
+    }
+
+    protected boolean giveDyedColor(CommandSender sender, String[] args) {
+        if (args.length != 3) return false;
+        final String targetArg = args[0];
+        final String mytemArg = args[1];
+        final String colorArg = args[2];
+        final Player target = Bukkit.getPlayer(targetArg);
+        if (target == null) throw new CommandWarn("Player not found: " + targetArg);
+        final Mytems mytems = CommandArgCompleter.requireEnum(Mytems.class, mytemArg);
+        final TextColor textColor = TextColor.fromHexString(colorArg);
+        if (textColor == null) throw new CommandWarn("Invalid color: " + colorArg);
+        final Color color = Color.fromRGB(textColor.value());
+        final ItemStack item = mytems.createItemStack();
+        item.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(color, true));
+        target.getInventory().addItem(item);
+        sender.sendMessage(textOfChildren(mytems,
+                                          text(" (" + textColor.asHexString() + ")", textColor),
                                           text(" given to " + target.getName(), YELLOW)));
         return true;
     }

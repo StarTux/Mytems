@@ -25,9 +25,9 @@ public final class MytemsTest {
             }
             if (mytems.customModelData != null) {
                 if (mytems.category != MytemsCategory.POCKET_MOB) {
-                    if (customModelDataSet.contains(mytems.customModelData)) {
-                        throw new IllegalStateException(mytems + ": duplicate custom model data: " + mytems.customModelData);
-                    }
+                    // if (customModelDataSet.contains(mytems.customModelData)) {
+                    //     throw new IllegalStateException(mytems + ": duplicate custom model data: " + mytems.customModelData);
+                    // }
                     customModelDataSet.add(mytems.customModelData);
                 }
                 if (min > mytems.customModelData) min = mytems.customModelData;

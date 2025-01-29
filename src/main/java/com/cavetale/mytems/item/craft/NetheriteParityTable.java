@@ -20,6 +20,7 @@ import org.bukkit.event.Event;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
+import static com.cavetale.mytems.block.BlockRegistry.blockRegistry;
 import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.text;
 
@@ -37,7 +38,7 @@ public final class NetheriteParityTable implements Mytem {
                 tooltip(meta, List.of(displayName));
                 key.markItemMeta(meta);
             });
-        new NetheriteParityTableBlock(key).register();
+        blockRegistry().register(key).addEventHandler(new NetheriteParityBlockEventHandler());
     }
 
     @Override

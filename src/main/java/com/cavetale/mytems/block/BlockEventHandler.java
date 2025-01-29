@@ -8,13 +8,10 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 
-public interface MytemBlock {
-    String getKey();
-
-    default void register() {
-        BlockRegistry.blockRegistry().register(this);
-    }
-
+/**
+ * A simple event handler for BlockRegistryEntry objects.
+ */
+public interface BlockEventHandler {
     default void onPlayerInteract(PlayerInteractEvent event, Block block) { }
     default void onBlockBreak(BlockBreakEvent event, Block block) { }
     default void onBlockDamage(BlockDamageEvent event, Block block) { }

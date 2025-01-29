@@ -6,6 +6,7 @@ import com.cavetale.core.font.GlyphPolicy;
 import com.cavetale.core.item.ItemFinder;
 import com.cavetale.mytems.block.BlockBreakListener;
 import com.cavetale.mytems.block.BlockRegistry;
+import com.cavetale.mytems.block.chair.Chairs;
 import com.cavetale.mytems.item.photo.Photo;
 import com.cavetale.mytems.loot.LootTableListener;
 import com.cavetale.mytems.session.Session;
@@ -119,6 +120,7 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
         mytems.clear();
         ItemFinder.super.unregister();
         Gui.disable();
+        Chairs.disableAll();
     }
 
     public void enableItems() {

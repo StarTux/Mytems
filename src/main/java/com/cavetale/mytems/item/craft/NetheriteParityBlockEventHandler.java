@@ -4,7 +4,7 @@ import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.event.block.PlayerChangeBlockEvent;
 import com.cavetale.core.event.item.PlayerReceiveItemsEvent;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.block.MytemBlock;
+import com.cavetale.mytems.block.BlockEventHandler;
 import com.cavetale.mytems.custom.NetheriteParityGui;
 import com.cavetale.worldmarker.block.BlockMarker;
 import java.util.List;
@@ -26,14 +26,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
 
 @RequiredArgsConstructor
-public final class NetheriteParityTableBlock implements MytemBlock {
-    private final Mytems mytems;
-
-    @Override
-    public String getKey() {
-        return mytems.id;
-    }
-
+public final class NetheriteParityBlockEventHandler implements BlockEventHandler {
     @Override
     public void onBlockDamage(BlockDamageEvent event, Block block) {
         if (event.isCancelled()) return;

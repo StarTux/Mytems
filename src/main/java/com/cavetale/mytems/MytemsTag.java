@@ -129,6 +129,11 @@ public final class MytemsTag {
             MytemsCategory.EQUIP_WHIP,
             MytemsCategory.EQUIP_YELLOW_WINGED_CLOTH_SET,
         });
+    public static final MytemsTag FURNITURE = new MytemsTag("furniture", new MytemsCategory[] {
+            MytemsCategory.CHAIR,
+            MytemsCategory.SOFA,
+            MytemsCategory.ARMCHAIR,
+        });
 
     public final String name;
     private final EnumSet<Mytems> set;
@@ -177,7 +182,7 @@ public final class MytemsTag {
         }
         this.set = theSet;
         if (set.isEmpty() && !name.equals("empty")) {
-            MytemsPlugin.getInstance().getLogger().warning("Empty tag: " + name);
+            System.err.println("Empty tag: " + name);
         }
         if (tmpList == null) tmpList = new ArrayList<>();
         tmpList.add(this);
