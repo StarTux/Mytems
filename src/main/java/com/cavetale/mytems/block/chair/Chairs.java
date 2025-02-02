@@ -71,6 +71,7 @@ public final class Chairs implements Listener {
     }
 
     public Seat sitDown(Player player, Block block, Location location) {
+        if (isOccupied(block)) return null;
         ArmorStand armorStand = location.getWorld().spawn(location, ArmorStand.class, as -> {
                 as.setPersistent(false);
                 as.setVisible(false);
