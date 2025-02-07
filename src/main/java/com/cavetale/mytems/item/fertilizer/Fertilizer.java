@@ -15,10 +15,13 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
+import org.bukkit.block.data.Bisected;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
@@ -62,12 +65,26 @@ public final class Fertilizer implements Mytem {
         growList.add(new FertilizerBisectedFlower(Material.TALL_GRASS));
         growList.add(new FertilizerFlower(Material.FERN));
         growList.add(new FertilizerBisectedFlower(Material.LARGE_FERN));
-        for (Material mat : Tag.SMALL_FLOWERS.getValues()) {
-            growList.add(new FertilizerFlower(mat));
-        }
         for (Material mat : Tag.FLOWERS.getValues()) {
-            if (Tag.SMALL_FLOWERS.isTagged(mat)) continue;
-            growList.add(new FertilizerBisectedFlower(mat));
+            if (Tag.LEAVES.isTagged(mat)) continue;
+            if (Tag.SAPLINGS.isTagged(mat)) continue;
+            // Completely arbitrary blacklist
+            switch (mat) {
+            case PITCHER_PLANT:
+            case CLOSED_EYEBLOSSOM:
+            case OPEN_EYEBLOSSOM:
+            case CHORUS_FLOWER:
+            case TORCHFLOWER:
+            case SPORE_BLOSSOM:
+                continue;
+            default:
+                break;
+            }
+            if (mat.createBlockData() instanceof Bisected) {
+                growList.add(new FertilizerBisectedFlower(mat));
+            } else {
+                growList.add(new FertilizerFlower(mat));
+            }
         }
     }
 
@@ -81,6 +98,7 @@ public final class Fertilizer implements Mytem {
         event.setCancelled(true);
         if (player.isSneaking()) {
             openGui(player);
+            player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 0.5f, 1.0f);
         } else if (event.hasBlock()) {
             if (fertilize(player, event.getClickedBlock(), item) && player.getGameMode() != GameMode.CREATIVE) {
                 item.subtract(1);
@@ -103,7 +121,7 @@ public final class Fertilizer implements Mytem {
                     if (!click.isLeftClick()) return;
                     playerData.grow[index] = !value;
                     openGui(player);
-                    player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 1.0f, 1.0f);
+                    player.playSound(player.getLocation(), Sound.UI_BUTTON_CLICK, 0.5f, 1.0f);
                 });
         }
         gui.title(builder.build());
@@ -118,7 +136,11 @@ public final class Fertilizer implements Mytem {
         for (int i = 0; i < growList.size(); i += 1) {
             if (playerData.grow[i]) selectedGrowList.add(growList.get(i));
         }
-        if (selectedGrowList.isEmpty()) return false;
+        if (selectedGrowList.isEmpty()) {
+            openGui(player);
+            player.playSound(player.getLocation(), Sound.BLOCK_CHEST_OPEN, 0.5f, 1.0f);
+            return false;
+        }
         Collections.shuffle(selectedGrowList);
         final int radius = 5;
         final int radius2 = radius * radius;
@@ -128,12 +150,16 @@ public final class Fertilizer implements Mytem {
                 for (int dx = -radius; dx <= radius; dx += 1) {
                     if (dx * dx + dy * dy + dz * dz > radius2) continue;
                     if (ThreadLocalRandom.current().nextInt(4) != 0) continue;
-                    Block block = clickedBlock.getRelative(dx, dy, dz);
-                    FertilizerGrowth growth = selectedGrowList.get(growIndex);
+                    // This is the grass block!
+                    final Block block = clickedBlock.getRelative(dx, dy, dz);
+                    final FertilizerGrowth growth = selectedGrowList.get(growIndex);
                     if (growth.canGrow(player, block)) {
                         growth.grow(player, block, itemStack);
                         growIndex += 1;
                         if (growIndex >= selectedGrowList.size()) growIndex = 0;
+                        final Location location = block.getLocation().add(0.5, 1.5, 0.5);
+                        block.getWorld().spawnParticle(Particle.HAPPY_VILLAGER, location, 8, 0.2, 0.2, 0.2, 0.0);
+                        block.getWorld().playSound(location, Sound.ITEM_BONE_MEAL_USE, 1f, 2f);
                     }
                 }
             }
