@@ -95,7 +95,15 @@ public final class Yardstick implements Mytem {
             session.world = block.getWorld().getName();
         }
         if (num == 1) {
-            session.point1 = Vec3i.of(block);
+            final Vec3i clickVector = Vec3i.of(block);
+            if (clickVector.equals(session.point1)) {
+                session.clearBlocks();
+                session.reset();
+                soundUse(player);
+                player.sendActionBar(textOfChildren(key, text(" Cleared", GRAY)));
+                return;
+            }
+            session.point1 = clickVector;
             player.sendActionBar(textOfChildren(key, text("Point A ", GRAY),
                                                 text(session.point1.x + " " + session.point1.y + " " + session.point1.z, color(COLOR_HEX))));
         } else if (num == 2) {

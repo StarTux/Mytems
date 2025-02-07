@@ -114,7 +114,15 @@ public final class Dividers implements Mytem {
             session.world = block.getWorld().getName();
         }
         if (!right) {
-            session.point1 = Vec3i.of(block);
+            final Vec3i clickVector = Vec3i.of(block);
+            if (clickVector.equals(session.point1)) {
+                session.clearBlocks();
+                session.reset();
+                soundUse(player);
+                player.sendActionBar(textOfChildren(key, text(" Cleared", GRAY)));
+                return;
+            }
+            session.point1 = clickVector;
             session.axis = axis;
             draw(player, session, List.of(session.point1));
             player.sendActionBar(textOfChildren(key,
