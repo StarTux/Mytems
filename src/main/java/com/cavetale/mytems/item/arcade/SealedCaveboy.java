@@ -69,7 +69,6 @@ public final class SealedCaveboy implements Mytem {
         }
         List<ArcadeGame> games = new ArrayList<>();
         for (var it : ArcadeGame.values()) games.add(it);
-        games.remove(ArcadeGame.TIC_TAC_TOE);
         ArcadeGame game = games.get(ThreadLocalRandom.current().nextInt(games.size()));
         event.setCancelled(true);
         plugin().getLogger().info("[" + key + "] " + player.getName() + " unwrapped " + game);
