@@ -7,6 +7,7 @@ import com.cavetale.mytems.util.Json;
 import com.destroystokyo.paper.event.player.PlayerArmorChangeEvent;
 import io.papermc.paper.event.player.PrePlayerAttackEntityEvent;
 import net.kyori.adventure.text.Component;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockDamageEvent;
@@ -119,6 +120,8 @@ public interface Mytem {
     default void onPlayerInventoryClick(InventoryClickEvent event, Player player, ItemStack item) { }
 
     default void onTick(Player player, ItemStack item, EquipmentSlot slot) { }
+
+    default void onCustomBlockDamage(Player player, Block block, ItemStack item, int ticks) { }
 
     /**
      * These can be overridden entirely.

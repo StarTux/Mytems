@@ -15,6 +15,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.Getter;
+import lombok.Setter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -45,6 +46,7 @@ public final class Session {
     protected Attributes attributes = new Attributes(this);
     protected final Favorites favorites = new Favorites();
     private boolean hidingPlayers;
+    @Setter private BlockDamageSession blockDamage;
 
     public Session(final MytemsPlugin plugin, final Player player) {
         this.plugin = plugin;
@@ -89,6 +91,9 @@ public final class Session {
             final Mytems mytems = Mytems.forItem(item);
             if (mytems == null) continue;
             plugin.getMytem(mytems).onTick(player, item, slot);
+        }
+        if (blockDamage != null) {
+            blockDamage.tick(this, player);
         }
     }
 

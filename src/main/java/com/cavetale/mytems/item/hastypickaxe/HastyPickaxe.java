@@ -6,7 +6,6 @@ import com.cavetale.core.struct.Vec3i;
 import com.cavetale.core.util.Json;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.session.Session;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,7 +26,6 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.type.EndPortalFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockDamageEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffectType;
 import static com.cavetale.core.exploits.PlayerPlacedBlocks.isPlayerPlaced;
@@ -205,20 +203,17 @@ public final class HastyPickaxe implements Mytem {
     }
 
     @Override
-    public void onBlockDamage(BlockDamageEvent event, Player player, ItemStack item) {
-        final Block block = event.getBlock();
+    public void onCustomBlockDamage(Player player, Block block, ItemStack item, int ticks) {
         final Material material = block.getType();
         if (material == Material.END_PORTAL_FRAME) {
-            tryToBreak(player, block, item, HastyPickaxeStat.END_PORTAL, 50);
-            event.setCancelled(true);
+            tryToBreak(player, block, item, HastyPickaxeStat.END_PORTAL, ticks, 100);
         } else if (material == Material.BEDROCK) {
             // The bedrock ability requires bedrock to come from the
             // end or be player placed.
             if (!isEndPillarBlock(block) && !isPlayerPlaced(block)) {
                 return;
             }
-            tryToBreak(player, block, item, HastyPickaxeStat.BEDROCK, 300);
-            event.setCancelled(true);
+            tryToBreak(player, block, item, HastyPickaxeStat.BEDROCK, ticks, 600);
         }
     }
 
@@ -241,7 +236,7 @@ public final class HastyPickaxe implements Mytem {
         return true;
     }
 
-    private void tryToBreak(Player player, Block block, ItemStack item, HastyPickaxeStat stat, int max) {
+    private void tryToBreak(Player player, Block block, ItemStack item, HastyPickaxeStat stat, int ticks, int max) {
         final HastyPickaxeTag tag = serializeTag(item);
         final int upgradeLevel = tag.getUpgradeLevel(stat);
         if (upgradeLevel < 1) {
@@ -252,17 +247,8 @@ public final class HastyPickaxe implements Mytem {
             return;
         }
         final Vec3i vector = Vec3i.of(block);
-        final BlockBreakProgress blockBreakProgress = Session.of(player).getFavorites().getOrSet(BlockBreakProgress.class, BlockBreakProgress::new);
         final World world = block.getWorld();
-        if (!world.getName().equals(blockBreakProgress.world) || !vector.equals(blockBreakProgress.where)) {
-            blockBreakProgress.reset();
-            blockBreakProgress.world = world.getName();
-            blockBreakProgress.where = vector;
-            blockBreakProgress.progress = 0;
-        }
-        blockBreakProgress.progress += 1;
-        if (blockBreakProgress.progress >= max) {
-            blockBreakProgress.reset();
+        if (ticks >= max) {
             if (!new PlayerBreakBlockEvent(player, block, item).callEvent()) {
                 return;
             }
@@ -288,12 +274,11 @@ public final class HastyPickaxe implements Mytem {
             }
         } else {
             final int bars = 20;
-            final int full = (blockBreakProgress.progress * bars) / max;
+            final int full = (ticks * bars) / max;
             final int empty = bars - full;
             player.sendActionBar(textOfChildren(key,
-                                                text(superscript(String.format("%02d", blockBreakProgress.progress)) + "/" + subscript(max), tier.getMenuColor()),
+                                                text(superscript(String.format("%02d", ticks)) + "/" + subscript(max), tier.getMenuColor()),
                                                 text("|".repeat(full), tier.getMenuColor()), text("|".repeat(empty), color(0x303030))));
-            player.sendBlockDamage(block.getLocation(), (float) blockBreakProgress.progress / (float) max);
         }
     }
 
@@ -312,18 +297,6 @@ public final class HastyPickaxe implements Mytem {
                 nbor.getWorld().spawnParticle(Particle.BLOCK, location, 16, 0.0, 0.0, 0.0, 1.0, Material.END_PORTAL.createBlockData());
                 nbor.getWorld().playSound(location, Sound.BLOCK_GLASS_BREAK, 1f, 0.5f);
             }
-        }
-    }
-
-    private static final class BlockBreakProgress {
-        private String world;
-        private Vec3i where;
-        private int progress;
-
-        private void reset() {
-            world = null;
-            where = null;
-            progress = 0;
         }
     }
 

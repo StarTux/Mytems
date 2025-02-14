@@ -129,6 +129,12 @@ public final class BlockRegistry implements Listener {
         handle(event.getBlock(), en -> onBlockEdit(event, en), null);
     }
 
+    public BlockRegistryEntry getEntryAt(Block block) {
+        final String id = BlockMarker.getId(block);
+        if (id == null) return null;
+        return blockMap.get(id);
+    }
+
     private void handle(Block block, Consumer<BlockRegistryEntry> entryCallback, Consumer<BlockEventHandler> eventHandlerCallback) {
         final String id = BlockMarker.getId(block);
         if (id == null) return;

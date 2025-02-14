@@ -6,7 +6,6 @@ import com.cavetale.core.event.block.PlayerChangeBlockEvent;
 import com.cavetale.core.struct.Vec3i;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.block.BlockEventHandler;
 import com.cavetale.worldmarker.block.BlockMarker;
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -28,7 +27,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -52,7 +50,7 @@ import static java.util.Objects.requireNonNull;
  * fill.  It also returns a single furniture item.
  */
 @Getter
-public final class Furniture implements Mytem, BlockEventHandler {
+public final class Furniture implements Mytem {
     private final Mytems key;
     private final FurnitureType furnitureType;
     private ItemStack prototype;
@@ -71,7 +69,8 @@ public final class Furniture implements Mytem, BlockEventHandler {
                 tooltip(meta, List.of(getDisplayName()));
             });
         blockRegistry().register(key)
-            .addEventHandler(this);
+            .setCancelBlockEdits(true)
+            .addEventHandler(new FurnitureBlockEventHandler(this));
     }
 
     @Override
@@ -197,7 +196,7 @@ public final class Furniture implements Mytem, BlockEventHandler {
      * We allow breaking if the player is allowed to break the origin
      * block.
      */
-    private boolean breakFurniture(Player player, Block originBlock) {
+    protected boolean breakFurniture(Player player, Block originBlock) {
         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, originBlock)) {
             return false;
         }
@@ -232,7 +231,7 @@ public final class Furniture implements Mytem, BlockEventHandler {
      * @return The origin block or null if there is an inconsistency
      *   (see console)
      */
-    private Block getOriginBlock(Block block, boolean requireConsistency) {
+    protected Block getOriginBlock(Block block, boolean requireConsistency) {
         final PersistentDataContainer tag = BlockMarker.getTag(block);
         // This should not happen if we previously got a valid id from this block.
         if (tag == null) return null;
@@ -256,38 +255,5 @@ public final class Furniture implements Mytem, BlockEventHandler {
             return null;
         }
         return originBlock;
-    }
-
-    // Overrides BlockEventHandler from BlockRegistry
-    @Override
-    public void onPlayerInteract(PlayerInteractEvent event, Block clickedBlock) {
-        final boolean left;
-        final boolean right;
-        switch (event.getAction()) {
-        case LEFT_CLICK_BLOCK:
-            left = true;
-            right = false;
-            break;
-        case RIGHT_CLICK_BLOCK:
-            left = false;
-            right = true;
-            break;
-        default: return;
-        }
-        if (event.getHand() != EquipmentSlot.HAND) return;
-        final Player player = event.getPlayer();
-        if (player.getGameMode() == GameMode.SPECTATOR) return;
-        final Block originBlock = getOriginBlock(clickedBlock, true);
-        if (originBlock == null) {
-            return;
-        } else if (left) {
-            event.setCancelled(true);
-            if (breakFurniture(player, originBlock)) {
-                originBlock.getWorld().playSound(originBlock.getLocation().add(0.5, 0.5, 0.5), Sound.BLOCK_WOOD_BREAK, 1.0f, 0.5f);
-            }
-        } else if (right) {
-            event.setCancelled(true);
-            furnitureType.getImplementation().onPlayerRightClick(player, clickedBlock, originBlock);
-        }
     }
 }

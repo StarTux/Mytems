@@ -3,6 +3,7 @@ package com.cavetale.mytems.block;
 import com.cavetale.worldmarker.block.BlockMarker;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Consumer;
 import lombok.Getter;
 import org.bukkit.block.Block;
 
@@ -16,6 +17,10 @@ public final class BlockRegistryEntry {
         this.id = id;
     }
 
+    public static BlockRegistryEntry at(Block block) {
+        return BlockRegistry.blockRegistry().getEntryAt(block);
+    }
+
     public void set(Block block) {
         BlockMarker.setId(block, id);
     }
@@ -24,11 +29,23 @@ public final class BlockRegistryEntry {
         BlockMarker.resetId(block);
     }
 
-    public void addEventHandler(BlockEventHandler handler) {
+    public BlockRegistryEntry addEventHandler(BlockEventHandler handler) {
         eventHandlers.add(handler);
+        return this;
+    }
+
+    public BlockRegistryEntry setCancelBlockEdits(boolean value) {
+        this.cancelBlockEdits = value;
+        return this;
     }
 
     public void removeEventHandler(BlockEventHandler handler) {
         eventHandlers.remove(handler);
+    }
+
+    public void applyEventHandlers(Consumer<BlockEventHandler> callback) {
+        for (BlockEventHandler handler : eventHandlers) {
+            callback.accept(handler);
+        }
     }
 }

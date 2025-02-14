@@ -5,6 +5,7 @@ import com.cavetale.core.font.Emoji;
 import com.cavetale.core.font.GlyphPolicy;
 import com.cavetale.core.item.ItemFinder;
 import com.cavetale.mytems.block.BlockBreakListener;
+import com.cavetale.mytems.block.BlockDamageListener;
 import com.cavetale.mytems.block.BlockRegistry;
 import com.cavetale.mytems.block.chair.Chairs;
 import com.cavetale.mytems.item.photo.Photo;
@@ -105,6 +106,7 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
         if (ServerCategory.current().isSurvival()) {
             Bukkit.getPluginManager().registerEvents(new LootTableListener(this), this);
         }
+        new BlockDamageListener(this).enable();
     }
 
     @Override
