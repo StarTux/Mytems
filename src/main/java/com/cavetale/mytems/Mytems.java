@@ -1243,7 +1243,6 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
-    private static final Map<Integer, Mytems> CUSTOM_MODEL_DATA_MAP = new HashMap<>();
     public final String id;
     public final Class<? extends Mytem> mytemClass;
     public final Material material;
@@ -1261,9 +1260,6 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
             ID_MAP.put(it.id, it);
             if (!it.id.contains(":")) {
                 ID_MAP.put("mytems:" + it.id, it);
-                if (it.customModelData != null) {
-                    CUSTOM_MODEL_DATA_MAP.put(it.customModelData, it);
-                }
             }
         }
         ID_MAP.put("dwarf_axe", DWARVEN_AXE); // legacy
@@ -1367,19 +1363,28 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
         return forId(id);
     }
 
-    public static Mytems forCustomModelData(ItemStack item) {
+    public static Mytems forNamespacedKey(NamespacedKey key) {
+        if (!key.getNamespace().equals("mytems")) return null;
+        return forId(key.getKey());
+    }
+
+    public static Mytems forItemModel(ItemStack item) {
         if (item == null) return null;
         if (!item.hasItemMeta()) return null;
         final ItemMeta meta = item.getItemMeta();
         if (meta == null) return null;
-        if (!meta.hasCustomModelData()) return null;
-        final Integer customModelData = meta.getCustomModelData();
-        if (customModelData == null) return null;
-        return forCustomModelData(customModelData);
+        if (!meta.hasItemModel()) return null;
+        final NamespacedKey itemModel = meta.getItemModel();
+        if (itemModel == null) return null;
+        return forNamespacedKey(itemModel);
     }
 
-    public static Mytems forCustomModelData(int customModelData) {
-        return CUSTOM_MODEL_DATA_MAP.get(customModelData);
+    /**
+     * Legacy function.
+     */
+    @Deprecated
+    public static Mytems forCustomModelData(ItemStack item) {
+        return forItemModel(item);
     }
 
     public Mytem getMytem() {
@@ -1439,7 +1444,6 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     public void markItemMeta(ItemMeta meta) {
         ItemMarker.setId(meta, id);
         if (customModelData != null) {
-            meta.setCustomModelData(customModelData);
             meta.setItemModel(getNamespacedKey());
         }
     }
@@ -1494,7 +1498,6 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
         }
         if (customModelData != null) {
             item.editMeta(meta -> {
-                    meta.setCustomModelData(customModelData);
                     meta.setItemModel(getNamespacedKey());
                 });
         }
