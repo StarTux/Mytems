@@ -1,6 +1,7 @@
 package com.cavetale.mytems.item.furniture;
 
 import com.cavetale.core.struct.Vec3i;
+import com.cavetale.worldmarker.entity.EntityMarker;
 import java.util.List;
 import java.util.Map;
 import org.bukkit.Location;
@@ -34,6 +35,7 @@ public interface FurnitureTypeImpl {
         }
         location.getWorld().spawn(location, ItemDisplay.class, e -> {
                 e.setItemStack(getType().getMytems().createItemStack());
+                EntityMarker.setId(e, getType().getMytems().getId());
             });
     }
 

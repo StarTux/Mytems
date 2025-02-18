@@ -7,6 +7,7 @@ import com.cavetale.core.struct.Vec3i;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.worldmarker.block.BlockMarker;
+import com.cavetale.worldmarker.entity.EntityMarker;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -16,12 +17,12 @@ import lombok.Getter;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.ItemDisplay;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -30,6 +31,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 import static com.cavetale.mytems.MytemsPlugin.mytemsPlugin;
 import static com.cavetale.mytems.block.BlockRegistry.blockRegistry;
@@ -207,13 +209,16 @@ public final class Furniture implements Mytem {
             new PlayerBreakBlockEvent(player, block);
             BlockMarker.clearTag(block);
             block.setBlockData(Material.AIR.createBlockData());
-        }
-        final Location originCenter = originBlock.getLocation().add(0.5, 0.5, 0.5);
-        for (ItemDisplay display : originCenter.getWorld().getNearbyEntitiesByType(ItemDisplay.class, originCenter, 0.5)) {
-            display.remove();
+            for (Entity entity : block.getWorld().getNearbyEntities(BoundingBox.of(block))) {
+                if (EntityMarker.hasId(entity, key.getId())) {
+                    entity.remove();
+                } else if (entity instanceof ItemDisplay display && Mytems.forItem(display.getItemStack()) == key) {
+                    display.remove();
+                }
+            }
         }
         if (player.getGameMode() != GameMode.CREATIVE) {
-            originCenter.getWorld().dropItem(originCenter, createItemStack());
+            originBlock.getWorld().dropItem(originBlock.getLocation().add(0.5, 0.5, 0.5), createItemStack());
         }
         return true;
     }
