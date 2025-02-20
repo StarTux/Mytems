@@ -55,6 +55,13 @@ public enum TreeChopperStat implements UpgradableStat {
                     new FortuneLevel(3, Mytems.DICE::createIcon,
                                      TreeChopperTier.IRON)),
             List.of(TreeChopperStat.LEAF), List.of()) {
+        @Override public void removeFromItem(ItemMeta meta) {
+            meta.removeEnchant(Enchantment.FORTUNE);
+        }
+
+        @Override public void applyToItem(ItemMeta meta, int upgradeLevel) {
+            meta.addEnchant(Enchantment.FORTUNE, upgradeLevel, true);
+        }
     },
     SILK(Vec2i.of(2, 4), text("Shears"), () -> new ItemStack(Material.SHEARS),
          List.of(new TreeChopperStatLevel(1, () -> new ItemStack(Material.SHEARS, 1),
@@ -66,6 +73,13 @@ public enum TreeChopperStat implements UpgradableStat {
                                                   text("vines drop as blocks")),
                                           TreeChopperTier.IRON)),
          List.of(TreeChopperStat.LEAF), List.of()) {
+        @Override public void removeFromItem(ItemMeta meta) {
+            meta.removeEnchant(Enchantment.SILK_TOUCH);
+        }
+
+        @Override public void applyToItem(ItemMeta meta, int upgradeLevel) {
+            meta.addEnchant(Enchantment.SILK_TOUCH, 1, true);
+        }
     },
     REPLANT(Vec2i.of(0, 2), text("Replant"), () -> new ItemStack(Material.OAK_SAPLING),
             List.of(new TreeChopperStatLevel(1, () -> new ItemStack(Material.OAK_SAPLING),
