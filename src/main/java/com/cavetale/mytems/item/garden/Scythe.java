@@ -31,7 +31,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
-import static com.cavetale.mytems.util.Hunger.createHunger;
 import static com.cavetale.mytems.util.Items.tooltip;
 import static com.cavetale.mytems.util.Items.unbreakable;
 import static net.kyori.adventure.text.Component.empty;
@@ -149,7 +148,7 @@ public final class Scythe implements Mytem, Listener {
                 if (count > 0) {
                     player.swingMainHand();
                     if (player.getGameMode() != GameMode.CREATIVE) {
-                        createHunger(player, 0.25f, 1.0 / 4.0);
+                        player.setExhaustion(player.getExhaustion() + 0.01f);
                     }
                 }
             });

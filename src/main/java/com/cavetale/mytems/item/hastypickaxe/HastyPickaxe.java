@@ -33,7 +33,6 @@ import static com.cavetale.core.font.Unicode.subscript;
 import static com.cavetale.core.font.Unicode.superscript;
 import static com.cavetale.mytems.MytemsPlugin.blockBreakListener;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
-import static com.cavetale.mytems.util.Hunger.createHunger;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
@@ -159,8 +158,11 @@ public final class HastyPickaxe implements Mytem {
         for (int i = 1; i < blocks.size(); i += 1) {
             final Block block = blocks.get(i);
             if (!new PlayerBreakBlockEvent(player, block, item).callEvent()) continue;
-            if (player.getGameMode() != GameMode.CREATIVE && !createHunger(player, 0.025f, 1.0 / 32.0)) {
-                break;
+            if (player.getGameMode() != GameMode.CREATIVE) {
+                if (player.getFoodLevel() == 0) {
+                    break;
+                }
+                player.setExhaustion(player.getExhaustion() + 0.01f);
             }
             blockBreakListener().breakBlockAndPickup(player, item, block);
         }

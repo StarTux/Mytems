@@ -26,7 +26,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import static com.cavetale.core.exploits.PlayerPlacedBlocks.isPlayerPlaced;
 import static com.cavetale.mytems.item.treechopper.TreeChopStatus.*;
-import static com.cavetale.mytems.util.Hunger.createHunger;
 
 /**
  * Represents one tree chopping action.  It provides the flood fill
@@ -214,6 +213,10 @@ public final class TreeChop {
 
             @Override
             public void run() {
+                if (!player.isOnline() || player.isDead() || player.getFoodLevel() == 0) {
+                    stop();
+                    return;
+                }
                 if (doVines && !didVines) {
                     didVines = true;
                     ItemStack shears = new ItemStack(Material.SHEARS);
@@ -237,8 +240,8 @@ public final class TreeChop {
                         logBlock.breakNaturally(axeItem, true);
                         TreeChopListener.target = null;
                         brokenBlocks += 1;
-                        if (player.isOnline() && player.getGameMode() != GameMode.CREATIVE) {
-                            createHunger(player, 0.025f, 1.0 / 64.0);
+                        if (player.getGameMode() != GameMode.CREATIVE) {
+                            player.setExhaustion(player.getExhaustion() + 0.01f);
                         }
                         blocksBrokenNow += 1;
                     }
@@ -293,6 +296,10 @@ public final class TreeChop {
                         if (saplingBlocksPlaced >= leafBlocks.size()) break;
                     }
                 }
+                stop();
+            }
+
+            private void stop() {
                 cancel();
                 CHOPPING.removeAll(logBlocks);
                 CHOPPING.removeAll(leafBlocks);

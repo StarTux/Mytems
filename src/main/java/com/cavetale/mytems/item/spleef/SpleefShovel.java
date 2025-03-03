@@ -29,7 +29,6 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.mytems.MytemsPlugin.blockBreakListener;
 import static com.cavetale.mytems.MytemsPlugin.plugin;
-import static com.cavetale.mytems.util.Hunger.createHunger;
 import static java.util.Objects.requireNonNull;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
@@ -129,8 +128,11 @@ public final class SpleefShovel implements Mytem {
         int count = 0;
         for (int i = 1; i < blockBreakList.size(); i += 1) {
             final Block breakBlock = blockBreakList.get(i);
-            if (player.getGameMode() != GameMode.CREATIVE && !createHunger(player, 0.025f, 1.0 / 64.0)) {
-                break;
+            if (player.getGameMode() != GameMode.CREATIVE) {
+                if (player.getFoodLevel() == 0) {
+                    break;
+                }
+                player.setExhaustion(player.getExhaustion() + 0.01f);
             }
             final BlockData blockData = breakBlock.getBlockData();
             final Sound breakSound = breakBlock.getBlockSoundGroup().getBreakSound();
