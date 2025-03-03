@@ -31,6 +31,7 @@ import com.cavetale.mytems.item.arcade.Caveboy;
 import com.cavetale.mytems.item.arcade.SealedCaveboy;
 import com.cavetale.mytems.item.beestick.Beestick;
 import com.cavetale.mytems.item.bingo.BingoBukkit;
+import com.cavetale.mytems.item.binoculars.Binoculars;
 import com.cavetale.mytems.item.captain.Blunderbuss;
 import com.cavetale.mytems.item.captain.CaptainsCutlass;
 import com.cavetale.mytems.item.coin.Coin;
@@ -1240,6 +1241,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     GOLDEN_SNEAKERS(Sneakers.class, LEATHER_BOOTS, 0xf38b, MytemsCategory.SNEAKERS),
     //
     CLAIM_TOOL(ClaimTool.class, GOLDEN_SHOVEL, 0xf38c, MytemsCategory.UTILITY, Animation.frametime(3)),
+    BINOCULARS(Binoculars.class, SPYGLASS, 0xf38d, MytemsCategory.UTILITY),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
