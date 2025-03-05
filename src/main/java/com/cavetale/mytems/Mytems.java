@@ -726,6 +726,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     MYSTERY_SEED(TreeSeed.class, BEETROOT_SEEDS, 0xF329, (char) 0xF329, TREE_SEED),
     RED_MUSHROOM_SPAWN(TreeSeed.class, BEETROOT_SEEDS, 0xF32A, (char) 0xF32A, TREE_SEED),
     WARPED_SPORE(TreeSeed.class, BEETROOT_SEEDS, 0xF32B, (char) 0xF32B, TREE_SEED),
+    MANGROVE_POD(TreeSeed.class, BEETROOT_SEEDS, 0xf38e, (char) 0xf38e, TREE_SEED),
     //
     EMPTY_FLASK(DummyMytem.class, GLASS_BOTTLE, 257, (char) 0xF11B, POTIONS),
     POTION_FLASK(PotionFlask.class, POTION, 258, (char) 0xF11C, POTIONS),

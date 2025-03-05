@@ -30,6 +30,7 @@ public enum CustomTreeType {
     MYSTERY_SEED(Mytems.MYSTERY_SEED, Material.SMALL_DRIPLEAF, TreeSeedCategory.FANCY),
     RED_MUSHROOM_SPAWN(Mytems.RED_MUSHROOM_SPAWN, Material.RED_MUSHROOM, TreeSeedCategory.MUSHROOM),
     WARPED_SPORE(Mytems.WARPED_SPORE, Material.WARPED_FUNGUS, TreeSeedCategory.MUSHROOM),
+    MANGROVE(Mytems.MANGROVE_POD, Material.MANGROVE_PROPAGULE, TreeSeedCategory.REGULAR),
     ;
 
     public final Mytems seedMytems;
