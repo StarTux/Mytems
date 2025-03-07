@@ -62,7 +62,7 @@ public final class UpgradableItemMenu {
             final UpgradableStatStatus status = new UpgradableStatStatus(tag, stat);
             final ItemStack icon;
             if (status.isDisabled()) {
-                icon = Mytems.NO.createIcon();
+                icon = Mytems.CROSSED_CHECKBOX.createIcon();
             } else if (status.hasCurrentLevel()) {
                 icon = status.getCurrentLevel().getIcon();
             } else if (status.isLocked()) {
