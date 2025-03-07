@@ -42,6 +42,8 @@ public final class DamageCalculation {
     private double armorFactor;
     private double resistanceFactor;
     private double protectionFactor;
+    private double freezingFactor;
+    private double invulnerableFactor;
     /**
      * The absorption value is special because it is derived after all
      * other damage calculations are done, based on the absorption
@@ -412,11 +414,14 @@ public final class DamageCalculation {
     }
 
     private static String printLivingEntity(LivingEntity living) {
-        return living.getType().name().toLowerCase()
+        return (living instanceof Player player
+                ? "player[" + player.getName() + "]"
+                : living.getType().name().toLowerCase())
             + "(" + printItem(living.getEquipment().getItemInMainHand())
             + "," + printItem(living.getEquipment().getItemInOffHand())
             + "," + printItem(living.getEquipment().getHelmet())
             + "," + printItem(living.getEquipment().getChestplate())
+            + "," + printItem(living.getEquipment().getLeggings())
             + "," + printItem(living.getEquipment().getBoots())
             + ")";
     }

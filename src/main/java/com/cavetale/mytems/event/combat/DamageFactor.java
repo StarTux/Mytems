@@ -26,7 +26,14 @@ public enum DamageFactor {
                DamageCalculation::getResistanceFactor),
     PROTECTION(DamageModifier.MAGIC,
                DamageCalculation::setProtectionFactor,
-               DamageCalculation::getProtectionFactor);
+               DamageCalculation::getProtectionFactor),
+    FREEZING(DamageModifier.FREEZING,
+             DamageCalculation::setFreezingFactor,
+             DamageCalculation::getFreezingFactor),
+    INVULNERABLE(DamageModifier.INVULNERABILITY_REDUCTION,
+             DamageCalculation::setInvulnerableFactor,
+             DamageCalculation::getInvulnerableFactor),
+    ;
 
     public final DamageModifier damageModifier;
     public final BiConsumer<DamageCalculation, Double> setter;
