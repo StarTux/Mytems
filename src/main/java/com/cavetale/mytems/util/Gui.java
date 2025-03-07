@@ -40,6 +40,7 @@ public final class Gui implements InventoryHolder {
     private Consumer<InventoryCloseEvent> onClose = null;
     private Consumer<InventoryOpenEvent> onOpen = null;
     private Consumer<InventoryClickEvent> onClick = null;
+    private Consumer<InventoryClickEvent> onClickBottom = null;
     private Consumer<InventoryDragEvent> onDrag = null;
     @Getter @Setter private boolean editable = false;
     @Getter private int size = 3 * 9;
@@ -135,6 +136,10 @@ public final class Gui implements InventoryHolder {
         setItem(column + row * 9, item, responder);
     }
 
+    public void onClickOutside(Consumer<InventoryClickEvent> responder) {
+        setItem(OUTSIDE, null, responder);
+    }
+
     public Gui open(Player player) {
         player.openInventory(getInventory());
         return this;
@@ -159,6 +164,11 @@ public final class Gui implements InventoryHolder {
 
     public Gui onClick(Consumer<InventoryClickEvent> responder) {
         onClick = responder;
+        return this;
+    }
+
+    public Gui onClickBottom(Consumer<InventoryClickEvent> responder) {
+        onClickBottom = responder;
         return this;
     }
 
@@ -196,9 +206,11 @@ public final class Gui implements InventoryHolder {
             event.setCancelled(true);
         }
         if (locked) return;
-        if (!(event.getWhoClicked() instanceof Player)) return;
-        Player player = (Player) event.getWhoClicked();
+        if (!(event.getWhoClicked() instanceof Player player)) return;
         if (event.getClickedInventory() != null && !inventory.equals(event.getClickedInventory())) {
+            if (onClickBottom != null) {
+                onClickBottom.accept(event);
+            }
             return;
         }
         Slot slot = slots.get(event.getSlot());
@@ -334,6 +346,12 @@ public final class Gui implements InventoryHolder {
 
     public Gui highlight(int x, int y, TextColor color) {
         getOverlayBuilder().highlightSlot(x, y, color);
+        return this;
+    }
+
+    public Gui tab(int tab, TextColor fg, TextColor bg) {
+        layer(GuiOverlay.TAB_BG, bg);
+        layer(GuiOverlay.tab(tab), fg);
         return this;
     }
 
