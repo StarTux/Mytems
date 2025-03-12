@@ -1243,6 +1243,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     //
     CLAIM_TOOL(ClaimTool.class, GOLDEN_SHOVEL, 0xf38c, MytemsCategory.UTILITY, Animation.frametime(3)),
     BINOCULARS(Binoculars.class, SPYGLASS, 0xf38d, MytemsCategory.UTILITY),
+    ATTENTION(ForbiddenMytem.class, REDSTONE_BLOCK, 0xf38f, MytemsCategory.UI),
+    WINNERS_PODIUM(ForbiddenMytem.class, STONE, 0xf390, MytemsCategory.UI),
+    HOME(ForbiddenMytem.class, RED_BED, 0xf391, MytemsCategory.UI),
+    CITY(ForbiddenMytem.class, STONE_BRICKS, 0xf392, MytemsCategory.UI),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
