@@ -38,6 +38,7 @@ import com.cavetale.mytems.item.coin.Coin;
 import com.cavetale.mytems.item.craft.NetheriteParityTable;
 import com.cavetale.mytems.item.deflector.DeflectorShield;
 import com.cavetale.mytems.item.dividers.Dividers;
+import com.cavetale.mytems.item.drink.FizzyBrew;
 import com.cavetale.mytems.item.dune.DuneItem;
 import com.cavetale.mytems.item.dwarven.DwarvenItem;
 import com.cavetale.mytems.item.easter.EasterBasket;
@@ -1247,6 +1248,8 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     WINNERS_PODIUM(ForbiddenMytem.class, STONE, 0xf390, MytemsCategory.UI),
     HOME(ForbiddenMytem.class, RED_BED, 0xf391, MytemsCategory.UI),
     CITY(ForbiddenMytem.class, STONE_BRICKS, 0xf392, MytemsCategory.UI),
+    EMPTY_STEIN(DummyMytem.class, GLASS_BOTTLE, 0xf393, MytemsCategory.DRINK),
+    FIZZY_BREW(FizzyBrew.class, POTION, 0xf394, MytemsCategory.DRINK),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();

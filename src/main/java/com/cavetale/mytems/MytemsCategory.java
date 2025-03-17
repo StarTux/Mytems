@@ -24,6 +24,7 @@ public enum MytemsCategory {
     CURRENCY,
     DEFLECTOR,
     DIE,
+    DRINK,
     DUNE,
     DWARVEN,
     EASTER,
