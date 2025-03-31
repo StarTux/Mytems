@@ -11,8 +11,6 @@ import java.util.Iterator;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
-import net.kyori.adventure.text.serializer.gson.GsonComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -41,6 +39,9 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.Component.textOfChildren;
+import static net.kyori.adventure.text.format.TextColor.color;
 
 @RequiredArgsConstructor
 public final class Enderball implements Mytem, Listener {
@@ -50,20 +51,18 @@ public final class Enderball implements Mytem, Listener {
 
     @Override
     public void enable() {
-        String json = "[{\"text\":\"E\",\"color\":\"#4b0082\"}"
-            + ",{\"text\":\"n\",\"color\":\"#620092\"}"
-            + ",{\"text\":\"d\",\"color\":\"#7800a1\"}"
-            + ",{\"text\":\"e\",\"color\":\"#8f00b1\"}"
-            + ",{\"text\":\"r\",\"color\":\"#a500c1\"}"
-            + ",{\"text\":\"b\",\"color\":\"#bc00d0\"}"
-            + ",{\"text\":\"a\",\"color\":\"#d200e0\"}"
-            + ",{\"text\":\"l\",\"color\":\"#e900ef\"}"
-            + ",{\"text\":\"l\",\"color\":\"#ff00ff\"}]";
-        displayName = Component.empty().decoration(TextDecoration.ITALIC, false).decorate(TextDecoration.BOLD)
-            .append(GsonComponentSerializer.gson().deserialize(json));
+        displayName = textOfChildren(text("E", color(0x4b0082)),
+                                     text("n", color(0x620092)),
+                                     text("d", color(0x7800a1)),
+                                     text("e", color(0x8f00b1)),
+                                     text("r", color(0xa500c1)),
+                                     text("b", color(0xbc00d0)),
+                                     text("a", color(0xd200e0)),
+                                     text("l", color(0xe900ef)),
+                                     text("l", color(0xff00ff)));
         prototype = new ItemStack(Material.DRAGON_EGG);
         ItemMeta meta = prototype.getItemMeta();
-        meta.displayName(displayName);
+        meta.itemName(displayName);
         meta.lore(Text.wrapLore("Official Enderball\u2122 event ball."
                                 + " Earned by event participation."
                                 + " Signed by StarTux in black and purple ink."

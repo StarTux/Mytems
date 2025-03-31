@@ -79,7 +79,6 @@ public final class MagicCape implements Mytem, Listener {
                     repairable.setRepairCost(9999);
                 }
                 meta.setUnbreakable(true);
-                meta.displayName(displayName);
                 tooltip(meta, tooltip);
                 key.markItemMeta(meta);
             });

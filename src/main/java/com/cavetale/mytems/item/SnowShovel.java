@@ -21,6 +21,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import static com.cavetale.mytems.util.Items.tooltip;
 import static com.cavetale.mytems.util.Items.unbreakable;
+import static net.kyori.adventure.text.Component.text;
 import static org.bukkit.Particle.*;
 
 @RequiredArgsConstructor @Getter
@@ -36,12 +37,10 @@ public final class SnowShovel implements Mytem {
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> {
                 meta.setUnbreakable(true);
-                meta.displayName(displayName);
                 meta.addItemFlags(ItemFlag.values());
-                tooltip(meta,
-                           List.of(displayName,
-                                   Component.text("Plow snow in a", NamedTextColor.GRAY),
-                                   Component.text(RADIUS + " block radius!", NamedTextColor.GRAY)));
+                tooltip(meta, List.of(displayName,
+                                      text("Plow snow in a", NamedTextColor.GRAY),
+                                      text(RADIUS + " block radius!", NamedTextColor.GRAY)));
                 unbreakable(meta);
                 key.markItemMeta(meta);
             });

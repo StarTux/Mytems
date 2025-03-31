@@ -47,7 +47,7 @@ public final class UnicornHorn implements Mytem {
         displayName = rainbowify("Unicorn Horn");
         prototype = new ItemStack(Material.END_ROD).ensureServerConversions();
         prototype.editMeta(meta -> {
-                meta.displayName(displayName);
+                meta.itemName(displayName);
                 meta.lore(Text.wrapLore(description, c -> c.color(NamedTextColor.AQUA)));
                 Attr.add(meta, Attribute.ARMOR, "unicorn_horn_armor", 2.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.HEAD);
                 Attr.add(meta, Attribute.ARMOR_TOUGHNESS, "unicorn_horn_armor_toughness", 2.0, AttributeModifier.Operation.ADD_NUMBER, EquipmentSlotGroup.HEAD);

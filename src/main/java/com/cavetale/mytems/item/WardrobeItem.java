@@ -7,7 +7,6 @@ import com.cavetale.mytems.util.Text;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
@@ -30,10 +29,10 @@ public final class WardrobeItem implements Mytem {
 
     @Override
     public void enable() {
-        displayName = Component.text(Text.toCamelCase(key, " ")).decoration(TextDecoration.ITALIC, false);
+        displayName = Component.text(Text.toCamelCase(key, " "));
         prototype = new ItemStack(key.material);
         ItemMeta meta = prototype.getItemMeta();
-        meta.displayName(displayName);
+        meta.itemName(displayName);
         meta.addItemFlags(ItemFlag.values());
         key.markItemMeta(meta);
         prototype.setItemMeta(meta);

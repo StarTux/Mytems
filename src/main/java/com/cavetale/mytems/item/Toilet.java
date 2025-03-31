@@ -14,8 +14,6 @@ import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.GameRule;
@@ -41,6 +39,8 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
+import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.format.TextColor.color;
 
 @RequiredArgsConstructor
 public final class Toilet implements Mytem, Listener {
@@ -61,10 +61,10 @@ public final class Toilet implements Mytem, Listener {
 
     @Override
     public void enable() {
-        displayName = Component.text("Toilet").color(TextColor.color(0xA0A0A0)).decoration(TextDecoration.ITALIC, false);
+        displayName = text("Toilet").color(color(0xa0a0a0));
         prototype = new ItemStack(key.material);
         ItemMeta meta = prototype.getItemMeta();
-        meta.displayName(displayName);
+        meta.itemName(displayName);
         key.markItemMeta(meta);
         prototype.setItemMeta(meta);
         emptyPrototype = new ItemStack(key.material);

@@ -89,7 +89,9 @@ public final class Skull {
     public static void apply(@NonNull SkullMeta meta, String name, UUID uuid, @NonNull String texture, String signature) {
         PlayerProfile profile;
         try {
-            profile = Bukkit.createProfile(uuid, name);
+            // Wart: We set the name to null in spite of the input in
+            // order to hide the profile name behind the itemName.
+            profile = Bukkit.createProfile(uuid, null);
         } catch (IllegalArgumentException iae) {
             plugin().getLogger().log(Level.SEVERE, "uuid:" + uuid + " name:'" + name + "'", iae);
             profile = Bukkit.createProfile(uuid, "");

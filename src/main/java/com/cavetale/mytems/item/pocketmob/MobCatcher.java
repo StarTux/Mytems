@@ -13,7 +13,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -26,6 +25,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import static com.cavetale.core.util.CamelCase.toCamelCase;
+import static net.kyori.adventure.text.Component.text;
 
 @Getter @RequiredArgsConstructor
 public final class MobCatcher implements Mytem, Listener {
@@ -50,14 +50,13 @@ public final class MobCatcher implements Mytem, Listener {
         String name = key == Mytems.FISH_CATCHER
             ? "Aquatic Catcher"
             : toCamelCase(" ", key);
-        displayName = Component.text(name, PocketMobTag.COLOR_FG).decoration(TextDecoration.ITALIC, false);
+        displayName = text(name, PocketMobTag.COLOR_FG);
         prototype = new ItemStack(key.material).ensureServerConversions();
         ItemMeta meta = prototype.getItemMeta();
-        meta.displayName(displayName);
+        meta.itemName(displayName);
         List<Component> lore = new ArrayList<>();
         for (String line : config.getString(key.id).split("\n")) {
-            lore.add(Component.text().append(Component.text(line, PocketMobTag.COLOR_BG))
-                     .decoration(TextDecoration.ITALIC, false).build());
+            lore.add(text(line, PocketMobTag.COLOR_BG));
         }
         meta.lore(lore);
         key.markItemMeta(meta);

@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
@@ -40,10 +39,8 @@ public final class CaptainsCutlass implements Mytem {
         displayName = Component.text("Captain's Cutlass", titleColor);
         prototype = new ItemStack(key.material);
         ItemMeta meta = prototype.getItemMeta();
-        meta.displayName(displayName.decoration(TextDecoration.ITALIC, false));
-        meta.lore(Text.wrapLore(description, c -> {
-                    return c.color(loreColor).decoration(TextDecoration.ITALIC, false);
-                }));
+        meta.itemName(displayName);
+        meta.lore(Text.wrapLore(description, c -> c.color(loreColor)));
         meta.addItemFlags(ItemFlag.values());
         if (meta instanceof Repairable) {
             Repairable repairable = (Repairable) meta;

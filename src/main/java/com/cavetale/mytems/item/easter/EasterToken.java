@@ -2,18 +2,17 @@ package com.cavetale.mytems.item.easter;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import java.util.ArrayList;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.NamedTextColor;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import static com.cavetale.mytems.util.Items.deserialize;
 import static net.kyori.adventure.text.Component.text;
+import static net.kyori.adventure.text.format.NamedTextColor.GRAY;
+import static net.kyori.adventure.text.format.TextDecoration.BOLD;
 
 @Getter @RequiredArgsConstructor
 public final class EasterToken implements Mytem {
@@ -23,17 +22,15 @@ public final class EasterToken implements Mytem {
 
     @Override
     public void enable() {
-        TextColor chatColor = TextColor.color(0xFFB6C1);
-        displayName = text("Easter Token").color(chatColor).decoration(TextDecoration.ITALIC, false).decorate(TextDecoration.BOLD);
+        TextColor chatColor = TextColor.color(0xffb6c1);
+        displayName = text("Easter Token", chatColor, BOLD);
         prototype = getBaseItemStack();
         ItemMeta meta = prototype.getItemMeta();
-        meta.displayName(displayName);
-        List<Component> lore = new ArrayList<>();
-        lore.add(text("Easter Event").color(chatColor).decoration(TextDecoration.ITALIC, false));
-        lore.add(text("Trade this for cool").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
-        lore.add(text("prizes at spawn.").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
-        lore.add(text("Only until Easter!").color(NamedTextColor.GRAY).decoration(TextDecoration.ITALIC, false));
-        meta.lore(lore);
+        meta.itemName(displayName);
+        meta.lore(List.of(text("Easter Event").color(chatColor),
+                          text("Trade this for cool").color(GRAY),
+                          text("prizes at spawn.").color(GRAY),
+                          text("Only until Easter!").color(GRAY)));
         key.markItemMeta(meta);
         prototype.setItemMeta(meta);
     }

@@ -7,7 +7,6 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
@@ -32,8 +31,8 @@ public final class WeddingRing implements Mytem {
     public void enable() {
         prototype = deserialize(serialized);
         ItemMeta meta = prototype.getItemMeta();
-        displayName = Component.text("Wedding Ring").color(pink).decoration(TextDecoration.ITALIC, false);
-        meta.displayName(displayName);
+        displayName = Component.text("Wedding Ring").color(pink);
+        meta.itemName(displayName);
         meta.lore(Text.wrapLore(description, cb -> cb.color(pink)));
         key.markItemMeta(meta);
         prototype.setItemMeta(meta);
