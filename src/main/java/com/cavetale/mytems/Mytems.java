@@ -50,6 +50,7 @@ import com.cavetale.mytems.item.farawaymap.FarawayMap;
 import com.cavetale.mytems.item.fertilizer.Fertilizer;
 import com.cavetale.mytems.item.finder.Finder;
 import com.cavetale.mytems.item.font.GlyphItem;
+import com.cavetale.mytems.item.food.CreeperBooger;
 import com.cavetale.mytems.item.furniture.Furniture;
 import com.cavetale.mytems.item.garden.Scissors;
 import com.cavetale.mytems.item.garden.Scythe;
@@ -1250,6 +1251,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     CITY(ForbiddenMytem.class, STONE_BRICKS, 0xf392, MytemsCategory.UI),
     EMPTY_STEIN(DummyMytem.class, GLASS_BOTTLE, 0xf393, MytemsCategory.DRINK),
     FIZZY_BREW(FizzyBrew.class, POTION, 0xf394, MytemsCategory.DRINK),
+    CREEPER_BOOGER(CreeperBooger.class, SLIME_BALL, 0xf395, MytemsCategory.FOOD),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();

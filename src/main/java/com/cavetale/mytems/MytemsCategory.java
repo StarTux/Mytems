@@ -35,6 +35,7 @@ public enum MytemsCategory {
     ENEMY,
     FATHERS_DAY,
     FINDER,
+    FOOD,
     FOX_COSTUME,
     FRIENDS,
     FUN_FLAGS,
