@@ -1,5 +1,6 @@
 package com.cavetale.mytems.loot;
 
+import com.cavetale.core.event.skills.SkillsMobKillRewardEvent;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.item.tree.CustomTreeType;
@@ -10,13 +11,12 @@ import java.util.concurrent.ThreadLocalRandom;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Material;
 import org.bukkit.entity.EntityType;
-import org.bukkit.entity.Player;
 import org.bukkit.entity.WanderingTrader;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
-import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.world.LootGenerateEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.MerchantRecipe;
@@ -78,11 +78,11 @@ public final class LootTableListener implements Listener {
         return total;
     }
 
-    @EventHandler
-    private void onEntityDeath(EntityDeathEvent event) {
-        if (event.getEntity().getType() != EntityType.CREEPER) return;
-        if (event.getDrops().isEmpty()) return;
-        if (!(event.getEntity().getKiller() instanceof Player)) return;
-        event.getDrops().add(Mytems.CREEPER_BOOGER.createItemStack());
+    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
+    private void onSkillsMobKillReward(SkillsMobKillRewardEvent event) {
+        if (event.getMob().getType() != EntityType.CREEPER) return;
+        if (event.getEntityDeathEvent().getDrops().isEmpty()) return;
+        if (ThreadLocalRandom.current().nextInt(3) > 0) return;
+        event.getEntityDeathEvent().getDrops().add(Mytems.CREEPER_BOOGER.createItemStack());
     }
 }
