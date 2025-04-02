@@ -49,9 +49,4 @@ public final class CreeperBooger implements Mytem {
         player.addPotionEffect(new PotionEffect(PotionEffectType.NAUSEA, duration, 0, true, true, true));
         player.addPotionEffect(new PotionEffect(PotionEffectType.INSTANT_DAMAGE, 1, 1, true, true, true));
     }
-
-    @Override
-    public boolean isMassStorable() {
-        return false;
-    }
 }
