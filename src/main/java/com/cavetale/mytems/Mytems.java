@@ -1250,7 +1250,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     HOME(ForbiddenMytem.class, RED_BED, 0xf391, MytemsCategory.UI),
     CITY(ForbiddenMytem.class, STONE_BRICKS, 0xf392, MytemsCategory.UI),
     EMPTY_STEIN(DummyMytem.class, GLASS_BOTTLE, 0xf393, MytemsCategory.DRINK),
-    FIZZY_BREW(FizzyBrew.class, POTION, 0xf394, MytemsCategory.DRINK),
+    FIZZY_BREW(FizzyBrew.class, SLIME_BALL, 0xf394, MytemsCategory.DRINK),
     CREEPER_BOOGER(CreeperBooger.class, SLIME_BALL, 0xf395, MytemsCategory.FOOD),
     ;
 
