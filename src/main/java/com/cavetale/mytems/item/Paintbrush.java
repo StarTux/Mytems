@@ -4,7 +4,6 @@ import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.event.block.PlayerChangeBlockEvent;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.MytemsPlugin;
 import com.cavetale.mytems.session.Session;
 import com.cavetale.mytems.util.BlockColor;
 import com.cavetale.mytems.util.Text;
@@ -15,6 +14,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
@@ -31,6 +31,7 @@ import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.RayTraceResult;
 import static com.cavetale.core.font.Unicode.tiny;
+import static com.cavetale.mytems.MytemsPlugin.mytemsPlugin;
 import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.empty;
 import static net.kyori.adventure.text.Component.join;
@@ -130,11 +131,7 @@ public final class Paintbrush implements Mytem {
         event.setUseInteractedBlock(Event.Result.DENY);
         event.setUseItemInHand(Event.Result.DENY);
         if (event.getHand() != EquipmentSlot.HAND) return;
-        if (event.hasBlock()) {
-            player.sendActionBar(text("Too close! Get some distance.", RED));
-            return;
-        }
-        Session session = MytemsPlugin.getInstance().getSessions().of(player);
+        Session session = mytemsPlugin().getSessions().of(player);
         if (session.isOnCooldown(key)) return;
         RayTraceResult rayTraceResult = player.rayTraceBlocks(RANGE);
         if (rayTraceResult == null) {
@@ -153,7 +150,11 @@ public final class Paintbrush implements Mytem {
      * @return true if the block was updated in any way, false otherwise
      */
     private boolean paintBlock(Player player, Block targetBlock, BlockFace face, ItemStack itemStack) {
-        if (!PlayerBlockAbilityQuery.Action.USE.query(player, targetBlock)) return false;
+        final boolean creative = player.getGameMode() == GameMode.CREATIVE
+            && (player.isOp() || PlayerBlockAbilityQuery.Action.BUILD.query(player, targetBlock));
+        if (!creative) {
+            if (!PlayerBlockAbilityQuery.Action.USE.query(player, targetBlock)) return false;
+        }
         BlockColor targetBlockColor = BlockColor.of(targetBlock.getType());
         if (targetBlockColor == null) return false;
         BlockColor.Suffix suffix = targetBlockColor.suffixOf(targetBlock.getType());
@@ -170,7 +171,7 @@ public final class Paintbrush implements Mytem {
         BlockData newBlockData = brackIndex > 0
             ? Bukkit.createBlockData(newMaterial, oldBlockData.substring(brackIndex))
             : newMaterial.createBlockData();
-        if (BlockMarker.hasId(targetBlock, "paintbrush_canvas")) {
+        if (creative || BlockMarker.hasId(targetBlock, "paintbrush_canvas")) {
             if (targetBlock.getType() == newBlockData.getMaterial()) return false;
             new PlayerChangeBlockEvent(player, targetBlock, newBlockData, itemStack).callEvent();
             targetBlock.setBlockData(newBlockData);
@@ -178,12 +179,14 @@ public final class Paintbrush implements Mytem {
             final int maxDist = targetBlock.getWorld().getViewDistance();
             final int chunkX = targetBlock.getX() >> 4;
             final int chunkZ = targetBlock.getZ() >> 4;
-            for (Player nearby : targetBlock.getWorld().getPlayers()) {
-                Location loc = player.getLocation();
-                if (Math.abs((loc.getBlockX() >> 4) - chunkX) > maxDist) continue;
-                if (Math.abs((loc.getBlockZ() >> 4) - chunkZ) > maxDist) continue;
-                nearby.sendBlockChange(targetBlock.getLocation(), newBlockData);
-            }
+            Bukkit.getScheduler().runTaskLater(mytemsPlugin(), () -> {
+                    for (Player nearby : targetBlock.getWorld().getPlayers()) {
+                        final Location loc = nearby.getLocation();
+                        if (Math.abs((loc.getBlockX() >> 4) - chunkX) > maxDist) continue;
+                        if (Math.abs((loc.getBlockZ() >> 4) - chunkZ) > maxDist) continue;
+                        nearby.sendBlockChange(targetBlock.getLocation(), newBlockData);
+                    }
+                }, 2L);
         }
         targetBlock.getWorld().playSound(targetBlock.getLocation(),
                                          Sound.ITEM_BUCKET_FILL, SoundCategory.MASTER, 0.5f, 2.0f);
@@ -207,7 +210,7 @@ public final class Paintbrush implements Mytem {
             block = event.getClickedBlock();
             face = event.getBlockFace();
         } else {
-            Session session = MytemsPlugin.getInstance().getSessions().of(player);
+            Session session = mytemsPlugin().getSessions().of(player);
             if (session.isOnCooldown(key)) return;
             RayTraceResult rayTraceResult = player.rayTraceBlocks(RANGE);
             if (rayTraceResult == null) {
