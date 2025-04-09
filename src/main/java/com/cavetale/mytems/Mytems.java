@@ -39,6 +39,7 @@ import com.cavetale.mytems.item.craft.NetheriteParityTable;
 import com.cavetale.mytems.item.deflector.DeflectorShield;
 import com.cavetale.mytems.item.dividers.Dividers;
 import com.cavetale.mytems.item.drink.FizzyBrew;
+import com.cavetale.mytems.item.drink.LovePotion;
 import com.cavetale.mytems.item.dune.DuneItem;
 import com.cavetale.mytems.item.dwarven.DwarvenItem;
 import com.cavetale.mytems.item.easter.EasterBasket;
@@ -1252,6 +1253,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     EMPTY_STEIN(DummyMytem.class, GLASS_BOTTLE, 0xf393, MytemsCategory.DRINK),
     FIZZY_BREW(FizzyBrew.class, SLIME_BALL, 0xf394, MytemsCategory.DRINK),
     CREEPER_BOOGER(CreeperBooger.class, SLIME_BALL, 0xf395, MytemsCategory.FOOD),
+    LOVE_POTION(LovePotion.class, GHAST_TEAR, 0xf396, MytemsCategory.DRINK),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
