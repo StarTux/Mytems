@@ -46,6 +46,7 @@ public enum FoundType {
     WOODLAND_MANSION(25, FinderStat.HIDDEN, List.of("minecraft:mansion"), Mytems.VEX_FACE::createIcon),
     // Boss Areas
     TRIAL_CHAMBERS(30, FinderStat.TRIAL_CHAMBER, List.of("minecraft:trial_chambers"), () -> new ItemStack(Material.TRIAL_KEY)),
+    MONSTER_HIVE(20, FinderStat.TRIAL_CHAMBER, List.of("hive:hive"), () -> new ItemStack(Material.TRIAL_SPAWNER)),
     ;
 
     private final int xp;
