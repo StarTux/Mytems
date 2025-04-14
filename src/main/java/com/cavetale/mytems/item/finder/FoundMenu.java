@@ -80,6 +80,7 @@ public final class FoundMenu {
                             lodestone.setY(location.getY());
                             meta.setLodestone(lodestone);
                             meta.setLodestoneTracked(false);
+                            meta.displayName(textOfChildren(mytems, text(found.type().getDisplayName(), tier.getColor())).decoration(ITALIC, false));
                         });
                     final Component message = textOfChildren(mytems, text(tiny(" points toward ") + found.type().getDisplayName(), GRAY));
                     player.sendActionBar(message);
