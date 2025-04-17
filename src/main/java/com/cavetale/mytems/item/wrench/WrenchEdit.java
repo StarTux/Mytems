@@ -243,8 +243,13 @@ public enum WrenchEdit {
             if (!(blockData instanceof Lightable)) return false;
             if (blockData instanceof Furnace) return true;
             switch (blockData.getMaterial()) {
+            case COPPER_BULB:
+            case DEEPSLATE_REDSTONE_ORE:
             case FURNACE:
             case REDSTONE_LAMP:
+            case REDSTONE_ORE:
+            case REDSTONE_TORCH:
+            case REDSTONE_WALL_TORCH:
                 return true;
             default: return false;
             }
