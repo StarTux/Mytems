@@ -198,8 +198,8 @@ public final class PocketMobTag extends MytemTag {
             }
         } else if (entity instanceof Fox fox) {
             nameComponents.add(Text.toCamelCase(fox.getFoxType()));
-            if (fox.isSleeping()) {
-                nameComponents.add(0, "Sleeping");
+            if (fox.getFirstTrustedPlayer() != null) {
+                nameComponents.add(0, "Tamed");
             }
         } else if (entity instanceof Rabbit rabbit) {
             nameComponents.add(Text.toCamelCase(rabbit.getRabbitType()));
