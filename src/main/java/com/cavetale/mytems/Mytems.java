@@ -175,7 +175,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     DWARVEN_BOOTS(DwarvenItem.Boots.class, IRON_BOOTS, 7413404, (char) 0xE232, DWARVEN),
     DWARVEN_AXE(DwarvenItem.Weapon.class, IRON_AXE, 7413405, (char) 0xE233, DWARVEN),
     LOVE_LETTER(DummyMytem.class, PAPER, 0xF24D, VALENTINE_TOKENS),
-    EASTER_TOKEN(EasterToken.class, PLAYER_HEAD, 345700, (char) 0xE211, EASTER_TOKENS),
+    EASTER_TOKEN(EasterToken.class, GOLDEN_CARROT, 345700, (char) 0xE211, EASTER_TOKENS),
     BLUE_EASTER_EGG(EasterEgg.class, PLAYER_HEAD, 345701, (char) 0xE212, EASTER_EGGS),
     GREEN_EASTER_EGG(EasterEgg.class, PLAYER_HEAD, 345702, (char) 0xE213, EASTER_EGGS),
     ORANGE_EASTER_EGG(EasterEgg.class, PLAYER_HEAD, 345703, (char) 0xE214, EASTER_EGGS),
