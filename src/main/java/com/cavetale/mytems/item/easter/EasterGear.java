@@ -6,10 +6,12 @@ import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
 import com.cavetale.mytems.session.Session;
+import com.cavetale.mytems.util.Skull;
 import com.cavetale.mytems.util.Text;
 import com.destroystokyo.paper.event.player.PlayerJumpEvent;
 import java.time.Duration;
 import java.util.List;
+import java.util.UUID;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
@@ -30,7 +32,6 @@ import org.bukkit.inventory.meta.Repairable;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
-import static com.cavetale.mytems.util.Items.deserialize;
 import static com.cavetale.mytems.util.Items.tooltip;
 
 /**
@@ -49,8 +50,10 @@ public abstract class EasterGear implements GearItem {
     @Override
     public final void enable() {
         displayName = fancify(getRawDisplayName());
-        if (getSerialized() != null) {
-            prototype = deserialize(getSerialized());
+        if (key == Mytems.EASTER_HELMET) {
+            prototype = Skull.create(null,
+                                     UUID.fromString("df40a559-cf47-4973-8fb6-e29e165cf424"),
+                                     "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWIzYTdhYTY5Y2RiNDEyN2Q1NWExYjQ3NmRmNzQ1MGYwMzJiYWQ3YzE1OWNjOTdjYzllNjVlMDIzMjQ5NWU0ZCJ9fX0=");
         } else {
             prototype = new ItemStack(key.material);
         }
@@ -77,14 +80,6 @@ public abstract class EasterGear implements GearItem {
             cb.append(Component.text(in.substring(i, i + 1), TextColor.color(255, 105 + i + i, 180 + i)));
         }
         return cb.build();
-    }
-
-    /**
-     * Get the serialized String or null if the Mytems material is to
-     * be used.
-     */
-    protected String getSerialized() {
-        return null;
     }
 
     protected abstract String getRawDisplayName();
