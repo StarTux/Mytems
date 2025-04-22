@@ -10,8 +10,6 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import static com.cavetale.mytems.util.Items.deserialize;
 
 @RequiredArgsConstructor
 public final class WeddingRing implements Mytem {
@@ -29,13 +27,13 @@ public final class WeddingRing implements Mytem {
 
     @Override
     public void enable() {
-        prototype = deserialize(serialized);
-        ItemMeta meta = prototype.getItemMeta();
-        displayName = Component.text("Wedding Ring").color(pink);
-        meta.itemName(displayName);
-        meta.lore(Text.wrapLore(description, cb -> cb.color(pink)));
-        key.markItemMeta(meta);
-        prototype.setItemMeta(meta);
+        prototype = new ItemStack(key.material);
+        displayName = Component.text("Wedding Ring", pink);
+        prototype.editMeta(meta -> {
+                meta.itemName(displayName);
+                meta.lore(Text.wrapLore(description, cb -> cb.color(pink)));
+                key.markItemMeta(meta);
+            });
     }
 
     @Override

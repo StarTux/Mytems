@@ -232,7 +232,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     MAGENTA_WOOL_SOFA(Furniture.class, MAGENTA_WOOL, 138, (char) 0, SOFA),
     PINK_WOOL_SOFA(Furniture.class, PINK_WOOL, 138, (char) 0, SOFA),
     //
-    WEDDING_RING(WeddingRing.class, PLAYER_HEAD, 7413002, (char) 0xE21C, FRIENDS),
+    WEDDING_RING(WeddingRing.class, GOLD_NUGGET, 7413002, (char) 0xE21C, FRIENDS),
     MAGIC_MAP(MagicMap.class, FILLED_MAP, 7413005, (char) 0xE21D, chrarr(0xE21D, 0xF00E, 0xF00F, 0xF010, 0xF011, 0xF012, 0xF013, 0xF014, 0xF015, 0xF016, 0xF017, 0xF018, 0xF019, 0xF01A, 0xF01B, 0xF01C), UTILITY, Animation.MAGIC_MAP),
     SNOW_SHOVEL(SnowShovel.class, IRON_SHOVEL, 220, (char) 0xF01D, UTILITY),
     HASTY_PICKAXE(HastyPickaxe.class, DIAMOND_PICKAXE, 223, (char) 0xF01E, HASTY_PICKAXES),
