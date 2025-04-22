@@ -113,6 +113,7 @@ public final class SpleefShovel implements Mytem {
             Collections.shuffle(faces);
             for (Vec3i face : faces) {
                 final Block nbor = block.getRelative(face.x, face.y, face.z);
+                if (nbor.getY() < center.getY()) continue;
                 final Vec3i nborVec = Vec3i.of(nbor);
                 if (done.contains(nborVec)) continue;
                 done.add(nborVec);
