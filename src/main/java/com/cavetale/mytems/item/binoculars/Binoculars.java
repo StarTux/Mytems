@@ -52,7 +52,6 @@ public final class Binoculars implements Mytem, Listener {
     @Override
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
         if (player.getViewDistance() == 32) return;
-        if (player.getCooldown(key.material) > 0) return;
         player.setViewDistance(32);
         final Session session = Session.of(player);
         final BinocularsFavorite fav = session.getFavorites().getOrSet(BinocularsFavorite.class, BinocularsFavorite::new);
@@ -60,7 +59,6 @@ public final class Binoculars implements Mytem, Listener {
         final Location location = player.getLocation();
         fav.setX(location.getBlockX());
         fav.setZ(location.getBlockZ());
-        player.setCooldown(key.material, 20 * 30);
         player.sendActionBar(textOfChildren(key, text("View distance maxed out", LIGHT_PURPLE)));
         player.playSound(player.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, SoundCategory.MASTER, 1f, 1.5f);
     }
