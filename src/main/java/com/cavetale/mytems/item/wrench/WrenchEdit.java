@@ -31,6 +31,7 @@ import org.bukkit.block.data.Snowable;
 import org.bukkit.block.data.type.Barrel;
 import org.bukkit.block.data.type.Bell;
 import org.bukkit.block.data.type.Chest;
+import org.bukkit.block.data.type.CopperBulb;
 import org.bukkit.block.data.type.Door;
 import org.bukkit.block.data.type.Fence;
 import org.bukkit.block.data.type.Furnace;
@@ -241,15 +242,14 @@ public enum WrenchEdit {
 
         @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
             if (!(blockData instanceof Lightable)) return false;
+            // Redstone torches will revert instantly, despite physics
+            // being disabled
             if (blockData instanceof Furnace) return true;
+            if (blockData instanceof CopperBulb) return true;
             switch (blockData.getMaterial()) {
-            case COPPER_BULB:
             case DEEPSLATE_REDSTONE_ORE:
-            case FURNACE:
             case REDSTONE_LAMP:
             case REDSTONE_ORE:
-            case REDSTONE_TORCH:
-            case REDSTONE_WALL_TORCH:
                 return true;
             default: return false;
             }
