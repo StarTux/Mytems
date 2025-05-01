@@ -39,7 +39,7 @@ public final class Luminator implements Mytem {
     private ItemStack prototype;
     private final boolean empty;
     private final List<Component> baseText = new ArrayList<>();
-    public static final int MAX_LIGHT = 64;
+    public static final int MAX_LIGHT = 120;
 
     public Luminator(final Mytems key) {
         this.key = key;
@@ -68,7 +68,7 @@ public final class Luminator implements Mytem {
 
     public List<Component> baseTextWithLight(int light) {
         List<Component> result = new ArrayList<>(baseText);
-        result.set(5, textOfChildren(text(tiny("light"), GRAY), text(" " + light, YELLOW)));
+        result.set(5, textOfChildren(text(tiny("light"), GRAY), text(" " + light, YELLOW), text("/", GRAY), text(MAX_LIGHT, YELLOW)));
         return result;
     }
 
