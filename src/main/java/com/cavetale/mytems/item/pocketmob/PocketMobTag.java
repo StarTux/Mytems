@@ -6,6 +6,7 @@ import com.cavetale.mytems.util.BlockColor;
 import com.cavetale.mytems.util.Entities;
 import com.cavetale.mytems.util.Text;
 import com.cavetale.worldmarker.util.Tags;
+import io.papermc.paper.entity.EntitySerializationFlag;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -275,7 +276,7 @@ public final class PocketMobTag extends MytemTag {
 
     @SuppressWarnings("deprecation")
     public void serializeMob(Entity entity) {
-        final byte[] byteArray = Bukkit.getUnsafe().serializeEntity(entity);
+        final byte[] byteArray = Bukkit.getUnsafe().serializeEntity(entity, EntitySerializationFlag.FORCE);
         mob = Base64.getEncoder().encodeToString(byteArray);
     }
 
