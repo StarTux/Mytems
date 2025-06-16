@@ -4,6 +4,8 @@ import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.event.block.PlayerChangeBlockEvent;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
+import com.cavetale.mytems.block.BlockRegistryEntry;
+import com.cavetale.mytems.farming.FarmingPlantBlock;
 import com.cavetale.mytems.util.BlockColor;
 import com.cavetale.mytems.util.Json;
 import com.cavetale.mytems.util.Text;
@@ -126,6 +128,14 @@ public final class WateringCan implements Mytem {
 
     private boolean water(Player player, Block block, ItemStack item, boolean direct) {
         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return false;
+        final BlockRegistryEntry blockRegistryEntry = BlockRegistryEntry.at(block);
+        if (blockRegistryEntry != null) {
+            if (!(blockRegistryEntry.getImplementation() instanceof FarmingPlantBlock plant)) return false;
+            if (!plant.water(player, block)) return false;
+            final Location location = block.getLocation().add(0.5, 1.5, 0.5);
+            block.getWorld().spawnParticle(SPLASH, location, 38, 0.2, 0.2, 0.2, 0.0);
+            return true;
+        }
         if (block.getBlockData() instanceof Ageable ageable) {
             if (ageable.getAge() >= ageable.getMaximumAge()) return false;
             ageable.setAge(ageable.getAge() + 1);

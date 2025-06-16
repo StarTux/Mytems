@@ -73,6 +73,7 @@ public enum MytemsCategory {
     REACTION,
     SANTA,
     SCARLET,
+    SEEDS,
     SHEEP_COSTUME,
     SKELETON_COSTUME,
     SNEAKERS,

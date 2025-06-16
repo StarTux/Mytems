@@ -2,6 +2,8 @@ package com.cavetale.mytems;
 
 import com.cavetale.core.item.ItemKind;
 import com.cavetale.core.util.Json;
+import com.cavetale.mytems.farming.FarmingCrop;
+import com.cavetale.mytems.farming.FarmingSeeds;
 import com.cavetale.mytems.item.ArmorPart;
 import com.cavetale.mytems.item.ArmorStandEditor;
 import com.cavetale.mytems.item.ChristmasToken;
@@ -104,7 +106,9 @@ import com.cavetale.mytems.item.wateringcan.WateringCan;
 import com.cavetale.mytems.item.wrench.MonkeyWrench;
 import com.cavetale.mytems.item.yardstick.Yardstick;
 import com.cavetale.mytems.util.Skull;
+import com.cavetale.worldmarker.entity.EntityMarker;
 import com.cavetale.worldmarker.item.ItemMarker;
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -119,6 +123,7 @@ import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Keyed;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -1254,9 +1259,159 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     FIZZY_BREW(FizzyBrew.class, SLIME_BALL, 0xf394, MytemsCategory.DRINK),
     CREEPER_BOOGER(CreeperBooger.class, SLIME_BALL, 0xf395, MytemsCategory.FOOD),
     LOVE_POTION(LovePotion.class, GHAST_TEAR, 0xf396, MytemsCategory.DRINK),
+    // Farming
+    KING_RICHARD_LEEK(FarmingCrop.class, STICK, 0xf397, MytemsCategory.FOOD),
+    KING_RICHARD_LEEK_SEEDS(FarmingSeeds.class, STICK, 0xf398, MytemsCategory.SEEDS),
+    BLUE_POPCORN(FarmingCrop.class, STICK, 0xf399, MytemsCategory.FOOD),
+    BLUE_POPCORN_SEEDS(FarmingSeeds.class, STICK, 0xf39a, MytemsCategory.SEEDS),
+    ASHEN_NETHER_WART(FarmingCrop.class, STICK, 0xf39b, MytemsCategory.FOOD),
+    ASHEN_NETHER_WART_SEEDS(FarmingSeeds.class, STICK, 0xf39c, MytemsCategory.SEEDS),
+    GLOOMROT_NETHER_WART(FarmingCrop.class, STICK, 0xf39d, MytemsCategory.FOOD),
+    GLOOMROT_NETHER_WART_SEEDS(FarmingSeeds.class, STICK, 0xf39e, MytemsCategory.SEEDS),
+    INFERNAL_NETHER_WART(FarmingCrop.class, STICK, 0xf39f, MytemsCategory.FOOD),
+    INFERNAL_NETHER_WART_SEEDS(FarmingSeeds.class, STICK, 0xf29f, MytemsCategory.SEEDS),
+    GREEN_CABBAGE(FarmingCrop.class, STICK, 0xf309, MytemsCategory.FOOD),
+    GREEN_CABBAGE_SEEDS(FarmingSeeds.class, STICK, 0xf331, MytemsCategory.SEEDS),
+    YELLOW_PITAYA(FarmingCrop.class, STICK, 0xf2a0, MytemsCategory.FOOD),
+    YELLOW_PITAYA_SEEDS(FarmingSeeds.class, STICK, 0xf2a1, MytemsCategory.SEEDS),
+    CAMELIA_TEA_LEAVES(FarmingCrop.class, STICK, 0xf2a2, MytemsCategory.FOOD),
+    CAMELIA_TEA_SEEDS(FarmingSeeds.class, STICK, 0xf2a3, MytemsCategory.SEEDS),
+    CANTALOUPE(FarmingCrop.class, STICK, 0xf2a4, MytemsCategory.FOOD),
+    CANTALOUPE_SEEDS(FarmingSeeds.class, STICK, 0xf2a5, MytemsCategory.SEEDS),
+    RUSSET_POTATO(FarmingCrop.class, STICK, 0xf2a6, MytemsCategory.FOOD),
+    RUSSET_POTATO_SEEDS(FarmingSeeds.class, STICK, 0xf2a7, MytemsCategory.SEEDS),
+    SWEET_POTATO(FarmingCrop.class, STICK, 0xf2a8, MytemsCategory.FOOD),
+    SWEET_POTATO_SEEDS(FarmingSeeds.class, STICK, 0xf2a9, MytemsCategory.SEEDS),
+    RED_POTATO(FarmingCrop.class, STICK, 0xf2aa, MytemsCategory.FOOD),
+    RED_POTATO_SEEDS(FarmingSeeds.class, STICK, 0xf2ab, MytemsCategory.SEEDS),
+    RED_GARDEN_BEET(FarmingCrop.class, STICK, 0xf2ac, MytemsCategory.FOOD),
+    RED_GARDEN_BEET_SEEDS(FarmingSeeds.class, STICK, 0xf2ad, MytemsCategory.SEEDS),
+    COMMON_OAT(FarmingCrop.class, STICK, 0xf2ae, MytemsCategory.FOOD),
+    COMMON_OAT_SEEDS(FarmingSeeds.class, STICK, 0xf2af, MytemsCategory.SEEDS),
+    HARD_WHEAT(FarmingCrop.class, STICK, 0xf2b0, MytemsCategory.FOOD),
+    HARD_WHEAT_SEEDS(FarmingSeeds.class, STICK, 0xf2b1, MytemsCategory.SEEDS),
+    SILVERSKIN_GARLIC(FarmingCrop.class, STICK, 0xf2b2, MytemsCategory.FOOD),
+    SILVERSKIN_GARLIC_SEEDS(FarmingSeeds.class, STICK, 0xf2b4, MytemsCategory.SEEDS),
+    DENT_CORN(FarmingCrop.class, STICK, 0xf2b5, MytemsCategory.FOOD),
+    DENT_CORN_SEEDS(FarmingSeeds.class, STICK, 0xf2b6, MytemsCategory.SEEDS),
+    HONEYCRISP_APPLE(FarmingCrop.class, STICK, 0xf2b8, MytemsCategory.FOOD),
+    HONEYCRISP_APPLE_SEEDS(FarmingSeeds.class, STICK, 0xf2b9, MytemsCategory.SEEDS),
+    SWEET_CORN(FarmingCrop.class, STICK, 0xf2ba, MytemsCategory.FOOD),
+    SWEET_CORN_SEEDS(FarmingSeeds.class, STICK, 0xf2bb, MytemsCategory.SEEDS),
+    GLOWROOT(FarmingCrop.class, STICK, 0xf2bc, MytemsCategory.FOOD),
+    GLOWROOT_SEEDS(FarmingSeeds.class, STICK, 0xf2bd, MytemsCategory.SEEDS),
+    SUNSET_TEA_LEAVES(FarmingCrop.class, STICK, 0xf2be, MytemsCategory.FOOD),
+    SUNSET_TEA_SEEDS(FarmingSeeds.class, STICK, 0xf2bf, MytemsCategory.SEEDS),
+    CRIOLLO_COCOA(FarmingCrop.class, STICK, 0xf2c0, MytemsCategory.FOOD),
+    CRIOLLO_COCOA_SEEDS(FarmingSeeds.class, STICK, 0xf2c1, MytemsCategory.SEEDS),
+    HERITAGE_RASPBERRY(FarmingCrop.class, STICK, 0xf2c2, MytemsCategory.FOOD),
+    HERITAGE_RASPBERRY_SEEDS(FarmingSeeds.class, STICK, 0xf2c3, MytemsCategory.SEEDS),
+    WATERMELON(FarmingCrop.class, STICK, 0xf2c4, MytemsCategory.FOOD),
+    WATERMELON_SEEDS(FarmingSeeds.class, STICK, 0xf2c5, MytemsCategory.SEEDS),
+    NORTHERN_BLUEBERRIES(FarmingCrop.class, STICK, 0xf2c6, MytemsCategory.FOOD),
+    NORTHERN_BLUEBERRY_SEEDS(FarmingSeeds.class, STICK, 0xf2c7, MytemsCategory.SEEDS),
+    WARPAL_BERRIES(FarmingCrop.class, STICK, 0xf2c8, MytemsCategory.FOOD),
+    WARPAL_BERRY_SEEDS(FarmingSeeds.class, STICK, 0xf2c9, MytemsCategory.SEEDS),
+    JASMINE_RICE(FarmingCrop.class, STICK, 0xf2ca, MytemsCategory.FOOD),
+    JASMINE_RICE_SEEDS(FarmingSeeds.class, STICK, 0xf2cb, MytemsCategory.SEEDS),
+    WAKAME(FarmingCrop.class, STICK, 0xf2cc, MytemsCategory.FOOD),
+    WAKAME_SEEDS(FarmingSeeds.class, STICK, 0xf2cd, MytemsCategory.SEEDS),
+    HEIRLOOM_TOMATO(FarmingCrop.class, STICK, 0xf2ce, MytemsCategory.FOOD),
+    HEIRLOOM_TOMATO_SEEDS(FarmingSeeds.class, STICK, 0xf2cf, MytemsCategory.SEEDS),
+    GARDEN_CUCUMBER(FarmingCrop.class, STICK, 0xf2d0, MytemsCategory.FOOD),
+    GARDEN_CUCUMBER_SEEDS(FarmingSeeds.class, STICK, 0xf2d1, MytemsCategory.SEEDS),
+    GOLD_KIWI(FarmingCrop.class, STICK, 0xf2d2, MytemsCategory.FOOD),
+    GOLD_KIWI_SEEDS(FarmingSeeds.class, STICK, 0xf2d3, MytemsCategory.SEEDS),
+    HASS_AVOCADO(FarmingCrop.class, STICK, 0xf2d4, MytemsCategory.FOOD),
+    HASS_AVOCADO_SEEDS(FarmingSeeds.class, STICK, 0xf2d5, MytemsCategory.SEEDS),
+    ETHEREAL_CHORUS_FRUIT(FarmingCrop.class, STICK, 0xf2d6, MytemsCategory.FOOD),
+    ETHEREAL_CHORUS_FRUIT_SEEDS(FarmingSeeds.class, STICK, 0xf2d7, MytemsCategory.SEEDS),
+    PORTOBELLO_MUSHROOM(FarmingCrop.class, STICK, 0xf2d8, MytemsCategory.FOOD),
+    PORTOBELLO_MUSHROOM_SPORES(FarmingSeeds.class, STICK, 0xf2d9, MytemsCategory.SEEDS),
+    FALSE_PICKLE(FarmingCrop.class, STICK, 0xf2da, MytemsCategory.FOOD),
+    FALSE_PICKLE_SEEDS(FarmingSeeds.class, STICK, 0xf2db, MytemsCategory.SEEDS),
+    GREEN_BELL_PEPPER(FarmingCrop.class, STICK, 0xf2dc, MytemsCategory.FOOD),
+    GREEN_BELL_PEPPER_SEEDS(FarmingSeeds.class, STICK, 0xf2dd, MytemsCategory.SEEDS),
+    RED_PITAYA(FarmingCrop.class, STICK, 0xf2de, MytemsCategory.FOOD),
+    RED_PITAYA_SEEDS(FarmingSeeds.class, STICK, 0xf2df, MytemsCategory.SEEDS),
+    HOLLOW_CROWN_PARSNIP(FarmingCrop.class, STICK, 0xf2e0, MytemsCategory.FOOD),
+    HOLLOW_CROWN_PARSNIP_SEEDS(FarmingSeeds.class, STICK, 0xf2e1, MytemsCategory.SEEDS),
+    PICUAL_OLIVE(FarmingCrop.class, STICK, 0xf2e2, MytemsCategory.FOOD),
+    PICUAL_OLIVE_SEEDS(FarmingSeeds.class, STICK, 0xf2e3, MytemsCategory.SEEDS),
+    ARABICA_COFFEE_BEAN(FarmingCrop.class, STICK, 0xf2e4, MytemsCategory.FOOD),
+    ARABICA_COFFEE_SEEDS(FarmingSeeds.class, STICK, 0xf2e5, MytemsCategory.SEEDS),
+    DWARF_COCONUT(FarmingCrop.class, STICK, 0xf2e6, MytemsCategory.FOOD),
+    DWARF_COCONUT_SEEDS(FarmingSeeds.class, STICK, 0xf2e7, MytemsCategory.SEEDS),
+    QUEEN_ANNE_CHERRIES(FarmingCrop.class, STICK, 0xf2e8, MytemsCategory.FOOD),
+    QUEEN_ANNE_CHERRY_SEEDS(FarmingSeeds.class, STICK, 0xf2e9, MytemsCategory.SEEDS),
+    CHERRY_BELLE_RADISH(FarmingCrop.class, STICK, 0xf2ea, MytemsCategory.FOOD),
+    CHERRY_BELLE_RADISH_SEEDS(FarmingSeeds.class, STICK, 0xf2eb, MytemsCategory.SEEDS),
+    HONEYDEW(FarmingCrop.class, STICK, 0xf2ec, MytemsCategory.FOOD),
+    HONEYDEW_SEEDS(FarmingSeeds.class, STICK, 0xf2ed, MytemsCategory.SEEDS),
+    GOOSEBERRY(FarmingCrop.class, STICK, 0xf2ee, MytemsCategory.FOOD),
+    GOOSEBERRY_SEEDS(FarmingSeeds.class, STICK, 0xf2ef, MytemsCategory.SEEDS),
+    SUGAR_PIE_PUMPKIN(FarmingCrop.class, STICK, 0xf2f0, MytemsCategory.FOOD),
+    SUGAR_PIE_PUMPKIN_SEEDS(FarmingSeeds.class, STICK, 0xf2f1, MytemsCategory.SEEDS),
+    BLACK_CHERRIES(FarmingCrop.class, STICK, 0xf2f2, MytemsCategory.FOOD),
+    BLACK_CHERRY_SEEDS(FarmingSeeds.class, STICK, 0xf2f3, MytemsCategory.SEEDS),
+    CAMAROSA_STRAWBERRY(FarmingCrop.class, STICK, 0xf2f4, MytemsCategory.FOOD),
+    CAMAROSA_STRAWBERRY_SEEDS(FarmingSeeds.class, STICK, 0xf2f5, MytemsCategory.SEEDS),
+    SPICY_FIG(FarmingCrop.class, STICK, 0xf2f6, MytemsCategory.FOOD),
+    SPICY_FIG_SEEDS(FarmingSeeds.class, STICK, 0xf2f7, MytemsCategory.SEEDS),
+    MOREL_MUSHROOM(FarmingCrop.class, STICK, 0xf2f8, MytemsCategory.FOOD),
+    MOREL_MUSHROOM_SPORES(FarmingSeeds.class, STICK, 0xf2f9, MytemsCategory.SEEDS),
+    NAVEL_ORANGE(FarmingCrop.class, STICK, 0xf2fa, MytemsCategory.FOOD),
+    NAVEL_ORANGE_SEEDS(FarmingSeeds.class, STICK, 0xf2fb, MytemsCategory.SEEDS),
+    PURPLE_CARROT(FarmingCrop.class, STICK, 0xf2fc, MytemsCategory.FOOD),
+    PURPLE_CARROT_SEEDS(FarmingSeeds.class, STICK, 0xf2fd, MytemsCategory.SEEDS),
+    MIDNIGHT_DRAGONBLOOM(FarmingCrop.class, STICK, 0xf2fe, MytemsCategory.FOOD),
+    MIDNIGHT_DRAGONBLOOM_SEEDS(FarmingSeeds.class, STICK, 0xf2ff, MytemsCategory.SEEDS),
+    HERBAL_TEA_LEAVES(FarmingCrop.class, STICK, 0xf336, MytemsCategory.FOOD),
+    HERBAL_TEA_SEEDS(FarmingSeeds.class, STICK, 0xf337, MytemsCategory.SEEDS),
+    CONCORD_GRAPES(FarmingCrop.class, STICK, 0xf338, MytemsCategory.FOOD),
+    CONCORD_GRAPE_SEEDS(FarmingSeeds.class, STICK, 0xf3a0, MytemsCategory.SEEDS),
+    IMPERATOR_CARROT(FarmingCrop.class, STICK, 0xf3a1, MytemsCategory.FOOD),
+    IMPERATOR_CARROT_SEEDS(FarmingSeeds.class, STICK, 0xf3a2, MytemsCategory.SEEDS),
+    NORI(FarmingCrop.class, STICK, 0xf3a3, MytemsCategory.FOOD),
+    NORI_SEEDS(FarmingSeeds.class, STICK, 0xf3a4, MytemsCategory.SEEDS),
+    RED_DELICIOUS_APPLE(FarmingCrop.class, STICK, 0xf3a5, MytemsCategory.FOOD),
+    RED_DELICIOUS_APPLE_SEEDS(FarmingSeeds.class, STICK, 0xf3a6, MytemsCategory.SEEDS),
+    BRIGHT_GLOW_BERRIES(FarmingCrop.class, STICK, 0xf3a7, MytemsCategory.FOOD),
+    BRIGHT_GLOW_BERRY_SEEDS(FarmingSeeds.class, STICK, 0xf3a8, MytemsCategory.SEEDS),
+    GLOBE_EGGPLANT(FarmingCrop.class, STICK, 0xf3a9, MytemsCategory.FOOD),
+    GLOBE_EGGPLANT_SEEDS(FarmingSeeds.class, STICK, 0xf3aa, MytemsCategory.SEEDS),
+    FLY_AGARIC_MUSHROOM(FarmingCrop.class, STICK, 0xf3ab, MytemsCategory.FOOD),
+    FLY_AGARIC_MUSHROOM_SPORES(FarmingSeeds.class, STICK, 0xf3ac, MytemsCategory.SEEDS),
+    YELLOW_ONION(FarmingCrop.class, STICK, 0xf3ad, MytemsCategory.FOOD),
+    YELLOW_ONION_SEEDS(FarmingSeeds.class, STICK, 0xf3ae, MytemsCategory.SEEDS),
+    MORELLO_CHERRIES(FarmingCrop.class, STICK, 0xf3af, MytemsCategory.FOOD),
+    MORELLO_CHERRY_SEEDS(FarmingSeeds.class, STICK, 0xf3b0, MytemsCategory.SEEDS),
+    BLACKBERRY(FarmingCrop.class, STICK, 0xf3b1, MytemsCategory.FOOD),
+    BLACKBERRY_SEEDS(FarmingSeeds.class, STICK, 0xf3b2, MytemsCategory.SEEDS),
+    GREEN_SQUASH(FarmingCrop.class, STICK, 0xf3b3, MytemsCategory.FOOD),
+    GREEN_SQUASH_SEEDS(FarmingSeeds.class, STICK, 0xf3b4, MytemsCategory.SEEDS),
+    CANDY_GRAPES(FarmingCrop.class, STICK, 0xf3b5, MytemsCategory.FOOD),
+    CANDY_GRAPE_SEEDS(FarmingSeeds.class, STICK, 0xf3b6, MytemsCategory.SEEDS),
+    GRANNY_SMITH_APPLE(FarmingCrop.class, STICK, 0xf3b7, MytemsCategory.FOOD),
+    GRANNY_SMITH_APPLE_SEEDS(FarmingSeeds.class, STICK, 0xf3b8, MytemsCategory.SEEDS),
+    TURBO_COFFEE_BEAN(FarmingCrop.class, STICK, 0xf3b9, MytemsCategory.FOOD),
+    TURBO_COFFEE_SEEDS(FarmingSeeds.class, STICK, 0xf3ba, MytemsCategory.SEEDS),
+    WHITE_GRAPES(FarmingCrop.class, STICK, 0xf3bb, MytemsCategory.FOOD),
+    WHITE_GRAPE_SEEDS(FarmingSeeds.class, STICK, 0xf3bc, MytemsCategory.SEEDS),
+    PLANTAIN(FarmingCrop.class, STICK, 0xf3bd, MytemsCategory.FOOD),
+    PLANTAIN_SEEDS(FarmingSeeds.class, STICK, 0xf3be, MytemsCategory.SEEDS),
+    YELLOW_SQUASH(FarmingCrop.class, STICK, 0xf3bf, MytemsCategory.FOOD),
+    YELLOW_SQUASH_SEEDS(FarmingSeeds.class, STICK, 0xf3c0, MytemsCategory.SEEDS),
+    FORASTERO_COCOA(FarmingCrop.class, STICK, 0xf3c1, MytemsCategory.FOOD),
+    FORASTERO_COCOA_SEEDS(FarmingSeeds.class, STICK, 0xf3c2, MytemsCategory.SEEDS),
+    QUEEN_PINEAPPLE(FarmingCrop.class, STICK, 0xf3c3, MytemsCategory.FOOD),
+    QUEEN_PINEAPPLE_SEEDS(FarmingSeeds.class, STICK, 0xf3c4, MytemsCategory.SEEDS),
+    ROMAINE_LETTUCE(FarmingCrop.class, STICK, 0xf2b7, MytemsCategory.FOOD),
+    ROMAINE_LETTUCE_SEEDS(FarmingSeeds.class, STICK, 0xf2b3, MytemsCategory.SEEDS),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
+    private static final Map<Character, Mytems> CHARACTER_MAP = new HashMap<>();
     public final String id;
     public final Class<? extends Mytem> mytemClass;
     public final Material material;
@@ -1274,6 +1429,12 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
             ID_MAP.put(it.id, it);
             if (!it.id.contains(":")) {
                 ID_MAP.put("mytems:" + it.id, it);
+            }
+            if (it.character != (char) 0) {
+                CHARACTER_MAP.put(it.character, it);
+            }
+            for (char chr : it.characters) {
+                CHARACTER_MAP.put(chr, it);
             }
         }
         ID_MAP.put("dwarf_axe", DWARVEN_AXE); // legacy
@@ -1401,6 +1562,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
         return forItemModel(item);
     }
 
+    public static Mytems forCharacter(char chr) {
+        return CHARACTER_MAP.get(chr);
+    }
+
     public Mytem getMytem() {
         return MytemsPlugin.getInstance().getMytem(this);
     }
@@ -1463,9 +1628,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     }
 
     public void markItemStack(ItemStack itemStack) {
-        ItemMeta meta = itemStack.getItemMeta();
-        markItemMeta(meta);
-        itemStack.setItemMeta(meta);
+        ItemMarker.setId(itemStack, id);
+        if (customModelData != null) {
+            itemStack.setData(DataComponentTypes.ITEM_MODEL, getNamespacedKey());
+        }
     }
 
     public ItemStack createItemStack() {
@@ -1541,6 +1707,14 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
             if (mytems == it) return true;
         }
         return false;
+    }
+
+    public void markEntity(Entity entity) {
+        EntityMarker.setId(entity, id);
+    }
+
+    public boolean isEntity(Entity entity) {
+        return EntityMarker.hasId(entity, id);
     }
 
     @Override

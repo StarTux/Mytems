@@ -41,11 +41,19 @@ public final class BlockRegistry implements Listener {
     }
 
     public BlockRegistryEntry register(final Mytems mytems) {
-        return register(mytems.getId());
+        return register(mytems.getId(), null);
+    }
+
+    public BlockRegistryEntry register(final Mytems mytems, final BlockImplementation implementation) {
+        return register(mytems.getId(), implementation);
     }
 
     public BlockRegistryEntry register(final String id) {
-        final BlockRegistryEntry entry = new BlockRegistryEntry(id);
+        return register(id, null);
+    }
+
+    public BlockRegistryEntry register(final String id, final BlockImplementation implementation) {
+        final BlockRegistryEntry entry = new BlockRegistryEntry(id, implementation);
         blockMap.put(id, entry);
         return entry;
     }

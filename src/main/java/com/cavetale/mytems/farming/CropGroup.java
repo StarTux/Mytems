@@ -1,0 +1,63 @@
+package com.cavetale.mytems.farming;
+
+/**
+ * This puts crops into groups for recipes.
+ * This categorization could change a lot.
+ *
+ * @see FarmingPlantType
+ */
+public enum CropGroup {
+SQUASH,
+PITAYA,
+COFFEE,
+GOOSEBERRY,
+APPLE,
+HONEYDEW,
+CARROT,
+AVOCADO,
+KIWI,
+WAKAME,
+BLACKBERRY,
+NORI,
+POTATO,
+GRAPE,
+PUMPKIN,
+RASPBERRY,
+WHEAT,
+BLUEBERRY,
+BEET,
+NETHER_WART,
+MUSHROOM,
+BERRY,
+DRAGONBLOOM,
+CORN,
+EGGPLANT,
+COCOA,
+LETTUCE,
+OAT,
+PARSNIP,
+OLIVE,
+GARLIC,
+MELON,
+ONION,
+PEPPER,
+STRAWBERRY,
+TOMATO,
+ORANGE,
+CUCUMBER,
+GLOWROOT,
+FIG,
+RADISH,
+CABBAGE,
+WATERMELON,
+PLANTAIN,
+COCONUT,
+TEA,
+CHERRY,
+FRUIT,
+LEEK,
+PINEAPPLE,
+PICKLE,
+RICE,
+    ;
+}
