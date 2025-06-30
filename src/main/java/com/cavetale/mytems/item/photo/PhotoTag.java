@@ -60,10 +60,8 @@ public final class PhotoTag extends MytemTag {
                     : Photo.getPhotoData(0);
                 @SuppressWarnings("deprecation") MapView mapView = Bukkit.getMap(data.mapId());
                 meta.setMapView(mapView);
-                int hexColor = data.color() & 0xFFFFFF;
+                final int hexColor = data.color() & 0xFFFFFF;
                 meta.setColor(Color.fromRGB(hexColor));
-                meta.setScaling(false);
-                meta.setColor(Color.fromRGB(data.color()));
                 List<Component> tooltip = new ArrayList<>();
                 tooltip.add(text((data.name() != null ? data.name() : "Photo"), color(hexColor)));
                 if (data.name() != null) {
