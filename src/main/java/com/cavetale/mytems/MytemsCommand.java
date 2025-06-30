@@ -306,7 +306,7 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
         if (textColor == null) throw new CommandWarn("Invalid color: " + colorArg);
         final Color color = Color.fromRGB(textColor.value());
         final ItemStack item = mytems.createItemStack();
-        item.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(color, true));
+        item.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(color));
         target.getInventory().addItem(item);
         sender.sendMessage(textOfChildren(mytems,
                                           text(" (" + textColor.asHexString() + ")", textColor),

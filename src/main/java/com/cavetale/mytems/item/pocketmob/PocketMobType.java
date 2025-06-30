@@ -39,6 +39,7 @@ public enum PocketMobType {
     GLOW_SQUID(Mytems.POCKET_GLOW_SQUID, EntityType.GLOW_SQUID, 0x95656, 0x85f1bc),
     GOAT(Mytems.POCKET_GOAT, EntityType.GOAT, 0xa5947c, 0x55493e),
     GUARDIAN(Mytems.POCKET_GUARDIAN, EntityType.GUARDIAN, 0x5a8272, 0xf17d30),
+    HAPPY_GHAST(Mytems.POCKET_HAPPY_GHAST, EntityType.HAPPY_GHAST, 0xf9f9f9, 0xbcbcbc),
     HOGLIN(Mytems.POCKET_HOGLIN, EntityType.HOGLIN, 0xc66e55, 0x5f6464),
     HORSE(Mytems.POCKET_HORSE, EntityType.HORSE, 0xc09e7d, 0xeee500),
     HUSK(Mytems.POCKET_HUSK, EntityType.HUSK, 0x797061, 0xe6cc94),

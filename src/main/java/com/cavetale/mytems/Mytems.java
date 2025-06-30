@@ -340,6 +340,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     BOOK_OF_MAY(DummyMytem.class, BOOK, 304, (char) 0xF02C, MAY),
     BEESTICK(Beestick.class, BLAZE_ROD, 305, (char) 0xF02D, UTILITY),
     ENDERBALL(Enderball.class, DRAGON_EGG, null, (char) 0, UTILITY),
+    // Pocket Mobs
     POCKET_ALLAY(PocketMob.class, ALLAY_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_ARMADILLO(PocketMob.class, ARMADILLO_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_AXOLOTL(PocketMob.class, AXOLOTL_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
@@ -367,13 +368,16 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     POCKET_FOX(PocketMob.class, FOX_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_FROG(PocketMob.class, FROG_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_GHAST(PocketMob.class, GHAST_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
+    // Irregular
     POCKET_GIANT(PocketMob.class, ZOMBIE_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_GLOW_SQUID(PocketMob.class, GLOW_SQUID_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_GOAT(PocketMob.class, GOAT_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_GUARDIAN(PocketMob.class, GUARDIAN_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
+    POCKET_HAPPY_GHAST(PocketMob.class, HAPPY_GHAST_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_HOGLIN(PocketMob.class, HOGLIN_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_HORSE(PocketMob.class, HORSE_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_HUSK(PocketMob.class, HUSK_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
+    // Irregular
     POCKET_ILLUSIONER(PocketMob.class, VINDICATOR_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_IRON_GOLEM(PocketMob.class, IRON_GOLEM_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_LLAMA(PocketMob.class, LLAMA_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
@@ -423,6 +427,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     POCKET_ZOMBIE_HORSE(PocketMob.class, ZOMBIE_HORSE_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_ZOMBIE_VILLAGER(PocketMob.class, ZOMBIE_VILLAGER_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
     POCKET_ZOMBIFIED_PIGLIN(PocketMob.class, ZOMBIFIED_PIGLIN_SPAWN_EGG, 908301, (char) 0, POCKET_MOB),
+    // Mob Catchers
     MOB_CATCHER(MobCatcher.class, EGG, 908302, (char) 0xE24E, MOB_CATCHERS),
     MONSTER_CATCHER(MobCatcher.class, EGG, 908303, (char) 0xE24F, MOB_CATCHERS),
     ANIMAL_CATCHER(MobCatcher.class, EGG, 908304, (char) 0xE250, MOB_CATCHERS),
