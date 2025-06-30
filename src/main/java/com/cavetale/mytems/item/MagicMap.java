@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.LIGHT_PURPLE;
 
@@ -27,11 +26,12 @@ public final class MagicMap implements Mytem {
 
     @Override
     public ItemStack createItemStack() {
-        ItemStack item = new ItemStack(Material.PAPER);
-        ItemMeta meta = item.getItemMeta();
-        meta.itemName(displayName);
-        key.markItemMeta(meta);
-        item.setItemMeta(meta);
+        final ItemStack item = new ItemStack(Material.PAPER);
+        item.editMeta(meta -> {
+                meta.itemName(displayName);
+                key.markItemMeta(meta);
+                item.setItemMeta(meta);
+            });
         return item;
     }
 
