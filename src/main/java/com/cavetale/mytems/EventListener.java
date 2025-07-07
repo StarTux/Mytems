@@ -564,10 +564,17 @@ public final class EventListener implements Listener {
                 hand = player.getInventory().getItemInOffHand();
             }
             if (hand != null && hand.getType() == Material.TRIDENT) {
+                final ItemStack finalHand = hand;
                 hand.editMeta(meta -> {
-                        if (!meta.isUnbreakable() && meta instanceof Damageable dmg) {
-                            dmg.setDamage(dmg.getDamage() + 1);
+                        if (!(meta.isUnbreakable() && meta instanceof Damageable dmg)) {
+                            return;
                         }
+                        final int original = dmg.getDamage();
+                        final int damage = original + 1;
+                        if (!new PlayerItemDamageEvent(player, finalHand, damage, original).callEvent()) {
+                            return;
+                        }
+                        dmg.setDamage(dmg.getDamage() + 1);
                     });
             }
         }
