@@ -5,6 +5,7 @@ public enum MytemsCategory {
     ARMCHAIR,
     ARMOR_PART,
     ARROWS,
+    BADGE,
     BEE_COSTUME,
     BINGO_BUKKITS,
     BLOCKS,

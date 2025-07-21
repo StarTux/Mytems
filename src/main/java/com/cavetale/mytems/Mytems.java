@@ -1413,6 +1413,11 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     QUEEN_PINEAPPLE_SEEDS(FarmingSeeds.class, STICK, 0xf3c4, MytemsCategory.SEEDS),
     ROMAINE_LETTUCE(FarmingCrop.class, STICK, 0xf2b7, MytemsCategory.FOOD),
     ROMAINE_LETTUCE_SEEDS(FarmingSeeds.class, STICK, 0xf2b3, MytemsCategory.SEEDS),
+    // RANKS
+    ADMIN_BADGE(ForbiddenMytem.class, STICK, 0xf3c5, MytemsCategory.BADGE),
+    MODERATOR_BADGE(ForbiddenMytem.class, STICK, 0xf3c6, MytemsCategory.BADGE),
+    TRUSTED_BADGE(ForbiddenMytem.class, STICK, 0xf3c7, MytemsCategory.BADGE),
+    GOAT_BADGE(ForbiddenMytem.class, STICK, 0xf3c8, MytemsCategory.BADGE),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
@@ -1927,6 +1932,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
         case CHRISTMAS_TREE:
         case MOTHER:
         case MOM:
+        case ADMIN_BADGE:
+        case MODERATOR_BADGE:
+        case TRUSTED_BADGE:
+        case GOAT_BADGE:
             return true;
         default: return false;
         }
