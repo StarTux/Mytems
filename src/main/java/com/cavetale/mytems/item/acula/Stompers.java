@@ -27,8 +27,6 @@ import static net.kyori.adventure.text.format.NamedTextColor.*;
 @Getter
 public final class Stompers extends AculaItem {
     private final String rawDisplayName = "Stompers";
-    private final double damageFactor = 2.0;
-    private final String damageFactorStr = "2";
     private final double radius = 3.0;
     private final String radiusStr = "3";
     private final String description = "\n\n"
@@ -70,7 +68,7 @@ public final class Stompers extends AculaItem {
         }
         int particles = (int) (radius * Math.PI * 2.0 / 3.0); // circumference / 3
         for (Damageable target : targets) {
-            target.damage(dmg * damageFactor, player);
+            target.damage(dmg, player);
             Vector vec = target.getLocation().subtract(center).toVector().normalize();
             target.setVelocity(target.getVelocity().add(vec));
         }
