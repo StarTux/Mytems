@@ -26,6 +26,8 @@ import org.bukkit.entity.Animals;
 import org.bukkit.entity.Axolotl;
 import org.bukkit.entity.Bee;
 import org.bukkit.entity.Cat;
+import org.bukkit.entity.Chicken;
+import org.bukkit.entity.Cow;
 import org.bukkit.entity.Creeper;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fox;
@@ -36,6 +38,7 @@ import org.bukkit.entity.Llama;
 import org.bukkit.entity.Mob;
 import org.bukkit.entity.MushroomCow;
 import org.bukkit.entity.Parrot;
+import org.bukkit.entity.Pig;
 import org.bukkit.entity.PufferFish;
 import org.bukkit.entity.Rabbit;
 import org.bukkit.entity.Raider;
@@ -247,6 +250,12 @@ public final class PocketMobTag extends MytemTag {
             nameComponents.add(Text.toCamelCase(axolotl.getVariant()));
         } else if (entity instanceof MushroomCow mushroomCow) {
             nameComponents.add(Text.toCamelCase(mushroomCow.getVariant()));
+        } else if (entity instanceof Cow cow) {
+            nameComponents.add(snakeToCamelCase(" ", cow.getVariant().getKey().getKey()));
+        } else if (entity instanceof Chicken chicken) {
+            nameComponents.add(snakeToCamelCase(" ", chicken.getVariant().getKey().getKey()));
+        } else if (entity instanceof Pig pig) {
+            nameComponents.add(snakeToCamelCase(" ", pig.getVariant().getKey().getKey()));
         }
         if (entity instanceof Tameable tameable) {
             if (tameable.isTamed()) {
