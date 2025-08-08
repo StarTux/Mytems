@@ -43,6 +43,7 @@ public enum MytemsCategory {
     GARDENING,
     GEM,
     GEM_SLOT,
+    GOLF_CLUB,
     HALLOWEEN,
     HALLOWEEN_WEAPON,
     HASTY_PICKAXES,

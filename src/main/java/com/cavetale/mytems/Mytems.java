@@ -58,6 +58,7 @@ import com.cavetale.mytems.item.furniture.Furniture;
 import com.cavetale.mytems.item.garden.Scissors;
 import com.cavetale.mytems.item.garden.Scythe;
 import com.cavetale.mytems.item.gem.Gem;
+import com.cavetale.mytems.item.golf.GolfClub;
 import com.cavetale.mytems.item.halloween.HalloweenCandy;
 import com.cavetale.mytems.item.halloween.HalloweenToken;
 import com.cavetale.mytems.item.halloween.HalloweenToken2;
@@ -1419,6 +1420,12 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     MODERATOR_BADGE(ForbiddenMytem.class, STICK, 0xf3c6, MytemsCategory.BADGE),
     TRUSTED_BADGE(ForbiddenMytem.class, STICK, 0xf3c7, MytemsCategory.BADGE),
     GOAT_BADGE(ForbiddenMytem.class, STICK, 0xf3c8, MytemsCategory.BADGE),
+    // Golf
+    WOODEN_GOLF_CLUB(GolfClub.class, STICK, 0xf3c9, MytemsCategory.GOLF_CLUB),
+    COPPER_GOLF_CLUB(GolfClub.class, STICK, 0xf3ca, MytemsCategory.GOLF_CLUB),
+    IRON_GOLF_CLUB(GolfClub.class, STICK, 0xf3cb, MytemsCategory.GOLF_CLUB),
+    GOLDEN_GOLF_CLUB(GolfClub.class, STICK, 0xf3cc, MytemsCategory.GOLF_CLUB),
+    DIAMOND_GOLF_CLUB(GolfClub.class, STICK, 0xf3cd, MytemsCategory.GOLF_CLUB),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();
