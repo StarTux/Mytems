@@ -129,6 +129,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import static com.cavetale.mytems.MytemsCategory.*;
 import static com.cavetale.mytems.util.Items.tooltip;
+import static io.papermc.paper.datacomponent.item.ItemLore.lore;
 import static net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer.plainText;
 import static org.bukkit.Material.*;
 
@@ -1413,7 +1414,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     QUEEN_PINEAPPLE_SEEDS(FarmingSeeds.class, STICK, 0xf3c4, MytemsCategory.SEEDS),
     ROMAINE_LETTUCE(FarmingCrop.class, STICK, 0xf2b7, MytemsCategory.FOOD),
     ROMAINE_LETTUCE_SEEDS(FarmingSeeds.class, STICK, 0xf2b3, MytemsCategory.SEEDS),
-    // RANKS
+    // Ranks
     ADMIN_BADGE(ForbiddenMytem.class, STICK, 0xf3c5, MytemsCategory.BADGE),
     MODERATOR_BADGE(ForbiddenMytem.class, STICK, 0xf3c6, MytemsCategory.BADGE),
     TRUSTED_BADGE(ForbiddenMytem.class, STICK, 0xf3c7, MytemsCategory.BADGE),
@@ -1679,17 +1680,17 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
                    || material == LEATHER_LEGGINGS
                    || material == LEATHER_BOOTS) {
             item = createItemStack(1);
-            item.editMeta(meta -> {
-                    meta.displayName(Component.empty());
-                    meta.lore(List.of());
-                });
+            // ???
+            item.setData(DataComponentTypes.CUSTOM_NAME, Component.empty());
+            item.setData(DataComponentTypes.LORE, lore(List.of()));
         } else {
             item = new ItemStack(material, amount);
         }
         if (customModelData != null) {
-            item.editMeta(meta -> {
-                    meta.setItemModel(getNamespacedKey());
-                });
+            item.setData(DataComponentTypes.ITEM_MODEL, getNamespacedKey());
+        }
+        if (item.getType().hasDefaultData(DataComponentTypes.ATTRIBUTE_MODIFIERS)) {
+            item.unsetData(DataComponentTypes.ATTRIBUTE_MODIFIERS);
         }
         return item;
     }

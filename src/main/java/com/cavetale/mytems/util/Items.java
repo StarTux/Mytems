@@ -1,6 +1,7 @@
 package com.cavetale.mytems.util;
 
 import com.google.common.collect.ImmutableListMultimap;
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -17,6 +18,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.Repairable;
+import static io.papermc.paper.datacomponent.item.ItemLore.lore;
 
 public final class Items {
     public static Component nonItalic(Component in) {
@@ -48,7 +50,20 @@ public final class Items {
     }
 
     public static ItemStack tooltip(ItemStack item, List<Component> text) {
-        item.editMeta(meta -> text(meta, text));
+        item.setData(DataComponentTypes.ITEM_NAME, text.isEmpty() ? Component.empty() : text.get(0));
+        item.setData(DataComponentTypes.LORE,
+                     lore(text.isEmpty()
+                          ? List.of()
+                          : text.subList(1, text.size()).stream().map(Items::nonItalic).collect(Collectors.toList())));
+        return item;
+    }
+
+    public static ItemStack tooltipCustomName(ItemStack item, List<Component> text) {
+        item.setData(DataComponentTypes.CUSTOM_NAME, text.isEmpty() ? Component.empty() : text.get(0));
+        item.setData(DataComponentTypes.LORE,
+                     lore(text.isEmpty()
+                          ? List.of()
+                          : text.subList(1, text.size()).stream().map(Items::nonItalic).collect(Collectors.toList())));
         return item;
     }
 
