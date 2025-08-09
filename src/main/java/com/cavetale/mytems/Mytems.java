@@ -1426,6 +1426,11 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     IRON_GOLF_CLUB(GolfClub.class, STICK, 0xf3cb, MytemsCategory.GOLF_CLUB),
     GOLDEN_GOLF_CLUB(GolfClub.class, STICK, 0xf3cc, MytemsCategory.GOLF_CLUB),
     DIAMOND_GOLF_CLUB(GolfClub.class, STICK, 0xf3cd, MytemsCategory.GOLF_CLUB),
+    // Golf Trophy
+    GOLD_GOLF_TROPHY(Trophy.class, STICK, 0xf3ce, MytemsCategory.TROPHY),
+    SILVER_GOLF_TROPHY(Trophy.class, STICK, 0xf3cf, MytemsCategory.TROPHY),
+    BRONZE_GOLF_TROPHY(Trophy.class, STICK, 0xf3d0, MytemsCategory.TROPHY),
+    BLUE_GOLF_TROPHY(Trophy.class, STICK, 0xf3d1, MytemsCategory.TROPHY),
     ;
 
     private static final Map<String, Mytems> ID_MAP = new HashMap<>();

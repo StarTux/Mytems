@@ -113,6 +113,11 @@ public enum TrophyType implements ComponentLike {
     // Halloween
     HALLOWEEN_TROPHY(Mytems.HALLOWEEN_TROPHY, HALLOWEEN, GOLD),
     CAVETOBER_TROPHY(Mytems.CAVETOBER_TROPHY, CAVETOBER, GOLD),
+    // Golf
+    GOLD_GOLF(Mytems.GOLD_GOLF_TROPHY, GOLF, GOLD),
+    SILVER_GOLF(Mytems.SILVER_GOLF_TROPHY, GOLF, SILVER),
+    BRONZE_GOLF(Mytems.BRONZE_GOLF_TROPHY, GOLF, BRONZE),
+    PARTICIPATION_GOLF(Mytems.BLUE_GOLF_TROPHY, GOLF, PARTICIPATION),
     ;
 
     private final Mytems mytems;

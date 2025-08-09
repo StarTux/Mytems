@@ -17,6 +17,7 @@ public enum TrophyCategory {
     ENDERBALL,
     HALLOWEEN,
     CAVETOBER,
+    GOLF,
 
     SHOVEL,
     SWORD,
