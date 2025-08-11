@@ -44,7 +44,6 @@ import org.bukkit.entity.Rabbit;
 import org.bukkit.entity.Raider;
 import org.bukkit.entity.Slime;
 import org.bukkit.entity.Spellcaster;
-import org.bukkit.entity.Steerable;
 import org.bukkit.entity.Strider;
 import org.bukkit.entity.Tameable;
 import org.bukkit.entity.TropicalFish;
@@ -210,13 +209,11 @@ public final class PocketMobTag extends MytemTag {
             if (rabbit.getRabbitType() == Rabbit.Type.THE_KILLER_BUNNY) {
                 finalNameComponent = null;
             }
-        } else if (entity instanceof Steerable steerable) { // Pig, Strider
-            if (steerable instanceof Strider strider) {
-                if (strider.isShivering()) {
-                    nameComponents.add(0, "Shivering");
-                }
+        } else if (entity instanceof Strider strider) {
+            if (strider.isShivering()) {
+                nameComponents.add(0, "Shivering");
             }
-            if (steerable.hasSaddle()) {
+            if (strider.hasSaddle()) {
                 nameComponents.add(0, "Saddled");
             }
         } else if (entity instanceof TropicalFish tropicalFish) {
@@ -256,6 +253,9 @@ public final class PocketMobTag extends MytemTag {
             nameComponents.add(snakeToCamelCase(" ", chicken.getVariant().getKey().getKey()));
         } else if (entity instanceof Pig pig) {
             nameComponents.add(snakeToCamelCase(" ", pig.getVariant().getKey().getKey()));
+            if (pig.hasSaddle()) {
+                nameComponents.add(0, "Saddled");
+            }
         }
         if (entity instanceof Tameable tameable) {
             if (tameable.isTamed()) {
