@@ -80,6 +80,7 @@ public final class UpgradableItemCombinerRecipe implements ItemCombinerRecipe {
         addChain(Mytems.IRON_SCYTHE, Mytems.GOLDEN_SCYTHE);
         addChain(Mytems.EMPTY_WATERING_CAN, Mytems.EMPTY_GOLDEN_WATERING_CAN);
         addChain(Mytems.SNEAKERS, Mytems.RED_SNEAKERS, Mytems.BLUE_SNEAKERS, Mytems.PURPLE_SNEAKERS, Mytems.GOLDEN_SNEAKERS);
+        addChain(Mytems.WOODEN_GOLF_CLUB, Mytems.COPPER_GOLF_CLUB, Mytems.IRON_GOLF_CLUB, Mytems.GOLDEN_GOLF_CLUB, Mytems.DIAMOND_GOLF_CLUB);
         all = List.copyOf(all);
         return all;
     }

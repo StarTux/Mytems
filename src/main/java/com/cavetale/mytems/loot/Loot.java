@@ -40,6 +40,7 @@ public final class Loot {
             result.add(Mytems.HASTY_PICKAXE.createItemStack());
             result.add(Mytems.BINOCULARS.createItemStack());
             result.add(Mytems.LOVE_POTION.createItemStack());
+            result.add(Mytems.WOODEN_GOLF_CLUB.createItemStack());
         }
     }
 
