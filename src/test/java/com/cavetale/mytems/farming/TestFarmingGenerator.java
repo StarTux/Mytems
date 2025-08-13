@@ -18,7 +18,7 @@ import org.junit.Test;
  * the appropriate files.
  */
 public final class TestFarmingGenerator {
-    private int nextChar = 0xf2b7;
+    private int nextChar = 0xf3d2;
 
     @Test
     public void test() throws IOException {
@@ -51,6 +51,9 @@ public final class TestFarmingGenerator {
                 if (!stageName.endsWith(".png")) continue;
                 final File file = new File(plantFolder, stageName);
                 final BufferedImage img = ImageIO.read(file);
+                if (img == null) {
+                    throw new IllegalStateException("Not found: " + file);
+                }
                 final int width = img.getWidth();
                 final int height = img.getHeight();
                 if (width != 16) throw new IllegalStateException(file + ": " + width + "x" + height);

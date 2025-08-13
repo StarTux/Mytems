@@ -421,6 +421,16 @@ public enum GrowthStage {
     ROMAINE_LETTUCE_3(FarmingPlantType.ROMAINE_LETTUCE, Model.X),
     ROMAINE_LETTUCE_4(FarmingPlantType.ROMAINE_LETTUCE, Model.X),
     ROMAINE_LETTUCE_5(FarmingPlantType.ROMAINE_LETTUCE, Model.X),
+
+    CAVENDISH_BANANA_SAPLING(FarmingPlantType.CAVENDISH_BANANA, Model.X),
+
+    EUREKA_LEMON_SAPLING(FarmingPlantType.EUREKA_LEMON, Model.X),
+
+    GIANT_COCONUT_SAPLING(FarmingPlantType.GIANT_COCONUT, Model.X),
+
+    BLUESHELL_BANANA_SAPLING(FarmingPlantType.BLUESHELL_BANANA, Model.X),
+
+    SIMCA_PLUM_SAPLING(FarmingPlantType.SIMCA_PLUM, Model.X),
     ;
 
     private final FarmingPlantType farmingPlantType;
