@@ -18,7 +18,8 @@ import org.junit.Test;
  * the appropriate files.
  */
 public final class TestFarmingGenerator {
-    private int nextChar = 0xf3d2;
+    // Set to highest known char.
+    private int nextChar = 0xf3d1;
 
     @Test
     public void test() throws IOException {
