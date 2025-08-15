@@ -450,6 +450,11 @@ public enum GrowthStage {
     JALAPENO_PEPPER_1(FarmingPlantType.JALAPENO_PEPPER, Model.X),
     JALAPENO_PEPPER_2(FarmingPlantType.JALAPENO_PEPPER, Model.X),
     JALAPENO_PEPPER_3(FarmingPlantType.JALAPENO_PEPPER, Model.X),
+
+    SUGAR_BEET_0(FarmingPlantType.SUGAR_BEET, Model.X),
+    SUGAR_BEET_1(FarmingPlantType.SUGAR_BEET, Model.X),
+    SUGAR_BEET_2(FarmingPlantType.SUGAR_BEET, Model.X),
+    SUGAR_BEET_3(FarmingPlantType.SUGAR_BEET, Model.X),
     ;
 
     private final FarmingPlantType farmingPlantType;
