@@ -2,6 +2,7 @@ package com.cavetale.mytems.farming;
 
 import com.cavetale.core.struct.Vec3i;
 import com.cavetale.mytems.block.BlockRegistryEntry;
+import com.cavetale.worldmarker.block.BlockMarker;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import java.util.List;
 import lombok.Getter;
@@ -200,6 +201,10 @@ public enum GrowthStage {
     GARDEN_CUCUMBER_3(FarmingPlantType.GARDEN_CUCUMBER, Model.X),
 
     GOLD_KIWI_0(FarmingPlantType.GOLD_KIWI, Model.X),
+    GOLD_KIWI_1(FarmingPlantType.GOLD_KIWI, Model.X),
+    GOLD_KIWI_2(FarmingPlantType.GOLD_KIWI, Model.X),
+    GOLD_KIWI_3(FarmingPlantType.GOLD_KIWI, Model.X),
+    GOLD_KIWI_4(FarmingPlantType.GOLD_KIWI, Model.X),
 
     HOSS_AVOCADO_0(FarmingPlantType.HASS_AVOCADO, Model.X),
 
@@ -431,6 +436,20 @@ public enum GrowthStage {
     BLUESHELL_BANANA_SAPLING(FarmingPlantType.BLUESHELL_BANANA, Model.X),
 
     SIMCA_PLUM_SAPLING(FarmingPlantType.SIMCA_PLUM, Model.X),
+
+    PIRI_PEPPER_1(FarmingPlantType.PIRI_PEPPER, Model.X),
+    PIRI_PEPPER_2(FarmingPlantType.PIRI_PEPPER, Model.X),
+    PIRI_PEPPER_3(FarmingPlantType.PIRI_PEPPER, Model.X),
+
+    KIWI_0(FarmingPlantType.KIWI, Model.X),
+    KIWI_1(FarmingPlantType.KIWI, Model.X),
+    KIWI_2(FarmingPlantType.KIWI, Model.X),
+    KIWI_3(FarmingPlantType.KIWI, Model.X),
+    KIWI_4(FarmingPlantType.KIWI, Model.X),
+
+    JALAPENO_PEPPER_1(FarmingPlantType.JALAPENO_PEPPER, Model.X),
+    JALAPENO_PEPPER_2(FarmingPlantType.JALAPENO_PEPPER, Model.X),
+    JALAPENO_PEPPER_3(FarmingPlantType.JALAPENO_PEPPER, Model.X),
     ;
 
     private final FarmingPlantType farmingPlantType;
@@ -458,19 +477,24 @@ public enum GrowthStage {
     public boolean checkAdditionalBlocks(Block farmland) {
         for (Vec3i v : model.getAdditionalBlockVectors()) {
             final Block additionalBlock = farmland.getRelative(v.x, v.y, v.z);
-            if (farmingPlantType.getBlockRegistryEntry().isBlock(additionalBlock)) {
+            // If this block already belongs to us, we skip the check
+            if (!farmland.equals(farmingPlantType.getBlockRegistryEntry().getRecursiveParentBlock(additionalBlock))) {
                 continue;
             }
+            // Check if block is empty and not marked
             if (!additionalBlock.isEmpty()) return false;
             if (BlockRegistryEntry.at(additionalBlock) != null) return false;
+            if (BlockMarker.hasId(additionalBlock)) return false;
         }
         return true;
     }
 
     /**
      * Place this growth stage in this world, that is:
+     *
      * - Mark all additional blocks with the crop id.
      * - Spawn the item display that represents this plant.
+     *
      * The farmland block will be left unchanged.  It is assumed that
      * it was set up during the planting.
      */

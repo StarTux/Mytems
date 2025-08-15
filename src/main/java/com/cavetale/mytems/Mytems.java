@@ -1425,6 +1425,12 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     BLUESHELL_BANANA_SEEDS(FarmingSeeds.class, STICK, 0xf3da, MytemsCategory.SEEDS),
     SIMCA_PLUM(FarmingCrop.class, STICK, 0xf3db, MytemsCategory.FOOD),
     SIMCA_PLUM_SEEDS(FarmingSeeds.class, STICK, 0xf3dc, MytemsCategory.SEEDS),
+    PIRI_PEPPER(FarmingCrop.class, STICK, 0xf3de, MytemsCategory.FOOD),
+    PIRI_PEPPER_SEEDS(FarmingSeeds.class, STICK, 0xf3df, MytemsCategory.SEEDS),
+    KIWI(FarmingCrop.class, STICK, 0xf3e0, MytemsCategory.FOOD),
+    KIWI_SEEDS(FarmingSeeds.class, STICK, 0xf3e1, MytemsCategory.SEEDS),
+    JALAPENO_PEPPER(FarmingCrop.class, STICK, 0xf3e2, MytemsCategory.FOOD),
+    JALAPENO_PEPPER_SEEDS(FarmingSeeds.class, STICK, 0xf3e3, MytemsCategory.SEEDS),
     // Ranks
     ADMIN_BADGE(ForbiddenMytem.class, STICK, 0xf3c5, MytemsCategory.BADGE),
     MODERATOR_BADGE(ForbiddenMytem.class, STICK, 0xf3c6, MytemsCategory.BADGE),
