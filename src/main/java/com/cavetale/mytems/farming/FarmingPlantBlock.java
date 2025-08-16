@@ -1,6 +1,7 @@
 package com.cavetale.mytems.farming;
 
 import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
+import com.cavetale.core.struct.Vec3i;
 import com.cavetale.mytems.block.BlockEventHandler;
 import com.cavetale.mytems.block.BlockImplementation;
 import com.cavetale.worldmarker.block.BlockMarker;
@@ -15,6 +16,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import static com.cavetale.mytems.MytemsPlugin.mytemsPlugin;
 import static com.cavetale.mytems.MytemsPlugin.namespacedKey;
 
 /**
@@ -65,5 +67,10 @@ public final class FarmingPlantBlock implements BlockImplementation, BlockEventH
         if (growthStage == type.getGrowthStages().size() - 1) {
             block.getWorld().dropItem(location, type.getCropItem().createItemStack());
         }
+    }
+
+    @Override
+    public void tick(Block block) {
+        mytemsPlugin().getLogger().info("[" + type + "] ticking at " + Vec3i.of(block));
     }
 }

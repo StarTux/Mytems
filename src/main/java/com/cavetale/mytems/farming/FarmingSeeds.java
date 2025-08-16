@@ -8,6 +8,7 @@ import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
+import org.bukkit.GameMode;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
@@ -59,7 +60,9 @@ public final class FarmingSeeds implements Mytem {
         final GrowthStage growthStage = farmingPlantType.getGrowthStages().get(0);
         if (!growthStage.checkAdditionalBlocks(farmland)) return;
         // No return
-        item.subtract(1);
+        if (player.getGameMode() != GameMode.CREATIVE) {
+            item.subtract(1);
+        }
         farmingPlantType.getBlockRegistryEntry().setBlockId(farmland);
         growthStage.place(farmland);
         farmland.getWorld().playSound(farmland.getLocation().add(0.5, 1.5, 0.5), Sound.ITEM_CROP_PLANT, 1f, 1f);

@@ -17,7 +17,7 @@ public enum FarmingPlantType {
     BLACK_CHERRY(CropGroup.CHERRY, GrowthType.TREE, Mytems.BLACK_CHERRIES, Mytems.BLACK_CHERRY_SEEDS),
     BLUESHELL_BANANA(CropGroup.BANANA, GrowthType.TREE, Mytems.BLUESHELL_BANANA, Mytems.BLUESHELL_BANANA_SEEDS),
     BLUE_POPCORN(CropGroup.CORN, GrowthType.HERBACEOUS, Mytems.BLUE_POPCORN, Mytems.BLUE_POPCORN_SEEDS),
-    BRIGHT_GLOW_BERRY(CropGroup.BERRY, GrowthType.VINE, Mytems.BRIGHT_GLOW_BERRIES, Mytems.BRIGHT_GLOW_BERRY_SEEDS),
+    BRIGHT_GLOW_BERRY(CropGroup.GLOW_BERRY, GrowthType.VINE, Mytems.BRIGHT_GLOW_BERRIES, Mytems.BRIGHT_GLOW_BERRY_SEEDS),
     CAMAROSA_STRAWBERRY(CropGroup.STRAWBERRY, GrowthType.HERBACEOUS, Mytems.CAMAROSA_STRAWBERRY, Mytems.CAMAROSA_STRAWBERRY_SEEDS),
     CAMELIA_TEA(CropGroup.TEA, GrowthType.BUSH, Mytems.CAMELIA_TEA_LEAVES, Mytems.CAMELIA_TEA_SEEDS),
     CANDY_GRAPE(CropGroup.GRAPE, GrowthType.VINE, Mytems.CANDY_GRAPES, Mytems.CANDY_GRAPE_SEEDS),
@@ -29,9 +29,9 @@ public enum FarmingPlantType {
     CRIOLLO_COCOA(CropGroup.COCOA, GrowthType.COCOA, Mytems.CRIOLLO_COCOA, Mytems.CRIOLLO_COCOA_SEEDS),
     DENT_CORN(CropGroup.CORN, GrowthType.HERBACEOUS, Mytems.DENT_CORN, Mytems.DENT_CORN_SEEDS),
     DWARF_COCONUT(CropGroup.COCONUT, GrowthType.TREE, Mytems.DWARF_COCONUT, Mytems.DWARF_COCONUT_SEEDS),
-    ETHEREAL_CHORUS_FRUIT(CropGroup.FRUIT, GrowthType.CHORUS, Mytems.ETHEREAL_CHORUS_FRUIT, Mytems.ETHEREAL_CHORUS_FRUIT_SEEDS),
+    ETHEREAL_CHORUS_FRUIT(CropGroup.CHORUS, GrowthType.CHORUS, Mytems.ETHEREAL_CHORUS_FRUIT, Mytems.ETHEREAL_CHORUS_FRUIT_SEEDS),
     EUREKA_LEMON(CropGroup.LEMON, GrowthType.TREE, Mytems.EUREKA_LEMON, Mytems.EUREKA_LEMON_SEEDS),
-    FALSE_PICKLE(CropGroup.PICKLE, GrowthType.GOURD, Mytems.FALSE_PICKLE, Mytems.FALSE_PICKLE_SEEDS),
+    FALSE_PICKLE(CropGroup.CUCUMBER, GrowthType.GOURD, Mytems.FALSE_PICKLE, Mytems.FALSE_PICKLE_SEEDS),
     FLY_AGARIC_MUSHROOM(CropGroup.MUSHROOM, GrowthType.MUSHROOM, Mytems.FLY_AGARIC_MUSHROOM, Mytems.FLY_AGARIC_MUSHROOM_SPORES),
     FORASTERO_COCOA(CropGroup.COCOA, GrowthType.COCOA, Mytems.FORASTERO_COCOA, Mytems.FORASTERO_COCOA_SEEDS),
     GARDEN_CUCUMBER(CropGroup.CUCUMBER, GrowthType.GOURD, Mytems.GARDEN_CUCUMBER, Mytems.GARDEN_CUCUMBER_SEEDS),
@@ -55,8 +55,10 @@ public enum FarmingPlantType {
     HONEYDEW(CropGroup.HONEYDEW, GrowthType.GOURD, Mytems.HONEYDEW, Mytems.HONEYDEW_SEEDS),
     IMPERATOR_CARROT(CropGroup.CARROT, GrowthType.ROOT, Mytems.IMPERATOR_CARROT, Mytems.IMPERATOR_CARROT_SEEDS),
     INFERNAL_NETHER_WART(CropGroup.NETHER_WART, GrowthType.NETHER_WART, Mytems.INFERNAL_NETHER_WART, Mytems.INFERNAL_NETHER_WART_SEEDS),
-    JASMINE_RICE(CropGroup.RICE, GrowthType.TREE, Mytems.JASMINE_RICE, Mytems.JASMINE_RICE_SEEDS),
+    JALAPENO_PEPPER(CropGroup.PEPPER, GrowthType.BUSH, Mytems.JALAPENO_PEPPER, Mytems.JALAPENO_PEPPER_SEEDS),
+    JASMINE_RICE(CropGroup.RICE, GrowthType.GRAIN, Mytems.JASMINE_RICE, Mytems.JASMINE_RICE_SEEDS),
     KING_RICHARD_LEEK(CropGroup.LEEK, GrowthType.ROOT, Mytems.KING_RICHARD_LEEK, Mytems.KING_RICHARD_LEEK_SEEDS),
+    KIWI(CropGroup.KIWI, GrowthType.VINE, Mytems.KIWI, Mytems.KIWI_SEEDS),
     MIDNIGHT_DRAGONBLOOM(CropGroup.DRAGONBLOOM, GrowthType.CACTUS, Mytems.MIDNIGHT_DRAGONBLOOM, Mytems.MIDNIGHT_DRAGONBLOOM_SEEDS),
     MORELLO_CHERRY(CropGroup.CHERRY, GrowthType.TREE, Mytems.MORELLO_CHERRIES, Mytems.MORELLO_CHERRY_SEEDS),
     MOREL_MUSHROOM(CropGroup.MUSHROOM, GrowthType.MUSHROOM, Mytems.MOREL_MUSHROOM, Mytems.MOREL_MUSHROOM_SPORES),
@@ -64,6 +66,7 @@ public enum FarmingPlantType {
     NORI(CropGroup.NORI, GrowthType.KELP, Mytems.NORI, Mytems.NORI_SEEDS),
     NORTHERN_BLUEBERRY(CropGroup.BLUEBERRY, GrowthType.BUSH, Mytems.NORTHERN_BLUEBERRIES, Mytems.NORTHERN_BLUEBERRY_SEEDS),
     PICUAL_OLIVE(CropGroup.OLIVE, GrowthType.TREE, Mytems.PICUAL_OLIVE, Mytems.PICUAL_OLIVE_SEEDS),
+    PIRI_PEPPER(CropGroup.PEPPER, GrowthType.BUSH, Mytems.PIRI_PEPPER, Mytems.PIRI_PEPPER_SEEDS),
     PLANTAIN(CropGroup.PLANTAIN, GrowthType.TREE, Mytems.PLANTAIN, Mytems.PLANTAIN_SEEDS),
     PORTOBELLO_MUSHROOM(CropGroup.MUSHROOM, GrowthType.MUSHROOM, Mytems.PORTOBELLO_MUSHROOM, Mytems.PORTOBELLO_MUSHROOM_SPORES),
     PURPLE_CARROT(CropGroup.CARROT, GrowthType.ROOT, Mytems.PURPLE_CARROT, Mytems.PURPLE_CARROT_SEEDS),
@@ -77,7 +80,7 @@ public enum FarmingPlantType {
     RUSSET_POTATO(CropGroup.POTATO, GrowthType.ROOT, Mytems.RUSSET_POTATO, Mytems.RUSSET_POTATO_SEEDS),
     SILVERSKIN_GARLIC(CropGroup.GARLIC, GrowthType.ROOT, Mytems.SILVERSKIN_GARLIC, Mytems.SILVERSKIN_GARLIC_SEEDS),
     SIMCA_PLUM(CropGroup.PLUM, GrowthType.TREE, Mytems.SIMCA_PLUM, Mytems.SIMCA_PLUM_SEEDS),
-    SPICY_FIG(CropGroup.FIG, GrowthType.VINE, Mytems.SPICY_FIG, Mytems.SPICY_FIG_SEEDS),
+    SPICY_FIG(CropGroup.FIG, GrowthType.TREE, Mytems.SPICY_FIG, Mytems.SPICY_FIG_SEEDS),
     SUGAR_PIE_PUMPKIN(CropGroup.PUMPKIN, GrowthType.GOURD, Mytems.SUGAR_PIE_PUMPKIN, Mytems.SUGAR_PIE_PUMPKIN_SEEDS),
     SUNSET_TEA(CropGroup.TEA, GrowthType.BUSH, Mytems.SUNSET_TEA_LEAVES, Mytems.SUNSET_TEA_SEEDS),
     SWEET_CORN(CropGroup.CORN, GrowthType.HERBACEOUS, Mytems.SWEET_CORN, Mytems.SWEET_CORN_SEEDS),
@@ -90,10 +93,11 @@ public enum FarmingPlantType {
     YELLOW_ONION(CropGroup.ONION, GrowthType.ROOT, Mytems.YELLOW_ONION, Mytems.YELLOW_ONION_SEEDS),
     YELLOW_PITAYA(CropGroup.PITAYA, GrowthType.CACTUS, Mytems.YELLOW_PITAYA, Mytems.YELLOW_PITAYA_SEEDS),
     YELLOW_SQUASH(CropGroup.SQUASH, GrowthType.GOURD, Mytems.YELLOW_SQUASH, Mytems.YELLOW_SQUASH_SEEDS),
+    SUGAR_BEET(CropGroup.BEET, GrowthType.ROOT, Mytems.SUGAR_BEET, Mytems.SUGAR_BEET_SEEDS),
     ;
 
     private final CropGroup cropGroup;
-    private final GrowthType category;
+    private final GrowthType growthType;
     private final Mytems cropItem;
     private final Mytems seedItem;
     private List<GrowthStage> growthStages;
@@ -136,5 +140,13 @@ public enum FarmingPlantType {
             if (it.seedItem == seedItem) return it;
         }
         return null;
+    }
+
+    public PlantLocation getPlantLocation() {
+        return cropGroup.getPlantLocation();
+    }
+
+    public WateringNeed getWateringNeed() {
+        return cropGroup.getWateringNeed();
     }
 }

@@ -7,6 +7,7 @@ import com.cavetale.core.item.ItemFinder;
 import com.cavetale.mytems.block.BlockBreakListener;
 import com.cavetale.mytems.block.BlockDamageListener;
 import com.cavetale.mytems.block.BlockRegistry;
+import com.cavetale.mytems.block.BlockTicker;
 import com.cavetale.mytems.block.chair.Chairs;
 import com.cavetale.mytems.item.photo.Photo;
 import com.cavetale.mytems.loot.LootTableListener;
@@ -62,6 +63,7 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
     private List<CustomMytemSlot> customMytemSlots = new ArrayList<>();
     private boolean fixAllPlayerInventoriesScheduled = false;
     private final BlockRegistry blockRegistry = new BlockRegistry();
+    private final BlockTicker blockTicker = new BlockTicker(this);
 
     @Override
     public void onLoad() {
@@ -83,6 +85,7 @@ public final class MytemsPlugin extends JavaPlugin implements ItemFinder {
         sessions.enable();
         Gui.enable();
         blockRegistry.enable();
+        blockTicker.enable();
         new MytemsBlockMarkerHook(this).enable();
         for (Mytems it : Mytems.values()) {
             it.preprocessAnimationFrames();

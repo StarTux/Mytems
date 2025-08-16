@@ -5,7 +5,6 @@ public enum GrowthType {
     CACTUS,
     CHORUS,
     COCOA,
-    COFFEE,
     GOURD,
     GRAIN,
     HERBACEOUS,

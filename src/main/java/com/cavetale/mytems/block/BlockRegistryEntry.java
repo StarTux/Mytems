@@ -121,4 +121,9 @@ public final class BlockRegistryEntry {
             callback.accept(handler);
         }
     }
+
+    public void tick(Block block) {
+        if (implementation == null) return;
+        implementation.tick(block);
+    }
 }
