@@ -1,7 +1,8 @@
 package com.cavetale.mytems.block;
 
+import java.time.Instant;
 import org.bukkit.block.Block;
 
 public interface BlockImplementation {
-    void tick(Block block);
+    void randomTick(Block block, Instant now);
 }

@@ -2,6 +2,7 @@ package com.cavetale.mytems.block;
 
 import com.cavetale.core.struct.Vec3i;
 import com.cavetale.worldmarker.block.BlockMarker;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
@@ -122,8 +123,9 @@ public final class BlockRegistryEntry {
         }
     }
 
-    public void tick(Block block) {
-        if (implementation == null) return;
-        implementation.tick(block);
+    public void randomTick(Block block, Instant now) {
+        if (implementation != null) {
+            implementation.randomTick(block, now);
+        }
     }
 }

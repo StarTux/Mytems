@@ -4,8 +4,10 @@ import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.block.BlockRegistryEntry;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import static com.cavetale.core.util.CamelCase.toCamelCase;
 import static com.cavetale.mytems.block.BlockRegistry.blockRegistry;
 
 @Getter
@@ -101,15 +103,20 @@ public enum FarmingPlantType {
     private final Mytems seedItem;
     private List<GrowthStage> growthStages;
     private BlockRegistryEntry blockRegistryEntry;
+    private AbstractPlantBlock plantBlock;
 
     /**
      * Called by seedItem.
      */
     public void enable() {
-        final FarmingPlantBlock impl = new FarmingPlantBlock(this);
-        blockRegistryEntry = blockRegistry().register(cropItem, impl);
+        if (getPlantLocation().isOnFarmland()) {
+            plantBlock = new FarmlandPlantBlock(this);
+        } else {
+            plantBlock = new AbstractPlantBlock(this) { };
+        }
+        blockRegistryEntry = blockRegistry().register(cropItem, plantBlock);
         blockRegistryEntry.setCancelBlockEdits(true);
-        blockRegistryEntry.addEventHandler(impl);
+        blockRegistryEntry.addEventHandler(plantBlock);
         final List<GrowthStage> tmpGrowthStages = new ArrayList<>();
         for (GrowthStage it : GrowthStage.values()) {
             if (it.getFarmingPlantType() == this) {
@@ -141,6 +148,34 @@ public enum FarmingPlantType {
         return null;
     }
 
+    public int getGrowthTime() {
+        return cropGroup.getGrowthTime();
+    }
+
+    public boolean doesRegrow() {
+        return cropGroup.doesRegrow();
+    }
+
+    public int getRegrowthTime() {
+        return cropGroup.getRegrowthTime();
+    }
+
+    public boolean isPerennial() {
+        return cropGroup.isPerennial();
+    }
+
+    public int getMinYield() {
+        return cropGroup.getMinYield();
+    }
+
+    public int getMaxYield() {
+        return cropGroup.getMaxYield();
+    }
+
+    public int rollRandomYield() {
+        return cropGroup.rollRandomYield();
+    }
+
     public PlantLocation getPlantLocation() {
         return cropGroup.getPlantLocation();
     }
@@ -149,7 +184,23 @@ public enum FarmingPlantType {
         return cropGroup.getGrowthType();
     }
 
+    public Set<Season> getSeasons() {
+        return cropGroup.getSeasons();
+    }
+
+    public Set<Climate> getClimates() {
+        return cropGroup.getClimates();
+    }
+
     public WateringNeed getWateringNeed() {
         return cropGroup.getWateringNeed();
+    }
+
+    public LightRequirement getLightRequirement() {
+        return cropGroup.getLightRequirement();
+    }
+
+    public String getDisplayName() {
+        return toCamelCase(" ", this);
     }
 }

@@ -21,6 +21,7 @@ import org.bukkit.event.block.BlockMultiPlaceEvent;
 import org.bukkit.event.block.BlockPistonExtendEvent;
 import org.bukkit.event.block.BlockPistonRetractEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.MoistureChangeEvent;
 import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -134,6 +135,11 @@ public final class BlockRegistry implements Listener {
 
     @EventHandler(priority = EventPriority.LOW)
     private void onEntityChangeBlock(EntityChangeBlockEvent event) {
+        handle(event.getBlock(), en -> onBlockEdit(event, en), null);
+    }
+
+    @EventHandler(priority = EventPriority.LOW)
+    private void onMoistureChange(MoistureChangeEvent event) {
         handle(event.getBlock(), en -> onBlockEdit(event, en), null);
     }
 

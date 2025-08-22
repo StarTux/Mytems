@@ -479,17 +479,30 @@ public enum GrowthStage {
         return namespacedKey(name().toLowerCase());
     }
 
-    public boolean checkAdditionalBlocks(Block farmland) {
+    public boolean checkAdditionalBlocksAreEmpty(Block farmland) {
         for (Vec3i v : model.getAdditionalBlockVectors()) {
             final Block additionalBlock = farmland.getRelative(v.x, v.y, v.z);
             // If this block already belongs to us, we skip the check
-            if (!farmland.equals(farmingPlantType.getBlockRegistryEntry().getRecursiveParentBlock(additionalBlock))) {
+            if (farmland.equals(farmingPlantType.getBlockRegistryEntry().getRecursiveParentBlock(additionalBlock))) {
                 continue;
             }
             // Check if block is empty and not marked
             if (!additionalBlock.isEmpty()) return false;
             if (BlockRegistryEntry.at(additionalBlock) != null) return false;
             if (BlockMarker.hasId(additionalBlock)) return false;
+        }
+        return true;
+    }
+
+    public boolean checkAdditionalBlocksConsistency(Block farmland) {
+        for (Vec3i v : model.getAdditionalBlockVectors()) {
+            final Block additionalBlock = farmland.getRelative(v.x, v.y, v.z);
+            if (!farmland.equals(farmingPlantType.getBlockRegistryEntry().getRecursiveParentBlock(additionalBlock))) {
+                return false;
+            }
+            if (!additionalBlock.isEmpty()) {
+                return false;
+            }
         }
         return true;
     }

@@ -1,5 +1,9 @@
 package com.cavetale.mytems.farming;
 
+import lombok.Getter;
+import static com.cavetale.core.util.CamelCase.toCamelCase;
+
+@Getter
 public enum GrowthType {
     BUSH,
     CACTUS,
@@ -16,4 +20,6 @@ public enum GrowthType {
     TREE,
     VINE,
     ;
+
+    private final String displayName = toCamelCase(" ", this);
 }

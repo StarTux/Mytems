@@ -1,6 +1,7 @@
 package com.cavetale.mytems.block;
 
 import com.cavetale.mytems.MytemsPlugin;
+import java.time.Instant;
 import java.util.Random;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
@@ -9,6 +10,10 @@ import org.bukkit.GameRule;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 
+/**
+ * Ticks custom blocks randomly, at the same speed as the random
+ * vanilla tick.
+ */
 @RequiredArgsConstructor
 public final class BlockTicker {
     private final MytemsPlugin plugin;
@@ -19,6 +24,7 @@ public final class BlockTicker {
     }
 
     private void tick() {
+        final Instant now = Instant.now();
         for (World world : Bukkit.getWorlds()) {
             final int randomTickSpeed = world.getGameRuleValue(GameRule.RANDOM_TICK_SPEED);
             if (randomTickSpeed < 1) continue;
@@ -35,7 +41,7 @@ public final class BlockTicker {
                     final Block block = chunk.getBlock(x, y, z);
                     final BlockRegistryEntry entry = BlockRegistryEntry.at(block);
                     if (entry == null) continue;
-                    entry.tick(block);
+                    entry.randomTick(block, now);
                 }
             }
         }

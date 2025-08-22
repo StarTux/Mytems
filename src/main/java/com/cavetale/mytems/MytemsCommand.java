@@ -199,6 +199,10 @@ public final class MytemsCommand extends AbstractCommand<MytemsPlugin> {
             .description("Open item combiner")
             .completers(CommandArgCompleter.ONLINE_PLAYERS)
             .senderCaller(this::upgradableCombiner);
+        // Block
+        final CommandNode blockNode = rootNode.addChild("block")
+            .description("Block commands");
+        new MytemsBlockCommand(blockNode).enable();
     }
 
     protected boolean list(CommandSender sender, String[] args) {
