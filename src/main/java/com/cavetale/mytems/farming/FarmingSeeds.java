@@ -74,9 +74,9 @@ public final class FarmingSeeds implements Mytem {
                         + (farmingPlantType.getMinYield() == farmingPlantType.getMaxYield()
                            ? (farmingPlantType.getMinYield() == 1
                               ? "1 crop"
-                              : "" + farmingPlantType.getMinYield())
-                           : farmingPlantType.getMinYield() + "-" + farmingPlantType.getMaxYield())
-                        + " crops after " + farmingPlantType.getGrowthTime() + " days.";
+                              : "" + farmingPlantType.getMinYield() + " crops")
+                           : farmingPlantType.getMinYield() + "-" + farmingPlantType.getMaxYield() + " crops")
+                        + " after " + farmingPlantType.getGrowthTime() + " days.";
                     tooltip.add(empty());
                     tooltip.addAll(wrapLore(secondSection, c -> c.color(GRAY)));
                 }
