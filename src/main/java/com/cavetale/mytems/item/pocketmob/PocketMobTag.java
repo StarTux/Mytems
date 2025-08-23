@@ -33,6 +33,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Fox;
 import org.bukkit.entity.Frog;
 import org.bukkit.entity.Goat;
+import org.bukkit.entity.Golem;
 import org.bukkit.entity.Horse;
 import org.bukkit.entity.Llama;
 import org.bukkit.entity.Mob;
@@ -140,7 +141,7 @@ public final class PocketMobTag extends MytemTag {
             String health = "" + (int) Math.ceil(mobEntity.getHealth());
             String maxHealth = "" + (int) Math.ceil(mobEntity.getAttribute(Attribute.MAX_HEALTH).getValue());
             text.add(prop("Health", textOfChildren(Mytems.HEART, text(health, RED), text("/", COLOR_BG), text(maxHealth, RED))));
-            if ((!(mobEntity instanceof Animals) && mobEntity.getRemoveWhenFarAway())
+            if ((!(mobEntity instanceof Animals) && !(mobEntity instanceof Golem) && mobEntity.getRemoveWhenFarAway())
                 || !mobEntity.isPersistent() || Entities.isTransient(mobEntity)) {
                 text.add(prop("Warning", text("May Despawn!", color(0xFF0000))));
             }
