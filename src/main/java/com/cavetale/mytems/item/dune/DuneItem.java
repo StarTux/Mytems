@@ -52,7 +52,7 @@ public abstract class DuneItem implements GearItem {
         text(prototype, createTooltip());
         prototype.setData(DataComponentTypes.REPAIR_COST, 9999);
         prototype.setData(DataComponentTypes.UNBREAKABLE);
-        prototype.setData(DataComponentTypes.ENCHANTMENTS, itemEnchantments().add(Enchantment.PROTECTION, 5));
+        prototype.setData(DataComponentTypes.ENCHANTMENTS, itemEnchantments().add(Enchantment.PROTECTION, 5).add(Enchantment.FIRE_PROTECTION, 4));
         prototype.setData(DataComponentTypes.TOOLTIP_DISPLAY, tooltipDisplay().addHiddenComponents(DataComponentTypes.UNBREAKABLE));
         key.markItemStack(prototype);
     }
