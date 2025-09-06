@@ -93,7 +93,7 @@ public final class Session {
             plugin.getMytem(mytems).onTick(player, item, slot);
         }
         if (blockDamage != null) {
-            blockDamage.tick(this, player);
+            blockDamage.tick(player);
         }
     }
 

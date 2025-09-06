@@ -25,18 +25,22 @@ public final class BlockDamageListener implements Listener {
         final Session session = Session.of(event.getPlayer());
         session.setBlockDamage(null);
         if (event.isCancelled()) return;
-        session.setBlockDamage(new BlockDamageSession(event.getBlock()));
+        session.setBlockDamage(new BlockDamageSession(session, event.getBlock()));
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.MONITOR)
     private void onBlockDamageAbort(BlockDamageAbortEvent event) {
         final Session session = Session.of(event.getPlayer());
-        session.setBlockDamage(null);
+        if (session.getBlockDamage() != null) {
+            session.getBlockDamage().cancel(event.getPlayer());
+        }
     }
 
     @EventHandler(ignoreCancelled = false, priority = EventPriority.MONITOR)
     private void onBlockBreak(BlockBreakEvent event) {
         final Session session = Session.of(event.getPlayer());
-        session.setBlockDamage(null);
+        if (session.getBlockDamage() != null) {
+            session.getBlockDamage().cancel(event.getPlayer());
+        }
     }
 }
