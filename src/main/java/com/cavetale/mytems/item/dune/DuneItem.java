@@ -6,8 +6,11 @@ import com.cavetale.mytems.gear.EntityAttribute;
 import com.cavetale.mytems.gear.GearItem;
 import com.cavetale.mytems.gear.ItemSet;
 import com.cavetale.mytems.gear.SetBonus;
+import com.cavetale.mytems.util.Skull;
 import com.cavetale.mytems.util.Text;
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import java.util.List;
+import java.util.UUID;
 import java.util.concurrent.ThreadLocalRandom;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -15,20 +18,21 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TextComponent;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityCombustByEntityEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.Repairable;
-import static com.cavetale.mytems.util.Items.deserialize;
-import static com.cavetale.mytems.util.Items.tooltip;
+import static com.cavetale.mytems.util.Items.text;
+import static io.papermc.paper.datacomponent.item.ItemEnchantments.itemEnchantments;
+import static io.papermc.paper.datacomponent.item.TooltipDisplay.tooltipDisplay;
 import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 
@@ -43,17 +47,14 @@ public abstract class DuneItem implements GearItem {
     @Override
     public final void enable() {
         displayName = fancify(getRawDisplayName());
-        prototype = deserialize(getSerialized());
+        prototype = getBaseItem();
         baseLore = Text.wrapLore2("\n\n" + getDescription(), DuneItem::fancify);
-        prototype.editMeta(meta -> {
-                tooltip(meta, createTooltip());
-                if (meta instanceof Repairable repairable) {
-                    repairable.setRepairCost(9999);
-                    meta.setUnbreakable(true);
-                    meta.addItemFlags(ItemFlag.HIDE_UNBREAKABLE);
-                }
-                key.markItemMeta(meta);
-            });
+        text(prototype, createTooltip());
+        prototype.setData(DataComponentTypes.REPAIR_COST, 9999);
+        prototype.setData(DataComponentTypes.UNBREAKABLE);
+        prototype.setData(DataComponentTypes.ENCHANTMENTS, itemEnchantments().add(Enchantment.PROTECTION, 5));
+        prototype.setData(DataComponentTypes.TOOLTIP_DISPLAY, tooltipDisplay().addHiddenComponents(DataComponentTypes.UNBREAKABLE));
+        key.markItemStack(prototype);
     }
 
     protected static final Component fancify(String in) {
@@ -66,7 +67,7 @@ public abstract class DuneItem implements GearItem {
         return cb.build();
     }
 
-    abstract String getSerialized();
+    abstract ItemStack getBaseItem();
 
     abstract String getRawDisplayName();
 
@@ -85,56 +86,88 @@ public abstract class DuneItem implements GearItem {
 
     public static final class Helmet extends DuneItem {
         @Getter private final String rawDisplayName = "Dune Helmet";
-        @Getter private final String serialized = "H4sIAAAAAAAAALVSy04TURj+6UWnRTZGgpoY60QTF4QUCjUQTWwolylMK6UXZjbkMHPaOe25NGfOgCPhSdwaVy59Bp/CV/AZ8EwRCxqMLpzV/DPf7b/kAdIwXUUKdbAMieAA+fsGpIgPs4xw7EnUU2sjimIsDwOM/DykFern4M4G9wLEFcNchXnQMhesBxNWj0h8OJJCYU9p5RSk6TGFLFwAH1+Rl2KQYOgf4PeuwX/F5OBuRSlJjiKFbeGTHtHdJKlSBmTqiGGY6WOOJfEWkGRC3oJbFSYirl4bMH7SkGuMsERqPAKAaci021ZVv2XOv316BhA9Atgxzs9nv2jFfSoUZJJxGDDz03jsMzfJec0RLoPMXft8qETUDzgOw/8X6ckNkSbekIfbPgmTNV/GXD41iUKUeOZaD9EQz5ueoEKaa2ZfUN+cNxV+q3RVjTgubGPKsDLPcpDZFRInDWTg4W8KPyjmGZRuVpconqhXeAFxj+gb06TyX5L6EZI+QbwguIf/wexERy+ogIQLmpSH/P4worRxoiemizdS6GUogsMcGAkhknh8YVMGZDuIRhg+47hWdA+Con9Qo15slXXd2i/ShjUYvbB4Jz5at8oW0/+3K+XdePUKdkWh7gp1SrXA5XvREesUd0tNirebix5rH9tdq+QMatR+Z5ecJXfotoYlt7qxVGedob3lLNrVJqm3gsBhm0OXOXGj215yt+xlt7s5sFmTOa29E7vVjm1WC+oDZ9ll1opNaqu9g+Kr5K5Slp9s7OvzvcXj7MbH908/7Lw87SS9QXY9Ockp+A7vzTP3KAQAAA==";
-        @Getter private final String description = "\n"
-            + "An ancient guardian once wore this mighty headpiece.";
+        @Getter private final String description = "An ancient guardian once wore this mighty headpiece.";
 
         public Helmet(final Mytems key) {
             super(key);
+        }
+
+        @Override
+        public ItemStack getBaseItem() {
+            final ItemStack result = Skull.create(null,
+                                                  UUID.fromString("dc285131-7605-45a6-9b24-a44b3c7b5600"),
+                                                  "eyJ0ZXh0dXJlcyI6eyJTS0lOIjp7InVybCI6Imh0dHA6Ly90ZXh0dXJlcy5taW5lY3JhZnQubmV0L3RleHR1cmUvMWI3YjJlMzM3Y2ZkZTk3ZDE2NmVkMGY1MDRiNThhYmFkZmYyOWU2ZGM4ZWFjMmRmYTQwMTUyMmJhNjY4ZmI5MiJ9fX0=");
+            result.setData(DataComponentTypes.ATTRIBUTE_MODIFIERS,
+                           Material.NETHERITE_HELMET.getDefaultData(DataComponentTypes.ATTRIBUTE_MODIFIERS));
+            return result;
         }
     }
 
     public static final class Chestplate extends DuneItem {
         @Getter private final String rawDisplayName = "Dune Chestplate";
-        @Getter private final String serialized = "H4sIAAAAAAAAAJ2SzW7TQBDH/42dNHHpBSGVwgGzErfSCxKqciJqekDi44DKNZraE2dhvRutx9AK9S14AzjyQH0I+gxhnYSGCoUCe1vp9/+Y0SRAhK0hCb1lX2lngeRuFy2d436pLWeextIvnMnZjrIJVzI1JJwgEip6uHVkswlZKdlKlQCIF9rdlXasPY+m3glnEvxbiMwHgzYW4IMVGJh3DWP+gN+5ht/I1PbEM73XtlgyMXq4PRDx+qQWfulyPdZh7qZ5q4v4jXGC9nzMLravuFdUMnZ+WQdb9jrbJ186H6H3esqeZL48YAvx8fHzYbOL2eW3R8Djz2h9/zKbfb0ICXOr7WsGHXQGpautPEuxeDc0ebimyUhcXUwsV9V/dNpZY7Vq1122i9AZUkkFN58Em7muwk2c/TQ6+KS0kNGZ6o/JVLynMmecV33VXJHaU8KnEn7D2nJ6eHVR6ryH+IXz3MTEuPeby1KmzvFkfYKns1XCwKZkMx1OM4ie/qWoqMnnmmzqbMb/EPYxVE9loqv9IMIG2ofN0jbwA/5VSchhAwAA";
-        @Getter private final String description = ""
-            + "An ancient guardian once wore this breastplate.";
+        @Getter private final String description = "An ancient guardian once wore this breastplate.";
 
         public Chestplate(final Mytems key) {
             super(key);
+        }
+
+        @Override
+        public ItemStack getBaseItem() {
+            final ItemStack result = new ItemStack(key.getMaterial());
+            result.setData(DataComponentTypes.ATTRIBUTE_MODIFIERS,
+                           Material.NETHERITE_CHESTPLATE.getDefaultData(DataComponentTypes.ATTRIBUTE_MODIFIERS));
+            return result;
         }
     }
 
     public static final class Leggings extends DuneItem {
         @Getter private final String rawDisplayName = "Dune Leggings";
-        @Getter private final String serialized = "H4sIAAAAAAAAAJ1Sz0sbQRT+zK4xWRVBkFroISx4E2+C5BZMD4LWg9hLkfDcfZmMzs6E2bdaEf8j/7T21ns6m1ij0kbodb73/XjfmwSIsNonoa/sS+0skGy30NA5PhbacuZpKF3lTM52YFgpbVWZIBJSbax9ttmIrBRsJTwC8Yy5MdSeB2PvhDMJmhEic2MCvozZwFbArmrMLBxLFmGVvfRM1yHPMxajjc2eiNeXlfCJy/VQh63qZI0W4jPjBHFYomxh/XnsCxWMdcWWvc72yBfOR2ifjtmTTPsAVhGfnx/1a4fJz8cd4ETQ+PFrMuFQVfxXgWavcJWVQGlisfWHV8yBuEqNLJflf4T4t9Q8TigLzT4VpLhWTbCS63Js6O6PyMG3+1T4u6TdtF9Z7hw/HT3dTbWQ0VnaHZIpeTfNnHE+jNW/I324aCM+dp5b00N8mqu8JT5cYH+O9myHbKbDD1pg4OkuGLyMpiryuSbbcTbj95kvDG9Dxo6MdLn3Pg1LWD6si1vCb17XRLMpAwAA";
-        @Getter private final String description = "\n"
-            + "An ancient guardian once wore these leggings.";
+        @Getter private final String description = "An ancient guardian once wore these leggings.";
 
         public Leggings(final Mytems key) {
             super(key);
+        }
+
+        @Override
+        public ItemStack getBaseItem() {
+            final ItemStack result = new ItemStack(key.getMaterial());
+            result.setData(DataComponentTypes.ATTRIBUTE_MODIFIERS,
+                           Material.NETHERITE_LEGGINGS.getDefaultData(DataComponentTypes.ATTRIBUTE_MODIFIERS));
+            return result;
         }
     }
 
     public static final class Boots extends DuneItem {
         @Getter private final String rawDisplayName = "Dune Boots";
-        @Getter private final String serialized = "H4sIAAAAAAAAAJ2SzW4TMRSFTzOTNEnpBqGWnwXBEruqGyQWWTUQFiB+FqhsWEQ3M3cmBo8d2XeACvWNeBGehBW8QvA0paGKGn688rW+c+7x1e0DCXbGJPSGfdDOAv2bXbR0jr1KW848FTIsncnZTqbOSegjESp7uPbEZjOyUrFtHoH2UnZrJSu058ncO+FMonULiflg0MYSvLsCI/OuYcwG/MYl/I9McLWZhDlzfs6k60xtp57pvbblBdPD9ZGI19Na+IXLdaHjWJrftbpIXxsnSAtm6WL3AntJFWP/t2GxZa+zQ/KV8wl6r+bsSc5GC+wgPT5+Oo63dPH9y33gzlu0fnxbLL4+iw3OrHYvGXTQGVWutnLUxfJsDnLviiATcXU5sxzCf0Tav8JqPVyCzpgqKrkp+tjOdZgbOvll9OCz0kJGZ2pYkAl8oDJnnFdD1ayYOlDCnyRW49ry4FGzbuq0h/S589x0SHF7zeBcoU43mXs6WZmP7IBspuPeRtHDvxSVNflckx04m/E/NPsYow9kpsNhFGEL7cfNvLbwEyXJu/J5AwAA";
-        @Getter private final String description = ""
-            + "An ancient guardian once wore these golden boots.";
+        @Getter private final String description = "An ancient guardian once wore these golden boots.";
 
         public Boots(final Mytems key) {
             super(key);
+        }
+
+        @Override
+        public ItemStack getBaseItem() {
+            final ItemStack result = new ItemStack(key.getMaterial());
+            result.setData(DataComponentTypes.ATTRIBUTE_MODIFIERS,
+                           Material.NETHERITE_BOOTS.getDefaultData(DataComponentTypes.ATTRIBUTE_MODIFIERS));
+            return result;
         }
     }
 
     public static final class Weapon extends DuneItem {
         @Getter private final String rawDisplayName = "Dune Digger";
-        @Getter private final String serialized = "H4sIAAAAAAAAAJWQMU8DMQyFXe5a2sAOA8Mpc2eQujBwbIgRBlQhk/pyFjmnSnIVFep/J1VRWzGA8Pr5+T0/BVDAWY0JnyhE9gKgLsdwwgu46FjIBGzSzHq3IHmNrV+RU1AktAWMauzQEuRRcLrguHS4HkP5iB3B9cunTvSR9EzXvVBVs7UU9FRzQsdGzxp0kabaeOdDXto66M18AuWDDzTON0u4Otz4KdzM4eZAn1tMFYphkvSLRcB1tjiOFnqWWHVs2//pOFW9mFxGuP1bN4HzezEtSupyvqjyb8WuYUVNw9vUZl1A4VYuoxHs2CS2GJZCMe7R8BupXt4C4TuL3bMSYADDO99LGsAXImUfsdUBAAA=";
-            @Getter private final String description = ""
-                + "What ancient ruins might this golden shovel uncover?";
+        @Getter private final String description = "What ancient ruins might this golden shovel uncover?";
 
         public Weapon(final Mytems key) {
             super(key);
+        }
+
+        @Override
+        public ItemStack getBaseItem() {
+            final ItemStack result = new ItemStack(key.getMaterial());
+            result.setData(DataComponentTypes.ATTRIBUTE_MODIFIERS,
+                           Material.NETHERITE_SWORD.getDefaultData(DataComponentTypes.ATTRIBUTE_MODIFIERS));
+            return result;
         }
     }
 
