@@ -13,7 +13,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.GameMode;
 import org.bukkit.Sound;
-import org.bukkit.entity.EntityType;
+import org.bukkit.entity.AbstractSkeleton;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Spider;
 import org.bukkit.event.block.BlockPlaceEvent;
@@ -55,7 +55,7 @@ public abstract class SkeletonCostume implements GearItem {
             @Override
             public void onEntityTargetPlayer(EntityTargetEvent event, Player player) {
                 if (event.isCancelled()) return;
-                if (event.getEntity().getType() == EntityType.SKELETON) {
+                if (event.getEntity() instanceof AbstractSkeleton) {
                     event.setCancelled(true);
                 }
             }
