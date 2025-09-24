@@ -2,12 +2,12 @@ package com.cavetale.mytems.item;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Text;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.core.util.CamelCase.toCamelCase;
 import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.text;
 
@@ -19,12 +19,10 @@ public final class ForbiddenMytem implements Mytem {
 
     @Override
     public void enable() {
-        displayName = text(Text.toCamelCase(key, " "));
+        displayName = text(toCamelCase(" ", key));
         prototype = new ItemStack(key.material);
-        prototype.editMeta(meta -> {
-                tooltip(meta, List.of(displayName));
-                key.markItemMeta(meta);
-            });
+        tooltip(prototype, List.of(displayName));
+        key.markItemStack(prototype);
     }
 
     @Override

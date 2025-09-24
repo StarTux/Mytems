@@ -2,7 +2,6 @@ package com.cavetale.mytems.item;
 
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
-import com.cavetale.mytems.util.Text;
 import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -12,10 +11,12 @@ import org.bukkit.event.Event;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
+import static com.cavetale.core.util.CamelCase.toCamelCase;
 import static com.cavetale.mytems.util.Items.tooltip;
 import static net.kyori.adventure.text.Component.text;
 
-@RequiredArgsConstructor @Getter
+@Getter
+@RequiredArgsConstructor
 public final class DummyMytem implements Mytem {
     private final Mytems key;
     private ItemStack prototype;
@@ -23,12 +24,10 @@ public final class DummyMytem implements Mytem {
 
     @Override
     public void enable() {
-        displayName = text(Text.toCamelCase(key, " "));
+        displayName = text(toCamelCase(" ", key));
         prototype = new ItemStack(key.material);
-        prototype.editMeta(meta -> {
-                tooltip(meta, List.of(displayName));
-                key.markItemMeta(meta);
-            });
+        tooltip(prototype, List.of(displayName));
+        key.markItemStack(prototype);
     }
 
     @Override

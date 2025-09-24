@@ -59,9 +59,7 @@ import com.cavetale.mytems.item.garden.Scissors;
 import com.cavetale.mytems.item.garden.Scythe;
 import com.cavetale.mytems.item.gem.Gem;
 import com.cavetale.mytems.item.golf.GolfClub;
-import com.cavetale.mytems.item.halloween.HalloweenCandy;
-import com.cavetale.mytems.item.halloween.HalloweenToken;
-import com.cavetale.mytems.item.halloween.HalloweenToken2;
+import com.cavetale.mytems.item.halloween.*;
 import com.cavetale.mytems.item.hastypickaxe.HastyPickaxe;
 import com.cavetale.mytems.item.hookshot.Hookshot;
 import com.cavetale.mytems.item.hourglass.Hourglass;
@@ -1159,10 +1157,10 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     BAT_WINGS(WardrobeItem.class, FEATHER, 0xF330, WARDROBE_OFFHAND),
     PUMPKIN_SUIT(WardrobeItem.class, FEATHER, 0xF331, (char) 0, WARDROBE_OFFHAND),
     // Halloween Weapons
-    CRESCENT_MOON(ForbiddenMytem.class, IRON_HOE, 0xF332, HALLOWEEN_WEAPON),
-    ETHEREAL_BLADE(ForbiddenMytem.class, IRON_SWORD, 0xF333, HALLOWEEN_WEAPON),
-    KNIFE(ForbiddenMytem.class, IRON_SWORD, 0xF334, HALLOWEEN_WEAPON),
-    SMASHING_PUMPKIN(ForbiddenMytem.class, MACE, 0xF335, HALLOWEEN_WEAPON),
+    CRESCENT_MOON(CrescentMoon.class, NETHERITE_SWORD, 0xf332, HALLOWEEN_WEAPON),
+    ETHEREAL_BLADE(EtherealBlade.class, NETHERITE_SWORD, 0xf333, HALLOWEEN_WEAPON),
+    KNIFE(Knife.class, NETHERITE_AXE, 0xf334, HALLOWEEN_WEAPON),
+    SMASHING_PUMPKIN(SmashingPumpkin.class, MACE, 0xf335, HALLOWEEN_WEAPON),
     // Lances
     COPPER_LANCE(ForbiddenMytem.class, IRON_SWORD, 0xF336, (char) 0, LANCE),
     GOLDEN_LANCE(ForbiddenMytem.class, GOLDEN_SWORD, 0xF337, (char) 0, LANCE),
