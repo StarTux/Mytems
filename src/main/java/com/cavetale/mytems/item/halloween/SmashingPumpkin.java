@@ -11,6 +11,8 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
+import org.bukkit.Sound;
+import org.bukkit.SoundCategory;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
@@ -39,8 +41,7 @@ public final class SmashingPumpkin implements Mytem {
         prototype.setData(DataComponentTypes.ENCHANTMENTS, itemEnchantments()
                           .add(Enchantment.DENSITY, 5)
                           .add(Enchantment.BREACH, 4)
-                          .add(Enchantment.WIND_BURST, 2)
-                          .add(Enchantment.FIRE_ASPECT, 2));
+                          .add(Enchantment.WIND_BURST, 2));
         final List<Component> tooltip = new ArrayList<>();
         tooltip.add(displayName);
         tooltip.addAll(wrapLore2(lore, txt -> text(tiny(txt), GOLD)));
@@ -57,9 +58,10 @@ public final class SmashingPumpkin implements Mytem {
     public void onDamageEntity(EntityDamageByEntityEvent event, Player player, ItemStack item) {
         if (event.isCancelled()) return;
         if (event.getCause() != DamageCause.ENTITY_ATTACK) return;
-        final Location location = player.getEyeLocation();
-        location.add(location.getDirection());
-        location.getWorld().spawnParticle(Particle.DUST, location, 12, 0.25, 0.25, 0.25, 0.0, new Particle.DustOptions(Color.YELLOW, 0.5f));
-        location.getWorld().spawnParticle(Particle.DUST, location, 12, 0.25, 0.25, 0.25, 0.0, new Particle.DustOptions(Color.ORANGE, 0.5f));
+        final Location location = event.getEntity().getLocation().add(0.0, event.getEntity().getHeight() * 0.5, 0.0);
+        final double d = 0.35;
+        location.getWorld().spawnParticle(Particle.DUST, location, 16, d, d, d, 0.0, new Particle.DustOptions(Color.YELLOW, 2f));
+        location.getWorld().spawnParticle(Particle.DUST, location, 16, d, d, d, 0.0, new Particle.DustOptions(Color.ORANGE, 2f));
+        location.getWorld().playSound(location, Sound.BLOCK_ANVIL_LAND, SoundCategory.PLAYERS, 0.5f, 0.75f);
     }
 }

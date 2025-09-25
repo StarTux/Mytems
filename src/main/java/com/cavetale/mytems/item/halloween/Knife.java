@@ -40,14 +40,14 @@ public final class Knife implements Mytem {
         prototype = new ItemStack(key.material);
         prototype.setData(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, false);
         prototype.setData(DataComponentTypes.ENCHANTMENTS, itemEnchantments()
-                          .add(Enchantment.SHARPNESS, 5)
+                          .add(Enchantment.SHARPNESS, 4)
                           .add(Enchantment.SMITE, 5)
                           .add(Enchantment.LOOTING, 3));
         final ItemAttributeModifiers.Builder attributes = ItemAttributeModifiers.itemAttributes();
         for (ItemAttributeModifiers.Entry entry : Material.NETHERITE_SWORD.getDefaultData(DataComponentTypes.ATTRIBUTE_MODIFIERS).modifiers()) {
             if (entry.attribute() == Attribute.ATTACK_SPEED) {
                 attributes.addModifier(entry.attribute(),
-                                       new AttributeModifier(entry.modifier().getKey(), 0, AttributeModifier.Operation.ADD_NUMBER, entry.getGroup()),
+                                       new AttributeModifier(entry.modifier().getKey(), -1, AttributeModifier.Operation.ADD_NUMBER, entry.getGroup()),
                                        entry.getGroup(), entry.display());
             } else {
                 attributes.addModifier(entry.attribute(), entry.modifier(), entry.getGroup(), entry.display());

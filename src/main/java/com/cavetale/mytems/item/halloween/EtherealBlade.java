@@ -1,5 +1,6 @@
 package com.cavetale.mytems.item.halloween;
 
+import com.cavetale.core.font.VanillaEffects;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.session.Session;
@@ -10,11 +11,13 @@ import java.util.List;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -45,13 +48,13 @@ public final class EtherealBlade implements Mytem {
         prototype.setData(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, false);
         prototype.setData(DataComponentTypes.ENCHANTMENTS, itemEnchantments()
                           .add(Enchantment.SHARPNESS, 6)
-                          .add(Enchantment.FIRE_ASPECT, 2)
                           .add(Enchantment.KNOCKBACK, 2)
                           .add(Enchantment.LOOTING, 3));
         final List<Component> tooltip = new ArrayList<>();
         tooltip.add(displayName);
         tooltip.addAll(wrapLore2(lore, txt -> text(tiny(txt), GOLD)));
         tooltip.add(empty());
+        tooltip.add(textOfChildren(VanillaEffects.WITHER, text(" Applied on crit", GRAY)));
         tooltip.add(textOfChildren(Mytems.MOUSE_RIGHT, text(" Phase out", GRAY)));
         tooltip(prototype, tooltip);
         key.markItemStack(prototype);
@@ -66,7 +69,7 @@ public final class EtherealBlade implements Mytem {
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
         final Session session = Session.of(player);
         if (session.isOnCooldown(key)) return;
-        final int duration = 20 * 5;
+        final int duration = 20 * 10;
         player.addPotionEffect(new PotionEffect(PotionEffectType.INVISIBILITY, duration, 0, true, false, true));
         player.addPotionEffect(new PotionEffect(PotionEffectType.GLOWING, duration, 0, true, false, true));
         session.cooldown(key).duration(Duration.ofSeconds(30));
@@ -81,5 +84,10 @@ public final class EtherealBlade implements Mytem {
         final Location location = player.getEyeLocation();
         location.add(location.getDirection());
         location.getWorld().spawnParticle(Particle.REVERSE_PORTAL, location, 32, 0.05, 0.05, 0.05, 5.0);
+        if (event.isCritical() && event.getEntity() instanceof LivingEntity living) {
+            living.addPotionEffect(new PotionEffect(PotionEffectType.WITHER, 20 * 20, 0, false, true, true));
+            living.getWorld().playSound(living, Sound.ENTITY_WITHER_HURT, SoundCategory.MASTER, 0.25f, 2f);
+            living.getWorld().spawnParticle(Particle.ENTITY_EFFECT, location, 64, 0.25, 0.25, 0.25, 1.0, Color.BLACK);
+        }
     }
 }
