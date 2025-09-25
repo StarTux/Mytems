@@ -141,9 +141,14 @@ public final class PocketMobTag extends MytemTag {
             String health = "" + (int) Math.ceil(mobEntity.getHealth());
             String maxHealth = "" + (int) Math.ceil(mobEntity.getAttribute(Attribute.MAX_HEALTH).getValue());
             text.add(prop("Health", textOfChildren(Mytems.HEART, text(health, RED), text("/", COLOR_BG), text(maxHealth, RED))));
-            if ((!(mobEntity instanceof Animals) && !(mobEntity instanceof Golem) && mobEntity.getRemoveWhenFarAway())
-                || !mobEntity.isPersistent() || Entities.isTransient(mobEntity)) {
-                text.add(prop("Warning", text("May Despawn!", color(0xFF0000))));
+            final boolean mayDespawn = !mobEntity.isPersistent()
+                || Entities.isTransient(mobEntity)
+                || (mobEntity.getRemoveWhenFarAway()
+                    && !(mobEntity instanceof Animals)
+                    && !(mobEntity instanceof Golem)
+                    && !(mobEntity instanceof Villager));
+            if (mayDespawn) {
+                text.add(prop("Warning", text("May despawn if released!", color(0xFF0000))));
             }
         }
         List<String> nameComponents = new ArrayList<>();
