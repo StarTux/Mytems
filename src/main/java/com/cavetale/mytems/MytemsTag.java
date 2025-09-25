@@ -79,6 +79,7 @@ public final class MytemsTag {
             MytemsCategory.WEAPON,
             MytemsCategory.MOBSLAYERS,
             MytemsCategory.DEFLECTOR,
+            MytemsCategory.HALLOWEEN_WEAPON,
         });
     public static final MytemsTag COLLECTIBLES = new MytemsTag("collectibles", new MytemsCategory[] {
             MytemsCategory.COLLECTIBLES,
