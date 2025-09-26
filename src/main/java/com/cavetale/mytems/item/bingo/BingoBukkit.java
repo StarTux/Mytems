@@ -74,70 +74,108 @@ public final class BingoBukkit implements Mytem {
         return result;
     }
 
+    /**
+     * Sneaking indicates that the player wants to interact with the
+     * block that is adjacent to the clicked block, in direction of
+     * the clicked face.
+     * So the many !sneak checks are all there to interact with the
+     * target block directly.
+     */
     @Override
     public void onPlayerRightClick(PlayerInteractEvent event, Player player, ItemStack item) {
         if (player.getGameMode() == GameMode.SPECTATOR) return;
         event.setUseInteractedBlock(Event.Result.DENY);
         if (player.getWorld().getEnvironment() == Environment.NETHER) return;
-        RayTraceResult trace = player.rayTraceBlocks(5.0, FluidCollisionMode.SOURCE_ONLY);
+        final RayTraceResult trace = player.rayTraceBlocks(5.0, FluidCollisionMode.SOURCE_ONLY);
         if (trace == null) return;
-        Block block = trace.getHitBlock();
+        final Block block = trace.getHitBlock();
         if (block == null) return;
-        BlockData blockData = block.getBlockData();
-        boolean sneak = player.isSneaking();
-        if (!sneak && blockData.getMaterial() == Material.WATER && blockData instanceof Levelled levelled && levelled.getLevel() == 0) {
-            // Fill
-            BingoBukkitTag tag = new BingoBukkitTag();
-            tag.load(key, item);
+        final BlockData blockData = block.getBlockData();
+        final boolean sneak = player.isSneaking();
+        final BingoBukkitTag tag = new BingoBukkitTag();
+        tag.load(key, item);
+        if (blockData.getMaterial() == Material.WATER && blockData instanceof Levelled levelled && levelled.getLevel() == 0) {
+            // Clicking water withouer sneaking
+            // Fill from water source
             if (tag.water >= type.capacity) return;
             if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return;
-            BlockData newBlockData = Material.AIR.createBlockData();
+            final BlockData newBlockData = Material.AIR.createBlockData();
             if (!new PlayerChangeBlockEvent(player, block, newBlockData).callEvent()) return;
             block.setBlockData(newBlockData);
-            tag.water += 1;
+            tag.addWater();
             tag.store(key, item);
             fillEffect(block);
         } else if (!sneak && blockData instanceof Waterlogged waterlogged) {
             if (waterlogged.isWaterlogged()) {
-                // Fill
-                BingoBukkitTag tag = new BingoBukkitTag();
-                tag.load(key, item);
+                // Fill from waterlogged
                 if (tag.water >= type.capacity) return;
                 if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return;
                 waterlogged.setWaterlogged(false);
                 if (!new PlayerChangeBlockEvent(player, block, waterlogged).callEvent()) return;
                 block.setBlockData(blockData);
-                tag.water += 1;
+                tag.addWater();
                 tag.store(key, item);
                 fillEffect(block);
             } else {
-                // Place
-                BingoBukkitTag tag = new BingoBukkitTag();
-                tag.load(key, item);
+                // Place on waterlogged
                 if (tag.water <= 0) return;
                 if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return;
                 waterlogged.setWaterlogged(true);
                 if (!new PlayerChangeBlockEvent(player, block, waterlogged).callEvent()) return;
                 block.setBlockData(blockData);
-                tag.water -= 1;
+                tag.subtractWater();
+                tag.store(key, item);
+                placeEffect(block);
+            }
+        } else if (!sneak && blockData.getMaterial() == Material.CAULDRON) {
+            // Fill cauldron
+            if (tag.water <= 0) return;
+            if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return;
+            final Levelled cauldron = (Levelled) Material.WATER_CAULDRON.createBlockData();
+            cauldron.setLevel(cauldron.getMaximumLevel());
+            if (!new PlayerChangeBlockEvent(player, block, cauldron).callEvent()) return;
+            block.setBlockData(cauldron);
+            tag.subtractWater();
+            tag.store(key, item);
+            placeEffect(block);
+        } else if (!sneak && blockData.getMaterial() == Material.WATER_CAULDRON && blockData instanceof Levelled cauldron) {
+            if (cauldron.getLevel() == cauldron.getMaximumLevel()) {
+                // Cauldron is full. Empty it.
+                if (tag.water >= type.capacity) return;
+                if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return;
+                final BlockData emptyCauldron = Material.CAULDRON.createBlockData();
+                if (!new PlayerChangeBlockEvent(player, block, emptyCauldron).callEvent()) return;
+                block.setBlockData(emptyCauldron);
+                tag.addWater();
+                tag.store(key, item);
+                fillEffect(block);
+            } else {
+                // Cauldron not quite full. Fill it.
+                if (tag.water <= 0) return;
+                if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return;
+                cauldron.setLevel(cauldron.getMaximumLevel());
+                if (!new PlayerChangeBlockEvent(player, block, cauldron).callEvent()) return;
+                block.setBlockData(cauldron);
+                tag.subtractWater();
                 tag.store(key, item);
                 placeEffect(block);
             }
         } else if (trace.getHitBlockFace() != null) {
-            block = block.getRelative(trace.getHitBlockFace());
-            blockData = block.getBlockData();
-            if (block.isEmpty() || (blockData.getMaterial() == Material.WATER && blockData instanceof Levelled levelled && levelled.getLevel() != 0)) {
+            // Possibly sneaking.
+            // We place water in the adjacent block.
+            final Block nbor = block.getRelative(trace.getHitBlockFace());
+            final BlockData nborData = nbor.getBlockData();
+            if (nbor.isEmpty() || (nborData.getMaterial() == Material.WATER && nborData instanceof Levelled levelled && levelled.getLevel() != 0)) {
                 // Place
-                BingoBukkitTag tag = new BingoBukkitTag();
                 tag.load(key, item);
                 if (tag.water <= 0) return;
-                if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return;
+                if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, nbor)) return;
                 BlockData newBlockData = Material.WATER.createBlockData();
-                if (!new PlayerChangeBlockEvent(player, block, newBlockData).callEvent()) return;
-                block.setBlockData(newBlockData);
-                tag.water -= 1;
+                if (!new PlayerChangeBlockEvent(player, nbor, newBlockData).callEvent()) return;
+                nbor.setBlockData(newBlockData);
+                tag.subtractWater();
                 tag.store(key, item);
-                placeEffect(block);
+                placeEffect(nbor);
             }
         }
     }

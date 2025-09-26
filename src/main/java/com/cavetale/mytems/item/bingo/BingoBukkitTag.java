@@ -72,4 +72,12 @@ public final class BingoBukkitTag extends MytemTag {
             && other instanceof BingoBukkitTag tag
             && tag.water == water;
     }
+
+    public void addWater() {
+        water += 1;
+    }
+
+    public void subtractWater() {
+        water -= 1;
+    }
 }
