@@ -18,6 +18,7 @@ import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
 import org.bukkit.block.data.Levelled;
+import org.bukkit.block.data.type.CaveVinesPlant;
 import org.bukkit.block.data.type.Farmland;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
@@ -126,7 +127,15 @@ public final class WateringCan implements Mytem {
 
     private boolean water(Player player, Block block, ItemStack item, boolean direct) {
         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return false;
-        if (block.getBlockData() instanceof Ageable ageable) {
+        if (block.getBlockData() instanceof CaveVinesPlant caveVines) {
+            if (caveVines.hasBerries()) return false;
+            caveVines.setBerries(true);
+            new PlayerChangeBlockEvent(player, block, caveVines, item).callEvent();
+            block.setBlockData(caveVines);
+            Location location = block.getLocation().add(0.5, 0.5, 0.5);
+            block.getWorld().spawnParticle(SPLASH, location, 38, 0.2, 0.2, 0.2, 0.0);
+            return true;
+        } else if (block.getBlockData() instanceof Ageable ageable) {
             if (ageable.getAge() >= ageable.getMaximumAge()) return false;
             ageable.setAge(ageable.getAge() + 1);
             new PlayerChangeBlockEvent(player, block, ageable, item).callEvent();
