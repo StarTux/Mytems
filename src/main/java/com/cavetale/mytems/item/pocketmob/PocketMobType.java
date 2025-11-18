@@ -21,6 +21,7 @@ public enum PocketMobType {
     CAVE_SPIDER(Mytems.POCKET_CAVE_SPIDER, EntityType.CAVE_SPIDER, 0xc424e, 0xa80e0e),
     CHICKEN(Mytems.POCKET_CHICKEN, EntityType.CHICKEN, 0xa1a1a1, 0xff0000),
     COD(Mytems.POCKET_COD, EntityType.COD, 0xc1a76a, 0xe5c48b),
+    COPPER_GOLEM(Mytems.POCKET_COPPER_GOLEM, EntityType.COPPER_GOLEM, 0x995943, 0x7ab698),
     COW(Mytems.POCKET_COW, EntityType.COW, 0x443626, 0xa1a1a1),
     CREAKING(Mytems.POCKET_CREAKING, EntityType.CREAKING, 0xffffff, 0x0),
     CREEPER(Mytems.POCKET_CREEPER, EntityType.CREEPER, 0xda70b, 0x0),

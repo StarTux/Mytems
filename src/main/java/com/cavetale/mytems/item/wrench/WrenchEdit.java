@@ -333,7 +333,7 @@ public enum WrenchEdit {
     },
     ATTACHED {
         @Override public Component getDisplayName() {
-            return join(noSeparators(), VanillaItems.CHAIN, text("Attached", BLUE));
+            return join(noSeparators(), VanillaItems.IRON_CHAIN, text("Attached", BLUE));
         }
 
         @Override public boolean canEdit(Player player, Block block, BlockData blockData) {
