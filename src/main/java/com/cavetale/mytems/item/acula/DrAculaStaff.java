@@ -74,7 +74,7 @@ public final class DrAculaStaff extends AculaItem {
             player.playSound(player.getLocation(), Sound.BLOCK_FIRE_EXTINGUISH, SoundCategory.MASTER, 0.5f, 2.0f);
             return;
         }
-        effect = new PotionEffect(PotionEffectType.INVISIBILITY, durationSeconds * 10, 0, false, false, true);
+        effect = new PotionEffect(PotionEffectType.INVISIBILITY, durationSeconds * 20, 0, false, false, true);
         player.addPotionEffect(effect);
         session.cooldown(key).duration(COOLDOWN);
         Location base = player.getLocation().add(0, 1, 0);
