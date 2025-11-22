@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.function.Consumer;
 import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Item;
@@ -46,8 +47,12 @@ public final class BlockBreakListener implements Listener {
 
     public boolean breakBlockAndPickup(Player player, ItemStack tool, Block block) {
         return breakBlock(player, tool, block, itemSpawnEvent -> {
-                itemSpawnEvent.getEntity().teleport(player.getLocation());
-                itemSpawnEvent.getEntity().setPickupDelay(0);
+                final Item item = itemSpawnEvent.getEntity();
+                final Location location = player.getLocation();
+                Bukkit.getScheduler().runTask(plugin, () -> {
+                        item.teleport(location);
+                        item.setPickupDelay(0);
+                    });
             });
     }
 
