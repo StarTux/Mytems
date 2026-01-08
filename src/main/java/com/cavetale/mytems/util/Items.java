@@ -18,6 +18,7 @@ import org.bukkit.inventory.meta.Damageable;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.Repairable;
+import org.bukkit.inventory.meta.SkullMeta;
 import static io.papermc.paper.datacomponent.item.ItemLore.lore;
 
 public final class Items {
@@ -51,6 +52,9 @@ public final class Items {
 
     public static ItemStack tooltip(ItemStack item, List<Component> text) {
         item.setData(DataComponentTypes.ITEM_NAME, text.isEmpty() ? Component.empty() : text.get(0));
+        if (item.getType() == Material.PLAYER_HEAD) {
+            item.setData(DataComponentTypes.CUSTOM_NAME, text.isEmpty() ? Component.empty() : text.get(0));
+        }
         item.setData(DataComponentTypes.LORE,
                      lore(text.isEmpty()
                           ? List.of()
@@ -69,12 +73,18 @@ public final class Items {
 
     public static void tooltip(ItemMeta meta, List<Component> text) {
         meta.itemName(text.isEmpty() ? Component.empty() : text.get(0));
+        if (meta instanceof SkullMeta) {
+            meta.displayName(text.isEmpty() ? Component.empty() : text.get(0));
+        }
         meta.lore(text.isEmpty() ? List.of() : text.subList(1, text.size())
                   .stream().map(Items::nonItalic).collect(Collectors.toList()));
     }
 
     public static void tooltip(ItemMeta meta, Component displayName, List<Component> lore) {
         meta.itemName(displayName);
+        if (meta instanceof SkullMeta) {
+            meta.displayName(displayName);
+        }
         meta.lore(nonItalic(lore));
     }
 
