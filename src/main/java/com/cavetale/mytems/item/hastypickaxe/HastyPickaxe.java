@@ -157,7 +157,6 @@ public final class HastyPickaxe implements Mytem {
         if (blocks.size() <= 1) return 0;
         for (int i = 1; i < blocks.size(); i += 1) {
             final Block block = blocks.get(i);
-            if (!new PlayerBreakBlockEvent(player, block, item).callEvent()) continue;
             if (player.getGameMode() != GameMode.CREATIVE) {
                 if (player.getFoodLevel() == 0) {
                     break;

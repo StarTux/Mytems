@@ -1,6 +1,7 @@
 package com.cavetale.mytems.block;
 
 import com.cavetale.core.event.block.PlayerBreakBlockEvent;
+import com.cavetale.core.event.item.PlayerReceiveItemsEvent;
 import com.cavetale.mytems.MytemsPlugin;
 import java.util.List;
 import java.util.function.Consumer;
@@ -8,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -44,13 +44,14 @@ public final class BlockBreakListener implements Listener {
         return true;
     }
 
+    public boolean breakBlock(Player player, ItemStack tool, Block block) {
+        return breakBlock(player, tool, block, null);
+    }
+
     public boolean breakBlockAndPickup(Player player, ItemStack tool, Block block) {
         return breakBlock(player, tool, block, itemSpawnEvent -> {
-                final Item item = itemSpawnEvent.getEntity();
-                Bukkit.getScheduler().runTask(plugin, () -> {
-                        item.teleport(player.getLocation());
-                        item.setPickupDelay(0);
-                    });
+                itemSpawnEvent.setCancelled(true);
+                PlayerReceiveItemsEvent.receiveItems(player, List.of(itemSpawnEvent.getEntity().getItemStack()));
             });
     }
 
@@ -71,12 +72,7 @@ public final class BlockBreakListener implements Listener {
     }
 
     public boolean breakBlockNoPhysicsAndPickup(Player player, ItemStack tool, Block block) {
-        return breakBlockNoPhysics(player, tool, block, drops -> {
-                for (ItemStack drop : drops) {
-                    final Item item = player.getWorld().dropItem(player.getLocation(), drop);
-                    item.setPickupDelay(0);
-                }
-            });
+        return breakBlockNoPhysics(player, tool, block, drops -> PlayerReceiveItemsEvent.receiveItems(player, drops));
     }
 
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)

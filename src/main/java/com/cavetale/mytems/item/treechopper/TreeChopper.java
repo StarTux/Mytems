@@ -8,7 +8,6 @@ import com.cavetale.mytems.MytemsPlugin;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
@@ -47,8 +46,6 @@ public final class TreeChopper implements Mytem {
         commandNode.addChild("debug").denyTabCompletion()
             .description("Dump debug information")
             .senderCaller(this::debug);
-        // Listener
-        Bukkit.getPluginManager().registerEvents(new TreeChopListener(), MytemsPlugin.getInstance());
     }
 
     @Override

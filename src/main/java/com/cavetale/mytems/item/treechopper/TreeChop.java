@@ -1,7 +1,6 @@
 package com.cavetale.mytems.item.treechopper;
 
 import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
-import com.cavetale.core.event.block.PlayerBreakBlockEvent;
 import com.cavetale.core.event.block.PlayerChangeBlockEvent;
 import com.cavetale.mytems.MytemsPlugin;
 import java.util.ArrayList;
@@ -25,6 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scheduler.BukkitRunnable;
 import static com.cavetale.core.exploits.PlayerPlacedBlocks.isPlayerPlaced;
+import static com.cavetale.mytems.block.BlockBreakListener.blockBreakListener;
 import static com.cavetale.mytems.item.treechopper.TreeChopStatus.*;
 
 /**
@@ -222,11 +222,11 @@ public final class TreeChop {
                     ItemStack shears = new ItemStack(Material.SHEARS);
                     for (Block vineBlock : vineBlocks) {
                         if (vineBlock.getType() != Material.VINE) continue;
-                        if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, vineBlock)) continue;
-                        if (!new PlayerBreakBlockEvent(player, vineBlock, itemStack).callEvent()) continue;
-                        if (pickup > 0) TreeChopListener.target = player.getLocation();
-                        vineBlock.breakNaturally(shears, true);
-                        TreeChopListener.target = null;
+                        if (pickup > 0) {
+                            if (!blockBreakListener().breakBlockAndPickup(player, shears, vineBlock)) continue;
+                        } else {
+                            if (!blockBreakListener().breakBlock(player, shears, vineBlock)) continue;
+                        }
                     }
                 }
                 int blocksBrokenNow = 0;
@@ -234,11 +234,11 @@ public final class TreeChop {
                     if (logBlockIndex < logBlocks.size()) {
                         Block logBlock = logBlocks.get(logBlockIndex++);
                         if (!choppedType.logs.isTagged(logBlock.getType())) continue;
-                        if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, logBlock)) continue;
-                        if (!new PlayerBreakBlockEvent(player, logBlock, itemStack).callEvent()) continue;
-                        if (pickup > 0) TreeChopListener.target = player.getLocation();
-                        logBlock.breakNaturally(axeItem, true);
-                        TreeChopListener.target = null;
+                        if (pickup > 0) {
+                            if (!blockBreakListener().breakBlockAndPickup(player, axeItem, logBlock)) continue;
+                        } else {
+                            if (!blockBreakListener().breakBlock(player, axeItem, logBlock)) continue;
+                        }
                         brokenBlocks += 1;
                         if (player.getGameMode() != GameMode.CREATIVE) {
                             player.setExhaustion(player.getExhaustion() + 0.01f);
@@ -252,11 +252,11 @@ public final class TreeChop {
                     if (leafBlockIndex < leafBlocks.size()) {
                         Block leafBlock = leafBlocks.get(leafBlockIndex++);
                         if (!choppedType.leaves.isTagged(leafBlock.getType())) continue;
-                        if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, leafBlock)) continue;
-                        if (!new PlayerBreakBlockEvent(player, leafBlock, itemStack).callEvent()) continue;
-                        if (pickup > 0) TreeChopListener.target = player.getLocation();
-                        leafBlock.breakNaturally(axeItem, true);
-                        TreeChopListener.target = null;
+                        if (pickup > 0) {
+                            if (!blockBreakListener().breakBlockAndPickup(player, axeItem, leafBlock)) continue;
+                        } else {
+                            if (!blockBreakListener().breakBlock(player, axeItem, leafBlock)) continue;
+                        }
                         brokenBlocks += 1;
                         blocksBrokenNow += 1;
                     }
@@ -267,11 +267,11 @@ public final class TreeChop {
                     didShroomlights = true;
                     for (Block shroomlightBlock : shroomlightBlocks) {
                         if (shroomlightBlock.getType() != Material.SHROOMLIGHT) continue;
-                        if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, shroomlightBlock)) continue;
-                        if (!new PlayerBreakBlockEvent(player, shroomlightBlock, itemStack).callEvent()) continue;
-                        if (pickup > 0) TreeChopListener.target = player.getLocation();
-                        shroomlightBlock.breakNaturally(axeItem, true);
-                        TreeChopListener.target = null;
+                        if (pickup > 0) {
+                            if (!blockBreakListener().breakBlockAndPickup(player, axeItem, shroomlightBlock)) continue;
+                        } else {
+                            if (!blockBreakListener().breakBlock(player, axeItem, shroomlightBlock)) continue;
+                        }
                         brokenBlocks += 1;
                         blocksBrokenNow += 1;
                     }
