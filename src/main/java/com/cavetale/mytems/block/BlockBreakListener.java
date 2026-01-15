@@ -34,9 +34,9 @@ public final class BlockBreakListener implements Listener {
         this.storedDropCallback = dropCallback;
         try {
             if (tool != null) {
-                block.breakNaturally(tool);
+                block.breakNaturally(tool, true, true);
             } else {
-                block.breakNaturally();
+                block.breakNaturally(true, true);
             }
         } finally {
             this.storedDropCallback = null;
