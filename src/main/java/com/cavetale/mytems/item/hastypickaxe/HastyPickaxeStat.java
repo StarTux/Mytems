@@ -76,7 +76,7 @@ public enum HastyPickaxeStat implements UpgradableStat {
                                                                                                        text("break an ore block")))),
           List.of(), List.of(EFFICIENCY)),
 
-    HASTE_TIME(Vec2i.of(5, 1), text("Haste Time", color(0xFFFF00)), () -> new ItemStack(Material.CLOCK),
+    HASTE_TIME(Vec2i.of(5, 0), text("Haste Time", color(0xFFFF00)), () -> new ItemStack(Material.CLOCK),
                List.of(new Level(1, HastyPickaxeTier.GOLD, () -> new ItemStack(Material.CLOCK, 1), List.of(text("The Haste effect lasts"),
                                                                                                            text("twice as long"))),
                        new Level(2, HastyPickaxeTier.DIAMOND, () -> new ItemStack(Material.CLOCK, 2), List.of(text("The Haste effect lasts"),
@@ -87,7 +87,7 @@ public enum HastyPickaxeStat implements UpgradableStat {
                List.of(new Level(1, HastyPickaxeTier.GOLD, () -> new ItemStack(Material.END_PORTAL_FRAME), List.of(text("Break End Portal Frames")))),
                List.of(HASTE), List.of()),
 
-    BEDROCK(Vec2i.of(7, 1), text("Bedrocker", DARK_GRAY), () -> new ItemStack(Material.BEDROCK),
+    BEDROCK(Vec2i.of(7, 0), text("Bedrocker", DARK_GRAY), () -> new ItemStack(Material.BEDROCK),
             List.of(new Level(1, HastyPickaxeTier.DIAMOND, () -> new ItemStack(Material.BEDROCK), List.of(text("Break Bedrock,"),
                                                                                                           text("provided it is either"),
                                                                                                           text("player placed or"),
@@ -114,6 +114,21 @@ public enum HastyPickaxeStat implements UpgradableStat {
                                                                                                   text("in a dome shaped area"),
                                                                                                   text("with maximum radius")))),
            List.of(), List.of(EFFICIENCY)),
+    REINFORCED_DEEPSLATE(
+        Vec2i.of(7, 4),
+        text("Deep Dark Desecrator", LIGHT_PURPLE),
+        () -> new ItemStack(Material.REINFORCED_DEEPSLATE),
+        List.of(
+            new Level(
+                1,
+                HastyPickaxeTier.RUBY,
+                () -> new ItemStack(Material.REINFORCED_DEEPSLATE),
+                List.of(text("Mine reinforced deepslate"))
+            )
+        ),
+        List.of(),
+        List.of(END_PORTAL)
+    ),
     ;
 
     @Value

@@ -8,6 +8,7 @@ import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 import lombok.Getter;
@@ -19,6 +20,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Particle;
 import org.bukkit.Sound;
+import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -49,6 +51,7 @@ public final class HastyPickaxe implements Mytem {
     private final Mytems key;
     private ItemStack prototype;
     private HastyPickaxeTier tier;
+    private final Set<Material> stoneTypes = new HashSet<>();
 
     @Override
     public void enable() {
@@ -59,6 +62,13 @@ public final class HastyPickaxe implements Mytem {
         prototype = new ItemStack(key.material);
         prototype.editMeta(meta -> key.markItemMeta(meta));
         tier.createTag().store(key, prototype);
+        // Add stone types
+        stoneTypes.add(Material.END_STONE);
+        stoneTypes.add(Material.SANDSTONE);
+        stoneTypes.add(Material.RED_SANDSTONE);
+        stoneTypes.addAll(Tag.BADLANDS_TERRACOTTA.getValues());
+        stoneTypes.addAll(Tag.BASE_STONE_NETHER.getValues());
+        stoneTypes.addAll(Tag.BASE_STONE_OVERWORLD.getValues());
     }
 
     @Override
@@ -77,7 +87,7 @@ public final class HastyPickaxe implements Mytem {
         onBreak(player, block, item);
         final HastyPickaxeTag tag = serializeTag(item);
         final int radius = tag.getEffectiveUpgradeLevel(HastyPickaxeStat.RADIUS);
-        if (radius > 0 && !player.isSneaking() && STONE_TYPES.contains(block.getType())) {
+        if (radius > 0 && !player.isSneaking() && stoneTypes.contains(block.getType())) {
             Bukkit.getScheduler().runTask(plugin(), () -> {
                     final int count = breakRadius(player, block, item,  2 + radius - 1);
                 });
@@ -99,17 +109,6 @@ public final class HastyPickaxe implements Mytem {
         if (event.isCancelled()) return;
         onBreak(player, event.getBlock(), item);
     }
-
-    private static final Set<Material> STONE_TYPES = Set.of(Material.STONE,
-                                                            Material.DEEPSLATE,
-                                                            Material.ANDESITE,
-                                                            Material.DIORITE,
-                                                            Material.GRANITE,
-                                                            Material.TUFF,
-                                                            Material.NETHERRACK,
-                                                            Material.BLACKSTONE,
-                                                            Material.BASALT,
-                                                            Material.END_STONE);
 
     private void onBreak(Player player, Block block, ItemStack item) {
         if (isPlayerPlaced(block)) {
@@ -144,7 +143,7 @@ public final class HastyPickaxe implements Mytem {
                 final Block nbor = block.getRelative(face);
                 if (nbor.getY() < cy) continue;
                 if (blocks.contains(nbor)) continue;
-                if (!STONE_TYPES.contains(nbor.getType())) continue;
+                if (!stoneTypes.contains(nbor.getType())) continue;
                 if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, nbor)) continue;
                 final int dy = nbor.getY() - cy;
                 final int dx = nbor.getX() - cx;
@@ -207,7 +206,9 @@ public final class HastyPickaxe implements Mytem {
     public void onCustomBlockDamage(Player player, Block block, ItemStack item, int ticks) {
         final Material material = block.getType();
         if (material == Material.END_PORTAL_FRAME) {
-            tryToBreak(player, block, item, HastyPickaxeStat.END_PORTAL, ticks, 100);
+            tryToBreak(player, block, item, HastyPickaxeStat.END_PORTAL, ticks, 300);
+        } else if (material == Material.REINFORCED_DEEPSLATE) {
+            tryToBreak(player, block, item, HastyPickaxeStat.REINFORCED_DEEPSLATE, ticks, 300);
         } else if (material == Material.BEDROCK) {
             // The bedrock ability requires bedrock to come from the
             // end or be player placed.
@@ -239,7 +240,7 @@ public final class HastyPickaxe implements Mytem {
 
     private void tryToBreak(Player player, Block block, ItemStack item, HastyPickaxeStat stat, int ticks, int max) {
         final HastyPickaxeTag tag = serializeTag(item);
-        final int upgradeLevel = tag.getUpgradeLevel(stat);
+        final int upgradeLevel = Math.min(stat.getMaxLevel().getLevel(), tag.getUpgradeLevel(stat));
         if (upgradeLevel < 1) {
             return;
         }
