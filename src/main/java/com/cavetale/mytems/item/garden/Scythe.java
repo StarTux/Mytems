@@ -3,6 +3,7 @@ package com.cavetale.mytems.item.garden;
 import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
 import com.cavetale.core.event.block.PlayerBreakBlockEvent;
 import com.cavetale.core.event.block.PlayerChangeBlockEvent;
+import com.cavetale.core.event.item.PlayerReceiveItemsEvent;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Text;
@@ -14,19 +15,15 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Particle;
 import org.bukkit.Sound;
 import org.bukkit.SoundGroup;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Ageable;
-import org.bukkit.block.data.BlockData;
-import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.entity.ItemSpawnEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -38,18 +35,14 @@ import static net.kyori.adventure.text.Component.text;
 import static net.kyori.adventure.text.Component.textOfChildren;
 import static net.kyori.adventure.text.format.NamedTextColor.*;
 import static net.kyori.adventure.text.format.TextColor.color;
-import static org.bukkit.Particle.*;
 
 @RequiredArgsConstructor @Getter
-public final class Scythe implements Mytem, Listener {
+public final class Scythe implements Mytem {
     private final Mytems key;
     private final Quality quality;
     private final Component displayName;
     private final ItemStack prototype;
     private final boolean leftClickAllowed = false; // Flip switch if whining ensues
-    private CropType brokenCropType;
-    private boolean dropReduced;
-    private Player breakingPlayer;
 
     public Scythe(final Mytems mytems) {
         this.key = mytems;
@@ -72,6 +65,9 @@ public final class Scythe implements Mytem, Listener {
                 key.markItemMeta(meta);
             });
     }
+
+    @Override
+    public void enable() { }
 
     @RequiredArgsConstructor
     private enum Quality {
@@ -98,11 +94,6 @@ public final class Scythe implements Mytem, Listener {
             }
             return null;
         }
-    }
-
-    @Override
-    public void enable() {
-        Bukkit.getPluginManager().registerEvents(this, plugin());
     }
 
     @Override
@@ -186,45 +177,34 @@ public final class Scythe implements Mytem, Listener {
     private boolean harvestBlock(Player player, Block block, ItemStack itemStack) {
         final CropType cropType = CropType.of(block);
         if (cropType == null) return false;
-        BlockData data = block.getBlockData();
-        if (!(data instanceof Ageable)) return false;
-        Ageable ageable = (Ageable) data;
+        if (!(block.getBlockData() instanceof Ageable ageable)) return false;
         if (ageable.getAge() != ageable.getMaximumAge()) return false;
         if (!PlayerBlockAbilityQuery.Action.BUILD.query(player, block)) return false;
-        if (!new PlayerBreakBlockEvent(player, block, itemStack).callEvent()) return false;
-        SoundGroup snd = block.getBlockSoundGroup();
-        block.getWorld().playSound(block.getLocation(), snd.getBreakSound(), snd.getVolume(), snd.getPitch());
-        if (player.getGameMode() != GameMode.CREATIVE) {
-            this.brokenCropType = cropType;
-            this.dropReduced = false;
-            this.breakingPlayer = player;
-            block.breakNaturally(true); // triggerEffect
-            this.brokenCropType = null;
-            this.breakingPlayer = null;
-        }
-        block.getWorld().spawnParticle(SWEEP_ATTACK, block.getLocation().add(0.5, 0.5, 0.5), 1, 0.0, 0.0, 0.0, 0.0);
-        ageable.setAge(0);
-        new PlayerChangeBlockEvent(player, block, ageable, itemStack).callEvent();
-        block.setBlockData(ageable, true);
-        return true;
-    }
-
-    @EventHandler(ignoreCancelled = true, priority = EventPriority.HIGH)
-    private void onItemSpawn(ItemSpawnEvent event) {
-        if (brokenCropType == null) return;
-        Item item = event.getEntity();
-        ItemStack itemStack = item.getItemStack();
-        if (!dropReduced && CropType.of(itemStack) == brokenCropType) {
-            dropReduced = true;
-            final int amount = itemStack.getAmount();
-            itemStack.subtract(1);
-            if (amount <= 1) {
-                event.setCancelled(true);
-                return;
+        final SoundGroup soundGroup = block.getBlockSoundGroup();
+        final List<ItemStack> drops = List.copyOf(block.getDrops(itemStack, player));
+        boolean hasSeedItem = false;
+        for (ItemStack drop : drops) {
+            if (drop.getType() == cropType.seed) {
+                drop.subtract(1);
+                hasSeedItem = true;
+                break;
             }
         }
-        item.teleport(breakingPlayer);
-        item.setPickupDelay(0);
-        item.setOwner(breakingPlayer.getUniqueId());
+        if (!hasSeedItem) {
+            if (!new PlayerBreakBlockEvent(player, block, itemStack).callEvent()) return false;
+            block.setType(Material.AIR, true);
+        } else {
+            final Ageable newCrop = (Ageable) ageable.clone();
+            newCrop.setAge(0);
+            if (!new PlayerChangeBlockEvent(player, block, newCrop, itemStack).callEvent()) return false;
+            block.setBlockData(newCrop, true);
+        }
+        PlayerReceiveItemsEvent.receiveItems(player, drops);
+        // Effects
+        final Location centerLocation = block.getLocation().add(0.5, 0.5, 0.5);
+        block.getWorld().playSound(centerLocation, soundGroup.getBreakSound(), soundGroup.getVolume(), soundGroup.getPitch());
+        block.getWorld().spawnParticle(Particle.SWEEP_ATTACK, centerLocation, 1, 0.0, 0.0, 0.0, 0.0);
+        block.getWorld().spawnParticle(Particle.BLOCK, centerLocation, 16, 0.2, 0.2, 0.2, 0.0, ageable);
+        return true;
     }
 }
