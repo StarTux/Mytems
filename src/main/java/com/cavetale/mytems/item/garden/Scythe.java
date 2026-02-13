@@ -190,14 +190,14 @@ public final class Scythe implements Mytem {
                 break;
             }
         }
-        if (!hasSeedItem) {
-            if (!new PlayerBreakBlockEvent(player, block, itemStack).callEvent()) return false;
-            block.setType(Material.AIR, true);
-        } else {
+        if (!new PlayerBreakBlockEvent(player, block, itemStack).callEvent()) return false;
+        block.setType(Material.AIR, true);
+        if (hasSeedItem) {
             final Ageable newCrop = (Ageable) ageable.clone();
             newCrop.setAge(0);
-            if (!new PlayerChangeBlockEvent(player, block, newCrop, itemStack).callEvent()) return false;
-            block.setBlockData(newCrop, true);
+            if (new PlayerChangeBlockEvent(player, block, newCrop, itemStack).callEvent()) {
+                block.setBlockData(newCrop, true);
+            }
         }
         PlayerReceiveItemsEvent.receiveItems(player, drops);
         // Effects
