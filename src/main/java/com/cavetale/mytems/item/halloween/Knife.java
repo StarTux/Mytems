@@ -36,7 +36,7 @@ public final class Knife implements Mytem {
 
     @Override
     public void enable() {
-        displayName = text("Knife", DARK_RED);
+        displayName = text("Kitchen Knife", DARK_RED);
         prototype = new ItemStack(key.material);
         prototype.setData(DataComponentTypes.ENCHANTMENT_GLINT_OVERRIDE, false);
         prototype.setData(DataComponentTypes.ENCHANTMENTS, itemEnchantments()
