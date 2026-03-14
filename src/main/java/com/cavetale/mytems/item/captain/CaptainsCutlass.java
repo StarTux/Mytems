@@ -1,5 +1,6 @@
 package com.cavetale.mytems.item.captain;
 
+import com.cavetale.core.event.entity.EntityStrikeEntityEvent;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
 import com.cavetale.mytems.util.Text;
@@ -61,17 +62,21 @@ public final class CaptainsCutlass implements Mytem {
         if (event.isCancelled()) return;
         event.setDamage(0);
         if (player.getAttackCooldown() < 1.0f) return;
-        if (!(event.getEntity() instanceof LivingEntity)) return;
-        LivingEntity target = (LivingEntity) event.getEntity();
+        if (!(event.getEntity() instanceof LivingEntity target)) return;
         Vector velo = target.getLocation().subtract(player.getLocation()).toVector();
         Vector horizontal = new Vector(velo.getX(), 0.0, velo.getZ());
         if (horizontal.length() < 0.1) return;
         horizontal = horizontal.normalize();
         Vector vertical = new Vector(0.0, 2.0f, 0.0);
         Vector hit = horizontal.multiply(player.isSprinting() ? 4.0 : 3.0).add(vertical);
+        if (!new EntityStrikeEntityEvent(player, target, item, 0.0, hit).callEvent()) {
+            return;
+        }
         target.setVelocity(target.getVelocity().add(hit));
         target.getWorld().playSound(target.getLocation(), Sound.ENTITY_ARMOR_STAND_BREAK, SoundCategory.PLAYERS, 1.0f, 0.75f);
-        target.getWorld().spawnParticle(Particle.BLOCK, target.getLocation(), 24, .25, .25, .25, 0,
-                                        Material.OAK_PLANKS.createBlockData());
+        target.getWorld().spawnParticle(
+            Particle.BLOCK, target.getLocation(), 24, .25, .25, .25, 0,
+            Material.OAK_PLANKS.createBlockData()
+        );
     }
 }

@@ -1,9 +1,8 @@
 package com.cavetale.mytems.item.captain;
 
 import com.cavetale.core.connect.NetworkServer;
-import com.cavetale.core.event.block.PlayerBlockAbilityQuery;
+import com.cavetale.core.event.entity.EntityShootEntityEvent;
 import com.cavetale.core.event.entity.PlayerEntityAbilityQuery;
-import com.cavetale.core.event.player.PluginPlayerEvent;
 import com.cavetale.core.text.LineWrap;
 import com.cavetale.mytems.Mytem;
 import com.cavetale.mytems.Mytems;
@@ -85,7 +84,7 @@ public final class Blunderbuss implements Mytem {
     public void onPlayerLeftClick(PlayerInteractEvent event, Player player, ItemStack item) {
         if (player.getGameMode() == GameMode.SPECTATOR) return;
         event.setCancelled(true);
-        boolean result = pullTheTrigger(player);
+        boolean result = pullTheTrigger(player, item);
         if (result && Tags.getInt(item.getItemMeta().getPersistentDataContainer(), singleUseKey) != null) {
             item.subtract(1);
         }
@@ -95,7 +94,7 @@ public final class Blunderbuss implements Mytem {
     public void onPrePlayerAttackEntity(PrePlayerAttackEntityEvent event, Player player, ItemStack item) {
         if (player.getGameMode() == GameMode.SPECTATOR) return;
         event.setCancelled(true);
-        boolean result = pullTheTrigger(player);
+        boolean result = pullTheTrigger(player, item);
         if (result && Tags.getInt(item.getItemMeta().getPersistentDataContainer(), singleUseKey) != null) {
             item.subtract(1);
         }
@@ -105,7 +104,7 @@ public final class Blunderbuss implements Mytem {
      * Pull the trigger on the gun in hand.
      * @return true if the blunderbuss was fired, false otherwise.
      */
-    public boolean pullTheTrigger(Player player) {
+    public boolean pullTheTrigger(Player player, ItemStack item) {
         Session session = MytemsPlugin.getInstance().getSessions().of(player);
         long cooldown = session.getCooldown(key).toSeconds();
         if (cooldown > 0) {
@@ -146,33 +145,31 @@ public final class Blunderbuss implements Mytem {
         if (rayTraceResult == null) return true;
         Entity targetEntity = rayTraceResult.getHitEntity();
         if (targetEntity == null) return false;
-        return boostHitEntity(player, targetEntity, gunDirection);
+        return boostHitEntity(player, targetEntity, gunDirection, item);
     }
 
     /**
      * Attempt to boost the target entity.
      * @return true if entity was boosted, false otherwise.
      */
-    public boolean boostHitEntity(Player shooter, Entity target, Vector direction) {
+    public boolean boostHitEntity(Player shooter, Entity target, Vector direction, ItemStack item) {
+        if (!PlayerEntityAbilityQuery.Action.MOVE.query(shooter, target)) return false;
         if (target instanceof Player player) {
             if (!NetworkServer.OVERBOARD.isThisServer()) {
                 ItemStack hand = player.getEquipment().getItemInMainHand();
                 if (hand == null || !key.isItem(hand)) return false;
             }
-            // Temporary solution
-            if (!PlayerBlockAbilityQuery.Action.FLY.query(player, player.getLocation().getBlock())) {
-                return false;
-            }
-            PluginPlayerEvent.Name.START_FLYING.call(MytemsPlugin.getInstance(), player);
-        } else if (!PlayerEntityAbilityQuery.Action.MOVE.query(shooter, target)) {
+        }
+        final Vector velocity = direction.normalize().multiply(3.0).add(new Vector(0.0, 1.0, 0.0));
+        final Entity vehicle = target.getVehicle();
+        if (vehicle != null && vehicle.getType() == EntityType.ARMOR_STAND) {
             return false;
         }
-        Entity vehicle = target.getVehicle();
-        if (vehicle != null) {
-            if (vehicle.getType() == EntityType.ARMOR_STAND) return false;
-            vehicle.removePassenger(target);
+        if (!new EntityShootEntityEvent(shooter, target, item, null, 0.0, velocity).callEvent()) {
+            return false;
         }
-        Vector velocity = direction.normalize().multiply(3.0).add(new Vector(0.0, 1.0, 0.0));
+        // No Return!
+        target.eject();
         target.setVelocity(target.getVelocity().add(velocity));
         target.getWorld().playSound(target.getLocation(), Sound.ENTITY_GENERIC_SPLASH, SoundCategory.PLAYERS, 1.0f, 2.0f);
         return true;
