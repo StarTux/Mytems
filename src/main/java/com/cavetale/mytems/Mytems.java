@@ -40,6 +40,7 @@ import com.cavetale.mytems.item.coin.Coin;
 import com.cavetale.mytems.item.craft.NetheriteParityTable;
 import com.cavetale.mytems.item.deflector.DeflectorShield;
 import com.cavetale.mytems.item.dividers.Dividers;
+import com.cavetale.mytems.item.drink.ChocolateMilk;
 import com.cavetale.mytems.item.drink.FizzyBrew;
 import com.cavetale.mytems.item.drink.LovePotion;
 import com.cavetale.mytems.item.dune.DuneItem;
@@ -1269,6 +1270,7 @@ public enum Mytems implements ComponentLike, Keyed, ItemKind {
     FIZZY_BREW(FizzyBrew.class, SLIME_BALL, 0xf394, MytemsCategory.DRINK),
     CREEPER_BOOGER(CreeperBooger.class, SLIME_BALL, 0xf395, MytemsCategory.FOOD),
     LOVE_POTION(LovePotion.class, GHAST_TEAR, 0xf396, MytemsCategory.DRINK),
+    CHOCOLATE_MILK(ChocolateMilk.class, COCOA_BEANS, 0xf3e4, MytemsCategory.DRINK),
     // Farming
     KING_RICHARD_LEEK(FarmingCrop.class, STICK, 0xf397, MytemsCategory.FOOD),
     KING_RICHARD_LEEK_SEEDS(FarmingSeeds.class, STICK, 0xf398, MytemsCategory.SEEDS),
