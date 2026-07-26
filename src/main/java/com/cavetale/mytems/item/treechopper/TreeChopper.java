@@ -11,6 +11,7 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -38,7 +39,17 @@ public final class TreeChopper implements Mytem {
     public void enable() {
         displayName = tier.getDisplayName();
         prototype = new ItemStack(key.material);
-        prototype.editMeta(meta -> key.markItemMeta(meta));
+        switch (tier) {
+        case IRON:
+            prototype.addEnchantment(Enchantment.EFFICIENCY, 4);
+            break;
+        case GOLD:
+            prototype.addEnchantment(Enchantment.EFFICIENCY, 5);
+            break;
+        default:
+            break;
+        }
+        key.markItemStack(prototype);
         tier.createTag().store(key, prototype);
         // Commands
         commandNode = MytemsPlugin.getInstance().getMytemsCommand().registerItemCommand(key)

@@ -105,27 +105,12 @@ public enum TreeChopperStat implements UpgradableStat {
                   new SpeedLevel(5, () -> new ItemStack(Material.SUGAR, 5),
                                  TreeChopperTier.IRON)),
           List.of(TreeChopperStat.CHOP), List.of()),
-    EFFICIENCY(Vec2i.of(7, 2), text("Efficiency"), () -> new ItemStack(Material.GOLDEN_AXE),
-               List.of(new EfficiencyLevel(1, TreeChopperTier.IRON),
-                       new EfficiencyLevel(2, TreeChopperTier.IRON),
-                       new EfficiencyLevel(3, TreeChopperTier.IRON),
-                       new EfficiencyLevel(4, TreeChopperTier.IRON),
-                       new EfficiencyLevel(5, TreeChopperTier.IRON)),
-               List.of(), List.of(TreeChopperStat.SPEED)) {
-        @Override public void removeFromItem(ItemMeta meta) {
-            meta.removeEnchant(Enchantment.EFFICIENCY);
-        }
-
-        @Override public void applyToItem(ItemMeta meta, int upgradeLevel) {
-            meta.addEnchant(Enchantment.EFFICIENCY, upgradeLevel, true);
-        }
-    },
     PUNCH(Vec2i.of(8, 2), text("Punching"), () -> new ItemStack(Material.GUNPOWDER),
           List.of(new TreeChopperStatLevel(1, () -> new ItemStack(Material.GUNPOWDER),
                                            List.of(text("Insta chop the root"),
                                                    text("block")),
                                            TreeChopperTier.GOLD)),
-          List.of(), List.of(TreeChopperStat.EFFICIENCY)),
+          List.of(), List.of(TreeChopperStat.SPEED)),
     MUSHROOM(Vec2i.of(6, 0), text("Mushrooms"), () -> new ItemStack(Material.RED_MUSHROOM),
              List.of(new TreeChopperStatLevel(1, () -> new ItemStack(Material.RED_MUSHROOM),
                                               List.of(text("Chop Huge Mushrooms")),
