@@ -132,152 +132,151 @@ public final class PocketMobTag extends MytemTag {
         if (entity != null) {
             Component customName = entity.customName();
             text.set(0, customName);
-        }
-        if (entity instanceof Mob mobEntity) {
-            Component customName = mobEntity.customName();
-            if (customName != null && !empty().equals(customName)) {
-                text.add(prop("Name", customName));
-            }
-            String health = "" + (int) Math.ceil(mobEntity.getHealth());
-            String maxHealth = "" + (int) Math.ceil(mobEntity.getAttribute(Attribute.MAX_HEALTH).getValue());
-            text.add(prop("Health", textOfChildren(Mytems.HEART, text(health, RED), text("/", COLOR_BG), text(maxHealth, RED))));
-            final boolean mayDespawn = !mobEntity.isPersistent()
-                || Entities.isTransient(mobEntity)
-                || (mobEntity.getRemoveWhenFarAway()
-                    && !(mobEntity instanceof Animals)
-                    && !(mobEntity instanceof Golem)
-                    && !(mobEntity instanceof Villager));
-            if (mayDespawn) {
-                text.add(prop("Warning", text("May despawn if released!", color(0xFF0000))));
-            }
-        }
-        List<String> nameComponents = new ArrayList<>();
-        String finalNameComponent = Text.toCamelCase(entity.getType());
-        if (entity instanceof Ageable ageable) {
-            if (!ageable.isAdult()) nameComponents.add("Baby");
-        }
-        if (entity instanceof Creeper creeper) {
-            if (creeper.isPowered()) {
-                nameComponents.add(0, "Powered");
-            }
-        } else if (entity instanceof Wither wither) {
-            if (wither.isCharged()) {
-                nameComponents.add(0, "Charged");
-            }
-        } else if (entity instanceof AbstractHorse ahorse) {
-            if (ahorse instanceof Horse horse) {
-                nameComponents.add(Text.toCamelCase(horse.getColor()));
-                nameComponents.add(Text.toCamelCase(horse.getStyle()));
-            }
-            if (ahorse instanceof Llama llama) {
-                nameComponents.add(Text.toCamelCase(llama.getColor()));
-                text.add(prop("Strength", "" + llama.getStrength()));
-            }
-            text.add(prop("Jump", "" + (int) Math.round(100.0 * ahorse.getJumpStrength())));
-            text.add(prop("Speed", "" + (int) Math.round(100.0 * ahorse.getAttribute(Attribute.MOVEMENT_SPEED).getValue())));
-        } else if (entity instanceof Colorable colorable) { // Sheep, Shulker
-            DyeColor dyeColor = colorable.getColor();
-            if (dyeColor != null) {
-                BlockColor blockColor = BlockColor.of(dyeColor);
-                text.add(prop("Color", blockColor));
-                nameComponents.add(0, blockColor.niceName);
-            }
-        } else if (entity instanceof Cat cat) {
-            nameComponents.add(snakeToCamelCase(" ", cat.getCatType().getKey().getKey()));
-            text.add(prop("Collar", BlockColor.of(cat.getCollarColor())));
-        } else if (entity instanceof Parrot parrot) {
-            nameComponents.add(Text.toCamelCase(parrot.getVariant()));
-        } else if (entity instanceof Frog frog) {
-            nameComponents.add(snakeToCamelCase(" ", frog.getVariant().getKey().getKey()));
-        } else if (entity instanceof Wolf wolf) {
-            if (wolf.isAngry()) {
-                nameComponents.add(0, "Angry");
-            }
-            text.add(prop("Collar", BlockColor.of(wolf.getCollarColor())));
-            nameComponents.add(Text.toCamelCase(wolf.getVariant().getKey().getKey()));
-        } else if (entity instanceof Bee bee) {
-            if (bee.getAnger() > 0) {
-                nameComponents.add(0, "Angry");
-            }
-            text.add(prop("Nectar", bee.hasNectar()));
-            text.add(prop("Sting", !bee.hasStung()));
-        } else if (entity instanceof PufferFish pufferfish) {
-            if (pufferfish.getPuffState() > 0) {
-                nameComponents.add(0, "Inflated");
-            }
-        } else if (entity instanceof Fox fox) {
-            nameComponents.add(Text.toCamelCase(fox.getFoxType()));
-            if (fox.getFirstTrustedPlayer() != null) {
-                nameComponents.add(0, "Tamed");
-            }
-        } else if (entity instanceof Rabbit rabbit) {
-            nameComponents.add(Text.toCamelCase(rabbit.getRabbitType()));
-            if (rabbit.getRabbitType() == Rabbit.Type.THE_KILLER_BUNNY) {
-                finalNameComponent = null;
-            }
-        } else if (entity instanceof Strider strider) {
-            if (strider.isShivering()) {
-                nameComponents.add(0, "Shivering");
-            }
-            if (strider.hasSaddle()) {
-                nameComponents.add(0, "Saddled");
-            }
-        } else if (entity instanceof TropicalFish tropicalFish) {
-            nameComponents.add(Text.toCamelCase(tropicalFish.getBodyColor()));
-            finalNameComponent = Text.toCamelCase(tropicalFish.getPattern());
-        } else if (entity instanceof Villager villager) {
-            if (villager.getProfession() != Villager.Profession.NONE) {
-                finalNameComponent = snakeToCamelCase(" ", villager.getProfession().getKey().getKey());
-            }
-            nameComponents.add(snakeToCamelCase(" ", villager.getVillagerType().getKey().getKey()));
-            text.add(prop("Level", "" + villager.getVillagerLevel()));
-        } else if (entity instanceof ZombieVillager zombieVillager) {
-            finalNameComponent = snakeToCamelCase(" ", zombieVillager.getVillagerProfession().getKey().getKey());
-            nameComponents.add(snakeToCamelCase(" ", zombieVillager.getVillagerType().getKey().getKey()));
-        } else if (entity instanceof Slime slime) {
-            text.add(prop("Size", "" + slime.getSize()));
-        } else if (entity instanceof Raider raider) {
-            if (raider.isPatrolLeader()) {
-                nameComponents.add("Chief");
-            }
-            if (raider instanceof Spellcaster spellcaster) {
-                if (spellcaster.getSpell() != Spellcaster.Spell.NONE) {
-                    text.add(prop("Spell", Text.toCamelCase(spellcaster.getSpell())));
+            if (entity instanceof Mob mobEntity) {
+                if (customName != null && !empty().equals(customName)) {
+                    text.add(prop("Name", customName));
+                }
+                String health = "" + (int) Math.ceil(mobEntity.getHealth());
+                String maxHealth = "" + (int) Math.ceil(mobEntity.getAttribute(Attribute.MAX_HEALTH).getValue());
+                text.add(prop("Health", textOfChildren(Mytems.HEART, text(health, RED), text("/", COLOR_BG), text(maxHealth, RED))));
+                final boolean mayDespawn = !mobEntity.isPersistent()
+                    || Entities.isTransient(mobEntity)
+                    || (mobEntity.getRemoveWhenFarAway()
+                        && !(mobEntity instanceof Animals)
+                        && !(mobEntity instanceof Golem)
+                        && !(mobEntity instanceof Villager));
+                if (mayDespawn) {
+                    text.add(prop("Warning", text("May despawn if released!", color(0xFF0000))));
                 }
             }
-        } else if (entity instanceof Goat goat) {
-            if (goat.isScreaming()) {
-                nameComponents.add(0, "Screaming");
+            List<String> nameComponents = new ArrayList<>();
+            String finalNameComponent = Text.toCamelCase(entity.getType());
+            if (entity instanceof Ageable ageable) {
+                if (!ageable.isAdult()) nameComponents.add("Baby");
             }
-        } else if (entity instanceof Axolotl axolotl) {
-            nameComponents.add(Text.toCamelCase(axolotl.getVariant()));
-        } else if (entity instanceof MushroomCow mushroomCow) {
-            nameComponents.add(Text.toCamelCase(mushroomCow.getVariant()));
-        } else if (entity instanceof Cow cow) {
-            nameComponents.add(snakeToCamelCase(" ", cow.getVariant().getKey().getKey()));
-        } else if (entity instanceof Chicken chicken) {
-            nameComponents.add(snakeToCamelCase(" ", chicken.getVariant().getKey().getKey()));
-        } else if (entity instanceof Pig pig) {
-            nameComponents.add(snakeToCamelCase(" ", pig.getVariant().getKey().getKey()));
-            if (pig.hasSaddle()) {
-                nameComponents.add(0, "Saddled");
+            if (entity instanceof Creeper creeper) {
+                if (creeper.isPowered()) {
+                    nameComponents.add(0, "Powered");
+                }
+            } else if (entity instanceof Wither wither) {
+                if (wither.isCharged()) {
+                    nameComponents.add(0, "Charged");
+                }
+            } else if (entity instanceof AbstractHorse ahorse) {
+                if (ahorse instanceof Horse horse) {
+                    nameComponents.add(Text.toCamelCase(horse.getColor()));
+                    nameComponents.add(Text.toCamelCase(horse.getStyle()));
+                }
+                if (ahorse instanceof Llama llama) {
+                    nameComponents.add(Text.toCamelCase(llama.getColor()));
+                    text.add(prop("Strength", "" + llama.getStrength()));
+                }
+                text.add(prop("Jump", "" + (int) Math.round(100.0 * ahorse.getJumpStrength())));
+                text.add(prop("Speed", "" + (int) Math.round(100.0 * ahorse.getAttribute(Attribute.MOVEMENT_SPEED).getValue())));
+            } else if (entity instanceof Colorable colorable) { // Sheep, Shulker
+                DyeColor dyeColor = colorable.getColor();
+                if (dyeColor != null) {
+                    BlockColor blockColor = BlockColor.of(dyeColor);
+                    text.add(prop("Color", blockColor));
+                    nameComponents.add(0, blockColor.niceName);
+                }
+            } else if (entity instanceof Cat cat) {
+                nameComponents.add(snakeToCamelCase(" ", cat.getCatType().getKey().getKey()));
+                text.add(prop("Collar", BlockColor.of(cat.getCollarColor())));
+            } else if (entity instanceof Parrot parrot) {
+                nameComponents.add(Text.toCamelCase(parrot.getVariant()));
+            } else if (entity instanceof Frog frog) {
+                nameComponents.add(snakeToCamelCase(" ", frog.getVariant().getKey().getKey()));
+            } else if (entity instanceof Wolf wolf) {
+                if (wolf.isAngry()) {
+                    nameComponents.add(0, "Angry");
+                }
+                text.add(prop("Collar", BlockColor.of(wolf.getCollarColor())));
+                nameComponents.add(Text.toCamelCase(wolf.getVariant().getKey().getKey()));
+            } else if (entity instanceof Bee bee) {
+                if (bee.getAnger() > 0) {
+                    nameComponents.add(0, "Angry");
+                }
+                text.add(prop("Nectar", bee.hasNectar()));
+                text.add(prop("Sting", !bee.hasStung()));
+            } else if (entity instanceof PufferFish pufferfish) {
+                if (pufferfish.getPuffState() > 0) {
+                    nameComponents.add(0, "Inflated");
+                }
+            } else if (entity instanceof Fox fox) {
+                nameComponents.add(Text.toCamelCase(fox.getFoxType()));
+                if (fox.getFirstTrustedPlayer() != null) {
+                    nameComponents.add(0, "Tamed");
+                }
+            } else if (entity instanceof Rabbit rabbit) {
+                nameComponents.add(Text.toCamelCase(rabbit.getRabbitType()));
+                if (rabbit.getRabbitType() == Rabbit.Type.THE_KILLER_BUNNY) {
+                    finalNameComponent = null;
+                }
+            } else if (entity instanceof Strider strider) {
+                if (strider.isShivering()) {
+                    nameComponents.add(0, "Shivering");
+                }
+                if (strider.hasSaddle()) {
+                    nameComponents.add(0, "Saddled");
+                }
+            } else if (entity instanceof TropicalFish tropicalFish) {
+                nameComponents.add(Text.toCamelCase(tropicalFish.getBodyColor()));
+                finalNameComponent = Text.toCamelCase(tropicalFish.getPattern());
+            } else if (entity instanceof Villager villager) {
+                if (villager.getProfession() != Villager.Profession.NONE) {
+                    finalNameComponent = snakeToCamelCase(" ", villager.getProfession().getKey().getKey());
+                }
+                nameComponents.add(snakeToCamelCase(" ", villager.getVillagerType().getKey().getKey()));
+                text.add(prop("Level", "" + villager.getVillagerLevel()));
+            } else if (entity instanceof ZombieVillager zombieVillager) {
+                finalNameComponent = snakeToCamelCase(" ", zombieVillager.getVillagerProfession().getKey().getKey());
+                nameComponents.add(snakeToCamelCase(" ", zombieVillager.getVillagerType().getKey().getKey()));
+            } else if (entity instanceof Slime slime) {
+                text.add(prop("Size", "" + slime.getSize()));
+            } else if (entity instanceof Raider raider) {
+                if (raider.isPatrolLeader()) {
+                    nameComponents.add("Chief");
+                }
+                if (raider instanceof Spellcaster spellcaster) {
+                    if (spellcaster.getSpell() != Spellcaster.Spell.NONE) {
+                        text.add(prop("Spell", Text.toCamelCase(spellcaster.getSpell())));
+                    }
+                }
+            } else if (entity instanceof Goat goat) {
+                if (goat.isScreaming()) {
+                    nameComponents.add(0, "Screaming");
+                }
+            } else if (entity instanceof Axolotl axolotl) {
+                nameComponents.add(Text.toCamelCase(axolotl.getVariant()));
+            } else if (entity instanceof MushroomCow mushroomCow) {
+                nameComponents.add(Text.toCamelCase(mushroomCow.getVariant()));
+            } else if (entity instanceof Cow cow) {
+                nameComponents.add(snakeToCamelCase(" ", cow.getVariant().getKey().getKey()));
+            } else if (entity instanceof Chicken chicken) {
+                nameComponents.add(snakeToCamelCase(" ", chicken.getVariant().getKey().getKey()));
+            } else if (entity instanceof Pig pig) {
+                nameComponents.add(snakeToCamelCase(" ", pig.getVariant().getKey().getKey()));
+                if (pig.hasSaddle()) {
+                    nameComponents.add(0, "Saddled");
+                }
             }
-        }
-        if (entity instanceof Tameable tameable) {
-            if (tameable.isTamed()) {
-                nameComponents.add(0, "Tamed");
+            if (entity instanceof Tameable tameable) {
+                if (tameable.isTamed()) {
+                    nameComponents.add(0, "Tamed");
+                }
             }
-        }
-        if (entity.isGlowing()) {
-            nameComponents.add(0, "Glowing");
-        }
-        if (finalNameComponent != null) {
-            nameComponents.add(finalNameComponent);
-        }
-        if (text.get(0) == null) {
-            text.set(0, text(String.join(" ", nameComponents), COLOR_FG));
-        } else {
-            text.add(1, text(String.join(" ", nameComponents), COLOR_BG));
+            if (entity.isGlowing()) {
+                nameComponents.add(0, "Glowing");
+            }
+            if (finalNameComponent != null) {
+                nameComponents.add(finalNameComponent);
+            }
+            if (text.get(0) == null) {
+                text.set(0, text(String.join(" ", nameComponents), COLOR_FG));
+            } else {
+                text.add(1, text(String.join(" ", nameComponents), COLOR_BG));
+            }
         }
         tooltip(meta, text);
     }
