@@ -286,7 +286,11 @@ public final class PocketMobTag extends MytemTag {
     public Entity deserializeMob(World world) {
         if (mob == null) return null;
         final byte[] byteArray = Base64.getDecoder().decode(mob);
-        return Bukkit.getUnsafe().deserializeEntity(byteArray, world, false);
+        try {
+            return Bukkit.getUnsafe().deserializeEntity(byteArray, world, false);
+        } catch (IllegalArgumentException iae) {
+            return null;
+        }
     }
 
     @SuppressWarnings("deprecation")
