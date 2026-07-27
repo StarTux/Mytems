@@ -66,6 +66,10 @@ public final class HastyPickaxe implements Mytem {
         stoneTypes.add(Material.END_STONE);
         stoneTypes.add(Material.SANDSTONE);
         stoneTypes.add(Material.RED_SANDSTONE);
+        stoneTypes.add(Material.DRIPSTONE_BLOCK);
+        stoneTypes.add(Material.SULFUR);
+        stoneTypes.add(Material.POTENT_SULFUR);
+        stoneTypes.add(Material.CINNABAR);
         stoneTypes.addAll(Tag.BADLANDS_TERRACOTTA.getValues());
         stoneTypes.addAll(Tag.BASE_STONE_NETHER.getValues());
         stoneTypes.addAll(Tag.BASE_STONE_OVERWORLD.getValues());
