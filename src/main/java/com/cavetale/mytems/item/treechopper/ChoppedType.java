@@ -19,26 +19,48 @@ public enum ChoppedType {
     OAK(Tag.OAK_LOGS, Material.OAK_LEAVES, Placeable.SAPLING, Material.OAK_SAPLING, VanillaItems.OAK_SAPLING),
     SPRUCE(Tag.SPRUCE_LOGS, Material.SPRUCE_LEAVES, Placeable.SAPLING, Material.SPRUCE_SAPLING, VanillaItems.SPRUCE_SAPLING),
     CHERRY(Tag.CHERRY_LOGS, Material.CHERRY_LEAVES, Placeable.SAPLING, Material.CHERRY_SAPLING, VanillaItems.CHERRY_SAPLING),
-    AZALEA(Tag.OAK_LOGS,
-           new MaterialSetTag(null, List.of(Material.AZALEA_LEAVES, Material.FLOWERING_AZALEA_LEAVES, Material.OAK_LEAVES)),
-           Placeable.SAPLING,
-           new MaterialSetTag(null, List.of(Material.AZALEA, Material.FLOWERING_AZALEA)),
-           VanillaItems.AZALEA),
-    MANGROVE(new MaterialSetTag(null, List.of(Material.MANGROVE_ROOTS)).add(Tag.MANGROVE_LOGS.getValues()),
-             Material.MANGROVE_LEAVES, Placeable.SAPLING, Material.MANGROVE_PROPAGULE, VanillaItems.MANGROVE_PROPAGULE),
-    RED_MUSHROOM(new MaterialSetTag(null, List.of(Material.MUSHROOM_STEM)),
-                 new MaterialSetTag(null, List.of(Material.RED_MUSHROOM_BLOCK)),
-                 Placeable.SAPLING,
-                 new MaterialSetTag(null, List.of(Material.RED_MUSHROOM)),
-                 VanillaItems.RED_MUSHROOM),
-    BROWN_MUSHROOM(new MaterialSetTag(null, List.of(Material.MUSHROOM_STEM)),
-                   new MaterialSetTag(null, List.of(Material.BROWN_MUSHROOM_BLOCK)),
-                   Placeable.SAPLING,
-                   new MaterialSetTag(null, List.of(Material.BROWN_MUSHROOM)),
-                   VanillaItems.BROWN_MUSHROOM),
+    AZALEA(
+        Tag.OAK_LOGS,
+        new MaterialSetTag(null, List.of(Material.AZALEA_LEAVES, Material.FLOWERING_AZALEA_LEAVES, Material.OAK_LEAVES)),
+        Placeable.SAPLING,
+        new MaterialSetTag(null, List.of(Material.AZALEA, Material.FLOWERING_AZALEA)),
+        VanillaItems.AZALEA
+    ),
+    MANGROVE(
+        new MaterialSetTag(null, List.of(Material.MANGROVE_ROOTS)).add(Tag.MANGROVE_LOGS.getValues()),
+        Material.MANGROVE_LEAVES, Placeable.SAPLING, Material.MANGROVE_PROPAGULE, VanillaItems.MANGROVE_PROPAGULE
+    ),
+    RED_MUSHROOM(
+        new MaterialSetTag(null, List.of(Material.MUSHROOM_STEM)),
+        new MaterialSetTag(null, List.of(Material.RED_MUSHROOM_BLOCK)),
+        Placeable.SAPLING,
+        new MaterialSetTag(null, List.of(Material.RED_MUSHROOM)),
+        VanillaItems.RED_MUSHROOM
+    ),
+    BROWN_MUSHROOM(
+        new MaterialSetTag(null, List.of(Material.MUSHROOM_STEM)),
+        new MaterialSetTag(null, List.of(Material.BROWN_MUSHROOM_BLOCK)),
+        Placeable.SAPLING,
+        new MaterialSetTag(null, List.of(Material.BROWN_MUSHROOM)),
+        VanillaItems.BROWN_MUSHROOM
+    ),
     CRIMSON(Tag.CRIMSON_STEMS, Material.NETHER_WART_BLOCK, Placeable.FUNGUS, Material.CRIMSON_FUNGUS, VanillaItems.CRIMSON_FUNGUS),
     WARPED(Tag.WARPED_STEMS, Material.WARPED_WART_BLOCK, Placeable.FUNGUS, Material.WARPED_FUNGUS, VanillaItems.WARPED_FUNGUS),
     PALE_OAK(Tag.PALE_OAK_LOGS, Material.PALE_OAK_LEAVES, Placeable.SAPLING, Material.PALE_OAK_SAPLING, VanillaItems.PALE_OAK_SAPLING),
+    POPLAR(
+        Tag.POPLAR_LOGS,
+        new MaterialSetTag(
+            null,
+            List.of(
+                Material.ORANGE_POPLAR_LEAVES,
+                Material.RED_POPLAR_LEAVES,
+                Material.YELLOW_POPLAR_LEAVES
+            )
+        ),
+        Placeable.SAPLING,
+        new MaterialSetTag(null, List.of(Material.POPLAR_SAPLING)),
+        VanillaItems.POPLAR_SAPLING
+    ),
     ;
 
     public final Tag<Material> logs;
